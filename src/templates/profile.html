@@ -1,0 +1,86 @@
+
+<!---head--->
+{% block head %}
+
+{% endblock head %}
+<!---content--->
+{% block content %}
+<main data-title = "{{title}}">
+
+    <main class="account container">
+        <div class="account__info">
+            <h2>Аккаунт</h2>
+            <div class="account__main-info">
+
+
+                <form method="post"  class="account__main-info" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="account__username">{{ user.username }}</div>
+                    <picture>
+                        <img id="avatar-profile-img" class="account__avatar" src="{{ user.avatar.url }}" width="250" height="250" />
+                    </picture>
+                    <label class="account__file">
+                        {{ form.avatar }}
+                        <span>Выберите файл</span>
+                    </label>
+                    <div class="account__info-item">
+                        <span>Дата регистрации</span>
+                        <span>{{ user.date_of_registration }}</span>
+                    </div>
+                    <div class="account__info-item">
+                        <span>Возраст:</span>
+                        <span>{{ user.age }}</span>
+                    </div>
+                    <div class="account__info-item">
+                        <span>Пол:</span>
+                        <span>{{ form.gender }}</span>
+                    </div>
+                    <div class="account__info-item">
+                        <span>Часовой пояс:</span>
+                        <span>{{ form.time_zone }}</span>
+                    </div>
+                    <div class="account__info-item">
+                        <span>Сообщений в чате:</span>
+                        <span>{{ user.sum_message }}</span>
+                    </div>
+                    <div class="account__info-item">
+                        <span>Баллы:</span>
+                        <span>{{ user.sum_bal }}</span>
+                    </div>
+                    <button id="profile-save"  class="account__save" type="submit">Сохранить</button>
+                </form>
+        </div>
+        </div>
+        <div class="account__empty-block">
+            <h3>Пустой блок</h3>
+            <p></p>
+        </div>
+    </main>
+</main>
+
+
+<style>
+
+
+
+</style>
+<script>
+    // Получаем ссылку на элементы
+    var avatarInput = document.getElementById("id_avatar");
+    var avatarImg = document.getElementById("avatar-profile-img");
+
+    // Назначаем обработчик события на изменение input[type="file"]
+    avatarInput.addEventListener("change", function () {
+        if (avatarInput.files.length > 0) {
+            var selectedFile = avatarInput.files[0];
+            var objectURL = URL.createObjectURL(selectedFile);
+            avatarImg.src = objectURL;
+        }
+    });
+</script>
+
+{% endblock content %}
+<!---footerlink--->
+{% block footerlink %}
+
+{% endblock footerlink %}

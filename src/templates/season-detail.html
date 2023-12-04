@@ -1,0 +1,530 @@
+{% load static %}
+<a
+        href="{% url 'season_detail' slug=season.slug %}"
+        hx-get="{% url 'season_detail' slug=season.slug %}"
+        hx-target="#main-content"
+        hx-push-url="true"
+        hx-indicator="#content-loader"
+        hx-on="htmx:beforeRequest: season.detail.target.innerHTML = ''"
+        hx-custom='title'
+        id="refresh">
+</a>
+<div id="updateTarget">
+
+    <main class="event-info sp-container" data-title = "{{title}}">
+        <div class="side-banners left">
+            {% for baner in sidebar_baners_left %}
+
+            <a href="{{ baner.slug }}" class="adv-link"><img src="{{ baner.baner.url }}" alt="logo" /></a>
+            {% endfor %}
+        </div>
+        <div>
+            <div class="event-info__score">
+                <div class="event-info__tournament">
+
+                    <form method="post" 
+                    action="{% url 'toggle_bookmark' 'season' season.id %}"
+                    hx-get="{% url 'toggle_bookmark' 'season' season.id  %}"
+        hx-target="#main-content"
+        hx-push-url="true"
+        hx-indicator="#content-loader"
+        hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''">
+                        {% csrf_token %}
+                        <input type="hidden" name="event_id" value="{{ event.id }}">
+                        <button class="event__like">
+                            {% if is_season_bookmarked %}
+                            <svg
+                                    stroke="currentColor"
+                                    fill="currentColor"
+                                    stroke-width="0"
+                                    viewBox="0 0 16 16"
+                                    color="#ffa830"
+                                    height="1em"
+                                    width="1em"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    style="color: rgb(255, 168, 48)"
+                            >
+                                <path
+                                        d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
+                                ></path>
+                            </svg>
+                            {% else %}
+                            <svg
+                                    stroke="currentColor"
+                                    fill="currentColor"
+                                    stroke-width="0"
+                                    viewBox="0 0 16 16"
+                                    height="1em"
+                                    width="1em"
+                                    xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                        d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"
+                                ></path>
+                            </svg>
+                            {% endif %}
+                        </button>
+                    </form>
+
+
+
+                    <span>{{ season.season_name }}</span>
+                </div>
+                <div class="event-info__teams">
+                    <div class="event-info__team event-team home">
+                        <div class="event-team__team">
+                            <h2 class="event-team__name">{{ season.season_name  }} - {{ season.league_name  }}</h2>
+                            <img src="{{ season.logo_league }}" width="46" height="46" alt="{{ season.logo_league }}" />
+                        </div>
+
+                    </div>
+
+                </div>
+                <div id="desktop" class="event-info__info-toggle">
+                    <label>
+                        <input value="review" type="radio" name="info-toggle" checked />
+                        <span>Предстоящие игры</span>
+                    </label>
+                    <label>
+                        <input value="h2h" type="radio" name="info-toggle" />
+                        <span>Завершенные игры</span>
+                    </label>
+                </div>
+                <div id="mobile" class="event-info__info-toggle mobile">
+                    <label>
+                        <input value="review" type="radio" name="info-toggle-mob" checked />
+                        <span>Предстоящие игры</span>
+                    </label>
+                    <label>
+                        <input value="h2h" type="radio" name="info-toggle-mob" />
+                        <span>Завершенные игры</span>
+                    </label>
+                </div>
+            </div>
+            <div class="event__info-h2h h2h none">
+
+                <div class="event-info__main-left">
+                    {% for baner in gorizont_baners_top %}
+                    <a href="{{ baner.slug }}" class="adv-link"><img src="{{ baner.baner.url }}" alt="logo" /></a>
+                    {% endfor %}
+                    <ul class="events__list">
+                        {% for league_name, events_in_league in events.items %}
+                        <li class="events__item event">
+                            <div class="event__tour like">
+
+                                <form method="post" 
+                                action="{% url 'toggle_bookmark' 'season' league_name.id %}"
+                                hx-get="{% url 'toggle_bookmark' 'season' league_name.id  %}"
+        hx-target="#main-content"
+        hx-push-url="true"
+        hx-indicator="#content-loader"
+        hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="league_name_id" value="{{ league_name.id }}">
+                                    <button type="submit" class="event__like">
+                                        {% if is_season_bookmarked %}
+                                        <svg
+                                                stroke="currentColor"
+                                                fill="currentColor"
+                                                stroke-width="0"
+                                                viewBox="0 0 16 16"
+                                                color="#ffa830"
+                                                height="1em"
+                                                width="1em"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                style="color: rgb(255, 168, 48)"
+                                        >
+                                            <path
+                                                    d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
+                                            ></path>
+                                        </svg>
+                                        {% else %}
+                                        <svg
+                                                stroke="currentColor"
+                                                fill="currentColor"
+                                                stroke-width="0"
+                                                viewBox="0 0 16 16"
+                                                height="1em"
+                                                width="1em"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                            <path
+                                                    d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"
+                                            ></path>
+                                        </svg>
+                                        {% endif %}
+                                    </button>
+                                </form>
+                                <a href="{% url 'season_detail' league_name.slug  %}"
+                                hx-get="{% url 'season_detail' league_name.slug  %}"
+        hx-target="#main-content"
+        hx-push-url="true"
+        hx-indicator="#content-loader"
+        hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''">
+                                    <img width="25" height="25" src="{{ league_name.logo_league }}" alt="logo" />
+                                    <span>{{ league_name }}</span>
+                                </a>
+                            </div>
+                            {% for event in events_in_league %}
+                            {% if event.status != 1 and event.status != 3 %}
+                            <div class="event__match-list">
+                                <a href="{% url 'events_detail' event.slug %}"
+                                hx-get="{% url 'events_detail' event.slug  %}"
+        hx-target="#main-content"
+        hx-push-url="true"
+        hx-indicator="#content-loader"
+        hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''" 
+        class="event__match-item">
+                                    <div class="event__match-item-left">
+                                        <form method="post" action="{% url 'toggle_bookmark' 'event' event.id %}">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="event_id" value="{{ event.id }}">
+                                            <button class="event__like">
+                                                {% if event.is_bookmarked %}
+                                                <svg
+                                                        stroke="currentColor"
+                                                        fill="currentColor"
+                                                        stroke-width="0"
+                                                        viewBox="0 0 16 16"
+                                                        color="#ffa830"
+                                                        height="1em"
+                                                        width="1em"
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        style="color: rgb(255, 168, 48)"
+                                                >
+                                                    <path
+                                                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
+                                                    ></path>
+                                                </svg>
+                                                {% else %}
+                                                <svg
+                                                        stroke="currentColor"
+                                                        fill="currentColor"
+                                                        stroke-width="0"
+                                                        viewBox="0 0 16 16"
+                                                        height="1em"
+                                                        width="1em"
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                >
+                                                    <path
+                                                            d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"
+                                                    ></path>
+                                                </svg>
+                                                {% endif %}
+                                            </button>
+                                        </form>
+                                        <div class="event__start-time"><span>{{event.get_start_time}}{% if event.status == 3 %}
+                                        {{ event.get_start_date }}
+                                        {% endif %}</span></div>
+
+                                        <div class="event__period"><span>{% if event.half  %}{% if event.half == 'FT'  %}Завершен{% else %}{{event.half}}{% endif %}{%else%} Предстоит{% endif %}</span></div>
+                                    </div>
+                                    <div class="event__match">
+                                        <div class="event__match-left">
+                                            <h2 class="event__home-team match-team">
+                                                <img src="{{event.home_team.logo}}" width="20" height="20" alt="team" />
+                                                <span>Домашние</span>
+                                                <span>{{event.home_team.name}}</span>
+
+                                            </h2>
+                                            <div class="event__score">
+                                                {% if event.status != 3%}
+                                                <span>{{event.home_score}}</span>
+                                                <span>-</span>
+                                                <span>{{event.away_score}}</span>
+                                                {% else %}
+                                                <span>0</span>
+                                                <span>-</span>
+                                                <span>0</span>
+                                                {% endif %}
+                                            </div>
+                                            <h2 class="event__away-team match-team">
+                                                <img src="{{event.away_team.logo}}" width="20" height="20" alt="team" />
+                                                <span>Гости</span>
+                                                <span>{{event.away_team.name}}</span>
+                                            </h2>
+                                        </div>
+                                        <div class="event__match-mob-score mob-score">
+                                            <div>{{event.home_score}}</div>
+                                            <div>{{event.away_score}}</div>
+                                        </div>
+                                    </div>
+                                </a>
+
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    <div class="pagination">
+                        <span class="step-links">
+                            {% if events_page.has_previous %}
+                                <a href="?page=1">&laquo; Первая</a>
+                                <a href="?page={{ events_page.previous_page_number }}">Предыдущая</a>
+                            {% endif %}
+
+                            <span class="current-page">{{ events_page.number }} из {{ events_page.paginator.num_pages }}</span>
+
+                            {% if events_page.has_next %}
+                                <a href="?page={{ events_page.next_page_number }}">Следующая</a>
+                                <a href="?page={{ events_page.paginator.num_pages }}">Последняя &raquo;</a>
+                            {% endif %}
+                        </span>
+                    </div>
+                    {% for baner in gorizont_baners_footer %}
+                    <a href="{{ baner.slug }}" class="adv-link"><img src="{{ baner.baner.url }}" alt="logo" /></a>
+                    {% endfor %}
+                </div>
+                <div class="event-info__main-right">
+
+                    {% for baner in sidebar_baners %}
+                    <a href="{{ baner.slug }}" class="adv-link"><img src="{{ baner.baner.url }}" alt="logo" /></a>
+                    {% endfor %}
+                </div>
+
+            </div>
+            <div class="event-info__main">
+                <div class="event-info__main-left">
+                    {% for baner in gorizont_baners_top %}
+                    <a href="{{ baner.slug }}" class="adv-link"><img src="{{ baner.baner.url }}" alt="logo" /></a>
+                    {% endfor %}
+                    <ul class="events__list">
+                        {% for league_name, events_in_league in events.items %}
+
+                        <li class="events__item event">
+                            <div class="event__tour like">
+
+                                <form method="post" 
+                                action="{% url 'toggle_bookmark' 'season' league_name.id %}"
+                                hx-get="{% url 'toggle_bookmark' 'season' league_name.id  %}"
+        hx-target="#main-content"
+        hx-push-url="true"
+        hx-indicator="#content-loader"
+        hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="league_name_id" value="{{ league_name.id }}">
+                                    <button type="submit" class="event__like">
+                                        {% if is_season_bookmarked %}
+                                        <svg
+                                                stroke="currentColor"
+                                                fill="currentColor"
+                                                stroke-width="0"
+                                                viewBox="0 0 16 16"
+                                                color="#ffa830"
+                                                height="1em"
+                                                width="1em"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                style="color: rgb(255, 168, 48)"
+                                        >
+                                            <path
+                                                    d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
+                                            ></path>
+                                        </svg>
+                                        {% else %}
+                                        <svg
+                                                stroke="currentColor"
+                                                fill="currentColor"
+                                                stroke-width="0"
+                                                viewBox="0 0 16 16"
+                                                height="1em"
+                                                width="1em"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                            <path
+                                                    d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"
+                                            ></path>
+                                        </svg>
+                                        {% endif %}
+                                    </button>
+                                </form>
+                                <a href="{% url 'season_detail' league_name.slug  %}"
+                                 hx-get="{% url 'season_detail' league_name.slug  %}"
+        hx-target="#main-content"
+        hx-push-url="true"
+        hx-indicator="#content-loader"
+        hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''">
+                                    <img width="25" height="25" src="{{ league_name.logo_league }}" alt="logo" />
+                                    <span>{{ league_name }}</span>
+                                </a>
+                            </div>
+                            {% for event in events_in_league %}
+                            {% if event.status != 2 and event.status != 4 %}
+                            <div class="event__match-list">
+                                <a 
+                                href="{% url 'events_detail' event.slug %}"
+                                hx-get="{% url 'events_detail' event.slug %}"
+        hx-target="#main-content"
+        hx-push-url="true"
+        hx-indicator="#content-loader"
+        hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''"
+                                class="event__match-item">
+                                    <div class="event__match-item-left">
+                                        <form method="post" 
+                                        action="{% url 'toggle_bookmark' 'event' event.id %}"
+                                        hx-get="{% url 'toggle_bookmark' 'event' event.id %}"
+        hx-target="#main-content"
+        hx-push-url="true"
+        hx-indicator="#content-loader"
+        hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''"
+                                        >
+                                            {% csrf_token %}
+                                            <input type="hidden" name="event_id" value="{{ event.id }}">
+                                            <button class="event__like">
+                                                {% if event.is_bookmarked %}
+                                                <svg
+                                                        stroke="currentColor"
+                                                        fill="currentColor"
+                                                        stroke-width="0"
+                                                        viewBox="0 0 16 16"
+                                                        color="#ffa830"
+                                                        height="1em"
+                                                        width="1em"
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        style="color: rgb(255, 168, 48)"
+                                                >
+                                                    <path
+                                                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
+                                                    ></path>
+                                                </svg>
+                                                {% else %}
+                                                <svg
+                                                        stroke="currentColor"
+                                                        fill="currentColor"
+                                                        stroke-width="0"
+                                                        viewBox="0 0 16 16"
+                                                        height="1em"
+                                                        width="1em"
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                >
+                                                    <path
+                                                            d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"
+                                                    ></path>
+                                                </svg>
+                                                {% endif %}
+                                            </button>
+                                        </form>
+                                        <div class="event__start-time"><span>{{event.get_start_time}}{% if event.status == 3 %}
+                                        {{ event.get_start_date }}
+                                        {% endif %}</span></div>
+
+                                        <div class="event__period"><span>{% if event.half  %}{% if event.half == 'FT'  %}Завершен{% else %}{{event.half}}{% endif %}{%else%} Предстоит{% endif %}</span></div>
+                                    </div>
+                                    <div class="event__match">
+                                        <div class="event__match-left">
+                                            <h2 class="event__home-team match-team">
+                                                <img src="{{event.home_team.logo}}" width="20" height="20" alt="team" />
+                                                <span>Домашние</span>
+                                                <span>{{event.home_team.name}}</span>
+
+                                            </h2>
+                                            <div class="event__score">
+                                                {% if event.status != 3%}
+                                                <span>{{event.home_score}}</span>
+                                                <span>-</span>
+                                                <span>{{event.away_score}}</span>
+                                                {% else %}
+                                                <span>0</span>
+                                                <span>-</span>
+                                                <span>0</span>
+                                                {% endif %}
+                                            </div>
+                                            <h2 class="event__away-team match-team">
+                                                <img src="{{event.away_team.logo}}" width="20" height="20" alt="team" />
+                                                <span>Гости</span>
+                                                <span>{{event.away_team.name}}</span>
+                                            </h2>
+                                        </div>
+                                        <div class="event__match-mob-score mob-score">
+                                            <div>{{event.home_score}}</div>
+                                            <div>{{event.away_score}}</div>
+                                        </div>
+                                    </div>
+                                </a>
+
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    <div class="pagination">
+                        <span class="step-links">
+                            {% if events_page.has_previous %}
+                                <a href="?page=1">&laquo; Первая</a>
+                                <a href="?page={{ events_page.previous_page_number }}">Предыдущая</a>
+                            {% endif %}
+
+                            <span class="current-page">{{ events_page.number }} из {{ events_page.paginator.num_pages }}</span>
+
+                            {% if events_page.has_next %}
+                                <a href="?page={{ events_page.next_page_number }}">Следующая</a>
+                                <a href="?page={{ events_page.paginator.num_pages }}">Последняя &raquo;</a>
+                            {% endif %}
+                        </span>
+                    </div>
+                    {% for baner in gorizont_baners_footer %}
+                    <a href="{{ baner.slug }}" class="adv-link"><img src="{{ baner.baner.url }}" alt="logo" /></a>
+                    {% endfor %}
+                </div>
+                <div class="event-info__main-right">
+
+                    {% for baner in sidebar_baners %}
+                    <a href="{{ baner.slug }}" class="adv-link"><img src="{{ baner.baner.url }}" alt="logo" /></a>
+                    {% endfor %}
+                </div>
+            </div>
+
+        </div>
+        <div class="side-banners right">
+            {% for baner in sidebar_baners_right %}
+
+            <a href="{{ baner.slug }}" class="adv-link"><img src="{{ baner.baner.url }}" alt="logo" /></a>
+            {% endfor %}
+        </div>
+    </main>
+
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/emoji-picker-element@1.0.6/dist/index.js"></script>
+
+<script>
+    // Функция для обновления контента внутри #main-content с использованием HTMX
+    function updateMainContent() {
+        htmx.ajax('#main-content', {
+            // Укажите здесь необходимые параметры запроса, если они есть
+        });
+    }
+
+    // Установите интервал для обновления каждые 3 секунды (3000 миллисекунд)
+    setInterval(updateMainContent, 3000);
+
+    // Также выполните обновление контента при загрузке страницы
+    updateMainContent();
+</script>
+
+<script>
+    const textarea = document.getElementById('id_message');
+    const charCount = document.getElementById('charCount');
+
+    textarea.addEventListener('input', function () {
+        const currentLength = textarea.value.length;
+        const maxLength = parseInt(textarea.getAttribute('maxlength'));
+        charCount.textContent = currentLength + '/' + maxLength;
+    });
+    // Найти поле textarea и кнопку для emoji
+    const messageInput = document.getElementById('message');
+    const emojiButton = document.getElementById('emojiButton');
+
+    // Инициализировать emoji-picker
+    const picker = new EmojiPicker();
+
+    // Прикрепить emoji-picker к полю textarea
+    picker.listenOn(messageInput);
+
+    // Обработчик для кнопки emoji
+    emojiButton.addEventListener('click', () => {
+        picker.pickerVisible ? picker.hidePicker() : picker.showPicker(messageInput);
+    });
+
+</script>

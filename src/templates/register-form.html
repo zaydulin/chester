@@ -1,0 +1,37 @@
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label>
+        Email
+        {{ form.email }}
+    </label>
+    <label>
+        Ник на сайте
+        {{ form.username }}
+    </label>
+    <label>
+        Дата рождения
+        {{ form.birthday }}
+    </label>
+    <label>
+        Пол
+        {{ form.gender }}
+    </label>
+    <label>
+        Пароль
+        {{ form.password1 }}
+    </label>
+    <label>
+        Пароль еще раз
+        {{ form.password2 }}
+    </label>
+    {{ form.recaptcha }}
+    <div class="acc-form__form-bottom">
+        <button type="submit">Зарегистрироваться</button>
+
+        <div class="acc-form__auth-link">
+            <span>Уже есть аккаунт?</span>
+            <a href="{% url 'login' %}">Войти</a>
+        </div>
+
+    </div>
+</form>

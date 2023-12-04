@@ -1,0 +1,68 @@
+{% extends 'themes/base.html' %}
+<!---title--->
+{% block title %} Регистрация пользователя {% endblock title %}
+<!---head--->
+{% block head %}
+
+{% endblock head %}
+<!---content--->
+{% block content %}
+
+    <main class="acc-form container">
+        <div class="acc-form__form">
+            <h2 class="acc-form__name-block">Регистрация</h2>
+            {% if form %}
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <label>
+                        Email
+                        {{ form.email }}
+                    </label>
+                    <label>
+                        Ник на сайте
+                        {{ form.username }}
+                    </label>
+                    <label>
+                        Дата рождения
+                        {{ form.birthday }}
+                    </label>
+                    <label>
+                        Пол
+                        {{ form.gender }}
+                    </label>
+                    <label>
+                        Пароль
+                        {{ form.password1 }}
+                    </label>
+                    <label>
+                        Пароль еще раз
+                        {{ form.password2 }}
+                    </label>
+                    {{ form.recaptcha }}
+                    <div class="acc-form__form-bottom">
+                        <button type="submit">Зарегистрироваться</button>
+
+                        <div class="acc-form__auth-link">
+                            <span>Уже есть аккаунт?</span>
+                            <a href="{% url 'login' %}">Войти</a>
+                        </div>
+
+                    </div>
+                </form>
+
+            {% else %}
+                <h2 class="acc-form__name-block">{{ message }}</h2>  <!-- Выводите сообщение, если регистрация отключена -->
+            {% endif %}
+        </div>
+        <div class="acc-form__block">
+            <h2>Пустой блок</h2>
+            <div class="acc-form__empty-block account-empty-block"></div>
+        </div>
+    </main>
+
+
+{% endblock content %}
+<!---footerlink--->
+{% block footerlink %}
+
+{% endblock footerlink %}

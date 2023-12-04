@@ -1,0 +1,568 @@
+<main class="favorite sp-container" data-title = "{{title}}">
+    <div class="search__left-banners side-banners left">
+        {% for baner in sidebar_baners_left %}
+            <a href="{{ baner.slug }}" class="adv-link">
+                <picture>
+                    <source srcset=".{{ baner.baner.url }}" type="image/webp" />
+                    <img src="{{ baner.baner.url }}" alt="logo" />
+                </picture>
+            </a>
+        {% endfor %}
+    </div>
+    <div class="search__container">
+        <div class="search__side-adv">
+            {% for baner in sidebar_baners %}
+                <a href="{{ baner.slug }}"  class="adv-link">
+                    <picture>
+                        <source srcset="{{ baner.baner.url }}" type="image/webp" />
+                        <img src="{{ baner.baner.url }}" alt="logo" />
+                    </picture>
+                </a>
+            {% endfor %}
+        </div>
+        <div class="search__main">
+            <div class="search__header">
+                <div class="search-toggle search__fav-toggle">
+                    <label class="search-toggle__label">
+                        <a href="{% url 'favoritesec' 'shedule' rubric.slug %}"
+                         hx-get="{% url 'favoritesec' 'shedule' rubric.slug %}"
+                            hx-target="#main-content"
+        hx-push-url="true"
+        hx-indicator="#content-loader"
+        hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''">
+
+                            <span>График</span>
+                        </a>
+                    </label>
+                    <label class="search-toggle__label">
+                        <a 
+                        href="{% url 'favoritesec' 'for_time' rubric.slug %}?time={{ today|date:'Y-m-d' }}"
+                        hx-get="{% url 'favoritesec' 'for_time' rubric.slug %}?time={{ today|date:'Y-m-d' }}"
+        hx-target="#main-content"
+        hx-push-url="true"
+        hx-indicator="#content-loader"
+        hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''">
+
+                            <span>Показать за...</span>
+                        </a>
+                    </label>
+                    <label class="search-toggle__label">
+                        <a href="{% url 'favoritesec' 'teams'  rubric.slug %}"
+                         hx-get="{% url 'favoritesec' 'teams'  rubric.slug %}"
+        hx-target="#main-content"
+        hx-push-url="true"
+        hx-indicator="#content-loader"
+        hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''">
+
+                            <span>
+                  <svg
+                          value="teams"
+                          stroke="currentColor"
+                          fill="currentColor"
+                          stroke-width="0"
+                          viewBox="0 0 24 24"
+                          height="1em"
+                          width="1em"
+                          xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                            d="M20.995 6.903a.997.997 0 0 0-.547-.797l-7.973-4a.997.997 0 0 0-.895-.002l-8.027 4c-.297.15-.502.437-.544.767-.013.097-1.145 9.741 8.541 15.008a.995.995 0 0 0 .969-.009c9.307-5.259 8.514-14.573 8.476-14.967zm-8.977 12.944c-6.86-4.01-7.14-10.352-7.063-12.205l7.071-3.523 6.998 3.511c.005 1.87-.481 8.243-7.006 12.217z"
+                    ></path>
+                  </svg>
+                    Команды
+                </span></a>
+                    </label>
+                    <label class="search-toggle__label">
+                        <a href="{% url 'favoritesec' 'league'  rubric.slug %}"
+                        hx-get="{% url 'favoritesec' 'teams'  rubric.slug %}"
+        hx-target="#main-content"
+        hx-push-url="true"
+        hx-indicator="#content-loader"
+        hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''">
+
+                            <span>
+                  <svg
+                          value="leagues"
+                          stroke="currentColor"
+                          fill="currentColor"
+                          stroke-width="0"
+                          viewBox="0 0 24 24"
+                          height="1em"
+                          width="1em"
+                          xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path fill="none" d="M0 0h24v24H0z"></path>
+                    <path
+                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 2.07c3.07.38 5.57 2.52 6.54 5.36L13 5.65V4.07zM8 5.08c1.18-.69 3.33-1.06 3-1.02v7.35l-3 1.73V5.08zM4.63 15.1c-.4-.96-.63-2-.63-3.1 0-2.02.76-3.86 2-5.27v7.58l-1.37.79zm1.01 1.73L12 13.15l3 1.73-6.98 4.03a7.794 7.794 0 1-2.38-2.08zM12 20c-.54 0-1.07-.06-1.58-.16l6.58-3.8 1.36.78C16.9 18.75 14.6 20 12 20zm1-8.58V7.96l7 4.05c0 1.1-.23 2.14-.63 3.09L13 11.42z"
+                    ></path>
+                  </svg>
+                  Лиги
+                </span></a>
+                    </label>
+                    <label class="search-toggle__label">
+                        <a href="{% url 'favoritesec' 'players'  rubric.slug %}"
+                        hx-get="{% url 'favoritesec' 'players'  rubric.slug %}"
+        hx-target="#main-content"
+        hx-push-url="true"
+        hx-indicator="#content-loader"
+        hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''">
+
+                            <span>
+                  <svg
+                          stroke="currentColor"
+                          fill="currentColor"
+                          stroke-width="0"
+                          viewBox="0 0 16 16"
+                          height="1em"
+                          width="1em"
+                          xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                            d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4Zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10Z"
+                    ></path>
+                  </svg>
+                  Игроки
+                </span></a>
+                    </label>
+                </div>
+                <div class="search__favorite-right">
+                    <select class="search__select favorite" id="rubricDropdown">
+
+                        {% for rubric in rubrics %}
+                            <option 
+                            value="{% url 'favoritesec' bookmark_sort_by rubric.slug %}"
+                            hx-get="{% url 'favoritesec' 'players'  rubric.slug %}"
+        hx-target="#main-content"
+        hx-push-url="true"
+        hx-indicator="#content-loader"
+        hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''">{{ rubric.name }}</option>
+                        {% endfor %}
+                    </select>
+                {% if bookmark_sort_by == 'for_time' %}
+
+                    <div class="events__calendar calendar active">
+                        <button class="calendar__prev">
+                            <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg" style="transform: rotate(180deg)">
+                                <path d="M271.653 1023.192c-8.685 0-17.573-3.432-24.238-10.097-13.33-13.33-13.33-35.144 0-48.474L703.67 508.163 254.08 58.573c-13.33-13.331-13.33-35.145 0-48.475 13.33-13.33 35.143-13.33 48.473 0L776.38 483.925c13.33 13.33 13.33 35.143 0 48.473l-480.492 480.694c-6.665 6.665-15.551 10.099-24.236 10.099z"></path>
+                            </svg>
+                        </button>
+                        <div class="calendar__date">
+                            <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 16 16" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"></path>
+                            </svg>
+                            <span>{{today|date:"d/m D"}}</span>
+                        </div>
+                        <button class="calendar__next">
+                            <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M271.653 1023.192c-8.685 0-17.573-3.432-24.238-10.097-13.33-13.33-13.33-35.144 0-48.474L703.67 508.163 254.08 58.573c-13.33-13.331-13.33-35.145 0-48.475 13.33-13.33 35.143-13.33 48.473 0L776.38 483.925c13.33 13.33 13.33 35.143 0 48.473l-480.492 480.694c-6.665 6.665-15.551 10.099-24.236 10.099z"></path>
+                            </svg>
+                        </button>
+                        <ul class="calendar__dropdown active">
+                            {% for day in day_list %}
+
+                            <a 
+                            href="{% url 'favoritesec' bookmark_sort_by rubric.slug  %}?time={{ day|date:'Y-m-d' }}"
+                            hx-get="{% url 'favoritesec' bookmark_sort_by rubric.slug  %}?time={{ day|date:'Y-m-d' }}"
+                   hx-target="#main-content"
+                   hx-push-url="true"
+                   hx-indicator = "#content-loader"
+                   hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''">
+                                <li class="calendar__item {% if request.GET.time == day|date:'Y-m-d' %}active{% endif %}">{{ day|date:"d/m D" }}</li>
+                            </a>
+                        {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            <ul class="events__list">
+                {% if bookmark_sort_by == 'shedule' %}
+                    {% for event in event_bookmarks %}
+                        <li class="events__item event">
+                            <div class="event__match-list">
+
+                                <a 
+                                href="{% url 'events_detail' event.slug %}"
+                                hx-get="{% url 'events_detail' event.slug %}"
+                   hx-target="#main-content"
+                   hx-push-url="true"
+                   hx-indicator = "#content-loader"
+                   hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''"
+                                class="event__match-item">
+
+                                    <div class="event__match-item-left">
+                                        <form method="post" 
+                                        action="{% url 'toggle_bookmark' 'event' event.id %}"
+                                        hx-get="{% url 'toggle_bookmark' 'event' event.id %}"
+                   hx-target="#main-content"
+                   hx-push-url="true"
+                   hx-indicator = "#content-loader"
+                   hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''"
+                                class="event__match-item">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="event_id" value="{{ event.id }}">
+                                            <button class="event__like">
+                                                <svg
+                                                        stroke="currentColor"
+                                                        fill="currentColor"
+                                                        stroke-width="0"
+                                                        viewBox="0 0 16 16"
+                                                        color="#ffa830"
+                                                        height="1em"
+                                                        width="1em"
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        style="color: rgb(255, 168, 48)"
+                                                >
+                                                    <path
+                                                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
+                                                    ></path>
+                                                </svg>
+
+                                            </button>
+                                        </form>
+                                        <div class="event__start-time"><span>{{event.get_start_time}}{% if event.status == 3 %}
+                                            {{ event.get_start_date }}
+                                        {% endif %}</span></div>
+
+                                        <div class="event__period"><span>{% if event.half  %}{{event.half}}{%else%} Предстоит{% endif %}</span></div>
+                                    </div>
+                                    <div class="event__match">
+                                        <div class="event__match-left">
+                                            <h2 class="event__home-team match-team">
+                                                <img src="{{event.home_team.logo}}" width="20" height="20" alt="team" />
+                                                <span>Домашние</span>
+                                                <span>{{event.home_team.name}}</span>
+
+                                            </h2>
+                                            <div class="event__score">
+                                                {% if event.status != 3%}
+                                                    <span>{{event.home_score}}</span>
+                                                    <span>-</span>
+                                                    <span>{{event.away_score}}</span>
+                                                {% else %}
+                                                    <span>0</span>
+                                                    <span>-</span>
+                                                    <span>0</span>
+                                                {% endif %}
+                                            </div>
+                                            <h2 class="event__away-team match-team">
+                                                <img src="{{event.away_team.logo}}" width="20" height="20" alt="team" />
+                                                <span>Гости</span>
+                                                <span>{{event.away_team.name}}</span>
+                                            </h2>
+                                        </div>
+                                        <div class="event__match-mob-score mob-score">
+                                            <div>{{event.home_score}}</div>
+                                            <div>{{event.away_score}}</div>
+                                        </div>
+                                    </div>
+                                </a>
+
+                            </div>
+                        </li>
+                    {% empty %}
+                        Нет закладок
+                    {% endfor %}
+                {%endif%}
+
+                {% if bookmark_sort_by == 'for_time' %}
+                    {% for event in event_bookmarks_day %}
+                        <li class="events__item event">
+
+                            <div class="event__match-list">
+
+                                <a 
+                                href="{% url 'events_detail' event.slug %}"
+                                hx-get="{% url 'events_detail' event.slug %}"
+                   hx-target="#main-content"
+                   hx-push-url="true"
+                   hx-indicator = "#content-loader"
+                   hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''"
+                                class="event__match-item">
+
+                                    <div class="event__match-item-left">
+                                        <form method="post" 
+                                        action="{% url 'toggle_bookmark' 'event' event.id %}"
+                                        hx-get="{% url 'toggle_bookmark' event.event.id %}"
+                   hx-target="#main-content"
+                   hx-push-url="true"
+                   hx-indicator = "#content-loader"
+                   hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="event_id" value="{{ event.id }}">
+                                            <button class="event__like">
+                                                <svg
+                                                        stroke="currentColor"
+                                                        fill="currentColor"
+                                                        stroke-width="0"
+                                                        viewBox="0 0 16 16"
+                                                        color="#ffa830"
+                                                        height="1em"
+                                                        width="1em"
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        style="color: rgb(255, 168, 48)"
+                                                >
+                                                    <path
+                                                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
+                                                    ></path>
+                                                </svg>
+
+                                            </button>
+                                        </form>
+                                        <div class="event__start-time"><span>{{event.get_start_time}}{% if event.status == 3 %}
+                                            {{ event.get_start_date }}
+                                        {% endif %}</span></div>
+
+                                        <div class="event__period"><span>{% if event.half  %}{{event.half}}{%else%} Предстоит{% endif %}</span></div>
+                                    </div>
+                                    <div class="event__match">
+                                        <div class="event__match-left">
+                                            <h2 class="event__home-team match-team">
+                                                <img src="{{event.home_team.logo}}" width="20" height="20" alt="team" />
+                                                <span>Домашние</span>
+                                                <span>{{event.home_team.name}}</span>
+
+                                            </h2>
+                                            <div class="event__score">
+                                                {% if event.status != 3%}
+                                                    <span>{{event.home_score}}</span>
+                                                    <span>-</span>
+                                                    <span>{{event.away_score}}</span>
+                                                {% else %}
+                                                    <span>0</span>
+                                                    <span>-</span>
+                                                    <span>0</span>
+                                                {% endif %}
+                                            </div>
+                                            <h2 class="event__away-team match-team">
+                                                <img src="{{event.away_team.logo}}" width="20" height="20" alt="team" />
+                                                <span>Гости</span>
+                                                <span>{{event.away_team.name}}</span>
+                                            </h2>
+                                        </div>
+                                        <div class="event__match-mob-score mob-score">
+                                            <div>{{event.home_score}}</div>
+                                            <div>{{event.away_score}}</div>
+                                        </div>
+                                    </div>
+                                </a>
+
+                            </div>
+                        </li>
+                    {% empty %}
+                        Нет закладок
+                    {% endfor %}
+                {%endif%}
+
+
+                {% if bookmark_sort_by == 'league' %}
+                    {% for season in season_bookmarks %}
+                        <li class="events__item leagues">
+                            <a 
+                            href="{% url 'season_detail' season.slug  %}"
+                            hx-get="{% url 'season_detail' season.slug %}"
+                   hx-target="#main-content"
+                   hx-push-url="true"
+                   hx-indicator = "#content-loader"
+                   hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''">
+                                <div class="event__tour like">
+                                    <form method="post" 
+                                    action="{% url 'toggle_bookmark' 'season' season.id %}"
+                                     hx-get="{% url 'toggle_bookmark' 'season' season.id %}"
+                   hx-target="#main-content"
+                   hx-push-url="true"
+                   hx-indicator = "#content-loader"
+                   hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="event_id" value="{{ event.id }}">
+                                        <button class="event__like">
+
+                                            <svg
+                                                    stroke="currentColor"
+                                                    fill="currentColor"
+                                                    stroke-width="0"
+                                                    viewBox="0 0 16 16"
+                                                    color="#ffa830"
+                                                    height="1em"
+                                                    width="1em"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    style="color: rgb(255, 168, 48)"
+                                            >
+                                                <path
+                                                        d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
+                                                ></path>
+                                            </svg>
+
+                                        </button>
+                                    </form>
+                                    <img width="25" height="25" src="{{ season.logo_league }}" alt="logo" />
+                                    <span>{{ season.league_name }},{{ season.season_name }}</span>
+                                </div>
+                            </a>
+                        </li>
+                    {% empty %}
+                        Нет закладок
+                    {%endfor%}
+                {%endif%}
+
+                {% if bookmark_sort_by == 'teams' %}
+                    {% for team in team_bookmarks %}
+                        <li class="events__item event">
+                            <div class="event__match-list">
+
+                                <a 
+                                href="{% url 'team_detail' team.slug %}"
+                                hx-get="{% url 'team_detail' team.slug %}"
+                   hx-target="#main-content"
+                   hx-push-url="true"
+                   hx-indicator = "#content-loader"
+                   hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''"
+                   class="event__match-item">
+
+                                    <div class="event__match-item-left">
+                                        <form method="post" 
+                                        action="{% url 'toggle_bookmark' 'team' team.id %}"
+                                        hx-get="{% url 'toggle_bookmark' 'team' team.id  %}"
+                   hx-target="#main-content"
+                   hx-push-url="true"
+                   hx-indicator = "#content-loader"
+                   hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="event_id" value="{{ team.id }}">
+                                            <button class="event__like">
+                                                <svg
+                                                        stroke="currentColor"
+                                                        fill="currentColor"
+                                                        stroke-width="0"
+                                                        viewBox="0 0 16 16"
+                                                        color="#ffa830"
+                                                        height="1em"
+                                                        width="1em"
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        style="color: rgb(255, 168, 48)"
+                                                >
+                                                    <path
+                                                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
+                                                    ></path>
+                                                </svg>
+
+                                            </button>
+                                        </form>
+                                    </div>
+                                    <div class="event__match">
+                                        <div class="event__match-left">
+                                            <h2 class="event__home-team match-team">
+                                                <img src="{{team.logo}}" width="20" height="20" alt="team" />
+                                                <span>{{team.name}}</span>
+                                            </h2>
+
+                                        </div>
+                                        <div class="event__match-mob-score mob-score">
+
+
+                                        </div>
+                                    </div>
+                                </a>
+
+                            </div>
+                        </li>
+                    {% empty %}
+                        Нет закладок
+                    {% endfor %}
+                {% endif %}
+
+                {% if bookmark_sort_by == 'players' %}
+                    {% for player in player_bookmarks %}
+                        <li class="events__item event">
+                            <div class="event__match-list">
+
+                                <a href="{% url 'player_detail' player.slug %}"
+                                hx-get="{% url 'player_detail' player.slug %}"
+                   hx-target="#main-content"
+                   hx-push-url="true"
+                   hx-indicator = "#content-loader"
+                   hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''"
+                                class="event__match-item">
+
+                                    <div class="event__match-item-left">
+                                        <form method="post" 
+                                        action="{% url 'toggle_bookmark' 'player' player.id %}"
+                                         hx-get="{% url 'toggle_bookmark' 'player' player.id %}"
+                   hx-target="#main-content"
+                   hx-push-url="true"
+                   hx-indicator = "#content-loader"
+                   hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="event_id" value="{{ player.id }}">
+                                            <button class="event__like">
+                                                <svg
+                                                        stroke="currentColor"
+                                                        fill="currentColor"
+                                                        stroke-width="0"
+                                                        viewBox="0 0 16 16"
+                                                        color="#ffa830"
+                                                        height="1em"
+                                                        width="1em"
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        style="color: rgb(255, 168, 48)"
+                                                >
+                                                    <path
+                                                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
+                                                    ></path>
+                                                </svg>
+
+                                            </button>
+                                        </form>
+                                    </div>
+                                    <div class="event__match">
+                                        <div class="event__match-left">
+                                            <h2 class="event__home-team match-team">
+                                                <img src="{{player.photo}}" width="20" height="20" alt="team" />
+                                                <span>{{player.name}}</span>
+                                            </h2>
+
+                                        </div>
+                                        <div class="event__match-mob-score mob-score">
+
+
+                                        </div>
+                                    </div>
+                                </a>
+
+                            </div>
+                        </li>
+                    {% empty %}
+                        Нет закладок
+                    {% endfor %}
+                {% endif %}
+            </ul>
+            <div class="search__fav-list-elems fav-list-elems none">
+
+            </div>
+        </div>
+    </div>
+    <div class="search__left-banners side-banners right">
+        {% for baner in sidebar_baners_right %}
+            <a href="{{ baner.slug }}" class="adv-link">
+                <picture>
+                    <source srcset="{{ baner.baner.url }}" type="image/webp" />
+                    <img src="{{ baner.baner.url }}" alt="logo" />
+                </picture>
+            </a>
+        {% endfor %}
+    </div>
+</main>
+<script>
+    // Get the select element
+    var rubricDropdown = document.getElementById("rubricDropdown");
+
+    // Add an event listener to handle the change event
+    rubricDropdown.addEventListener("change", function() {
+        // Redirect to the selected URL when an option is changed
+        var selectedOption = rubricDropdown.options[rubricDropdown.selectedIndex];
+        var selectedURL = selectedOption.value;
+        if (selectedURL) {
+            window.location.href = selectedURL;
+        }
+    });
+</script>

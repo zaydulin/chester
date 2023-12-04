@@ -1,0 +1,13 @@
+[
+    {"model": "mainapp.generalsettings",
+        "pk": 1,
+        "fields": {"logo": "logo_up2vqXC.jpg",
+        "logo_light": "logo_DmTsf4h.jpg",
+        "favicon": "logo_hgX838T.jpg",
+        "name": "chesterbets",
+        "content": "chesterbets",
+        "copyright_text": "Все права защищены",
+        "registration": 1,
+        "of_register_message": "Сообщение при отключение регистрации:"
+        }}
+]

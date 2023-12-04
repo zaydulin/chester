@@ -1,0 +1,53 @@
+{% extends 'themes/base.html' %}
+<!---title--->
+{% block title %} Авторизация пользователя {% endblock title %}
+<!---head--->
+{% block head %}
+
+{% endblock head %}
+<!---content--->
+{% block content %}
+
+
+    <main class="acc-form container">
+        <div class="acc-form__form">
+            <h2 class="acc-form__name-block">Вход</h2>
+            {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            <form method="post">
+                {% csrf_token %}
+                <label>
+                    Ник на сайте
+                    {{ form.username }}
+                    {% if form.username.errors %}
+                        <div class="error">{{ form.username.errors }}</div>
+                    {% endif %}
+                </label>
+                <label>
+                    Пароль
+                    {{ form.password }}
+                    {% if form.password.errors %}
+                        <div class="error">{{ form.password.errors }}</div>
+                    {% endif %}
+                </label>
+                <div class="acc-form__form-bottom"><button type="submit">Войти</button></div>
+            </form>
+
+        </div>
+        <div class="acc-form__block">
+            <h2>Пустой блок</h2>
+            <div class="acc-form__empty-block account-empty-block"></div>
+        </div>
+    </main>
+
+
+{% endblock content %}
+<!---footerlink--->
+{% block footerlink %}
+
+{% endblock footerlink %}

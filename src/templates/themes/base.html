@@ -1,0 +1,67 @@
+{% load generals_tag %}
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+            href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&amp;display=swap"
+            rel="stylesheet"
+    />
+    <title>{% get_current_name %} | {{ title }} {% block title %}  {% endblock title %}</title>
+    <meta name="description" content="{% block discriptions %} {{ meta_description }}{% endblock discriptions %}" />
+
+    {% include 'themes/head.html' %}
+    {% block head %}
+    {% endblock head %}
+</head>
+<body>
+
+{% include 'themes/header.html' %}
+<progress id="content-loader" class="htmx-indicator" max="100" style="width: 100%;"></progress>
+
+<div id="main-content" >
+    {% block content %}
+
+
+    {% endblock content %}
+</div>
+
+{% include 'themes/footer.html' %}
+<a style="display:none" id="back-link" href="#" onclick="goBack()">
+    Назад
+</a>
+
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>
+<script>
+    document.addEventListener('htmx:afterSwap', function (event) {
+        // При каждой смене контента обновляем URL
+        var currentUrl = window.location.href;
+        document.getElementById('back-link').href = currentUrl;
+        
+    });
+
+    // Обработчик события popstate
+    window.addEventListener('popstate', function (event) {
+        // При нажатии кнопки "назад" браузера симулируем клик по ссылке "Назад"
+        document.getElementById('back-link').click();
+    });
+</script>
+
+
+
+
+{% block footerlink %}
+
+{% endblock footerlink %}
+
+{% include 'themes/footer_link.html' %}
+</body>
+
+</html>

@@ -1,0 +1,28 @@
+{% load generals_tag %}
+
+<footer class="footer">
+    <div class="footer__container container">
+        <p class="footer__description">{% get_current_content %}</p>
+        <div class="footer__bottom">
+            <ul>
+                {% get_pages_footer as pages %}
+                {% for page in pages %}
+                    <li>
+                        <a
+                           href="{{ page.get_absolute_url }}"
+                            hx-get="{{ page.get_absolute_url }}"
+                            hx-target="#main-content"
+                            hx-push-url="true"
+                            hx-indicator = "#content-loader"
+                            hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''"
+                            hx-custom='title'
+                        >
+                        {{ page.name }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+            <p class="footer__copyright">&copy; {% get_current_copyright_text %}</p>
+        </div>
+    </div>
+</footer>
