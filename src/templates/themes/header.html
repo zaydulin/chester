@@ -1,8 +1,7 @@
+{% load static %}
 {% load generals_tag %}
 {% load events_tag %}
 {% load views_tracker %}
-{% load static %}
-
 
 
 <header class="header">
@@ -39,11 +38,12 @@
     </div>
     <div class="header__row container">
         <picture
-        ><source srcset="{% get_current_logo %}" type="image/webp" />
+        >
+            <source srcset="{% get_current_logo %}" type="image/webp"/>
             <img src="{% get_current_logo %}" alt="logo"
             /></picture>
         <div class="header__right">
-                {% event_search_form %}
+            {% event_search_form %}
 
 
             {% if user.is_authenticated %}
@@ -51,22 +51,24 @@
                    hx-get="{% url 'edit_profile' %}"
                    hx-target="#main-content"
                    hx-push-url="true"
-                   hx-indicator = "#content-loader"
+                   hx-indicator="#content-loader"
                    hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''"
                    hx-custom='title'
                    class="header__acc-link">
                     <picture>
-                        <source srcset="{{ user.avatar.url }}" type="image/webp" />
-                        <img src="{{ user.avatar.url }}" width="20" height="20" />
+                        <source srcset="{{ user.avatar.url }}" type="image/webp"/>
+                        <img src="{{ user.avatar.url }}" width="20" height="20"/>
                     </picture>
                 </a>
                 <a href="{% url 'logout' %}" class="header__auth-links"
                 ><span>Выйти</span
                 >
                     <picture
-                    ><source srcset="{% static 'docs/img/logout.webp' %}" type="image/webp" />
-                        <img src="{% static 'docs/img/logout.webp' %}" width="12" height="12" /></picture
-                    ></a>
+                    >
+                        <source srcset="{% static 'docs/img/logout.webp' %}" type="image/webp"/>
+                        <img src="{% static 'docs/img/logout.webp' %}" width="12" height="12"/></picture
+                    >
+                </a>
 
             {% else %}
                 <a href="{% url 'login' %}" class="header__auth-links"><span>Войти</span>
@@ -81,8 +83,10 @@
                         <path d="M20 5H8V9H6V3H22V21H6V15H8V19H20V5Z" fill="currentColor"></path>
                         <path
                                 d="M13.0743 16.9498 11.6601 15.5356 14.1957 13H2V11H14.1956L11.6601 8.46451 13.0743 7.05029 18.024 12 13.0743 16.9498Z"
-                                fill="currentColor"></path></svg
-                    ></a>
+                                fill="currentColor"></path>
+                    </svg
+                    >
+                </a>
                 <a href="{% url 'register' %}" class="header__auth-links"
                 ><span>Регистрация</span>
                     <svg
@@ -95,7 +99,9 @@
                             xmlns="http://www.w3.org/2000/svg">
                         <path fill="none" d="M0 0h24v24H0z"></path>
                         <path
-                                d="M10 4h4v4h-4zM4 16h4v4H4zM4 10h4v4H4zM4 4h4v4H4zM16 4h4v4h-4zM11 17.86V20h2.1l5.98-5.97-2.12-2.12zM14 12.03V10h-4v4h2.03zM20.85 11.56l-1.41-1.41c-.2-.2-.51-.2-.71 0l-1.06 1.06 2.12 2.12 1.06-1.06c.2-.2.2-.51 0-.71z"></path></svg></a
+                                d="M10 4h4v4h-4zM4 16h4v4H4zM4 10h4v4H4zM4 4h4v4H4zM16 4h4v4h-4zM11 17.86V20h2.1l5.98-5.97-2.12-2.12zM14 12.03V10h-4v4h2.03zM20.85 11.56l-1.41-1.41c-.2-.2-.51-.2-.71 0l-1.06 1.06 2.12 2.12 1.06-1.06c.2-.2.2-.51 0-.71z"></path>
+                    </svg>
+                </a
                 >
             {% endif %}
 
@@ -121,15 +127,15 @@
         </div>
     </div>
     <nav class="container header__nav">
-{% check_sport_rubric request as sportrubric %}
+        {% check_sport_rubric request as sportrubric %}
         <ul class="header__nav-ul">
 
             {% get_rubric_max_six as rubrics %}
             {% for rubric in rubrics %}
-                <li class="header__nav-link {% if forloop.counter > 2 %} desktop{% endif %} {% if request.session.rubric_active == rubric.slug %}active{%endif%}">
+                <li class="header__nav-link {% if forloop.counter > 2 %} desktop{% endif %} {% if request.session.rubric_active == rubric.slug %}active{% endif %}">
                     <a class="header__nav-text" href="{{ rubric.get_absolute_url }}" target="_blank">
                         <picture>
-                            <source srcset="{{ rubric.icon.url }}" type="image/webp" />
+                            <source srcset="{{ rubric.icon.url }}" type="image/webp"/>
                             <img src="{{ rubric.icon.url }}" alt="img"/>
                         </picture>
                         {{ rubric.name }}
@@ -140,8 +146,8 @@
             <li id="other-sport-btn" class="header__nav-link desktop" style="position: relative">
                 <span class="header__nav-text">
                     <picture>
-                        <source srcset="{% static 'docs/img/arrow-down.svg'%}" type="image/webp" />
-                        <img src="{% static 'docs/img/arrow-down.svg'%}" alt="arrow"/>
+                        <source srcset="{% static 'docs/img/arrow-down.svg' %}" type="image/webp"/>
+                        <img src="{% static 'docs/img/arrow-down.svg' %}" alt="arrow"/>
                     </picture>
                     Еще
                 </span>
@@ -152,7 +158,7 @@
                         <li>
                             <a href="{{ rubric.get_absolute_url }}" target="_blank">
                                 <picture>
-                                    <source srcset="{{ rubric.icon2.url }}" type="image/webp" />
+                                    <source srcset="{{ rubric.icon2.url }}" type="image/webp"/>
                                     <img src="{{ rubric.icon2.url }}" alt="img" width="20" height="20"/>
                                 </picture>
                                 {{ rubric.name }}
@@ -167,8 +173,8 @@
                 style="position: relative">
                 <span class="header__nav-text">
                     <picture>
-                        <source srcset="{% static 'docs/img/arrow-down.svg'%}" type="image/webp" />
-                        <img src="{% static 'docs/img/arrow-down.svg'%}" alt="arrow"/>
+                        <source srcset="{% static 'docs/img/arrow-down.svg' %}" type="image/webp"/>
+                        <img src="{% static 'docs/img/arrow-down.svg' %}" alt="arrow"/>
                     </picture>
                     Другие
                 </span>
@@ -176,14 +182,14 @@
             {% if user.is_authenticated %}
                 <li class="header__nav-link">
                     <a class="header__nav-text"
-                       href="{% url 'favorite'  %}"
+                       href="{% url 'favorite' %}"
                        hx-get="{% url 'favorite' %}"
                        hx-target="#main-content"
                        hx-push-url="true"
-                       hx-indicator = "#content-loader"
+                       hx-indicator="#content-loader"
                        hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''"
 
-                      >
+                    >
                         <svg
                                 class="header__favorite"
                                 stroke="currentColor"
@@ -211,7 +217,7 @@
                 <li class="mob-list-sports__item">
                     <a class="mob-list-sports__item-name" href="{{ rubric.get_absolute_url }}" target="_blank">
                         <picture>
-                            <source srcset="{{ rubric.icon.url }}" type="image/webp" />
+                            <source srcset="{{ rubric.icon.url }}" type="image/webp"/>
                             <img src="{{ rubric.icon.url }}" alt="img"/>
                         </picture>
                         {{ rubric.name }}

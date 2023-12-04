@@ -9,15 +9,15 @@
                 {% for page in pages %}
                     <li>
                         <a
-                           href="{{ page.get_absolute_url }}"
-                            hx-get="{{ page.get_absolute_url }}"
-                            hx-target="#main-content"
-                            hx-push-url="true"
-                            hx-indicator = "#content-loader"
-                            hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''"
-                            hx-custom='title'
+                                href="{{ page.get_absolute_url }}"
+                                hx-get="{{ page.get_absolute_url }}"
+                                hx-target="#main-content"
+                                hx-push-url="true"
+                                hx-indicator="#content-loader"
+                                hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''"
+                                hx-custom='title'
                         >
-                        {{ page.name }}
+                            {{ page.name }}
                         </a>
                     </li>
                 {% endfor %}

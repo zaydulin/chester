@@ -1,28 +1,31 @@
+{% load i18n %}
+{% load static %}
 {% load generals_tag %}
+{% get_current_language as CURRENT_LANGUAGE %}
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="{{ CURRENT_LANGUAGE }}">
 <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-            href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&amp;display=swap"
-            rel="stylesheet"
-    />
-    <title>{% get_current_name %} | {{ title }} {% block title %}  {% endblock title %}</title>
-    <meta name="description" content="{% block discriptions %} {{ meta_description }}{% endblock discriptions %}" />
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content="{% block descriptions %} {{ meta_description }}{% endblock descriptions %}"/>
 
-    {% include 'themes/head.html' %}
-    {% block head %}
-    {% endblock head %}
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&amp;display=swap"
+          rel="stylesheet"/>
+    <link type="image/x-icon" href="{% get_current_favicon %}" rel="icon">
+    <link rel="stylesheet" href="{% static 'docs/css/main.css' %}"/>
+    <link rel="stylesheet" href="{% static 'docs/css/style.css' %}"/>
+    {% block extra_css %}{% endblock extra_css %}
+
+    <title>{% get_current_name %} | {{ title }} {% block title %}{% endblock title %}</title>
 </head>
 <body>
 
 {% include 'themes/header.html' %}
 <progress id="content-loader" class="htmx-indicator" max="100" style="width: 100%;"></progress>
 
-<div id="main-content" >
+<div id="main-content">
     {% block content %}
 
 
@@ -44,7 +47,7 @@
         // При каждой смене контента обновляем URL
         var currentUrl = window.location.href;
         document.getElementById('back-link').href = currentUrl;
-        
+
     });
 
     // Обработчик события popstate
@@ -54,14 +57,15 @@
     });
 </script>
 
+{# Scripts #}
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script defer src="https://code.createjs.com/1.0.0/createjs.min.js"></script>
 
-
-
-{% block footerlink %}
-
-{% endblock footerlink %}
-
-{% include 'themes/footer_link.html' %}
+<script defer src="{% static 'docs/htmx.min.js' %}"></script>
+<script defer src="{% static 'docs/js/script.js' %}"></script>
+<script src="{% static 'docs/js/index.bundle.js' %}"></script>
+{% block extra_js %}{% endblock extra_js %}
+{# End scripts #}
 </body>
 
 </html>

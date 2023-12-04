@@ -1,5 +1,7 @@
 {% extends 'themes/base.html' %}
 {% load static %}
+{% load events_tag %}
+{% get_settings "DEBUG" as debug %}
 
 
 {% block content %}
@@ -1751,7 +1753,6 @@
 
 
 <script src="https://cdn.jsdelivr.net/npm/emoji-picker-element@1.0.6/dist/index.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 {% csrf_token %}
 <!--Event-->
 <script>
@@ -2030,7 +2031,7 @@
     const chatSocket= new WebSocket(
         'wss://'
         + window.location.host
-        + '/events/'
+        + '/ws/events/'
         + "{{ event.slug }}"
         + "/"
     )

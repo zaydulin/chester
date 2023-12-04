@@ -24,6 +24,8 @@ ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", ["*"])
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
+    "events",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -37,7 +39,6 @@ INSTALLED_APPS = [
     "ipware",
     # app (Приложения)
     "mainapp",
-    "events",
     "rapidapi",
 ]
 
@@ -73,14 +74,14 @@ TEMPLATES = [
     },
 ]
 
-# ASGI_APPLICATION = '_project.asgi.application'
+ASGI_APPLICATION = "_project.asgi.application"
 WSGI_APPLICATION = "_project.wsgi.application"
 
 # CSRF_TRUSTED_ORIGINS = "https://chestersbets.works-all.ru"
 CSRF_TRUSTED_ORIGINS = ("https://chestersbets.works-all.ru",)
 
 CHANNEL_LAYERS = {
-    "default": {"BACKEND": "channels_redis.core.RedisChannelLayer", "CONFIG": {"hosts": [("localhost", 6379)]}}
+    "default": {"BACKEND": "channels_redis.core.RedisChannelLayer", "CONFIG": {"hosts": [("cb-redis", 6379)]}}
 }
 
 CSRF_COOKIE_SECURE = True
