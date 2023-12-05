@@ -703,6 +703,8 @@ def get_h2h():
                                 pass
     return HttpResponse("Data fetched successfully")
 
+
+
 def add_sport_events_list_second(request):
 
     second_url = "https://flashlive-sports.p.rapidapi.com/v1/events/list"

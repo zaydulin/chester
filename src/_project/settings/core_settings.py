@@ -1,4 +1,6 @@
 import os
+
+from celery.schedules import crontab
 from environs import Env
 from pathlib import Path
 from string import ascii_lowercase, ascii_uppercase, digits
@@ -82,6 +84,17 @@ CSRF_TRUSTED_ORIGINS = ("https://chestersbets.works-all.ru",)
 
 CHANNEL_LAYERS = {
     "default": {"BACKEND": "channels_redis.core.RedisChannelLayer", "CONFIG": {"hosts": [("cb-redis", 6379)]}}
+}
+
+CELERY_BEAT_SCHEDULE = {
+    'add_sport_events_task': {
+        'task': 'events.tasks.add_sport_events_list_second',
+        'schedule': crontab(hour=24, minute=0),
+    },
+    'fetch_event_data': {
+        'task': 'events.tasks.fetch_event_data_for_second',
+        'schedule': crontab(hour=0, minute=0,seconds=10),
+    },
 }
 
 CSRF_COOKIE_SECURE = True
