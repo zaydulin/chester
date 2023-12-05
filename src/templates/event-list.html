@@ -21,7 +21,7 @@
     </div>
     <div class="events__main event-container">
         <div class="events__sidebar">
-            <h3>РџРѕРїСѓР»СЏСЂРЅС‹Рµ</h3>
+            <h3>Популярные</h3>
             {% get_popular_seasons as seasons%}
             <ul class="events__tour-list">
                 {% for season in seasons%}
@@ -38,7 +38,7 @@
                 </li>
                 {% endfor %}
             </ul>
-            <h3 class="events__other-leagues">Р”СЂСѓРіРёРµ Р»РёРіРё</h3>
+            <h3 class="events__other-leagues">Другие лиги</h3>
             <div class="events__search-tour">
                 <input placeholder="national screening" />
                 <button>
@@ -114,7 +114,7 @@
                                     hx-indicator="#content-loader"
                                     hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''"
                                     class="events__toggle {% if contexturl  == 'now' %}active{% endif %}"
-                            >РџСЂСЏРјРѕР№ СЌС„РёСЂ</a
+                            >Прямой эфир</a
                             >
 
                             {% with upcoming_view_name='events_upcoming' %}
@@ -126,7 +126,7 @@
                                     hx-indicator="#content-loader"
                                     hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''"
                                     class="events__toggle {% if contexturl  == 'upcoming' %}active{% endif %}"
-                            >РџСЂРµРґСЃС‚РѕСЏС‰РёРµ</a
+                            >Предстоящие</a
                             >
                             {% endwith %} {% with end_view_name='events_end' %}
                             <a
@@ -137,7 +137,7 @@
                                     hx-indicator="#content-loader"
                                     hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''"
                                     class="events__toggle {% if contexturl  == 'end' %}active{% endif %}"
-                            >Р—Р°РІРµСЂС€РµРЅРЅС‹Рµ</a
+                            >Завершенные</a
                             >
                             {% endwith %}
                         </div>
@@ -259,7 +259,7 @@
                                         }
                 });
             } else {
-                alert("Р’С‹ РЅРµ Р°РІС‚РѕСЂРёР·РѕРІР°РЅС‹. РџРѕР¶Р°Р»СѓР№СЃС‚Р°, РІРѕР№РґРёС‚Рµ РІ Р°РєРєР°СѓРЅС‚.");
+                alert("Вы не авторизованы. Пожалуйста, войдите в аккаунт.");
             }
         });
     });
@@ -389,7 +389,7 @@
                                         }
                 });
             } else {
-                alert("Р’С‹ РЅРµ Р°РІС‚РѕСЂРёР·РѕРІР°РЅС‹. РџРѕР¶Р°Р»СѓР№СЃС‚Р°, РІРѕР№РґРёС‚Рµ РІ Р°РєРєР°СѓРЅС‚.");
+                alert("Вы не авторизованы. Пожалуйста, войдите в аккаунт.");
             }
         });
     });
@@ -398,7 +398,7 @@
                                         <span>{{event.get_start_time}}{% if event.status == 3 %} {{ event.get_start_date }}{% endif %}</span>
                                     </div>
                                     <div class="event__period">
-                                        <span>{% if event.half %}{% if event.half == 'FT' %}Р—Р°РІРµСЂС€РµРЅ{% else %}{{event.half}}{% endif %}{%else%} РџСЂРµРґСЃС‚РѕРёС‚{% endif %}</span>
+                                        <span>{% if event.half %}{% if event.half == 'FT' %}Завершен{% else %}{{event.half}}{% endif %}{%else%} Предстоит{% endif %}</span>
                                     </div>
                                 </div>
                                 <div class="event__match">
@@ -529,7 +529,7 @@
                                         <span>{{event.get_start_time}}{% if event.status == 3 %} {{ event.get_start_date }}{% endif %}</span>
                                     </div>
                                     <div class="event__period">
-                                        <span>{% if event.half %}{% if event.half == 'FT' %}Р—Р°РІРµСЂС€РµРЅ{% else %}{{event.half}}{% endif %}{%else%} РџСЂРµРґСЃС‚РѕРёС‚{% endif %}</span>
+                                        <span>{% if event.half %}{% if event.half == 'FT' %}Завершен{% else %}{{event.half}}{% endif %}{%else%} Предстоит{% endif %}</span>
                                     </div>
                                 </div>
                                 <div class="event__match">
@@ -575,17 +575,17 @@
                 <div class="pagination">
 					<span class="step-links">
 						{% if events_page.has_previous %}
-						<a href="?page=1">&laquo; РџРµСЂРІР°СЏ</a>
-						<a href="?page={{ events_page.previous_page_number }}">РџСЂРµРґС‹РґСѓС‰Р°СЏ</a>
+						<a href="?page=1">&laquo; Первая</a>
+						<a href="?page={{ events_page.previous_page_number }}">Предыдущая</a>
 						{% endif %}
 
 						<span class="current-page"
-                        >{{ events_page.number }} РёР· {{ events_page.paginator.num_pages }}</span
+                        >{{ events_page.number }} из {{ events_page.paginator.num_pages }}</span
                         >
 
 						{% if events_page.has_next %}
-						<a href="?page={{ events_page.next_page_number }}">РЎР»РµРґСѓСЋС‰Р°СЏ</a>
-						<a href="?page={{ events_page.paginator.num_pages }}">РџРѕСЃР»РµРґРЅСЏСЏ &raquo;</a>
+						<a href="?page={{ events_page.next_page_number }}">Следующая</a>
+						<a href="?page={{ events_page.paginator.num_pages }}">Последняя &raquo;</a>
 						{% endif %}
 					</span>
                 </div>
@@ -610,16 +610,16 @@
 </main>
 
 <script>
-    // Р¤СѓРЅРєС†РёСЏ РґР»СЏ РѕР±РЅРѕРІР»РµРЅРёСЏ РєРѕРЅС‚РµРЅС‚Р° РІРЅСѓС‚СЂРё #main-content СЃ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёРµРј HTMX
+    // Функция для обновления контента внутри #main-content с использованием HTMX
     function updateMainContent() {
         htmx.ajax('#main-content', {
-            // РЈРєР°Р¶РёС‚Рµ Р·РґРµСЃСЊ РЅРµРѕР±С…РѕРґРёРјС‹Рµ РїР°СЂР°РјРµС‚СЂС‹ Р·Р°РїСЂРѕСЃР°, РµСЃР»Рё РѕРЅРё РµСЃС‚СЊ
+            // Укажите здесь необходимые параметры запроса, если они есть
         });
     }
 
-    // РЈСЃС‚Р°РЅРѕРІРёС‚Рµ РёРЅС‚РµСЂРІР°Р» РґР»СЏ РѕР±РЅРѕРІР»РµРЅРёСЏ РєР°Р¶РґС‹Рµ 3 СЃРµРєСѓРЅРґС‹ (3000 РјРёР»Р»РёСЃРµРєСѓРЅРґ)
+    // Установите интервал для обновления каждые 3 секунды (3000 миллисекунд)
     setInterval(updateMainContent, 3000);
 
-    // РўР°РєР¶Рµ РІС‹РїРѕР»РЅРёС‚Рµ РѕР±РЅРѕРІР»РµРЅРёРµ РєРѕРЅС‚РµРЅС‚Р° РїСЂРё Р·Р°РіСЂСѓР·РєРµ СЃС‚СЂР°РЅРёС†С‹
+    // Также выполните обновление контента при загрузке страницы
     updateMainContent();
 </script>
