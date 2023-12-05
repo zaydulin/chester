@@ -24,35 +24,22 @@
             <div class="search__header">
                 <div class="search-toggle search__fav-toggle">
                     <label class="search-toggle__label">
-                        <a href="{% url 'favoritesec' 'shedule' rubric.slug %}"
-                         hx-get="{% url 'favoritesec' 'shedule' rubric.slug %}"
-                            hx-target="#main-content"
-        hx-push-url="true"
-        hx-indicator="#content-loader"
-        hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''">
+                        <a href="{% url 'favoritesec' 'shedule' rubric.slug %}">
+                            <input name="fav-toggle" value="graphic" type="radio" {% if bookmark_sort_by == 'shedule' %}  checked{% endif %} />
 
                             <span>График</span>
                         </a>
                     </label>
                     <label class="search-toggle__label">
-                        <a 
-                        href="{% url 'favoritesec' 'for_time' rubric.slug %}?time={{ today|date:'Y-m-d' }}"
-                        hx-get="{% url 'favoritesec' 'for_time' rubric.slug %}?time={{ today|date:'Y-m-d' }}"
-        hx-target="#main-content"
-        hx-push-url="true"
-        hx-indicator="#content-loader"
-        hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''">
+                        <a href="{% url 'favoritesec' 'for_time' rubric.slug %}?time={{ today|date:'Y-m-d' }}">
+                            <input name="fav-toggle" value="end" type="radio" {% if bookmark_sort_by == 'for_time' %}  checked{% endif %}/>
 
                             <span>Показать за...</span>
                         </a>
                     </label>
                     <label class="search-toggle__label">
-                        <a href="{% url 'favoritesec' 'teams'  rubric.slug %}"
-                         hx-get="{% url 'favoritesec' 'teams'  rubric.slug %}"
-        hx-target="#main-content"
-        hx-push-url="true"
-        hx-indicator="#content-loader"
-        hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''">
+                        <a href="{% url 'favoritesec' 'teams'  rubric.slug %}">
+                            <input name="fav-toggle" value="teams" type="radio" {% if bookmark_sort_by == 'teams' %}  checked{% endif %} />
 
                             <span>
                   <svg
@@ -73,12 +60,8 @@
                 </span></a>
                     </label>
                     <label class="search-toggle__label">
-                        <a href="{% url 'favoritesec' 'league'  rubric.slug %}"
-                        hx-get="{% url 'favoritesec' 'teams'  rubric.slug %}"
-        hx-target="#main-content"
-        hx-push-url="true"
-        hx-indicator="#content-loader"
-        hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''">
+                        <a href="{% url 'favoritesec' 'league'  rubric.slug %}">
+                            <input name="fav-toggle" value="leagues" type="radio" {% if bookmark_sort_by == 'league' %} checked{% endif %} />
 
                             <span>
                   <svg
@@ -100,12 +83,8 @@
                 </span></a>
                     </label>
                     <label class="search-toggle__label">
-                        <a href="{% url 'favoritesec' 'players'  rubric.slug %}"
-                        hx-get="{% url 'favoritesec' 'players'  rubric.slug %}"
-        hx-target="#main-content"
-        hx-push-url="true"
-        hx-indicator="#content-loader"
-        hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''">
+                        <a href="{% url 'favoritesec' 'players'  rubric.slug %}">
+                            <input name="fav-toggle" value="players" type="radio" {% if bookmark_sort_by == 'players' %} checked{% endif %}/>
 
                             <span>
                   <svg
@@ -129,13 +108,7 @@
                     <select class="search__select favorite" id="rubricDropdown">
 
                         {% for rubric in rubrics %}
-                            <option 
-                            value="{% url 'favoritesec' bookmark_sort_by rubric.slug %}"
-                            hx-get="{% url 'favoritesec' 'players'  rubric.slug %}"
-        hx-target="#main-content"
-        hx-push-url="true"
-        hx-indicator="#content-loader"
-        hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''">{{ rubric.name }}</option>
+                            <option value="{% url 'favoritesec' bookmark_sort_by rubric.slug %}">{{ rubric.name }}</option>
                         {% endfor %}
                     </select>
                 {% if bookmark_sort_by == 'for_time' %}
@@ -160,13 +133,7 @@
                         <ul class="calendar__dropdown active">
                             {% for day in day_list %}
 
-                            <a 
-                            href="{% url 'favoritesec' bookmark_sort_by rubric.slug  %}?time={{ day|date:'Y-m-d' }}"
-                            hx-get="{% url 'favoritesec' bookmark_sort_by rubric.slug  %}?time={{ day|date:'Y-m-d' }}"
-                   hx-target="#main-content"
-                   hx-push-url="true"
-                   hx-indicator = "#content-loader"
-                   hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''">
+                            <a href="{% url 'favoritesec' bookmark_sort_by rubric.slug  %}?time={{ day|date:'Y-m-d' }}">
                                 <li class="calendar__item {% if request.GET.time == day|date:'Y-m-d' %}active{% endif %}">{{ day|date:"d/m D" }}</li>
                             </a>
                         {% endfor %}
@@ -178,27 +145,13 @@
             <ul class="events__list">
                 {% if bookmark_sort_by == 'shedule' %}
                     {% for event in event_bookmarks %}
-                        <li class="events__item event">
+                        <li class="events__item event" id="event-li-{{event.id}}">
                             <div class="event__match-list">
 
-                                <a 
-                                href="{% url 'events_detail' event.slug %}"
-                                hx-get="{% url 'events_detail' event.slug %}"
-                   hx-target="#main-content"
-                   hx-push-url="true"
-                   hx-indicator = "#content-loader"
-                   hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''"
-                                class="event__match-item">
+                                <a href="{% url 'events_detail' event.slug %}" class="event__match-item">
 
                                     <div class="event__match-item-left">
-                                        <form method="post" 
-                                        action="{% url 'toggle_bookmark' 'event' event.id %}"
-                                        hx-get="{% url 'toggle_bookmark' 'event' event.id %}"
-                   hx-target="#main-content"
-                   hx-push-url="true"
-                   hx-indicator = "#content-loader"
-                   hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''"
-                                class="event__match-item">
+                                        <form method="post" action="{% url 'toggle_bookmark' 'event' event.id %}">
                                             {% csrf_token %}
                                             <input type="hidden" name="event_id" value="{{ event.id }}">
                                             <button class="event__like">
@@ -217,9 +170,75 @@
                                                             d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
                                                     ></path>
                                                 </svg>
-
                                             </button>
                                         </form>
+                                        <a id="toggle_bookmark_event-{{event.id}}" class="event__like" style="cursor:pointer;">
+                                             <svg
+                                                stroke="currentColor"
+                                                fill="currentColor"
+                                                stroke-width="0"
+                                                viewBox="0 0 16 16"
+                                                color="#ffa830"
+                                                height="1em"
+                                                width="1em"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                style="display:block;color: rgb(255, 168, 48)"
+                                                id="event_bookmarked-{{event.id}}"
+                                        >
+                                            <path
+                                                    d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
+                                            ></path>
+                                        </svg>
+                                        </a>
+                                        <script>
+
+                                            $(document).ready(function() {
+                                                $("#toggle_bookmark_event-{{event.id}}").click(function(event) {
+                                                    event.preventDefault();
+
+                                                    var event_id = "{{ event.id }}";
+                                                    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+                                                    if ("{{ user.is_authenticated }}" === "True") {
+                                                        var isAlreadyActive = $(this).hasClass("active");
+
+                                                        $.ajax({
+                                                            type: "POST",
+                                                            url: "/toggle_bookmark_post/",
+                                                            headers: {
+                                                                'X-CSRFToken': csrftoken
+                                                            },
+                                                            data: {
+                                                                "bookmark_type": 'event',
+                                                                "event_id": event_id,
+                                                            },
+                                                            success: function(response) {
+                                                                var bookmarkedSVG = document.getElementById("event-li-{{event.id}}");
+                                                                bookmarkedSVG.style.display = "none";
+                                                            },
+                                                            error: function(error) {
+                                                                console.error(error);
+                                                            },
+                                                            complete: function() {
+                                                                let evnbookmrkd = $("#event_not_bookmarked-"+"{{event.id}}");
+                                                                let evbookmrkd = $("#event_bookmarked-"+"{{event.id}}");
+
+                                                                 let isBookmarkedVisible = evbookmrkd.is(":visible");
+
+                                                                // Toggle the display property of the first SVG based on the visibility of the second SVG
+                                                                if (isBookmarkedVisible) {
+                                                                    evnbookmrkd.css("display", "none");
+                                                                } else {
+                                                                    evnbookmrkd.css("display", "block");
+                                                                }
+                                                                                }
+                                                        });
+                                                    } else {
+                                                        alert("Вы не авторизованы. Пожалуйста, войдите в аккаунт.");
+                                                    }
+                                                });
+                                            });
+                                        </script>
                                         <div class="event__start-time"><span>{{event.get_start_time}}{% if event.status == 3 %}
                                             {{ event.get_start_date }}
                                         {% endif %}</span></div>
@@ -271,23 +290,10 @@
 
                             <div class="event__match-list">
 
-                                <a 
-                                href="{% url 'events_detail' event.slug %}"
-                                hx-get="{% url 'events_detail' event.slug %}"
-                   hx-target="#main-content"
-                   hx-push-url="true"
-                   hx-indicator = "#content-loader"
-                   hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''"
-                                class="event__match-item">
+                                <a href="{% url 'events_detail' event.slug %}" class="event__match-item">
 
                                     <div class="event__match-item-left">
-                                        <form method="post" 
-                                        action="{% url 'toggle_bookmark' 'event' event.id %}"
-                                        hx-get="{% url 'toggle_bookmark' event.event.id %}"
-                   hx-target="#main-content"
-                   hx-push-url="true"
-                   hx-indicator = "#content-loader"
-                   hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''">
+                                        <form method="post" action="{% url 'toggle_bookmark' 'event' event.id %}">
                                             {% csrf_token %}
                                             <input type="hidden" name="event_id" value="{{ event.id }}">
                                             <button class="event__like">
@@ -358,21 +364,9 @@
                 {% if bookmark_sort_by == 'league' %}
                     {% for season in season_bookmarks %}
                         <li class="events__item leagues">
-                            <a 
-                            href="{% url 'season_detail' season.slug  %}"
-                            hx-get="{% url 'season_detail' season.slug %}"
-                   hx-target="#main-content"
-                   hx-push-url="true"
-                   hx-indicator = "#content-loader"
-                   hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''">
+                            <a href="{% url 'season_detail' season.slug  %}" >
                                 <div class="event__tour like">
-                                    <form method="post" 
-                                    action="{% url 'toggle_bookmark' 'season' season.id %}"
-                                     hx-get="{% url 'toggle_bookmark' 'season' season.id %}"
-                   hx-target="#main-content"
-                   hx-push-url="true"
-                   hx-indicator = "#content-loader"
-                   hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''">
+                                    <form method="post" action="{% url 'toggle_bookmark' 'season' season.id %}">
                                         {% csrf_token %}
                                         <input type="hidden" name="event_id" value="{{ event.id }}">
                                         <button class="event__like">
@@ -410,23 +404,10 @@
                         <li class="events__item event">
                             <div class="event__match-list">
 
-                                <a 
-                                href="{% url 'team_detail' team.slug %}"
-                                hx-get="{% url 'team_detail' team.slug %}"
-                   hx-target="#main-content"
-                   hx-push-url="true"
-                   hx-indicator = "#content-loader"
-                   hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''"
-                   class="event__match-item">
+                                <a href="{% url 'team_detail' team.slug %}" class="event__match-item">
 
                                     <div class="event__match-item-left">
-                                        <form method="post" 
-                                        action="{% url 'toggle_bookmark' 'team' team.id %}"
-                                        hx-get="{% url 'toggle_bookmark' 'team' team.id  %}"
-                   hx-target="#main-content"
-                   hx-push-url="true"
-                   hx-indicator = "#content-loader"
-                   hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''">
+                                        <form method="post" action="{% url 'toggle_bookmark' 'team' team.id %}">
                                             {% csrf_token %}
                                             <input type="hidden" name="event_id" value="{{ team.id }}">
                                             <button class="event__like">
@@ -476,22 +457,10 @@
                         <li class="events__item event">
                             <div class="event__match-list">
 
-                                <a href="{% url 'player_detail' player.slug %}"
-                                hx-get="{% url 'player_detail' player.slug %}"
-                   hx-target="#main-content"
-                   hx-push-url="true"
-                   hx-indicator = "#content-loader"
-                   hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''"
-                                class="event__match-item">
+                                <a href="{% url 'player_detail' player.slug %}" class="event__match-item">
 
                                     <div class="event__match-item-left">
-                                        <form method="post" 
-                                        action="{% url 'toggle_bookmark' 'player' player.id %}"
-                                         hx-get="{% url 'toggle_bookmark' 'player' player.id %}"
-                   hx-target="#main-content"
-                   hx-push-url="true"
-                   hx-indicator = "#content-loader"
-                   hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''">
+                                        <form method="post" action="{% url 'toggle_bookmark' 'player' player.id %}">
                                             {% csrf_token %}
                                             <input type="hidden" name="event_id" value="{{ player.id }}">
                                             <button class="event__like">
