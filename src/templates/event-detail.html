@@ -2047,7 +2047,8 @@
     )
     chatSocket.onmessage = function (e) {
         const data = JSON.parse(e.data)
-        console.log(data)
+        const event_update = JSON.parse(e.event_update)
+        console.log(event_update)
         let commentsList = document.getElementById('comments-list')
         const scoreElements = document.querySelectorAll("#score");
         scoreElements.forEach(function (scoreElement) {
