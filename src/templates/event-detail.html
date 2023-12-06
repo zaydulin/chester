@@ -2047,9 +2047,9 @@
     )
     chatSocket.onmessage = function (e) {
     const data = JSON.parse(e.data);
-    const type = e.type;
-
-    if (data.type === 'event_update') {
+    const type = data.data.type;
+    console.log(type)
+    if (type === 'event_update') {
         const scoreData = data.data;
         console.log(scoreData);
         const scoreElements = document.querySelectorAll("#score");
@@ -2059,7 +2059,6 @@
             scoreElement.innerHTML = `<span>${homeScore} - ${awayScore}</span>`;
         });
     } else {
-        console.log(type)
         let commentsList = document.getElementById('comments-list');
         commentsList.insertAdjacentHTML(
             'beforeend',
