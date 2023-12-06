@@ -2038,27 +2038,27 @@
 
 </script>
 <script>
-    const chatSocket= new WebSocket(
-        'wss://'
-        + window.location.host
-        + '/ws/events/'
-        + "{{ event.slug }}"
-        + "/"
-    )
-    chatSocket.onmessage = function (e) {
+    const chatSocket = new WebSocket(
+    'wss://' +
+    window.location.host +
+    '/ws/events/' +
+    "{{ event.slug }}" +
+    "/"
+);
+
+chatSocket.onmessage = function (e) {
     const data = JSON.parse(e.data);
-    const type = data.data.type;
-    console.log(type)
+    const type = data.type;
+    console.log(type);
+
     if (type === 'event_update') {
-        const scoreData = data.data;
-        console.log(scoreData);
+        const homeScore = data['home_score'];
+        const awayScore = data['away_score'];
         const scoreElements = document.querySelectorAll("#score");
         scoreElements.forEach(function (scoreElement) {
-            const homeScore = data['data']['home_score'];
-            const awayScore = data['data']['away_score'];
             scoreElement.innerHTML = `<span>${homeScore} - ${awayScore}</span>`;
         });
-    } else {
+    } else if (data.message) {
         let commentsList = document.getElementById('comments-list');
         commentsList.insertAdjacentHTML(
             'beforeend',
@@ -2069,6 +2069,7 @@
         );
     }
 };
+
 
 
     chatSocket.onclose = function(e) {
