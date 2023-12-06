@@ -29,30 +29,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
         message = text_data_json["text"]
 
         new_message = await self.create_new_message(message)
-        data = {"user": new_message.user, "message": new_message.message}
+        data = {"user": new_message.user.username, "message": new_message.message}
         await self.channel_layer.group_send(self.event_group_name, {"type": "new_message", "message": data})
 
     async def new_message(self, event):
         message = event["message"]
-        home_score = event["home_score"]
-        away_score = event["away_score"]
-        await self.send(text_data=json.dumps({
-            "message": message,
-            "home_score": home_score,
-            "away_score": away_score
-        }))
+        await self.send(text_data=json.dumps({"message": message}))
 
     @database_sync_to_async
     def create_new_message(self, text):
         event = Events.objects.get(slug=self.event_slug)
         new_comment = Messages.objects.create(user=self.scope["user"], message=text, event=event)
-        home_score = event.home_score
-        away_score = event.away_score
-        # Формируем словарь data с необходимыми данными
-        data = {
-            "user": new_comment.user.username,
-            "message": new_comment.message,
-            "home_score": home_score,
-            "away_score": away_score
-        }
-        return data
+        return new_comment
