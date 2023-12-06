@@ -16,6 +16,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         await self.accept()
 
+    async def disconnect(self, code):
+        pass
 
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
