@@ -2029,7 +2029,7 @@
 </script>
 <script>
     const chatSocket= new WebSocket(
-        'wss://'
+        'ws://'
         + window.location.host
         + '/ws/events/'
         + "{{ event.slug }}"
@@ -2037,29 +2037,30 @@
     )
     chatSocket.onmessage = function (e) {
         const data = JSON.parse(e.data)
-        commentsList = document.getElementById('comments-list')
+        let commentsList = document.getElementById('comments-list')
         commentsList.insertAdjacentHTML(
             'beforeend',
             '<li class="chat__message">\n' +
-            '<span class="chat__username">' + data['message']['author'] + ':</span>\n'+
-             '<span class="chat__text">' + ['message']['text'] + '</span>\n' +
+            '<span class="chat__username">' + data['message']['user'] + ':</span>\n'+
+             '<span class="chat__text">' + data['message']['message'] + '</span>\n' +
              '</li>'
         )
+    };
+
+    chatSocket.onclose = function(e) {
+        console.error('Chat socket closed unexpectedly');
     };
 
     document.querySelector('#send-comment').onclick = function (e) {
         e.preventDefault()
         const message = document.querySelector('#chat-text');
         const text =  message.value;
+        console.log(text)
         chatSocket.send(JSON.stringify({
             'text':text
         }));
         message.value = '';
-     } else {
-        console.error('WebSocket is not open');
-        // Дополнительная логика обработки, если WebSocket не открыт
-    }
-};
+     };
 
 
 </script>
