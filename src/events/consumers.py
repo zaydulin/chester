@@ -39,8 +39,5 @@ class ChatConsumer(AsyncWebsocketConsumer):
     @database_sync_to_async
     def create_new_message(self, text):
         event = Events.objects.get(slug=self.event_slug)
-        if text == '':
-            pass
-        else:
-            new_comment = Messages.objects.create(user=self.scope["user"], message=text, event=event)
-            return new_comment
+        new_comment = Messages.objects.create(user=self.scope["user"], message=text, event=event)
+        return new_comment
