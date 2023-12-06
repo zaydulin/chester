@@ -1,4 +1,5 @@
 import os
+from datetime import timedelta
 
 from celery.schedules import crontab
 from environs import Env
@@ -89,11 +90,11 @@ CHANNEL_LAYERS = {
 CELERY_BEAT_SCHEDULE = {
     'add_sport_events_task': {
         'task': 'events.tasks.add_sport_events_list_second',
-        'schedule': crontab(hour=24, minute=0),
+        'schedule': crontab(hour=0),
     },
     'fetch_event_data': {
         'task': 'events.tasks.fetch_event_data_for_second',
-        'schedule': crontab(hour=0, minute=0,seconds=10),
+        'schedule': timedelta(seconds=10),
     },
 }
 
