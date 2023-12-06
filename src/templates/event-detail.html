@@ -2048,7 +2048,7 @@
     chatSocket.onmessage = function (e) {
     const data = JSON.parse(e.data);
     const type = data.type;
-    console.log(type)
+    console.log(data)
     if (type === 'event_update') {
         const scoreData = data.data;
         console.log(scoreData);
