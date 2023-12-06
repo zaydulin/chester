@@ -1,5 +1,5 @@
 # consumers.py
-
+import asyncio
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
@@ -17,11 +17,27 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.event_slug = self.scope["url_route"]["kwargs"]["slug"]
         await self.channel_layer.group_add(self.event_group_name, self.channel_name)
+        asyncio.ensure_future(self.send_event_data_second())
         await self.accept()
 
     async def disconnect(self, code):
         await self.channel_layer.group_discard(self.event_group_name, self.channel_name)
         await super().disconnect(code=code)
+
+    async def get_event_data(self):
+        event = Events.objects.get(slug=self.event_slug)
+        return {"home_score":event.home_score,"away_score":event.away_score}
+
+    async def send_event_data(self,event_data):
+        await self.send(text_data=json.dumps({"type": "event_update","data":event_data}))
+
+    async def send_event_data_second(self):
+        while True:
+            event_data = await self.get_event_data()
+            await self.send_event_data(event_data)
+            await asyncio.sleep(5)
+
+
 
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
