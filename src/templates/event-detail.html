@@ -2045,6 +2045,13 @@
     "{{ event.slug }}" +
     "/"
     );
+    chatSocket.onopen = function(event) {
+       console.log("WebSocket is open. Initiating periodic updates.");
+
+       setInterval(function() {
+        chatSocket.send(JSON.stringify({})); // Sending an empty request
+        }, 5000);
+    };
 
     chatSocket.onmessage = function (e) {
         const data = JSON.parse(e.data);
@@ -2081,9 +2088,7 @@
         }));
         message.value = '';
      };
-    setInterval(function() {
-        chatSocket.send(JSON.stringify({})); // Sending an empty request
-    }, 5000);
+
 
 </script>
 {% endblock content %}
