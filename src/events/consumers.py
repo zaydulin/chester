@@ -30,11 +30,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     async def send_event_data(self, event_data):
         await self.send(text_data=json.dumps({
-            "type": "event_update",
-            "data": {
-                "home_score": event_data['home_score'],
-                "away_score": event_data['away_score']
-            }
+            "home_score": event_data['home_score'],
+            "away_score": event_data['away_score']
         }))
 
     async def send_event_data_second(self):
