@@ -1532,16 +1532,16 @@
                     <ul class="chat__messages" id="chat">
                         <ul id="comments-list" class="chat__messages">
                             {% for message in messages %}
+                                                            {% if message.user == request.user and message.stopwords %}
 
                             <li class="chat__message">
                                 <img src="{{ message.user.avatar.url }}" class="chat__avatar" alt="avatar" width="16" height="16" />
                                 <span class="chat__username">{{ message.user.username }}:</span>
-                                                            {% if message.user == request.user and message.stopwords %}
 
                                 <span class="chat__text" style="color:red;">{{ message.stopwords }}</span>
                                 {% endif %}
                                 <span class="chat__text">{{ message.message }}</span>
-                            </li>
+                            </li>{% endif %}
                             {% endfor %}
                         </ul>
                     </ul>
