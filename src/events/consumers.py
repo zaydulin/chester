@@ -1,6 +1,7 @@
+# consumers.py
+
 import json
 from django.contrib.contenttypes.models import ContentType
-
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
 from mainapp.models import Messages
@@ -13,11 +14,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
         self.event_group_name = "post_%s" % self.event_slug
 
         await self.channel_layer.group_add(self.event_group_name, self.channel_name)
-
         await self.accept()
 
     async def disconnect(self, code):
-        pass
+        await self.channel_layer.group_discard(self.event_group_name, self.channel_name)
 
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
