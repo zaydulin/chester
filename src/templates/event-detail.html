@@ -1536,6 +1536,7 @@
                             <li class="chat__message">
                                 <img src="{{ message.user.avatar.url }}" class="chat__avatar" alt="avatar" width="16" height="16" />
                                 <span class="chat__username">{{ message.user.username }}:</span>
+                                    {% if message.stopwords %}
 
                                 <span class="chat__text" style="color:red;">{{ message.stopwords }}</span>
                                 {% endif %}
