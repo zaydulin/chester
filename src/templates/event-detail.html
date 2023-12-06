@@ -2050,7 +2050,9 @@
 
         // Function to send an empty message to update scores
         function sendEmptyMessage() {
-            chatSocket.send(JSON.stringify({}));
+            chatSocket.send(JSON.stringify({
+                'text': ''
+            }));
         }
 
         // Sending an empty message initially and then at intervals of 5 seconds
