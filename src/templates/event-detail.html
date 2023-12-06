@@ -2028,47 +2028,35 @@
 
 </script>
 <script>
-const chatSocket = new WebSocket(
-    'wss://' +
-    window.location.host +
-    '/ws/events/' +
-    "{{ event.slug }}" +
-    "/"
-);
+    const chatSocket= new WebSocket(
+        'wss://'
+        + window.location.host
+        + '/ws/events/'
+        + "{{ event.slug }}"
+        + "/"
+    )
+    chatSocket.onmessage = function (e) {
+        const data = JSON.parse(e.data)
+        commentsList = document.getElementById('comments-list')
+        commentsList.insertAdjacentHTML(
+            'beforeend',
+            '<li class="chat__message">\n' +
+            '<span class="chat__username">' + data['message']['author'] + ':</span>\n'+
+             '<span class="chat__text">' + ['message']['text'] + '</span>\n' +
+             '</li>'
+        )
+    };
 
-chatSocket.onmessage = function (e) {
-    const data = JSON.parse(e.data);
-    displayMessage(data.message);
-};
+    document.querySelector('#send-comment').onclick = function (e) {
+        e.preventDefault()
+        const message = document.querySelector('#chat-text');
+        const text =  message.value;
+        chatSocket.send(JSON.stringify({
+            'text':text
+        }));
+        message.value = '';
+    }
 
-document.querySelector('#send-comment').onclick = function (e) {
-    e.preventDefault();
-    const message = document.querySelector('#chat-text');
-    const text = message.value;
-    chatSocket.send(JSON.stringify({
-        'text': text
-    }));
-    message.value = '';
-};
-
-// Функция для отображения нового сообщения
-function displayMessage(message) {
-    const commentsList = document.getElementById('comments-list');
-    commentsList.insertAdjacentHTML(
-        'beforeend',
-        '<li class="chat__message">\n' +
-        '<span class="chat__username">' + message.author + ':</span>\n' +
-        '<span class="chat__text">' + message.text + '</span>\n' +
-        '</li>'
-    );
-}
-
-// Проверка наличия новых сообщений каждую секунду
-setInterval(function () {
-    // Отправить запрос на сервер для проверки новых сообщений
-    // Например, вы можете отправить запрос Ajax к серверному эндпоинту, который возвращает новые сообщения
-    // и вызвать функцию displayMessage для отображения их на странице
-}, 1000);
 
 
 </script>
