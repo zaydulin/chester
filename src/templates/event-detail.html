@@ -2046,24 +2046,27 @@
         + "/"
     )
     chatSocket.onmessage = function (e) {
-        const data = JSON.parse(e.data)
-        const event_update = JSON.parse(e.event_update)
-        console.log(event_update)
-        let commentsList = document.getElementById('comments-list')
+    const data = JSON.parse(e.data);
+
+    if (data.type === 'event_update') {
         const scoreElements = document.querySelectorAll("#score");
         scoreElements.forEach(function (scoreElement) {
-            const homeScore = data['home_score'];
-            const awayScore = data['away_score'];
+            const homeScore = data['data']['home_score'];
+            const awayScore = data['data']['away_score'];
             scoreElement.innerHTML = `<span>${homeScore} - ${awayScore}</span>`;
         });
+    } else {
+        let commentsList = document.getElementById('comments-list');
         commentsList.insertAdjacentHTML(
             'beforeend',
             '<li class="chat__message">\n' +
             '<span class="chat__username">' + data['message']['user'] + ':</span>\n'+
-             '<span class="chat__text">' + data['message']['message'] + '</span>\n' +
-             '</li>'
-        )
-    };
+            '<span class="chat__text">' + data['message']['message'] + '</span>\n' +
+            '</li>'
+        );
+    }
+};
+
 
     chatSocket.onclose = function(e) {
         console.error('Chat socket closed unexpectedly');
