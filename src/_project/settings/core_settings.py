@@ -84,8 +84,15 @@ WSGI_APPLICATION = "_project.wsgi.application"
 CSRF_TRUSTED_ORIGINS = ("https://chestersbets.works-all.ru",)
 
 CHANNEL_LAYERS = {
-    "default": {"BACKEND": "channels_redis.core.RedisChannelLayer", "CONFIG": {"hosts": [("cb-redis", 6379)]}}
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("cb-redis", 6379)],
+            "capacity": 1024 * 1024, 
+        },
+    }
 }
+
 
 CELERY_BEAT_SCHEDULE = {
     'add_sport_events_task': {
