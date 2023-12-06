@@ -44,25 +44,25 @@ services:
       - cb-db
       - cb-redis
 
-#  cb-celery:
-#    build:
-#      context: .
-#      dockerfile: _configs/app/Dockerfile
-#    container_name: cb-app
-#    command: celery --app _project worker --beat -l info
-#    env_file:
-#      - .env
-#    environment:
-#      WAIT-HOSTS: cb-db, cb-redis
-#    volumes:
-#      - ./src:/app/chesterbets
-#    ports:
-#      - "8000:8000"
-#    tty: true
-#    restart: on-failure
-#    depends_on:
-#      - cb-db
-#      - cb-redis
+  cb-celery:
+    build:
+      context: .
+      dockerfile: _configs/app/Dockerfile
+    container_name: cb-app
+    command: celery --app _project worker --beat -l info
+    env_file:
+      - .env
+    environment:
+      WAIT-HOSTS: cb-db, cb-redis
+    volumes:
+      - ./src:/app/chesterbets
+    ports:
+      - "8000:8000"
+    tty: true
+    restart: on-failure
+    depends_on:
+      - cb-db
+      - cb-redis
 
 volumes:
   cb-db-data:
