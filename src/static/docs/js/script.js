@@ -27,3 +27,11 @@ document.body.addEventListener('htmx:afterRequest', function(event) {
         }
     }
 });
+const countries = document.querySelectorAll('.events__search-tour + div div');
+
+for (let i = 0; i < countries.length; i++) {
+	countries[i].onclick = () => {
+		const el = countries[i].nextElementSibling;
+		el.classList.toggle('active');
+	};
+}
