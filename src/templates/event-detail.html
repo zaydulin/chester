@@ -2071,13 +2071,15 @@
         });
 
         let commentsList = document.getElementById('comments-list');
-        commentsList.insertAdjacentHTML(
-            'beforeend',
-            '<li class="chat__message">\n' +
-            '<span class="chat__username">' + data['message']['user'] + ':</span>\n'+
-            '<span class="chat__text">' + data['message']['message'] + '</span>\n' +
-            '</li>'
-        );
+        if(data['message']['message'] != ''){
+            commentsList.insertAdjacentHTML(
+                'beforeend',
+                '<li class="chat__message">\n' +
+                '<span class="chat__username">' + data['message']['user'] + ':</span>\n'+
+                '<span class="chat__text">' + data['message']['message'] + '</span>\n' +
+                '</li>'
+            );
+        }
 
     };
 
