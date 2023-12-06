@@ -207,6 +207,10 @@ class Messages(models.Model):
         verbose_name = "Сообщение"
         verbose_name_plural = "Сообщения"
 
+@receiver(post_save, sender=Messages)
+def delete_emprty_message(sender, instance, **kwargs):
+    if instance.message == '':
+        instance.delete()
 
 class Bookmarks(models.Model):
     user = models.ForeignKey(User, verbose_name="Пользователь", on_delete=models.CASCADE)
