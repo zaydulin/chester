@@ -34,7 +34,13 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     async def new_message(self, event):
         message = event["message"]
-        await self.send(text_data=json.dumps({"message": message}))
+        home_score = event["home_score"]
+        away_score = event["away_score"]
+        await self.send(text_data=json.dumps({
+            "message": message,
+            "home_score": home_score,
+            "away_score": away_score
+        }))
 
     @database_sync_to_async
     def create_new_message(self, text):
