@@ -2049,6 +2049,7 @@
     const data = JSON.parse(e.data);
 
     if (data.type === 'event_update') {
+        console.log(data.type)
         const scoreElements = document.querySelectorAll("#score");
         scoreElements.forEach(function (scoreElement) {
             const homeScore = data['data']['home_score'];
@@ -2056,6 +2057,7 @@
             scoreElement.innerHTML = `<span>${homeScore} - ${awayScore}</span>`;
         });
     } else {
+        console.log(data.type)
         let commentsList = document.getElementById('comments-list');
         commentsList.insertAdjacentHTML(
             'beforeend',
