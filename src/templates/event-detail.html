@@ -2048,31 +2048,23 @@
 
 chatSocket.onmessage = function (e) {
     const data = JSON.parse(e.data);
-    const type = data.type;
-    const homeScore = data['home_score'];
-    const awayScore = data['away_score'];
-    console.log(homeScore);
-    console.log(awayScore);
-    console.log(data);
 
+    homeScore = data['message']['home_score']
+    awayScore = data['message']['away_score']
+    const scoreElements = document.querySelectorAll("#score");
+    scoreElements.forEach(function (scoreElement) {
+        scoreElement.innerHTML = `<span>${homeScore} - ${awayScore}</span>`;
+    });
 
-    if (type === 'event_update') {
-        const homeScore = data['home_score'];
-        const awayScore = data['away_score'];
-        const scoreElements = document.querySelectorAll("#score");
-        scoreElements.forEach(function (scoreElement) {
-            scoreElement.innerHTML = `<span>${homeScore} - ${awayScore}</span>`;
-        });
-    } else if (data.message) {
-        let commentsList = document.getElementById('comments-list');
-        commentsList.insertAdjacentHTML(
-            'beforeend',
-            '<li class="chat__message">\n' +
-            '<span class="chat__username">' + data['message']['user'] + ':</span>\n'+
-            '<span class="chat__text">' + data['message']['message'] + '</span>\n' +
-            '</li>'
-        );
-    }
+    let commentsList = document.getElementById('comments-list');
+    commentsList.insertAdjacentHTML(
+        'beforeend',
+        '<li class="chat__message">\n' +
+        '<span class="chat__username">' + data['message']['user'] + ':</span>\n'+
+        '<span class="chat__text">' + data['message']['message'] + '</span>\n' +
+        '</li>'
+    );
+
 };
 
 
@@ -2092,7 +2084,13 @@ chatSocket.onmessage = function (e) {
         message.value = '';
      };
 
-
+    function sendEmptyMessage() {
+        chatSocket.send(JSON.stringify({
+            'text': ''
+        }));
+    }
+    sendEmptyMessage(); // Initial send
+    setInterval(sendEmptyMessage, 5000);
 </script>
 {% endblock content %}
 
