@@ -2049,7 +2049,11 @@
 chatSocket.onmessage = function (e) {
     const data = JSON.parse(e.data);
     const type = data.type;
-    console.log(type);
+    const homeScore = data['home_score'];
+    const awayScore = data['away_score'];
+    console.log(homeScore);
+    console.log(awayScore);
+
 
     if (type === 'event_update') {
         const homeScore = data['home_score'];
