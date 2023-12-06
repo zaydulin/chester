@@ -2038,7 +2038,7 @@
 
 </script>
 <script>
-    const chatSocket = new WebSocket(
+const chatSocket = new WebSocket(
     'wss://' +
     window.location.host +
     '/ws/events/' +
@@ -2058,7 +2058,7 @@ chatSocket.onmessage = function (e) {
         scoreElements.forEach(function (scoreElement) {
             scoreElement.innerHTML = `<span>${homeScore} - ${awayScore}</span>`;
         });
-    } else if (data.message) {
+    } else if (type === 'new_message' && data.message) {
         let commentsList = document.getElementById('comments-list');
         commentsList.insertAdjacentHTML(
             'beforeend',
@@ -2070,23 +2070,29 @@ chatSocket.onmessage = function (e) {
     }
 };
 
+chatSocket.onclose = function(e) {
+    console.error('Chat socket closed unexpectedly');
+};
 
+document.querySelector('#send-comment').onclick = function (e) {
+    e.preventDefault();
+    const message = document.querySelector('#chat-text');
+    const text =  message.value;
+    console.log(text);
+    chatSocket.send(JSON.stringify({
+        'text': text
+    }));
+    message.value = '';
+};
 
-    chatSocket.onclose = function(e) {
-        console.error('Chat socket closed unexpectedly');
-    };
+// Add a separate function to handle sending event updates
+function sendEventUpdate() {
+    chatSocket.send(JSON.stringify({
+        'type': 'event_update'
+    }));
+}
 
-    document.querySelector('#send-comment').onclick = function (e) {
-        e.preventDefault()
-        const message = document.querySelector('#chat-text');
-        const text =  message.value;
-        console.log(text)
-        chatSocket.send(JSON.stringify({
-            'text':text
-        }));
-        message.value = '';
-     };
-
+// Call sendEventUpdate when you need to update the event data
 
 </script>
 {% endblock content %}
