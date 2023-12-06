@@ -2026,6 +2026,73 @@
     });
 
 </script>
+<script>
+    let chatSocket = null;
+
+function connectWebSocket() {
+    chatSocket = new WebSocket(
+        'wss://chestersbets.works-all.ru/ws/events/cr58OltuIWeUmP4vznalwAbGbukRvJYV/'
+    );
+
+    chatSocket.onmessage = function (e) {
+        const data = JSON.parse(e.data);
+        updateChat(data['message']['author'], data['message']['text']);
+    };
+
+    chatSocket.onclose = function (event) {
+        console.error('WebSocket closed with code:', event.code, 'reason:', event.reason);
+        // Переподключаемся через некоторое время
+        setTimeout(connectWebSocket, 1000);
+    };
+
+    // Другие обработчики событий, если нужно
+}
+
+// Вызываем функцию для подключения при загрузке страницы
+connectWebSocket();
+
+document.querySelector('#send-comment').onclick = function (e) {
+    e.preventDefault();
+
+    const message = document.querySelector('#chat-text');
+    const text =  message.value;
+
+    if (chatSocket.readyState === WebSocket.OPEN) {
+        chatSocket.send(JSON.stringify({
+            'text': text
+        }));
+        message.value = '';
+    } else if (chatSocket.readyState === WebSocket.CLOSING || chatSocket.readyState === WebSocket.CLOSED) {
+        console.error('WebSocket is not open. Reconnecting...');
+        connectWebSocket();  // Попытка переподключения
+        // Можно добавить логику ожидания подключения, если нужно
+    } else {
+        console.error('WebSocket is not open. Connection still in CONNECTING state.');
+        // Можно добавить логику ожидания подключения, если нужно
+    }
+};
+
+// Функция для обновления чата при появлении нового сообщения
+function updateChat(author, text) {
+    const commentsList = document.getElementById('comments-list');
+    commentsList.insertAdjacentHTML(
+        'beforeend',
+        '<li class="chat__message">\n' +
+        '<span class="chat__username">' + author + ':</span>\n'+
+        '<span class="chat__text">' + text + '</span>\n' +
+        '</li>'
+    );
+}
+
+// Периодически проверяем новые сообщения (каждые 1 секунду, например)
+setInterval(() => {
+    // Отправляем запрос к серверу для проверки наличия новых сообщений
+    chatSocket.send(JSON.stringify({ 'check_for_new_messages': true }));
+
+    // Можно также отправлять время последнего сообщения и обновлять его при получении новых сообщений
+}, 1000);
+
+</script>
 
 {% endblock content %}
 
