@@ -2035,30 +2035,45 @@
         + "{{ event.slug }}"
         + "/"
     )
-    chatSocket.onmessage = function (e) {
-        const data = JSON.parse(e.data)
-        commentsList = document.getElementById('comments-list')
+    sendMessage: function (text) {
+        if (this.ws.readyState === WebSocket.CLOSED) {
+            // Если WebSocket закрыт, закрываем текущее соединение и открываем новое
+            this.ws.close();
+            this.ws = new WebSocket('wss://' + window.location.host + '/ws/events/' + 'cr58OltuIWeUmP4vznalwAbGbukRvJYV' + '/');
+
+            // Ждем, пока новое соединение откроется
+            while (this.ws.readyState !== WebSocket.OPEN) {
+                await new Promise(r => setTimeout(r, 250));
+            }
+        }
+
+        // Отправляем сообщение
+        this.ws.send(JSON.stringify({
+            'text': text
+        }));
+    },
+
+    handleMessage: function (e) {
+        const data = JSON.parse(e.data);
+        commentsList = document.getElementById('comments-list');
         commentsList.insertAdjacentHTML(
             'beforeend',
             '<li class="chat__message">\n' +
-            '<span class="chat__username">' + data['message']['author'] + ':</span>\n'+
-             '<span class="chat__text">' + ['message']['text'] + '</span>\n' +
-             '</li>'
-        )
-    };
-
-    document.querySelector('#send-comment').onclick = function (e) {
-        e.preventDefault()
-        const message = document.querySelector('#chat-text');
-        const text =  message.value;
-        chatSocket.send(JSON.stringify({
-            'text':text
-        }));
-        message.value = '';
-     } else {
-        console.error('WebSocket is not open');
-        // Дополнительная логика обработки, если WebSocket не открыт
+            '<span class="chat__username">' + data['message']['author'] + ':</span>\n' +
+            '<span class="chat__text">' + data['message']['text'] + '</span>\n' +
+            '</li>'
+        );
     }
+};
+
+chatSocket.ws.onmessage = chatSocket.handleMessage;
+
+document.querySelector('#send-comment').onclick = function (e) {
+    e.preventDefault();
+    const message = document.querySelector('#chat-text');
+    const text = message.value;
+    chatSocket.sendMessage(text);
+    message.value = '';
 };
 
 
