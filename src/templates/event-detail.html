@@ -2047,11 +2047,12 @@
     )
     chatSocket.onmessage = function (e) {
         const data = JSON.parse(e.data)
+        console.log(data)
         let commentsList = document.getElementById('comments-list')
         const scoreElements = document.querySelectorAll("#score");
         scoreElements.forEach(function (scoreElement) {
-            const homeScore = data['message']['home_score'];
-            const awayScore = data['message']['away_score'];
+            const homeScore = data['home_score'];
+            const awayScore = data['away_score'];
             scoreElement.innerHTML = `<span>${homeScore} - ${awayScore}</span>`;
         });
         commentsList.insertAdjacentHTML(
