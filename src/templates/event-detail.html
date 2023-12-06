@@ -2046,11 +2046,16 @@
     "/"
     );
     chatSocket.onopen = function(event) {
-       console.log("WebSocket is open. Initiating periodic updates.");
+        console.log("WebSocket is open. Initiating periodic updates.");
 
-       setInterval(function() {
-        chatSocket.send(JSON.stringify({})); // Sending an empty request
-        }, 5000);
+        // Function to send an empty message to update scores
+        function sendEmptyMessage() {
+            chatSocket.send(JSON.stringify({}));
+        }
+
+        // Sending an empty message initially and then at intervals of 5 seconds
+        sendEmptyMessage(); // Initial send
+        setInterval(sendEmptyMessage, 5000); // Send every 5 seconds
     };
 
     chatSocket.onmessage = function (e) {
