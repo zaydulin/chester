@@ -25,7 +25,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
-        event = Events.object.get(slug=self.event_slug)
         message = text_data_json["text"]
 
         new_message = await self.create_new_message(message)
