@@ -2044,29 +2044,42 @@
     '/ws/events/' +
     "{{ event.slug }}" +
     "/"
-);
-
-chatSocket.onmessage = function (e) {
-    const data = JSON.parse(e.data);
-
-    homeScore = data['message']['home_score']
-    awayScore = data['message']['away_score']
-    const scoreElements = document.querySelectorAll("#score");
-    scoreElements.forEach(function (scoreElement) {
-        scoreElement.innerHTML = `<span>${homeScore} - ${awayScore}</span>`;
-    });
-
-    let commentsList = document.getElementById('comments-list');
-    commentsList.insertAdjacentHTML(
-        'beforeend',
-        '<li class="chat__message">\n' +
-        '<span class="chat__username">' + data['message']['user'] + ':</span>\n'+
-        '<span class="chat__text">' + data['message']['message'] + '</span>\n' +
-        '</li>'
     );
+    chatSocket.onopen = function(event) {
+        console.log("WebSocket is open. Initiating periodic updates.");
 
-};
+        // Function to send an empty message to update scores
+        function sendEmptyMessage() {
+            chatSocket.send(JSON.stringify({
+                'text': ''
+            }));
+        }
 
+
+        sendEmptyMessage(); // Initial send
+        setInterval(sendEmptyMessage, 5000); // Send every 5 seconds
+    };
+
+    chatSocket.onmessage = function (e) {
+        const data = JSON.parse(e.data);
+
+        homeScore = data['message']['home_score']
+        awayScore = data['message']['away_score']
+        const scoreElements = document.querySelectorAll("#score");
+        scoreElements.forEach(function (scoreElement) {
+            scoreElement.innerHTML = `<span>${homeScore} - ${awayScore}</span>`;
+        });
+
+        let commentsList = document.getElementById('comments-list');
+        commentsList.insertAdjacentHTML(
+            'beforeend',
+            '<li class="chat__message">\n' +
+            '<span class="chat__username">' + data['message']['user'] + ':</span>\n'+
+            '<span class="chat__text">' + data['message']['message'] + '</span>\n' +
+            '</li>'
+        );
+
+    };
 
 
     chatSocket.onclose = function(e) {
@@ -2077,20 +2090,13 @@ chatSocket.onmessage = function (e) {
         e.preventDefault()
         const message = document.querySelector('#chat-text');
         const text =  message.value;
-        console.log(text)
         chatSocket.send(JSON.stringify({
             'text':text
         }));
         message.value = '';
      };
 
-    function sendEmptyMessage() {
-        chatSocket.send(JSON.stringify({
-            'text': ''
-        }));
-    }
-    sendEmptyMessage(); // Initial send
-    setInterval(sendEmptyMessage, 5000);
+
 </script>
 {% endblock content %}
 
