@@ -45,7 +45,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         message = text_data_json["text"]
 
         new_message = await self.create_new_message(message)
-        data = {"user": new_message.user.username, "message": new_message.message}
+        data = {"user": new_message.user.username, "message": new_message.message,"event":new_message.event.home_score,}
         await self.channel_layer.group_send(self.event_group_name, {"type": "new_message", "message": data})
 
     async def new_message(self, event):
