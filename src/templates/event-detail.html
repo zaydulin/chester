@@ -2027,39 +2027,7 @@
     });
 
 </script>
-<script>
-    const chatSocket= new WebSocket(
-        'wss://'
-        + window.location.host
-        + '/ws/events/'
-        + "{{ event.slug }}"
-        + "/"
-    )
-    chatSocket.onmessage = function (e) {
-        const data = JSON.parse(e.data)
-        commentsList = document.getElementById('comments-list')
-        commentsList.insertAdjacentHTML(
-            'beforeend',
-            '<li class="chat__message">\n' +
-            '<span class="chat__username">' + data['message']['author'] + ':</span>\n'+
-             '<span class="chat__text">' + ['message']['text'] + '</span>\n' +
-             '</li>'
-        )
-    };
 
-    document.querySelector('#send-comment').onclick = function (e) {
-        e.preventDefault()
-        const message = document.querySelector('#chat-text');
-        const text =  message.value;
-        chatSocket.send(JSON.stringify({
-            'text':text
-        }));
-        message.value = '';
-    }
-
-
-
-</script>
 {% endblock content %}
 
 
