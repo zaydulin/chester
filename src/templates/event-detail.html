@@ -1090,7 +1090,7 @@
                     </div>
 
                     <div class="event-info__img-info img-info">
-                        <div class="img-info__score">{{event.home_score}}-{{event.away_score}}</div>
+                        <div class="img-info__score" id="score">{{event.home_score}}-{{event.away_score}}</div>
                         <img src="{{ event.rubrics.cover.url }}" alt="bg" class="img-info__background" />
                         <div class="img-info__period">{% if event.get_correct_half == None %} Матч не начался{% else %}{{ event.get_correct_half }}{% endif %}</div>
                         <div class="img-info__periods-data">
@@ -1208,7 +1208,7 @@
                             </div>
                         </div>
                         {% endfor %}
-                        <div class="football-rev__score"><span>{{event.home_score}} - {{event.away_score}}</span></div>
+                        <div class="football-rev__score" id="score"><span>{{event.home_score}} - {{event.away_score}}</span></div>
 
                     </div>
                     <div class="football-rev__footer">
@@ -1408,7 +1408,7 @@
                             </div>
                         </div>
                         {% endfor %}
-                        <div class="football-rev__score"><span>{{event.home_score}} - {{event.away_score}}</span></div>
+                        <div class="football-rev__score" id="score"><span>{{event.home_score}} - {{event.away_score}}</span></div>
 
                     </div>
 
@@ -2048,6 +2048,12 @@
     chatSocket.onmessage = function (e) {
         const data = JSON.parse(e.data)
         let commentsList = document.getElementById('comments-list')
+        const scoreElements = document.querySelectorAll("#score");
+        scoreElements.forEach(function (scoreElement) {
+            const homeScore = data['message']['home_score'];
+            const awayScore = data['message']['away_score'];
+            scoreElement.innerHTML = `<span>${homeScore} - ${awayScore}</span>`;
+        });
         commentsList.insertAdjacentHTML(
             'beforeend',
             '<li class="chat__message">\n' +
