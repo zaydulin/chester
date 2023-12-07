@@ -124,7 +124,7 @@ def get_incidents_event_post(request):
                     }
             return JsonResponse(data)
         else:
-            return JsonResponse({"message":"last_incident_ravno"})
+            return JsonResponse({})
     else:
         return HttpResponseBadRequest('Invalid')
 
