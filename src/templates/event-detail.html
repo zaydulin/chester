@@ -1018,33 +1018,8 @@
                 <a href="{{ baner.slug }}" class="adv-link"><img src="{{ baner.baner.url }}" alt="logo" /></a>
                 {% endfor %}
                 {% if not football %}
-                <div class="data-period">
-                    <div class="data-period__title">
-                        <div class="data-period__first-box">Тайм</div>
-                        {% for period in event.periods.all %}
-                        <div class="data-period__period-box"><span>{{period.period_number}}</span></div>
-                        {% endfor %}
+                <h1>paasdasd</h1>
 
-                    </div>
-                    <div class="data-period__content">
-                        <div class="data-period__first-box">
-                            <img src="{{home_team.logo}}" width="20" height="20" />
-                            <span>{{home_team.name}}</span>
-                        </div>
-                        {% for period in event.periods.all %}
-                        <div class="data-period__point-box loser"><span>{{period.home_score}}</span></div>
-                        {% endfor %}
-                    </div>
-                    <div class="data-period__content">
-                        <div class="data-period__first-box">
-                            <img src="{{away_team.logo}}" width="20" height="20" />
-                            <span>{{away_team.name}}</span>
-                        </div>
-                        {% for period in event.periods.all %}
-                        <div class="data-period__point-box"><span>{{period.away_score}}</span></div>
-                        {% endfor %}
-                    </div>
-                </div>
                 {% endif %}
                 {% if hockey %}
                 <div class="data-period">
@@ -1075,7 +1050,6 @@
                     </div>
                 </div>
                 {% endif %}
-
                 <div>
 
                     <div class="event-info__video-toggler">
