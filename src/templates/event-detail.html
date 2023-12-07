@@ -2070,16 +2070,17 @@
         scoreElements.forEach(function (scoreElement) {
             scoreElement.innerHTML = `<span>${homeScore} - ${awayScore}</span>`;
         });
+
         const scoreawayElements = document.querySelectorAll("#score-away-head");
         const scorehomeElements = document.querySelectorAll("#score-home-head");
 
-        scoreElements.forEach(function (scoreElement) {
-            scoreElement.innerHTML = `<span>${awayScore}</span>`;
+        scoreawayElements.forEach(function (scoreawayElement) {
+            scoreawayElement.innerHTML = `${awayScore}`;
         });
 
 
-        scoreElements.forEach(function (scoreElement) {
-            scoreElement.innerHTML = `<span>${homeScore}</span>`;
+        scorehomeElements.forEach(function (scorehomeElement) {
+            scorehomeElement.innerHTML = `${homeScore}`;
         });
 
 
