@@ -106,14 +106,8 @@ def get_incidents_event_post(request):
         event = Events.objects.get(slug = event_slug)
         incident = event.incidents.last()
 
-        data = {"incident_type":incident.incident_type,
-                "incident_team":incident.player_team,
-                "card_color":incident.card_type,
-                "player_replacement_first":incident.player.name,
-                "player_replacement_second":incident.player_two_in.name,
-                "scoring_team":incident.scoring_team,
-                "time":incident.time,
-                "inj_time":incident.inj_time,
+        data = {"message":"good"
+
                 }
         return JsonResponse(data)
     else:
