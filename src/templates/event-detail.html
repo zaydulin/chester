@@ -2,10 +2,10 @@
 {% load events_tag %}
 {% get_settings "DEBUG" as debug %}
 
-
+{% block descriptions %} {{ meta-content }}{% endblock descriptions %}
 {% block content %}
 
-<main  class="event-info sp-container" data-title = "{{title}}" data-description="ufdyy" >
+<main  class="event-info sp-container" data-title = "{{title}}"  >
     <div class="side-banners left">
         {% for baner in sidebar_baners_left %}
 
