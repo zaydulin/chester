@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.contrib import messages
 import time
-from django.http import HttpResponseRedirect, HttpResponseBadRequest, JsonResponse
+from django.http import HttpResponseRedirect, HttpResponseBadRequest, JsonResponse, HttpResponse
 from django.urls import reverse
 from django.contrib.contenttypes.models import ContentType
 from datetime import datetime, timedelta
@@ -114,7 +114,7 @@ def get_incidents_event_post(request):
             "time":incident.time,
             "inj_time":incident.inj_time,
             }
-    return JsonResponse(data)
+    return HttpResponse("gud")
 
 
 class EditProfileView(CustomHtmxMixin, TemplateView):

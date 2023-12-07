@@ -2102,7 +2102,6 @@ getIncidents();
 
     chatSocket.onmessage = function (e) {
         const data = JSON.parse(e.data);
-        console.log(data);
         homeScore = data['message']['home_score']
         awayScore = data['message']['away_score']
         const scoreElements = document.querySelectorAll("#score");
