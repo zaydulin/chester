@@ -280,7 +280,14 @@
 
                                 {% if event %}
 
-                                <a class="event__match-item" href="{% url 'events_detail' event.slug %}">
+                                <a class="event__match-item" href="{% url 'events_detail' event.slug %}"
+                                    hx-get="{% url 'events_detail' event.slug %}"
+                                    hx-target="#main-content" hx-history-elt="#main-content"
+                                    hx-push-url="true"
+                                    hx-indicator="#content-loader"
+                                    hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''"
+
+                                >
                                     <div class="event__match-item-left">
                                         <button id="toggle_bookmark_event-{{event.id}}" class="event__like" style="cursor:pointer;">
                                             <svg
@@ -349,8 +356,7 @@
                                             <div>{{event.away_score}}</div>
                                         </div>
                                     </div>
-                                </a>
-                                <script>
+                                    <script>
                                             document.addEventListener("DOMContentLoaded", function() {
                                                 // Get references to the SVG elements
                                                 var bookmarkedSVG = document.getElementById("event_bookmarked-"+"{{event.id}}");
@@ -431,6 +437,8 @@
                                                 });
                                             });
                                         </script>
+                                </a>
+
                                 {% endif %}
 
                             {% endfor %}
