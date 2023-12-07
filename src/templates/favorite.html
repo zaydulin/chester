@@ -106,9 +106,8 @@
                 </div>
                 <div class="search__favorite-right">
                     <select class="search__select favorite" id="rubricDropdown">
-
                         {% for rubric in rubrics %}
-                            <option value="{% url 'favoritesec' bookmark_sort_by rubric.slug %}">{{ rubric.name }}</option>
+                            <option value="{% url 'favoritesec' bookmark_sort_by rubric.slug %}" {% if request.path.endswith('/' + rubric.slug) %}selected  {% endif  %}>{{ rubric.name }}</option>
                         {% endfor %}
                     </select>
                 {% if bookmark_sort_by == 'for_time' %}
