@@ -18,12 +18,18 @@ function clearContent() {
 }
 
 document.body.addEventListener('htmx:afterRequest', function(event) {
-    const hxCustom = event.srcElement.getAttribute("hx-custom")
-    if (hxCustom === 'title'){
-        const dataTitle = document.getElementById("main-content").querySelector("main[data-title]")
+    const hxCustom = event.srcElement.getAttribute("hx-custom");
+    if (hxCustom === 'title') {
+        const dataTitle = document.getElementById("main-content").querySelector("main[data-title]");
         if (dataTitle) {
-            textTitle = dataTitle.getAttribute("data-title")
-            document.querySelector("head").querySelector("title").innerHTML = textTitle
+            const textTitle = dataTitle.getAttribute("data-title");
+            document.querySelector("head title").innerHTML = textTitle;
+        }
+    } else if (hxCustom === 'meta_content') {
+        const metaContent = event.detail.xhr.response;
+        const metaDescription = document.querySelector('meta[name="description"]');
+        if (metaDescription) {
+            metaDescription.setAttribute('content', metaContent);
         }
     }
 });
