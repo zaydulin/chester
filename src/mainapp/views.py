@@ -105,12 +105,18 @@ def get_incidents_event_post(request):
         last_incident_id = request.POST.get('last_incident_id')
         event = Events.objects.get(slug = event_slug)
         incident = event.incidents.last()
+        player_name = ""
+        player_name_second = ""
+        if incident.player:
+            player_name =  incident.player.name
+        if incident.player_two_in:
+            player_name_second =  incident.player_two_in.name
 
         data = {"message":incident.incident_type,
                 "incident_team":incident.player_team,
                 "card_color":incident.card_type,
-                "player_replacement_first":incident.player.name,
-
+                "player_replacement_first":player_name,
+                "player_replacement_second":player_name_second,
                 "scoring_team":incident.scoring_team,
                 "time":incident.time,
                 "inj_time":incident.inj_time,
