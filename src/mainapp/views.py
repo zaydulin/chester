@@ -212,6 +212,7 @@ class FavoriteView(CustomHtmxMixin, TemplateView):
         rubrics =  Rubrics.objects.all()
         sidebar_baners = Baners.objects.filter(type=1)
         context['sidebar_baners'] = sidebar_baners
+        context['slugofpage'] = slug
         context['rubric'] = rubric
         context['rubrics'] = rubrics
         context['bookmark_sort_by'] = bookmark_sort_by

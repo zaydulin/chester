@@ -1,4 +1,4 @@
-{% load events_tag %}
+
 
 <main class="favorite sp-container" data-title = "{{title}}">
     <div class="search__left-banners side-banners left">
@@ -107,12 +107,10 @@
                     </label>
                 </div>
 
-                endwith --
-                {{endwith}}
                 <div class="search__favorite-right">
                     <select class="search__select favorite" id="rubricDropdown">
                         {% for rubric in rubrics %}
-                            <option value="{% url 'favoritesec' bookmark_sort_by rubric.slug %}" {% if rubric.slug == endwith %}selected  {% endif  %}>{{ rubric.name }}</option>
+                            <option value="{% url 'favoritesec' bookmark_sort_by rubric.slug %}" {% if rubric.slug == slugofpage %}selected  {% endif  %}>{{ rubric.name }}</option>
                         {% endfor %}
                     </select>
                 {% if bookmark_sort_by == 'for_time' %}
