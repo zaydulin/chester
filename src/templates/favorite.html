@@ -27,21 +27,18 @@
                 <div class="search-toggle search__fav-toggle">
                     <label class="search-toggle__label">
                         <a href="{% url 'favoritesec' 'shedule' rubric.slug %}">
-                            <input name="fav-toggle" value="graphic" type="radio" {% if bookmark_sort_by == 'shedule' %}  checked{% endif %} />
 
                             <span>График</span>
                         </a>
                     </label>
                     <label class="search-toggle__label">
                         <a href="{% url 'favoritesec' 'for_time' rubric.slug %}?time={{ today|date:'Y-m-d' }}">
-                            <input name="fav-toggle" value="end" type="radio" {% if bookmark_sort_by == 'for_time' %}  checked{% endif %}/>
 
                             <span>Показать за...</span>
                         </a>
                     </label>
                     <label class="search-toggle__label">
                         <a href="{% url 'favoritesec' 'teams'  rubric.slug %}">
-                            <input name="fav-toggle" value="teams" type="radio" {% if bookmark_sort_by == 'teams' %}  checked{% endif %} />
 
                             <span>
                   <svg
@@ -63,7 +60,6 @@
                     </label>
                     <label class="search-toggle__label">
                         <a href="{% url 'favoritesec' 'league'  rubric.slug %}">
-                            <input name="fav-toggle" value="leagues" type="radio" {% if bookmark_sort_by == 'league' %} checked{% endif %} />
 
                             <span>
                   <svg
@@ -86,7 +82,6 @@
                     </label>
                     <label class="search-toggle__label">
                         <a href="{% url 'favoritesec' 'players'  rubric.slug %}">
-                            <input name="fav-toggle" value="players" type="radio" {% if bookmark_sort_by == 'players' %} checked{% endif %}/>
 
                             <span>
                   <svg
