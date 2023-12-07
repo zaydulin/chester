@@ -68,6 +68,11 @@ def get_context(request):
     else:
         return None
 
+@register.simple_tag()
+def get_endwith(request):
+    url = request.path
+    return url.endswith()
+
 
 @register.simple_tag
 def check_sport_rubric(request):
