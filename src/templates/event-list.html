@@ -281,7 +281,46 @@
                                 {% if event %}
 
                                 <a class="event__match-item" href="{% url 'events_detail' event.slug %}">
-
+                                    <div class="event__match-item-left">
+                                        <button id="toggle_bookmark_event-{{event.id}}" class="event__like" style="cursor:pointer;">
+                                            <svg
+                                                    stroke="currentColor"
+                                                    fill="currentColor"
+                                                    stroke-width="0"
+                                                    viewBox="0 0 16 16"
+                                                    color="#ffa830"
+                                                    height="1em"
+                                                    width="1em"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    style="display:none;color: rgb(255, 168, 48)"
+                                                    id="event_bookmarked-{{event.id}}"
+                                            >
+                                                <path
+                                                        d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
+                                                ></path>
+                                            </svg>
+                                            <svg
+                                                    stroke="currentColor"
+                                                    fill="currentColor"
+                                                    stroke-width="0"
+                                                    viewBox="0 0 16 16"
+                                                    height="1em"
+                                                    width="1em"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    id="event_not_bookmarked-{{event.id}}"
+                                            >
+                                                <path
+                                                        d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"
+                                                ></path>
+                                            </svg>
+                                        </button>
+                                        <div class="event__start-time">
+                                            <span>{{event.get_start_time}}{% if event.status == 3 %} {{ event.get_start_date }}{% endif %}</span>
+                                        </div>
+                                        <div class="event__period">
+                                            <span>{% if event.half %}{% if event.half == 'FT' %}Завершен{% else %}{{event.half}}{% endif %}{%else%} Предстоит{% endif %}</span>
+                                        </div>
+                                    </div>
                                     <div class="event__match">
                                        <div class="event__match-left">
                                             <h2 class="event__home-team match-team">
@@ -311,7 +350,89 @@
                                         </div>
                                     </div>
                                 </a>
+                                <script>
+                                            document.addEventListener("DOMContentLoaded", function() {
+                                                // Get references to the SVG elements
+                                                var bookmarkedSVG = document.getElementById("event_bookmarked-"+"{{event.id}}");
+                                                var notBookmarkedSVG = document.getElementById("event_not_bookmarked-"+"{{event.id}}");
+
+                                                // Assuming is_event_bookmarked is a boolean variable
+                                                var isEventBookmarked = {{ event.is_bookmarked|lower }}; // Convert to lower case for boolean interpretation
+
+                                                // Function to toggle display based on the bookmarked status
+                                                function toggleSVGDisplay() {
+                                                    if (isEventBookmarked) {
+                                                        bookmarkedSVG.style.display = "block";
+                                                        notBookmarkedSVG.style.display = "none";
+                                                    } else {
+                                                        bookmarkedSVG.style.display = "none";
+                                                        notBookmarkedSVG.style.display = "block";
+                                                    }
+                                                }
+
+                                                // Initial display based on the initial value of is_event_bookmarked
+                                                toggleSVGDisplay();
+                                            });
+
+                                            $(document).ready(function() {
+                                                $("#toggle_bookmark_event-{{event.id}}").click(function(event) {
+                                                    event.preventDefault();
+
+                                                    var event_id = "{{ event.id }}";
+                                                    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+                                                    if ("{{ user.is_authenticated }}" === "True") {
+                                                        var isAlreadyActive = $(this).hasClass("active");
+
+                                                        $.ajax({
+                                                            type: "POST",
+                                                            url: "/toggle_bookmark_post/",
+                                                            headers: {
+                                                                'X-CSRFToken': csrftoken
+                                                            },
+                                                            data: {
+                                                                "bookmark_type": 'event',
+                                                                "event_id": event_id,
+                                                            },
+                                                            success: function(response) {
+
+                                                                var bookmarkedSVG = document.getElementById("event_bookmarked-"+"{{event.id}}");
+                                                                var notBookmarkedSVG = document.getElementById("event_not_bookmarked-"+"{{event.id}}");
+
+                                                                // Toggle the display of the SVGs
+                                                                if (bookmarkedSVG.style.display === "block") {
+                                                                    bookmarkedSVG.style.display = "none";
+                                                                    notBookmarkedSVG.style.display = "block";
+                                                                } else {
+                                                                    bookmarkedSVG.style.display = "block";
+                                                                    notBookmarkedSVG.style.display = "none";
+                                                                }
+                                                            },
+                                                            error: function(error) {
+                                                                console.error(error);
+                                                            },
+                                                            complete: function() {
+                                                                let evnbookmrkd = $("#event_not_bookmarked-"+"{{event.id}}");
+                                                                let evbookmrkd = $("#event_bookmarked-"+"{{event.id}}");
+
+                                                                 let isBookmarkedVisible = evbookmrkd.is(":visible");
+
+                                                                // Toggle the display property of the first SVG based on the visibility of the second SVG
+                                                                if (isBookmarkedVisible) {
+                                                                    evnbookmrkd.css("display", "none");
+                                                                } else {
+                                                                    evnbookmrkd.css("display", "block");
+                                                                }
+                                                                                }
+                                                        });
+                                                    } else {
+                                                        alert("Вы не авторизованы. Пожалуйста, войдите в аккаунт.");
+                                                    }
+                                                });
+                                            });
+                                        </script>
                                 {% endif %}
+
                             {% endfor %}
                         </div>
                     </li>
