@@ -364,7 +364,8 @@ class EventsView(CustomHtmxMixin,TemplateView):
             ).first()
             context["is_home_team_bookmarked"] = home_team_bookmark is not None
             context["is_away_team_bookmarked"] = away_team_bookmark is not None
-
+        context["title"] = event.title
+        context["meta-content"] = event.content
         context["event"] = event
         context["messages"] = messages
         context["message_form"] = message_form

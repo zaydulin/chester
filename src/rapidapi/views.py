@@ -761,6 +761,7 @@ def add_sport_events_list_second(request):
                                 logo=event.get('AWAY_IMAGES')[-1],
                                 rubrics=rubrics
                             )
+                        content_text = f'ChesterBets ,смотреть - {home_team.name} против {away_team.name}.'
                         if not Events.objects.filter(
                                 rubrics=rubrics,
                                 second_event_api_id=event.get('EVENT_ID')).exists():
@@ -778,7 +779,8 @@ def add_sport_events_list_second(request):
                                     home_score= event.get('HOME_SCORE_CURRENT'),
                                     away_score= event.get('AWAY_SCORE_CURRENT'),
                                     half= event.get('ROUND'),
-                                    section = season
+                                    section = season,
+                                    content = content_text
                                 )
         else :
             return HttpResponse(f'Error  - {second_response.status_code} - {second_response.json()}')

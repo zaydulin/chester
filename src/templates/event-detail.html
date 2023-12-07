@@ -5,7 +5,7 @@
 
 {% block content %}
 
-<main  class="event-info sp-container" data-title = "{{title}}">
+<main  class="event-info sp-container" data-title = "{{title}}" data-meta="{{meta-content}}">
     <div class="side-banners left">
         {% for baner in sidebar_baners_left %}
 
@@ -2032,15 +2032,14 @@ function getIncidents() {
             "last_incident_id": incident_id,
         },
         success: function(response) {
-            let addedIncidents = [];
+
 
             console.log(response);
             let incidentBlock = document.getElementById('incidents-footbal');
             let teamClass = response.incident_team === 2 ? ' away' : '';
             if (Object.keys(response).length !== 0) {
-                if (!addedIncidents.includes(response.incident_id)) {
+                if (response.incident_id)) {
 
-                    addedIncidents.push(response.incident_id);
                 if (response.incident_type === 'goal' ){
                     incidentBlock.insertAdjacentHTML(
                         'beforeend',
