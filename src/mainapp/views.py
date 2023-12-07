@@ -80,10 +80,15 @@ def toggle_bookmark_post(request):
     elif bookmark_type == 'team':
         try:
             team = Team.objects.get(id=item_id)
-        except Events.DoesNotExist:
+        except Team.DoesNotExist:
             return HttpResponseRedirect(reverse('home'))
         content_type = ContentType.objects.get_for_model(team)
-        
+    elif bookmark_type == 'season':
+        try:
+            season = Season.objects.get(id=item_id)
+        except Season.DoesNotExist:
+            return HttpResponseRedirect(reverse('home'))
+        content_type = ContentType.objects.get_for_model(season)
     else:
         return HttpResponseBadRequest('Invalid bookmark type')
 
