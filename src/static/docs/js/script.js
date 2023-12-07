@@ -25,7 +25,8 @@ document.body.addEventListener('htmx:afterRequest', function(event) {
             const textTitle = dataTitle.getAttribute("data-title");
             document.querySelector("head title").innerHTML = textTitle;
         }
-    } else if (hxCustom === 'meta_content') {
+    }
+    if (hxCustom === 'meta_content') {
         const metaContent = event.detail.xhr.response;
         const metaDescription = document.querySelector('meta[name="description"]');
         if (metaDescription) {
