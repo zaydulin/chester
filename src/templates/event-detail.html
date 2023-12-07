@@ -1763,7 +1763,9 @@
 
 
 <script src="https://cdn.jsdelivr.net/npm/emoji-picker-element@1.0.6/dist/index.js"></script>
-{% csrf_token %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRiZgg8LRdTE7Ly8vhNE8vmf1cArFbFfK+J/gKb8q" crossorigin="anonymous"></script>
+
+
 <!--Event-->
 <script>
     document.addEventListener("DOMContentLoaded", function() {
@@ -1871,7 +1873,62 @@
         toggleSVGDisplay();
     });
 
+    $(document).ready(function() {
+        $("#toggle_bookmark_awayteam").click(function(event) {
+            event.preventDefault();
 
+            var event_id = "{{ event.away_team.id }}";
+            const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+            if ("{{ user.is_authenticated }}" === "True") {
+                var isAlreadyActive = $(this).hasClass("active");
+
+                $.ajax({
+                    type: "POST",
+                    url: "/toggle_bookmark_post/",
+                    headers: {
+                        'X-CSRFToken': csrftoken
+                    },
+                    data: {
+                        "bookmark_type": 'team',
+                        "event_id": event_id,
+                    },
+                    success: function(response) {
+
+                        var bookmarkedSVG = document.getElementById("away_team_bookmarked");
+                        var notBookmarkedSVG = document.getElementById("away_team_not_bookmarked");
+
+                        // Toggle the display of the SVGs
+                        if (bookmarkedSVG.style.display === "block") {
+                            bookmarkedSVG.style.display = "none";
+                            notBookmarkedSVG.style.display = "block";
+                        } else {
+                            bookmarkedSVG.style.display = "block";
+                            notBookmarkedSVG.style.display = "none";
+                        }
+                    },
+                    error: function(error) {
+                        console.error(error);
+                    },
+                    complete: function() {
+                        let evnbookmrkd = $("#away_team_bookmarked");
+                        let evbookmrkd = $("#away_team_not_bookmarked");
+
+                         let isBookmarkedVisible = evbookmrkd.is(":visible");
+
+                        // Toggle the display property of the first SVG based on the visibility of the second SVG
+                        if (isBookmarkedVisible) {
+                            evnbookmrkd.css("display", "none");
+                        } else {
+                            evnbookmrkd.css("display", "block");
+                        }
+                                        }
+                });
+            } else {
+                alert("Вы не авторизованы. Пожалуйста, войдите в аккаунт.");
+            }
+        });
+    });
 </script>
 <!--HomeTeam-->
 <script>
@@ -1898,7 +1955,62 @@
         toggleSVGDisplay();
     });
 
+    $(document).ready(function() {
+        $("#toggle_bookmark_hometeam").click(function(event) {
+            event.preventDefault();
 
+            var event_id = "{{ event.home_team.id }}";
+            const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+            if ("{{ user.is_authenticated }}" === "True") {
+                var isAlreadyActive = $(this).hasClass("active");
+
+                $.ajax({
+                    type: "POST",
+                    url: "/toggle_bookmark_post/",
+                    headers: {
+                        'X-CSRFToken': csrftoken
+                    },
+                    data: {
+                        "bookmark_type": 'team',
+                        "event_id": event_id,
+                    },
+                    success: function(response) {
+
+                        var bookmarkedSVG = document.getElementById("home_team_bookmarked");
+                        var notBookmarkedSVG = document.getElementById("home_team_not_bookmarked");
+
+                        // Toggle the display of the SVGs
+                        if (bookmarkedSVG.style.display === "block") {
+                            bookmarkedSVG.style.display = "none";
+                            notBookmarkedSVG.style.display = "block";
+                        } else {
+                            bookmarkedSVG.style.display = "block";
+                            notBookmarkedSVG.style.display = "none";
+                        }
+                    },
+                    error: function(error) {
+                        console.error(error);
+                    },
+                    complete: function() {
+                        let evnbookmrkd = $("#home_team_bookmarked");
+                        let evbookmrkd = $("#home_team_not_bookmarked");
+
+                         let isBookmarkedVisible = evbookmrkd.is(":visible");
+
+                        // Toggle the display property of the first SVG based on the visibility of the second SVG
+                        if (isBookmarkedVisible) {
+                            evnbookmrkd.css("display", "none");
+                        } else {
+                            evnbookmrkd.css("display", "block");
+                        }
+                                        }
+                });
+            } else {
+                alert("Вы не авторизованы. Пожалуйста, войдите в аккаунт.");
+            }
+        });
+    });
 </script>
 
 
