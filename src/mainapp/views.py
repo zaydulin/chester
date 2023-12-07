@@ -100,21 +100,24 @@ def toggle_bookmark_post(request):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 def get_incidents_event_post(request):
-    event_slug = request.POST.get('event_slug')
-    last_incident_id = request.POST.get('last_incident_id')
-    event = Events.objects.get(slug = event_slug)
-    incident = event.incidents.last()
+    if request.method == 'POST':
+        event_slug = request.POST.get('event_slug')
+        last_incident_id = request.POST.get('last_incident_id')
+        event = Events.objects.get(slug = event_slug)
+        incident = event.incidents.last()
 
-    data = {"incident_type":incident.incident_type,
-            "incident_team":incident.player_team,
-            "card_color":incident.card_type,
-            "player_replacement_first":incident.player.name,
-            "player_replacement_second":incident.player_two_in.name,
-            "scoring_team":incident.scoring_team,
-            "time":incident.time,
-            "inj_time":incident.inj_time,
-            }
-    return HttpResponse("gud")
+        data = {"incident_type":incident.incident_type,
+                "incident_team":incident.player_team,
+                "card_color":incident.card_type,
+                "player_replacement_first":incident.player.name,
+                "player_replacement_second":incident.player_two_in.name,
+                "scoring_team":incident.scoring_team,
+                "time":incident.time,
+                "inj_time":incident.inj_time,
+                }
+        return JsonResponse(data)
+    else:
+        return HttpResponseBadRequest('Invalid')
 
 
 class EditProfileView(CustomHtmxMixin, TemplateView):
