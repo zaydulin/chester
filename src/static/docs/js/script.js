@@ -18,23 +18,27 @@ function clearContent() {
 }
 
 document.body.addEventListener('htmx:afterRequest', function(event) {
-  const hxCustom = event.srcElement.getAttribute("hx-custom");
-  if (hxCustom === 'title') {
-    const dataTitle = document.querySelector("main[data-title]");
-    if (dataTitle) {
-      const textTitle = dataTitle.getAttribute("data-title");
-      document.querySelector("head title").innerHTML = textTitle;
+    const hxCustom = event.srcElement.getAttribute("hx-custom")
+    if (hxCustom === 'title'){
+        const dataTitle = document.getElementById("main-content").querySelector("main[data-title]")
+        if (dataTitle) {
+            textTitle = dataTitle.getAttribute("data-title")
+            document.querySelector("head").querySelector("title").innerHTML = textTitle
+        }
     }
-  }
+});
+document.body.addEventListener('htmx:afterRequest', function(event) {
+    const hxCustom = event.srcElement.getAttribute("hx-custom");
 
-  const metaContent = event.srcElement.getAttribute("data-content");
-  const metaTag = document.querySelector("meta[name='description']");
-  if (metaContent) {
-    metaTag.setAttribute("content", metaContent);
-  } else {
-    // Set a default description if data-content is not available
-    metaTag.setAttribute("content", "Default description goes here");
-  }
+    if (hxCustom === 'meta') {
+        const metaTag = document.querySelector('meta[name="description"]');
+        const mainContent = document.getElementById("main-content").querySelector("main[data-content]");
+
+        if (mainContent) {
+            const metaContent = mainContent.getAttribute("data-content");
+            metaTag.setAttribute("content", metaContent);
+        }
+    }
 });
 const countries = document.querySelectorAll('.events__search-tour + div div');
 
