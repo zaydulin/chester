@@ -23,14 +23,22 @@ document.body.addEventListener('htmx:afterRequest', function(event) {
         const dataTitle = document.getElementById("main-content").querySelector("main[data-title]");
         if (dataTitle) {
             const textTitle = dataTitle.getAttribute("data-title");
+            const metaContent = dataTitle.getAttribute("data-content");
+
+            // Update title tag
             document.querySelector("head title").innerHTML = textTitle;
-        }
-    }
-    if (hxCustom === 'meta_content') {
-        const metaContent = event.detail.xhr.response;
-        const metaDescription = document.querySelector('meta[name="description"]');
-        if (metaDescription) {
-            metaDescription.setAttribute('content', metaContent);
+
+            // Update meta tag
+            const metaDescription = document.querySelector("meta[name='description']");
+            if (metaDescription) {
+                metaDescription.setAttribute("content", metaContent);
+            } else {
+                // Create meta tag if it doesn't exist
+                const newMetaTag = document.createElement("meta");
+                newMetaTag.setAttribute("name", "description");
+                newMetaTag.setAttribute("content", metaContent);
+                document.querySelector("head").appendChild(newMetaTag);
+            }
         }
     }
 });
