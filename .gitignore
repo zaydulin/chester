@@ -57,7 +57,7 @@ fabric.properties
 *.pot
 *.pyc
 __pycache__/
-local_settings.py
+src/_project/settings/local_settings.tmpl
 db.sqlite3
 db.sqlite3-journal
 media
@@ -126,7 +126,7 @@ cover/
 
 # Django stuff:
 *.log
-local_settings.py
+src/_project/settings/local_settings.tmpl
 db.sqlite3
 db.sqlite3-journal
 

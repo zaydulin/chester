@@ -300,7 +300,7 @@ class EventsUpcomingView(CustomHtmxMixin, DetailView):
         return context
 
 
-class EventsView(TemplateView):
+class EventsView(CustomHtmxMixin,TemplateView):
     model = Events
     template_name = "event-detail.html"
     slug_field = "slug"

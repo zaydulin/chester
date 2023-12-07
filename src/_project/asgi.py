@@ -15,3 +15,10 @@ application = ProtocolTypeRouter(
         "websocket": AuthMiddlewareStack(URLRouter(websocket_urlpatterns)),
     }
 )
+# import os
+#
+# from django.core.asgi import get_asgi_application
+#
+# os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'megafarm.settings')
+#
+# application = get_asgi_application()
