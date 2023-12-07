@@ -29,6 +29,9 @@ document.body.addEventListener('htmx:afterRequest', function(event) {
             if (metaContent) {
                 dataTitle.setAttribute("data-content", metaContent);
             }
+
+            const description = "Your description here"; // Замените эту строку на ваше реальное описание страницы
+            dataTitle.setAttribute("data-description", description);
         }
     }
 });
