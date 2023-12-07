@@ -121,7 +121,7 @@
                                 ></path>
                             </svg>
                         </a>
-                        <span class="event-team__point">{{ event.home_score }}</span>
+                        <span class="event-team__point" id="score-home-head">{{ event.home_score }}</span>
                     </div>
                 </div>
                 <div class="event-info__team event-team away">
@@ -170,7 +170,7 @@
                                 ></path>
                             </svg>
                         </a>
-                        <span class="event-team__point">{{ event.away_score }}</span>
+                        <span class="event-team__point" id="score-away-head">{{ event.away_score }}</span>
                     </div>
                 </div>
             </div>
@@ -2070,6 +2070,19 @@
         scoreElements.forEach(function (scoreElement) {
             scoreElement.innerHTML = `<span>${homeScore} - ${awayScore}</span>`;
         });
+        const scoreawayElements = document.querySelectorAll("#score-away-head");
+        const scorehomeElements = document.querySelectorAll("#score-home-head");
+
+        scoreElements.forEach(function (scoreElement) {
+            scoreElement.innerHTML = `<span>${awayScore}</span>`;
+        });
+
+
+        scoreElements.forEach(function (scoreElement) {
+            scoreElement.innerHTML = `<span>${homeScore}</span>`;
+        });
+
+
 
         let commentsList = document.getElementById('comments-list');
         if(data['message']['message'] != ''){
