@@ -114,7 +114,7 @@ def get_incidents_event_post(request):
                 player_name_second =  incident.player_two_in.name
 
             data = {"incident_type":incident.incident_type,
-                    "incident_id":incident.id,
+                    "incident_id":int(incident.id),
                     "incident_team":incident.player_team,
                     "card_color":incident.card_type,
                     "player_replacement_first":player_name,
