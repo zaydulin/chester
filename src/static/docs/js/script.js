@@ -18,12 +18,27 @@ function clearContent() {
 }
 
 document.body.addEventListener('htmx:afterRequest', function(event) {
-    const hxCustom = event.srcElement.getAttribute("hx-custom")
-    if (hxCustom === 'title'){
-        const dataTitle = document.getElementById("main-content").querySelector("main[data-title]")
+    const hxCustom = event.srcElement.getAttribute("hx-custom");
+    if (hxCustom === 'title' || hxCustom === 'description') {
+        const dataTitle = document.getElementById("main-content").querySelector("main[data-title]");
+        const dataDescription = document.getElementById("main-content").querySelector("main[data-description]");
+
         if (dataTitle) {
-            textTitle = dataTitle.getAttribute("data-title")
-            document.querySelector("head").querySelector("title").innerHTML = textTitle
+            const textTitle = dataTitle.getAttribute("data-title");
+            document.querySelector("head title").innerText = textTitle;
+        }
+
+        if (dataDescription) {
+            const textDescription = dataDescription.getAttribute("data-description");
+            const metaDescription = document.querySelector("head meta[name='description']");
+            if (metaDescription) {
+                metaDescription.setAttribute("content", textDescription);
+            } else {
+                const newMeta = document.createElement("meta");
+                newMeta.setAttribute("name", "description");
+                newMeta.setAttribute("content", textDescription);
+                document.querySelector("head").appendChild(newMeta);
+            }
         }
     }
 });
