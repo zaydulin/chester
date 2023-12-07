@@ -18,19 +18,24 @@ function clearContent() {
 }
 
 document.body.addEventListener('htmx:afterRequest', function(event) {
-    const hxCustom = event.srcElement.getAttribute("hx-custom");
-    if (hxCustom === 'title') {
-      const dataTitle = document.getElementById("main-content").querySelector("main[data-title]");
-      if (dataTitle) {
-        const textTitle = dataTitle.getAttribute("data-title");
-        document.querySelector("head title").innerHTML = textTitle;
-      }
+  const hxCustom = event.srcElement.getAttribute("hx-custom");
+  if (hxCustom === 'title') {
+    const dataTitle = document.querySelector("main[data-title]");
+    if (dataTitle) {
+      const textTitle = dataTitle.getAttribute("data-title");
+      document.querySelector("head title").innerHTML = textTitle;
     }
-    const metaContent = event.srcElement.getAttribute("data-content");
-    if (metaContent) {
-      document.querySelector("meta[name='description']").setAttribute("content", metaContent);
-    }
-  });
+  }
+
+  const metaContent = event.srcElement.getAttribute("data-content");
+  const metaTag = document.querySelector("meta[name='description']");
+  if (metaContent) {
+    metaTag.setAttribute("content", metaContent);
+  } else {
+    // Set a default description if data-content is not available
+    metaTag.setAttribute("content", "Default description goes here");
+  }
+});
 const countries = document.querySelectorAll('.events__search-tour + div div');
 
 for (let i = 0; i < countries.length; i++) {
