@@ -2040,10 +2040,12 @@ function getIncidents() {
         success: function(response) {
             console.log(response);
             let incidentBlock = document.getElementById('incidents-footbal');
+            let teamClass = response.incident_team === 2 ? 'away' : '';
+
             if (Object.keys(response).length !== 0) {
                 incidentBlock.insertAdjacentHTML(
                     'beforeend',
-                     '<div class="football-rev__event ' + if (response.incident_team === 2){ 'away' } + '">'+
+                     '<div class="football-rev__event ${teamClass}">'+
                             <div class="football-rev__time">{{ incident.time }}'</div>
                             <div class="football-rev__event-description">
                                 <div class="football-rev__textbox">
