@@ -2045,13 +2045,11 @@ function getIncidents() {
             if (Object.keys(response).length !== 0) {
                 incidentBlock.insertAdjacentHTML(
                     'beforeend',
-                     '<div class="football-rev__event ${teamClass}">'+
-                            <div class="football-rev__time">{{ incident.time }}'</div>
-                            <div class="football-rev__event-description">
-                                <div class="football-rev__textbox">
-                                    <div class="football-rev__textbox-flex">
-
-
+                     '<div class="football-rev__event'+ teamClass + '">'+
+                            '<div class="football-rev__time"> + response.time + '</div>' +
+                            '<div class="football-rev__event-description">' +
+                                '<div class="football-rev__textbox">'+
+                                    '<div class="football-rev__textbox-flex">'+
                                         {% if incident.incident_type == 'goal' %}
                                         <span class="football-rev__name">{{ incident.player.name }}</span>
                                         <svg
