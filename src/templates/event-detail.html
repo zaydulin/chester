@@ -2057,7 +2057,6 @@
     "/"
     );
     chatSocket.onopen = function(event) {
-        console.log("WebSocket is open. Initiating periodic updates.");
 
         // Function to send an empty message to update scores
         function sendEmptyMessage() {
@@ -2073,7 +2072,7 @@
 
     chatSocket.onmessage = function (e) {
         const data = JSON.parse(e.data);
-
+        console.log(data);
         homeScore = data['message']['home_score']
         awayScore = data['message']['away_score']
         const scoreElements = document.querySelectorAll("#score");

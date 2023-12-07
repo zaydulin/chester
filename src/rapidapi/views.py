@@ -733,8 +733,10 @@ def add_sport_events_list_second(request):
                         rubrics = rubrics,
                         season_second_api_id=event_data.get("TOURNAMENT_SEASON_ID"),
                         season_name = event_data.get("NAME"),
+                        league_name = event_data.get("SHORT_NAME"),
                         logo_league = event_data.get("TOURNAMENT_IMAGE"),
-                        country = event_data.get("COUNTRY_NAME")
+                        country = event_data.get("COUNTRY_NAME"),
+                        season_id = event_data.get("TOURNAMENT_ID")
                     )
                 for event in events:
                     homeimg_base = event.get('HOME_IMAGES')
@@ -812,8 +814,10 @@ def add_sport_events_list_second_online_gou(request):
                         rubrics = rubrics,
                         season_second_api_id=event_data.get("TOURNAMENT_SEASON_ID"),
                         season_name = event_data.get("NAME"),
+                        league_name=event_data.get("SHORT_NAME"),
                         logo_league = event_data.get("TOURNAMENT_IMAGE"),
-                        country = event_data.get("COUNTRY_NAME")
+                        country = event_data.get("COUNTRY_NAME"),
+                        season_id = event_data.get("TOURNAMENT_ID")
                     )
                 for event in events:
                     homeimg_base = event.get('HOME_IMAGES')
@@ -875,7 +879,41 @@ def get_team_players():
         response = requests.get(url, headers=headers, params=querystring)
         if response.status_code == 200:
             response_data = response.json().get("DATA")
+            count = 0
+            for player in response_data:
 
+                try:
+                    player = Player.objects.get(player_id=player["id"])
+
+                except Player.DoesNotExist:
+                    if count < 11:
+                        player = Player.objects.create(
+                            player_id=player["id"],
+                            slug=player["slug"],
+                            name=player["name"],
+                            photo=player["photo"],
+                            position_name=player["position"],
+                            description=player,
+                            main_player=True,
+                            reiting=player["rating"],
+                            number=player["shirt_number"],
+                        )
+                    else:
+                        player = Player.objects.create(
+                            player_id=player["id"],
+                            slug=player["slug"],
+                            name=player["name"],
+                            photo=player["photo"],
+                            position_name=player["position"],
+                            description=player,
+                            main_player=False,
+                            reiting=player["rating"],
+                            number=player["shirt_number"],
+                        )
+                team.players.add(player)
+                count += 1
+    return HttpResponse("Data "
+                        "fetched successfully")
 def fetch_event_data_for_second(request):
     events =Events.objects.filter(second_event_api_id__isnull = False)
     url = "https://flashlive-sports.p.rapidapi.com/v1/events/data"
