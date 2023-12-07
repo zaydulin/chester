@@ -12,7 +12,7 @@
         hx-custom="title"
         id="refresh">
 </a>
-
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <main class="events sp-container">
     <div class="events__left-banners side-banners left">
         {% for baner in sidebar_baners_left %}
@@ -207,7 +207,7 @@
                                     toggleSVGDisplay();
                                 });
 
-                                document.ready(function() {
+                                $document.ready(function() {
                                     $("#toggle_season_bookmark-{{league_name.id}}").click(function(event) {
                                         event.preventDefault();
 
@@ -609,4 +609,3 @@
     </div>
 </main>
 
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
