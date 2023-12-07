@@ -19,7 +19,7 @@ env.read_env()
 SECRET_KEY = env.str("DJANGO_SECRET_KEY", "s6&pl7!-8d97nvje@mqz^4+%p=v)8bxaew)3-y9993q_xn04ir")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env.bool("DJANGO_DEBUG", False)
+DEBUG = env.bool("DJANGO_DEBUG", True)
 
 # ALLOWED_HOSTS = ['chestersbets.works-all.ru']
 ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", ["*"])
