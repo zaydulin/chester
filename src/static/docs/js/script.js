@@ -19,25 +19,15 @@ function clearContent() {
 
 document.body.addEventListener('htmx:afterRequest', function(event) {
     const hxCustom = event.srcElement.getAttribute("hx-custom");
-    if (hxCustom === 'title' || hxCustom === 'description') {
+    if (hxCustom === 'title') {
         const dataTitle = document.getElementById("main-content").querySelector("main[data-title]");
-        const dataDescription = document.getElementById("main-content").querySelector("main[data-description]");
-
         if (dataTitle) {
-            const textTitle = dataTitle.getAttribute("data-title");
-            document.querySelector("head title").innerText = textTitle;
-        }
+            textTitle = dataTitle.getAttribute("data-title");
+            document.querySelector("head").querySelector("title").innerHTML = textTitle;
 
-        if (dataDescription) {
-            const textDescription = dataDescription.getAttribute("data-description");
-            const metaDescription = document.querySelector("head meta[name='description']");
-            if (metaDescription) {
-                metaDescription.setAttribute("content", textDescription);
-            } else {
-                const newMeta = document.createElement("meta");
-                newMeta.setAttribute("name", "description");
-                newMeta.setAttribute("content", textDescription);
-                document.querySelector("head").appendChild(newMeta);
+            const metaContent = dataTitle.getAttribute("data-content");
+            if (metaContent) {
+                dataTitle.setAttribute("data-content", metaContent);
             }
         }
     }
