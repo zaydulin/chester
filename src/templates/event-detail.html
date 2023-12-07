@@ -2031,7 +2031,7 @@ function getIncidents() {
         success: function(response) {
             console.log(response);
             let incidentBlock = document.getElementById('incidents-footbal');
-            let teamClass = response.incident_team === 2 ? 'away' : '';
+            let teamClass = response.incident_team === 2 ? ' away' : '';
 
             if (Object.keys(response).length !== 0) {
                 if (response.incident_type === 'goal' ){
