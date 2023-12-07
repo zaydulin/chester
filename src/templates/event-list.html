@@ -609,17 +609,4 @@
     </div>
 </main>
 
-<script>
-    // Функция для обновления контента внутри #main-content с использованием HTMX
-    function updateMainContent() {
-        htmx.ajax('#main-content', {
-            // Укажите здесь необходимые параметры запроса, если они есть
-        });
-    }
-
-    // Установите интервал для обновления каждые 3 секунды (3000 миллисекунд)
-    setInterval(updateMainContent, 3000);
-
-    // Также выполните обновление контента при загрузке страницы
-    updateMainContent();
-</script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
