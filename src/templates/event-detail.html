@@ -2024,27 +2024,27 @@
 <!--IncidentAjax-->
 <script>
 function getIncidents() {
-
-    var eventSlug = '{{event.slug}}'; // замените на реальное значение
-    var lastIncidentId = '{{event.incidents.last}}'; // замените на реальное значение
+    var incident_id = "{{event.incidents.last.id}}";
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
     $.ajax({
-        url: '/get_incidents_event_post/',
-        method: 'POST',
+        type: "POST",
+        url: "/get_incidents_event_post/",
+        headers: {
+            'X-CSRFToken': csrftoken
+        },
         data: {
-            event_slug: eventSlug,
-            last_incident_id: lastIncidentId
+            "event_slug": '{{event.slug}}',
+            "last_incident_id": incident_id,
         },
         success: function(response) {
             console.log(response);
-
             setTimeout(getIncidents, 5000);
         },
         error: function(error) {
-            console.error('Ошибка:', error);
-            // Повторяем запрос при возникновении ошибки через 5 секунд
-            setTimeout(getIncidents, 5000);
+            console.error(error);
         }
+
     });
 }
 
