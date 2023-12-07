@@ -2019,6 +2019,7 @@
 function getIncidents() {
     var incident_id = "{{event.incidents.last.id}}";
     const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    let addedIncidents = [];
 
     $.ajax({
         type: "POST",
@@ -2034,8 +2035,10 @@ function getIncidents() {
             console.log(response);
             let incidentBlock = document.getElementById('incidents-footbal');
             let teamClass = response.incident_team === 2 ? ' away' : '';
-            incident_id++
             if (Object.keys(response).length !== 0) {
+                if (!addedIncidents.includes(response.id)) {
+
+                    addedIncidents.push(response.id);
                 if (response.incident_type === 'goal' ){
                     incidentBlock.insertAdjacentHTML(
                         'beforeend',
@@ -2055,10 +2058,8 @@ function getIncidents() {
                             '</div>'
                     );
                 }
-
+                }
             }
-
-
             setTimeout(getIncidents, 5000);
         },
         error: function(error) {
