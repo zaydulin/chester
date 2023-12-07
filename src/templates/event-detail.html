@@ -4,16 +4,7 @@
 
 
 {% block content %}
-<a
-        href="{% url 'events_detail' event.slug %}"
-        hx-get="{% url 'events_detail' event.slug %}"
-        hx-target="#main-content"
-        hx-push-url="true"
-        hx-indicator="#content-loader"
-        hx-on="htmx:beforeRequest: season.detail.target.innerHTML = ''"
-        hx-custom='title'
-        id="refresh">
-</a>
+
 <main  class="event-info sp-container" data-title = "{{title}}">
     <div class="side-banners left">
         {% for baner in sidebar_baners_left %}
