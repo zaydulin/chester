@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.contrib import messages
 import time
-from django.http import HttpResponseRedirect , HttpResponseBadRequest
+from django.http import HttpResponseRedirect, HttpResponseBadRequest, JsonResponse
 from django.urls import reverse
 from django.contrib.contenttypes.models import ContentType
 from datetime import datetime, timedelta
@@ -98,6 +98,25 @@ def toggle_bookmark_post(request):
         Bookmarks.objects.create(user=user, content_type=content_type, object_id=item_id)
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+def get_incidents_event_post(request):
+    event_slug = request.POST.get('event_slug')
+    last_incident_id = request.POST.get('last_incident_id')
+    event = Events.objects.get(slug = event_slug)
+    incident = event.incidents.last()
+
+    data = {"incident_type":incident.incident_type,
+            "incident_team":incident.player_team,
+            "card_color":incident.card_type,
+            "player_replacement_first":incident.player.name,
+            "player_replacement_second":incident.player_two_in.name,
+            "scoring_team":incident.scoring_team,
+            "time":incident.time,
+            "inj_time":incident.inj_time,
+            }
+    return JsonResponse(data)
+
+
 class EditProfileView(CustomHtmxMixin, TemplateView):
     template_name = 'profile.html'
 
