@@ -2019,7 +2019,7 @@
 function getIncidents() {
     var incident_id = "{{event.incidents.last.id}}";
     const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-    let addedIncidents = [];
+
 
     $.ajax({
         type: "POST",
@@ -2032,6 +2032,8 @@ function getIncidents() {
             "last_incident_id": incident_id,
         },
         success: function(response) {
+            let addedIncidents = [];
+
             console.log(response);
             let incidentBlock = document.getElementById('incidents-footbal');
             let teamClass = response.incident_team === 2 ? ' away' : '';
