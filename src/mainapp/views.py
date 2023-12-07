@@ -111,6 +111,9 @@ def get_incidents_event_post(request):
                 "card_color":incident.card_type,
                 "player_replacement_first":incident.player.name,
 
+                "scoring_team":incident.scoring_team,
+                "time":incident.time,
+                "inj_time":incident.inj_time,
                 }
         return JsonResponse(data)
     else:
