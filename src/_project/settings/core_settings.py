@@ -81,7 +81,7 @@ ASGI_APPLICATION = "_project.asgi.application"
 WSGI_APPLICATION = "_project.wsgi.application"
 
 # CSRF_TRUSTED_ORIGINS = "https://chestersbets.works-all.ru"
-CSRF_TRUSTED_ORIGINS = ("https://ferma.works-all.ru",)
+CSRF_TRUSTED_ORIGINS = ("https://chestersbets.works-all.ru",)
 
 CHANNEL_LAYERS = {
     "default": {
