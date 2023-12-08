@@ -771,7 +771,7 @@ def add_sport_events_list_second(request):
                                     name= event_data.get('NAME_PART_2'),
                                     description= event_data,
                                     title= event_data.get('SHORT_NAME'),
-                                    status= 2,
+                                    status= 3,
                                     home_team= home_team,
                                     away_team= away_team,
                                     home_score= event.get('HOME_SCORE_CURRENT'),
@@ -958,6 +958,7 @@ def fetch_event_data_for_second(request):
             event.home_score = hsc
             event.away_score = asc
             #Период
+
             for i in range(1, 10):  # Примерный диапазон периодов (может быть изменен)
                 home_score_key = f"HOME_SCORE_PART_{i}"
                 away_score_key = f"AWAY_SCORE_PART_{i}"
@@ -977,6 +978,10 @@ def fetch_event_data_for_second(request):
                     event.periods.add(period)
             if status == "FINISHED":
                 event.status = 2
+            if status == "LIVE":
+                event.status = 1
+            if status == "CANCELED":
+                event.status = 4
             event.save()
         #Статистика матча
         url_statistic = "https://flashlive-sports.p.rapidapi.com/v1/events/statistics"
