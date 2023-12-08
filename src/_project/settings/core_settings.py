@@ -19,7 +19,7 @@ env.read_env()
 SECRET_KEY = env.str("DJANGO_SECRET_KEY", "s6&pl7!-8d97nvje@mqz^4+%p=v)8bxaew)3-y9993q_xn04ir")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env.bool("DJANGO_DEBUG", True)
+DEBUG = env.bool("DJANGO_DEBUG", False)
 
 # ALLOWED_HOSTS = ['chestersbets.works-all.ru']
 ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", ["*"])
@@ -117,22 +117,22 @@ LOGIN_URL = "/login/"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.postgresql_psycopg2",
-#         "NAME": env.str("POSTGRES_DB", "db_chester"),
-#         "USER": env.str("POSTGRES_USER", "user"),
-#         "PASSWORD": env.str("POSTGRES_PASSWORD", ""),
-#         "HOST": env.str("DJANGO_POSTGRES_HOST", "localhost"),
-#         "PORT": env.int("DJANGO_POSTGRES_PORT", 5432),
-#     }
-# }
 DATABASES = {
-   "default": {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": env.str("POSTGRES_DB", "db_chester"),
+        "USER": env.str("POSTGRES_USER", "user"),
+        "PASSWORD": env.str("POSTGRES_PASSWORD", ""),
+        "HOST": env.str("DJANGO_POSTGRES_HOST", "localhost"),
+        "PORT": env.int("DJANGO_POSTGRES_PORT", 5432),
     }
 }
+# DATABASES = {
+#    "default": {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
