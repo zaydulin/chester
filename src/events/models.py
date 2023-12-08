@@ -48,7 +48,7 @@ class Events(models.Model):
     description = models.TextField("Описание",null=True)
     title = models.CharField("Заголовок", max_length=500, null=True)
     content = models.TextField("Мета-описание", max_length=500, null=True)
-    slug = models.SlugField("Ссылка", max_length=160, unique=True,blank=True)
+    slug = models.SlugField("Ссылка", max_length=160,blank=True)
     status = models.PositiveSmallIntegerField('Статус', choices=STATUS, default=3)
     home_team = models.ForeignKey("Team", verbose_name='Домашняя комнада', on_delete=models.CASCADE,related_name="home_team",blank=True,null=True)
     away_team = models.ForeignKey("Team", verbose_name='Гостевая комнада', on_delete=models.CASCADE,related_name="away_team",blank=True,null=True)
@@ -80,20 +80,8 @@ class Events(models.Model):
                 return 'Матч не начался'
 
     def save(self, *args, **kwargs):
-        loop_num = 0
-        unique = False
-        while not self.slug and not unique:
-            if loop_num < settings.RANDOM_URL_MAX_TRIES:
-                new_key = ''
-                for i in range(settings.RANDOM_URL_LENGTH):
-                    new_key += settings.RANDOM_URL_CHARSET[
-                        randrange(0, len(settings.RANDOM_URL_CHARSET))]
-                if not Events.objects.filter(slug=f'{self.home_team}-{self.away_team}-{self.start_at}-{new_key}'):
-                    self.slug = f'{self.home_team}-{self.away_team}-{self.start_at}-{new_key}'
-                    unique = True
-                loop_num += 1
-            else:
-                raise ValueError("Couldn't generate a unique code.")
+        if not Events.objects.filter(slug=f'{self.home_team}-{self.away_team}-{self.start_at}'):
+            self.slug = f'{self.home_team}+{self.away_team}+{self.start_at}'
         super(Events, self).save(*args, **kwargs)
 
     def get_start_time(self):
