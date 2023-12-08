@@ -872,7 +872,7 @@ def get_team_players():
         "X-RapidAPI-Key": "b4e32c39demsh21dc3591499b4f3p144d40jsn9a29de0bcb2a",
         "X-RapidAPI-Host": "flashlive-sports.p.rapidapi.com"
     }
-    events = Events.objects.filter(second_api_team_id__isnull = False ,status=1)
+    events = Events.objects.filter(second_event_api_id__isnull = False ,status=1)
     for event in events:
         querystring = {"locale": "ru_RU", "event_id": event.second_event_api_id}
         response = requests.get(url, headers=headers, params=querystring)
