@@ -1554,6 +1554,8 @@
                             {% endfor %}
                         </ul>
                     </ul>
+                                {% if user.is_authenticated %}
+
                     <div class="chat__form" id="chat__form">
                         <form method="post"
                               class="chat__form">
@@ -1596,6 +1598,7 @@
                         </form>
 
                     </div>
+                {% endif %}
                 </div>
                 <div class="event-info__stats stats">
                     <h5 class="stats__header">Статистика</h5>
