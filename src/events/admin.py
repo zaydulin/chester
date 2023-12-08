@@ -3,15 +3,17 @@ from .models import *
 
 
 class EventsAdmin(admin.ModelAdmin):
-    search_fields = ['slug', 'name']  # Enables searching by slug and name
-    list_filter = ['rubrics']  # Enables filtering by rubrics
+    search_fields = ['slug', 'name']
+    list_filter = ['rubrics']
 
-    # Other configurations for the admin panel can be added here
+class SeasonAdmin(admin.ModelAdmin):
+    search_fields = ['slug', 'name']
+    list_filter = ['rubrics']
 
 admin.site.register(Events, EventsAdmin)
 admin.site.register(Rubrics)
 admin.site.register(Team)
-admin.site.register(Season)
+admin.site.register(Season,SeasonAdmin)
 admin.site.register(Player)
 admin.site.register(Incidents)
 admin.site.register(Periods)
