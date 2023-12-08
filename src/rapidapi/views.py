@@ -863,10 +863,10 @@ def add_sport_events_list_second_online_gou(request):
                             print('евент создан')
         else :
             return HttpResponse(f'Error  - {second_response.status_code} - {second_response.json()}')
-    get_team_players()
+    get_team_players(request)
     return HttpResponse("Data "
                         "fetched successfully")
-def get_team_players():
+def get_team_players(request):
     url = "https://flashlive-sports.p.rapidapi.com/v1/events/lineups"
     headers = {
         "X-RapidAPI-Key": "b4e32c39demsh21dc3591499b4f3p144d40jsn9a29de0bcb2a",
@@ -1015,7 +1015,7 @@ def fetch_event_data_for_second(request):
             print(f"Error fetching data for event {event.event_api_id}: {response.json()}")
     return HttpResponse("Data fetched successfully")
 
-def get_h2h_second():
+def get_h2h_second(request):
     headers = {
         "X-RapidAPI-Key": "b4e32c39demsh21dc3591499b4f3p144d40jsn9a29de0bcb2a",
         "X-RapidAPI-Host": "flashlive-sports.p.rapidapi.com"

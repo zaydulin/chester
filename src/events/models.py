@@ -5,8 +5,6 @@ from django.urls import reverse
 from datetime import datetime
 from django.utils import timezone
 from django.utils.text import slugify
-from transliterate import translit
-
 from _project import settings
 
 
@@ -90,8 +88,17 @@ class Events(models.Model):
             # Заменяем пробелы на тире
             slug_text = slug_text.replace(' ', '-')
 
-            # Транслитерируем текст
-            slug_text = translit(slug_text, 'ru', reversed=True)
+            # Словарь для замены русских букв на английские
+            translit_dict = {
+                'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'e', 'ё': 'yo',
+                'ж': 'zh', 'з': 'z', 'и': 'i', 'й': 'y', 'к': 'k', 'л': 'l', 'м': 'm',
+                'н': 'n', 'о': 'o', 'п': 'p', 'р': 'r', 'с': 's', 'т': 't', 'у': 'u',
+                'ф': 'f', 'х': 'h', 'ц': 'ts', 'ч': 'ch', 'ш': 'sh', 'щ': 'sch', 'ъ': '',
+                'ы': 'y', 'ь': '', 'э': 'e', 'ю': 'yu', 'я': 'ya'
+            }
+
+            # Преобразуем текст, заменяя русские буквы на английские
+            slug_text = ''.join(translit_dict.get(c.lower(), c) for c in slug_text)
 
             # Преобразуем текст в slug
             self.slug = f'smotret-online-{slugify(slug_text)}'
@@ -214,7 +221,7 @@ class Team(models.Model):
 
         super(Team, self).save(*args, **kwargs)
     def __str__(self):
-        return f'{self.name}'
+        return f'{self.name} - {self.api_team_id}'
 
     class Meta:
         verbose_name = 'Команда'
