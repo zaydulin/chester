@@ -276,8 +276,6 @@ def fetch_event_data(request):
                             period_m = 5
                         else:
                             period_m = 6
-
-                        t_name = translate_to_russian(name)
                         if not GameStatistic.objects.filter(
                                 period=period_m,
                                 name=t_name,
@@ -794,7 +792,6 @@ def add_sport_events_list_second_online_gou(request):
     second_api_rubric_ids = Rubrics.objects.filter(second_api=True).values_list('api_id', flat=True).distinct()
 
     for rubric_id in second_api_rubric_ids:
-        print('rubric_id',rubric_id)
         rubric_id_q = str(rubric_id)
         querystring = {"timezone":"-4","locale":"ru_RU","sport_id":rubric_id_q}
 
@@ -870,54 +867,80 @@ def add_sport_events_list_second_online_gou(request):
     return HttpResponse("Data "
                         "fetched successfully")
 def get_team_players():
-    url = "https://flashlive-sports.p.rapidapi.com/v1/teams/squad"
+    url = "https://flashlive-sports.p.rapidapi.com/v1/events/lineups"
     headers = {
         "X-RapidAPI-Key": "b4e32c39demsh21dc3591499b4f3p144d40jsn9a29de0bcb2a",
         "X-RapidAPI-Host": "flashlive-sports.p.rapidapi.com"
     }
-    teams = Team.objects.filter(second_api_team_id__isnull = False)
-    for team in teams:
-        querystring = {"sport_id": "1", "locale": "en_INT", "team_id": team.second_api_team_id}
+    events = Events.objects.filter(second_api_team_id__isnull = False ,status=1)
+    for event in events:
+        querystring = {"locale": "ru_RU", "event_id": event.second_event_api_id}
         response = requests.get(url, headers=headers, params=querystring)
         if response.status_code == 200:
-            response_data = response.json().get("DATA")
             count = 0
-            for player in response_data:
-
-                try:
-                    player = Player.objects.get(player_id=player["id"])
-
-                except Player.DoesNotExist:
-                    if count < 11:
-                        player = Player.objects.create(
-                            player_id=player["id"],
-                            slug=player["slug"],
-                            name=player["name"],
-                            photo=player["photo"],
-                            position_name=player["position"],
-                            description=player,
-                            main_player=True,
-                            reiting=player["rating"],
-                            number=player["shirt_number"],
-                        )
-                    else:
-                        player = Player.objects.create(
-                            player_id=player["id"],
-                            slug=player["slug"],
-                            name=player["name"],
-                            photo=player["photo"],
-                            position_name=player["position"],
-                            description=player,
-                            main_player=False,
-                            reiting=player["rating"],
-                            number=player["shirt_number"],
-                        )
-                team.players.add(player)
-                count += 1
+            response_data = response.json().get("DATA")
+            for data in response_data:
+                formation_name = data.get("FORMATION_NAME")
+                formations = data.get("FORMATIONS",[])
+                for formation in formations:
+                    members = formation.get("MEMBERS",[])
+                    for player in members:
+                        try:
+                            player = Player.objects.get(player_id=player["id"])
+                        except Player.DoesNotExist:
+                            if count < 1:
+                                if formation_name == 'Starting Lineups':
+                                    player = Player.objects.create(
+                                        player_id=player["PLAYER_ID"],
+                                        slug=f'{player["PLAYER_FULL_NAME"]} + {player["PLAYER_ID"]}',
+                                        name=player["PLAYER_FULL_NAME"],
+                                        photo=f'https://www.flashscore.com/res/image/data/{player["LPI"]}',
+                                        position_name=player["PLAYER_POSITION"],
+                                        description=player,
+                                        main_player=True,
+                                        number=player["PLAYER_NUMBER"],
+                                    )
+                                else :
+                                    player = Player.objects.create(
+                                        player_id=player["PLAYER_ID"],
+                                        slug=f'{player["PLAYER_FULL_NAME"]} + {player["PLAYER_ID"]}',
+                                        name=player["PLAYER_FULL_NAME"],
+                                        photo=f'https://www.flashscore.com/res/image/data/{player["LPI"]}',
+                                        position_name=player["PLAYER_POSITION"],
+                                        description=player,
+                                        main_player=False,
+                                        number=player["PLAYER_NUMBER"],
+                                    )
+                                event.home_team.players.add(player)
+                            elif count == 1 :
+                                if formation_name == 'Starting Lineups':
+                                    player = Player.objects.create(
+                                        player_id=player["PLAYER_ID"],
+                                        slug=f'{player["PLAYER_FULL_NAME"]} + {player["PLAYER_ID"]}',
+                                        name=player["PLAYER_FULL_NAME"],
+                                        photo=f'https://www.flashscore.com/res/image/data/{player["LPI"]}',
+                                        position_name=player["PLAYER_POSITION"],
+                                        description=player,
+                                        main_player=True,
+                                        number=player["PLAYER_NUMBER"],
+                                    )
+                                else:
+                                    player = Player.objects.create(
+                                        player_id=player["PLAYER_ID"],
+                                        slug=f'{player["PLAYER_FULL_NAME"]} + {player["PLAYER_ID"]}',
+                                        name=player["PLAYER_FULL_NAME"],
+                                        photo=f'https://www.flashscore.com/res/image/data/{player["LPI"]}',
+                                        position_name=player["PLAYER_POSITION"],
+                                        description=player,
+                                        main_player=False,
+                                        number=player["PLAYER_NUMBER"],
+                                    )
+                                event.home_team.players.add(player)
+                    count += 1
     return HttpResponse("Data "
                         "fetched successfully")
 def fetch_event_data_for_second(request):
-    events =Events.objects.filter(second_event_api_id__isnull = False)
+    events = Events.objects.filter(second_event_api_id__isnull = False,status=1)
     url = "https://flashlive-sports.p.rapidapi.com/v1/events/data"
 
     headers = {
@@ -934,13 +957,31 @@ def fetch_event_data_for_second(request):
             status = response_data.get("STAGE_TYPE")
             event.home_score = hsc
             event.away_score = asc
+            #Период
+            for i in range(1, 10):  # Примерный диапазон периодов (может быть изменен)
+                home_score_key = f"HOME_SCORE_PART_{i}"
+                away_score_key = f"AWAY_SCORE_PART_{i}"
+                # Получение значений счета для текущего периода, если они существуют
+                home_score = response_data.get(home_score_key)
+                away_score = response_data.get(away_score_key)
+                # Проверка наличия данных о счете для текущего периода
+                if home_score is not None and away_score is not None:
+                    # Создание записи Periods для текущего периода
+                    period_number = i
+                    period = Periods.objects.update_or_create(
+                        event_api_id=response_data.get('EVENT_ID'),
+                        period_number=period_number,
+                        home_score=home_score,
+                        away_score=away_score
+                    )
+                    event.periods.add(period)
             if status == "FINISHED":
                 event.status = 2
             event.save()
         second_url = "https://flashlive-sports.p.rapidapi.com/v1/events/h2h"
 
         second_querystring = {"locale": "en_INT", "event_id": event.second_event_api_id }
-
+        #H2H события
         second_response = requests.get(second_url, headers=headers, params=second_querystring)
         if second_response.status_code == 200:
             second_response_data = second_response.json().get("DATA", [])
@@ -981,7 +1022,36 @@ def fetch_event_data_for_second(request):
                                     h_result=item.get("H_RESULT"),
                                     team_mark=item.get("TEAM_MARK"),
                                 )
-
+        #Статистика матча
+        url_statistic = "https://flashlive-sports.p.rapidapi.com/v1/events/statistics"
+        querystring_statistic = {"event_id": event.second_event_api_id, "locale": "ru_RU"}
+        time.sleep(1)
+        response_statistic = requests.get(url_statistic, headers=headers, params=querystring_statistic)
+        if response_statistic.status_code == 200:
+            statistics_data = response_statistic.json().get("DATA", [])
+            for statistic in statistics_data:
+                name = statistic.get('STAGE_NAME')
+                group = statistic.get("GROUPS", [])
+                for item in group:
+                    items = item.get("ITEMS")
+                    for i in items:
+                        if not GameStatistic.objects.filter(
+                                period=name,
+                                name=i.get("INCIDENT_NAME"),
+                                home=i.get("VALUE_HOME"),
+                                description=i,
+                                away=i.get("VALUE_AWAY")
+                        ).exists():
+                            gs = GameStatistic.objects.create(
+                                period=name,
+                                name=i.get("INCIDENT_NAME"),
+                                home=i.get("VALUE_HOME"),
+                                description=i,
+                                away=i.get("VALUE_AWAY")
+                            )
+                            event.statistic.add(gs)
+        else:
+            print(f"Error fetching data for event {event.event_api_id}: {response.json()}")
     return HttpResponse("Data fetched successfully")
 
 

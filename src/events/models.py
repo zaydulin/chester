@@ -87,13 +87,12 @@ class Events(models.Model):
                 for i in range(settings.RANDOM_URL_LENGTH):
                     new_key += settings.RANDOM_URL_CHARSET[
                         randrange(0, len(settings.RANDOM_URL_CHARSET))]
-                if not Events.objects.filter(slug=new_key):
-                    self.slug = new_key
+                if not Events.objects.filter(slug=f'{self.home_team}-{self.away_team}-{self.start_at}-{new_key}'):
+                    self.slug = f'{self.home_team}-{self.away_team}-{self.start_at}-{new_key}'
                     unique = True
                 loop_num += 1
             else:
                 raise ValueError("Couldn't generate a unique code.")
-
         super(Events, self).save(*args, **kwargs)
 
     def get_start_time(self):
@@ -286,16 +285,7 @@ class Incidents(models.Model):
         verbose_name_plural = 'События(голы и тд)'
 
 class GameStatistic(models.Model):
-    PERIOD = [
-        (1, '1 период'),
-        (2, '2 период'),
-        (3, '3 период'),
-        (4, '4 период'),
-        (5, '5 период'),
-        (6, 'Все'),
-    ]
-
-    period = models.PositiveSmallIntegerField('Период',choices=PERIOD,default=1)
+    period = models.CharField('Период', max_length=500)
     name = models.CharField("Название статистики", max_length=500, null=True)
     home = models.CharField("Кол-во у дома",max_length=150)
     away = models.CharField("Кол-во у гостей",max_length=150)
