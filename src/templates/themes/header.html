@@ -248,18 +248,19 @@
             </button>
         </div>
         <p>Лиги</p>
+        {% get_popular_seasons as seasons %}
         <ul>
-            <li><a href="/">Англия: Премьер-лига</a></li>
-            <li><a href="/">Германия: Бундеслига</a></li>
-            <li><a href="/">Европа: Евро</a></li>
-            <li><a href="/">Европа: Лига Европы</a></li>
-            <li><a href="/">Европа: Лига конференций УЕФА</a></li>
-            <li><a href="/">Европа: Лига наций УЕФА</a></li>
-            <li><a href="/">Европа: Лига чемпионов</a></li>
-            <li><a href="/">Испания: Примера</a></li>
-            <li><a href="/">Италия: Серия А</a></li>
-            <li><a href="/">Мир: Чемпионат мира</a></li>
-            <li><a href="/">Франция: Первая лига</a></li>
+             {% for season in seasons%}
+             <a
+                            href="{% url 'season_detail'  season.season.slug %}"
+                            hx-get="{% url 'season_detail' season.season.slug %}"
+                            hx-target="#main-content" hx-history-elt="#main-content"
+                            hx-push-url="true"
+                            hx-indicator="#content-loader"
+                            hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''">
+                 {{season.season.league_name}}
+             </a>
+             {% endfor %}
         </ul>
     </div>
 </div>

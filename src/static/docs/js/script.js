@@ -17,17 +17,13 @@ function clearContent() {
     });
 }
 
-
 document.body.addEventListener('htmx:afterRequest', function(event) {
-    const hxCustom = event.srcElement.getAttribute("hx-custom");
-
-    if (hxCustom === 'meta') {
-        const metaTag = document.querySelector('meta[name="description"]');
-        const mainContent = document.getElementById("main-content").querySelector("main[data-content]");
-
-        if (mainContent) {
-            const metaContent = mainContent.getAttribute("data-content");
-            metaTag.setAttribute("content", metaContent);
+    const hxCustom = event.srcElement.getAttribute("hx-custom")
+    if (hxCustom === 'title'){
+        const dataTitle = document.getElementById("main-content").querySelector("main[data-title]")
+        if (dataTitle) {
+            textTitle = dataTitle.getAttribute("data-title")
+            document.querySelector("head").querySelector("title").innerHTML = textTitle
         }
     }
 });

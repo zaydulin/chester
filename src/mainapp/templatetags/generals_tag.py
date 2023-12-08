@@ -14,6 +14,10 @@ def get_current_name():
     return GeneralSettings.objects.first().name
 
 @register.simple_tag()
+def get_yandex_metrika_link():
+    return GeneralSettings.objects.first().yandex_metrika_link
+
+@register.simple_tag()
 def get_current_content():
     return GeneralSettings.objects.first().content
 

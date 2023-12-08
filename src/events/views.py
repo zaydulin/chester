@@ -70,7 +70,8 @@ class HomeView(CustomHtmxMixin, DetailView):
 
         for league_name, events_in_league in groupby(events_page, key=lambda event: event.section):
             grouped_events[league_name] = list(events_in_league)
-
+        context['title'] = f'{rubric.name} | Прямой эфир'
+        context['meta_content'] = f'{rubric.name} | Прямой эфир'
         context["events"] = grouped_events
         context["events_page"] = events_page  # Pass the paginated events to the template
 
@@ -145,6 +146,8 @@ class EventsNow(CustomHtmxMixin, DetailView):
                 event.section.is_bookmarked = league_bookmarked if event.section else False
 
             grouped_events[league_name] = events_list
+        context['title'] = f'{rubric.name} | Прямой эфир'
+        context['meta_content'] = f'{rubric.name} | Прямой эфир'
 
         context["events"] = grouped_events
         context["events_page"] = events_page  # Pass the paginated events to the template
@@ -219,6 +222,8 @@ class EventsEndView(CustomHtmxMixin, DetailView):
                     event.section.is_bookmarked = league_bookmarked if event.section else False
 
             grouped_events[league_name] = events_list
+        context['title'] = f'{rubric.name} | Завершенные'
+        context['meta_content'] = f'{rubric.name} | Завершенные'
 
         context["events"] = grouped_events
         context["events_page"] = events_page  # Pass the paginated events to the template
@@ -294,6 +299,8 @@ class EventsUpcomingView(CustomHtmxMixin, DetailView):
 
             grouped_events[league_name] = events_list
 
+        context['title'] = f'{rubric.name} | Предстоящие'
+        context['meta_content'] = f'{rubric.name} | Предстоящие'
         context["events"] = grouped_events
         context["events_page"] = events_page  # Pass the paginated events to the template
 
@@ -364,8 +371,8 @@ class EventsView(CustomHtmxMixin,TemplateView):
             ).first()
             context["is_home_team_bookmarked"] = home_team_bookmark is not None
             context["is_away_team_bookmarked"] = away_team_bookmark is not None
-        context["title"] = event.title
-        context["meta_content"] = event.content
+        context["title"] = f' {home_team.name} - {away_team.name}: смотреть онлайн {event.start_at} , прямая трансляция  бесплатно | Chesterbets'
+        context["meta_content"] = f'{home_team.name} - {away_team.name} , ({event.rubrics.name}) , {event.start_at}. Онлайн видео трансляция, новости, статистика, ставки, прямой эфир.'
         context["event"] = event
         context["messages"] = messages
         context["message_form"] = message_form

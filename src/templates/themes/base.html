@@ -19,7 +19,7 @@
     <script defer src="{% static 'docs/htmx.min.js' %}"></script>
     <script defer src="{% static 'docs/js/script.js' %}"></script>
     <script defer src="{% static 'docs/js/index.bundle.js' %}"></script>
-
+    {% get_yandex_metrika_link %}
     {% block extra_css %}{% endblock extra_css %}
 
     <title>{% get_current_name %} | {{ title }} {% block title %}{% endblock title %}</title>
