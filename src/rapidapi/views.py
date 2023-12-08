@@ -940,7 +940,7 @@ def get_team_players():
     return HttpResponse("Data "
                         "fetched successfully")
 def fetch_event_data_for_second(request):
-    events = Events.objects.filter(second_event_api_id__isnull = False,status=1)
+    events = Events.objects.filter(second_event_api_id__isnull = False)
     url = "https://flashlive-sports.p.rapidapi.com/v1/events/data"
 
     headers = {
@@ -978,50 +978,6 @@ def fetch_event_data_for_second(request):
             if status == "FINISHED":
                 event.status = 2
             event.save()
-        second_url = "https://flashlive-sports.p.rapidapi.com/v1/events/h2h"
-
-        second_querystring = {"locale": "en_INT", "event_id": event.second_event_api_id }
-        #H2H события
-        second_response = requests.get(second_url, headers=headers, params=second_querystring)
-        if second_response.status_code == 200:
-            second_response_data = second_response.json().get("DATA", [])
-            for el in second_response_data:
-                groups = el.get("GROUPS")
-                for group in groups:
-                    print('----group-----', group)
-                    items = group.get("ITEMS", [])
-
-
-                    for item in items:
-                        hi = item.get("HOME_IMAGES")
-                        ai = item.get("AWAY_IMAGES")
-                        if hi is not None and ai is not None:
-                            if not H2H.objects.filter(
-                            home_score = item.get("HOME_SCORE_FULL"),
-                            away_score = item.get("AWAY_SCORE_FULL"),
-                            name = item.get("EVENT_NAME") ,
-                            home_team_NAME = item.get("HOME_PARTICIPANT"),
-                            home_team_LOGO = item.get("HOME_IMAGES")[-1],
-                            away_team_NAME = item.get("AWAY_PARTICIPANT"),
-                            away_team_LOGO = item.get("AWAY_IMAGES")[-1] ,
-                            league = item.get("EVENT_NAME"),
-                            start_at = datetime.utcfromtimestamp(item.get('START_TIME')),
-                            h_result = item.get("H_RESULT"),
-                            team_mark = item.get("TEAM_MARK"),
-                            ).exists():
-                                H2H.objects.create(
-                                    home_score=item.get("HOME_SCORE_FULL"),
-                                    away_score=item.get("AWAY_SCORE_FULL"),
-                                    name=item.get("EVENT_NAME"),
-                                    home_team_NAME=item.get("HOME_PARTICIPANT"),
-                                    home_team_LOGO=item.get("HOME_IMAGES")[-1],
-                                    away_team_NAME=item.get("AWAY_PARTICIPANT"),
-                                    away_team_LOGO=item.get("AWAY_IMAGES")[-1],
-                                    league=item.get("EVENT_NAME"),
-                                    start_at= datetime.utcfromtimestamp(item.get('START_TIME')),
-                                    h_result=item.get("H_RESULT"),
-                                    team_mark=item.get("TEAM_MARK"),
-                                )
         #Статистика матча
         url_statistic = "https://flashlive-sports.p.rapidapi.com/v1/events/statistics"
         querystring_statistic = {"event_id": event.second_event_api_id, "locale": "ru_RU"}
@@ -1054,6 +1010,56 @@ def fetch_event_data_for_second(request):
             print(f"Error fetching data for event {event.event_api_id}: {response.json()}")
     return HttpResponse("Data fetched successfully")
 
+def get_h2h_second():
+    headers = {
+        "X-RapidAPI-Key": "b4e32c39demsh21dc3591499b4f3p144d40jsn9a29de0bcb2a",
+        "X-RapidAPI-Host": "flashlive-sports.p.rapidapi.com"
+    }
+    events = Events.objects.filter(second_api_team_id__isnull = False)
+    for event in events:
+        second_url = "https://flashlive-sports.p.rapidapi.com/v1/events/h2h"
+        second_querystring = {"locale": "en_INT", "event_id": event.second_event_api_id}
+        # H2H события
+        second_response = requests.get(second_url, headers=headers, params=second_querystring)
+        if second_response.status_code == 200:
+            second_response_data = second_response.json().get("DATA", [])
+            for el in second_response_data:
+                groups = el.get("GROUPS")
+                for group in groups:
+                    print('----group-----', group)
+                    items = group.get("ITEMS", [])
 
+                    for item in items:
+                        hi = item.get("HOME_IMAGES")
+                        ai = item.get("AWAY_IMAGES")
+                        if hi is not None and ai is not None:
+                            if not H2H.objects.filter(
+                                    home_score=item.get("HOME_SCORE_FULL"),
+                                    away_score=item.get("AWAY_SCORE_FULL"),
+                                    name=item.get("EVENT_NAME"),
+                                    home_team_NAME=item.get("HOME_PARTICIPANT"),
+                                    home_team_LOGO=item.get("HOME_IMAGES")[-1],
+                                    away_team_NAME=item.get("AWAY_PARTICIPANT"),
+                                    away_team_LOGO=item.get("AWAY_IMAGES")[-1],
+                                    league=item.get("EVENT_NAME"),
+                                    start_at=datetime.utcfromtimestamp(item.get('START_TIME')),
+                                    h_result=item.get("H_RESULT"),
+                                    team_mark=item.get("TEAM_MARK"),
+                            ).exists():
+                                h2h = H2H.objects.create(
+                                    home_score=item.get("HOME_SCORE_FULL"),
+                                    away_score=item.get("AWAY_SCORE_FULL"),
+                                    name=item.get("EVENT_NAME"),
+                                    home_team_NAME=item.get("HOME_PARTICIPANT"),
+                                    home_team_LOGO=item.get("HOME_IMAGES")[-1],
+                                    away_team_NAME=item.get("AWAY_PARTICIPANT"),
+                                    away_team_LOGO=item.get("AWAY_IMAGES")[-1],
+                                    league=item.get("EVENT_NAME"),
+                                    start_at=datetime.utcfromtimestamp(item.get('START_TIME')),
+                                    h_result=item.get("H_RESULT"),
+                                    team_mark=item.get("TEAM_MARK"),
+                                )
+                                event.h2h.add(h2h)
+    return HttpResponse("Data fetched successfully")
 
 

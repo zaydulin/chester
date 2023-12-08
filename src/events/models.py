@@ -61,6 +61,7 @@ class Events(models.Model):
     incidents = models.ManyToManyField("Incidents",verbose_name='События(голы и тд)',blank=True)
     statistic = models.ManyToManyField("GameStatistic",verbose_name='Статистика за матч',blank=True)
     tennis_points = models.ManyToManyField("TennisPoints",verbose_name='Теннисные очки',blank=True)
+    h2h = models.ManyToManyField("H2H", verbose_name='H2H', blank=True)
 
     def get_absolute_url(self):
         return reverse('events', kwargs={"slug": self.slug})
@@ -191,7 +192,7 @@ class Team(models.Model):
     description = models.TextField("Описание",null=True)
     logo = models.ImageField("Изображения",default="default/generals/no-image.jpg", blank=True, null=True)
     players = models.ManyToManyField('Player',verbose_name="Игроки")
-    h2h = models.ManyToManyField(H2H, verbose_name='H2H', blank=True)
+
 
     def save(self, *args, **kwargs):
         loop_num = 0
