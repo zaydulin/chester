@@ -4,6 +4,8 @@ from django.db import models
 from django.urls import reverse
 from datetime import datetime
 from django.utils import timezone
+from django.utils.text import slugify
+from transliterate import translit
 
 from _project import settings
 
@@ -80,8 +82,20 @@ class Events(models.Model):
                 return 'Матч не начался'
 
     def save(self, *args, **kwargs):
-        if not Events.objects.filter(slug=f'{self.home_team}-{self.away_team}-{self.start_at}'):
-            self.slug = f'{self.home_team}+{self.away_team}+{self.start_at}'
+        original_slug = f'{self.home_team}-{self.away_team}-{self.start_at}'
+        if not Events.objects.filter(slug=original_slug):
+            # Создаем slug из полей home_team, away_team и start_at
+            slug_text = f'{self.home_team}+{self.away_team}+{self.start_at}'
+
+            # Заменяем пробелы на тире
+            slug_text = slug_text.replace(' ', '-')
+
+            # Транслитерируем текст
+            slug_text = translit(slug_text, 'ru', reversed=True)
+
+            # Преобразуем текст в slug
+            self.slug = f'smotret-online-{slugify(slug_text)}'
+
         super(Events, self).save(*args, **kwargs)
 
     def get_start_time(self):
@@ -200,7 +214,7 @@ class Team(models.Model):
 
         super(Team, self).save(*args, **kwargs)
     def __str__(self):
-        return f'{self.name} - {self.api_team_id}'
+        return f'{self.name}'
 
     class Meta:
         verbose_name = 'Команда'
