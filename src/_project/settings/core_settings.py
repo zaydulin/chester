@@ -117,22 +117,22 @@ LOGIN_URL = "/login/"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": env.str("POSTGRES_DB", "db_chester"),
-        "USER": env.str("POSTGRES_USER", "user"),
-        "PASSWORD": env.str("POSTGRES_PASSWORD", ""),
-        "HOST": env.str("DJANGO_POSTGRES_HOST", "localhost"),
-        "PORT": env.int("DJANGO_POSTGRES_PORT", 5432),
-    }
-}
 # DATABASES = {
-#    "default": {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql_psycopg2",
+#         "NAME": env.str("POSTGRES_DB", "db_chester"),
+#         "USER": env.str("POSTGRES_USER", "user"),
+#         "PASSWORD": env.str("POSTGRES_PASSWORD", ""),
+#         "HOST": env.str("DJANGO_POSTGRES_HOST", "localhost"),
+#         "PORT": env.int("DJANGO_POSTGRES_PORT", 5432),
 #     }
 # }
+DATABASES = {
+   "default": {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
