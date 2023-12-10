@@ -26,7 +26,7 @@ urlpatterns = [
     path('', include('mainapp.urls')),
     path('', include('events.urls')),
     path('api/', include('rapidapi.urls')),
-    #path('captcha/', include('captcha.urls')),
+    path('captcha/', include('captcha.urls')),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

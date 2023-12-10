@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # Library (Бибилиотеки)
     "ckeditor",
-    #"captcha",
+    "captcha",
     "ckeditor_uploader",
     "ipware",
     "django_celery_results",
