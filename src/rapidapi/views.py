@@ -207,7 +207,7 @@ def add_sport_events_list(request):
                 print(f"Error fetching data for {date_str} and api_team_id {api_rubric_id}: {response}")
             current_date += timedelta(days=1)
 
-    get_players_in_team()
+    get_players_in_team(request)
     return redirect('home')
 
 def fetch_event_data(request):
@@ -594,7 +594,7 @@ def fetch_event_data(request):
             # перенести/конец
     return HttpResponse("Data fetched successfully")
 
-def get_players_in_team():
+def get_players_in_team(request):
     headers = {
         "X-RapidAPI-Key": "5191ba307fmshb68da4acf336ab6p1550dbjsn92030c4d49d7",
         "X-RapidAPI-Host": "sportscore1.p.rapidapi.com"
@@ -642,10 +642,10 @@ def get_players_in_team():
                         )
                 team.players.add(player)
                 count += 1
-    get_h2h()
+    get_h2h(request)
     return HttpResponse("Data fetched successfully")
 
-def get_h2h():
+def get_h2h(request):
     headers = {
         "X-RapidAPI-Key": "5191ba307fmshb68da4acf336ab6p1550dbjsn92030c4d49d7",
         "X-RapidAPI-Host": "sportscore1.p.rapidapi.com"
