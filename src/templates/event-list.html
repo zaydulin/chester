@@ -25,7 +25,7 @@
             {% get_popular_seasons as seasons %}
             <ul class="events__tour-list">
                 {% for season in seasons%}
-                <li>
+                <li >
                     <a
                             href="{% url 'season_detail'  season.season.slug %}"
                             hx-get="{% url 'season_detail' season.season.slug %}"
@@ -66,7 +66,7 @@
                 </div>
                 <ul>
                     {% for season in seasons %}
-                    <li>
+                    <li data-season="{{ season.league_name }}">
                         <a
                                 href="{% url 'season_detail' season.slug %}"
                                 hx-get="{% url 'season_detail' season.slug %}"
