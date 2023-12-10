@@ -20,7 +20,7 @@ class RegistrationForm(UserCreationForm):
     email = forms.EmailField(required=True, label='Email')  # Добавьте поле для Email
     username = forms.CharField(required=True, label='Имя')  # Добавьте поле для Email
     birthday = forms.DateField(required=False, label='Дата рождения', widget=forms.DateInput(attrs={'id': 'datepicker'}))
-    captcha = CaptchaField()
+    #captcha = CaptchaField()
     class Meta:
         model = User  # Укажите модель пользователя, обычно 'User'
         fields = ('username','captcha', 'email', 'password1', 'password2', 'gender', 'birthday')  # Поля, которые будут отображаться в форме
