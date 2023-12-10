@@ -24,8 +24,8 @@ shell:
 manage:
 	docker-compose -f $(docker_file) exec cb-app python manage.py $(c)
 makemigrations:
-	docker-compose -f $(docker_file) exec cb-app python src/manage.py makemigrations
+	docker-compose -f $(docker_file) exec cb-app python manage.py makemigrations
 migrate:
-	docker-compose -f $(docker_file) exec cb-app python src/manage.py migrate
+	docker-compose -f $(docker_file) exec cb-app python manage.py migrate
 test:
 	docker-compose -f $(docker_file) exec cb-app python manage.py test
