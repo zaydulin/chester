@@ -239,7 +239,9 @@ class Season(models.Model):
     logo_league = models.ImageField("Изображения",default="default/generals/no-image.jpg", blank=True, null=True)
     description = models.TextField("Описание", null=True)
     popular = models.BooleanField(default=False)
-    country = models.ForeignKey("Country", on_delete=models.CASCADE,blank=True, null=True)
+    country = models.CharField("Страна", max_length=500,blank=True, null=True)
+
+    #country = models.ForeignKey("Country", on_delete=models.CASCADE, blank=True, null=True)
     def __str__(self):
         return f'{self.league_name} - {self.season_name}'
 
