@@ -314,3 +314,21 @@ class FavoriteView(CustomHtmxMixin, TemplateView):
         context['day_list'] = day_list
 
         return context
+
+
+class TestImage(TemplateView):
+    template_name = "test-image.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        image_url = "https://www.flashscore.com/res/image/data/QcXfQGf5-0Swx7XSF.png"
+
+        # Скачивание изображения с URL
+        response = requests.get(image_url)
+
+        if response.status_code == 200:
+            # Помещаем содержимое изображения в контекст для передачи в шаблон
+            context['image_content'] = response.content
+
+        return context

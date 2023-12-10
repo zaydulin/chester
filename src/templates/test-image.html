@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FFFFFFFFFFF</title>
+</head>
+<body>
+ {% if image_content %}
+        <img src="data:image/png;base64,{{ image_content|b64encode }}" alt="Image">
+    {% else %}
+        <p>Изображение недоступно</p>
+    {% endif %}
+</body>
+</html>

@@ -706,3 +706,5 @@ class PlayerView(CustomHtmxMixin, TemplateView):
             context["player_is_bookmarked"] = season_bookmark is not None
 
         return context
+
+

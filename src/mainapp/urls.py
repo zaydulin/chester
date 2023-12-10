@@ -10,6 +10,7 @@ urlpatterns = [
     path('favorite/', views.FavoriteView.as_view(), name='favorite'),
     path('favorite/<str:bookmark_sort_by>/<slug:slug>', views.FavoriteView.as_view(), name='favoritesec'),
     path('logout/', auth_views.LogoutView.as_view(next_page='/'), name='logout'),
+    path('test/test-image/', views.TestImage.as_view(), name='testimage'),
     path('toggle_bookmark/<str:bookmark_type>/<int:item_id>/', views.toggle_bookmark, name='toggle_bookmark'),
     path('toggle_bookmark_post/', views.toggle_bookmark_post, name='toggle_bookmark_post'),
     path('get_incidents_event_post/', views.get_incidents_event_post, name='get_incidents_event_post'),
