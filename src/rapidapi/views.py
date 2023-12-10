@@ -9,7 +9,7 @@ from django.utils.text import slugify
 from googletrans import Translator
 from datetime import date ,timedelta
 from events.models import Rubrics, Events, Team, Season, Player, Incidents, Periods, GameStatistic, H2H, TennisPoints, \
-    TennisGames, Points
+    TennisGames, Points , Country
 from django.utils import timezone
 from django.db.models import Q
 import time
@@ -60,8 +60,8 @@ def check_sport_list(request):
     url = "https://flashlive-sports.p.rapidapi.com/v1/sports/list"
 
     headers = {
-        "X-RapidAPI-Key": "b4e32c39demsh21dc3591499b4f3p144d40jsn9a29de0bcb2a",
-        "X-RapidAPI-Host": "flashlive-sports.p.rapidapi.com"
+        "X-RapidAPI-Key": "5191ba307fmshb68da4acf336ab6p1550dbjsn92030c4d49d7",
+        "X-RapidAPI-Host": "sportscore1.p.rapidapi.com"
     }
     desired_sports = ["SOCCER","TENNIS","BASKETBALL","HOCKEY","HANDBALL","VOLLEYBALL","ESPORTS", "SNOOKER", "TABLE_TENNIS", "BASEBALL", "CRICKET", "BADMINTON"]
 
@@ -93,7 +93,7 @@ def add_sport_events_list(request):
     base_url = "https://sportscore1.p.rapidapi.com/sports/{}/events/date/{}"
 
     headers = {
-        "X-RapidAPI-Key": "b4e32c39demsh21dc3591499b4f3p144d40jsn9a29de0bcb2a",
+        "X-RapidAPI-Key": "5191ba307fmshb68da4acf336ab6p1550dbjsn92030c4d49d7",
         "X-RapidAPI-Host": "sportscore1.p.rapidapi.com"
     }
 
@@ -162,6 +162,11 @@ def add_sport_events_list(request):
                     venue =  event_data.get("section", {})
                     if venue:
                         country_name = venue.get("name")
+                        country_name_ru = translate_to_russian(country_name)
+                        try:
+                            country_from_db = Country.objects.get(name=country_name_ru)
+                        except:
+                            country_from_db = Country.objects.create(name=country_name_ru)
 
                     if existing_event:
                         # Generate a new unique slug
@@ -180,7 +185,7 @@ def add_sport_events_list(request):
                             league_id=league_id,
                             season_id=season_id,
                             logo_league=league_logo,
-                            country = country_name
+                            country = country_from_db
                         )
                     if not Events.objects.filter(event_api_id=event_data.get("id")).exists():
                         Events.objects.create(
@@ -214,7 +219,7 @@ def fetch_event_data(request):
     )
     base_url = "https://sportscore1.p.rapidapi.com/events/{}"
     headers = {
-        "X-RapidAPI-Key": "b4e32c39demsh21dc3591499b4f3p144d40jsn9a29de0bcb2a",
+        "X-RapidAPI-Key": "5191ba307fmshb68da4acf336ab6p1550dbjsn92030c4d49d7",
         "X-RapidAPI-Host": "sportscore1.p.rapidapi.com"
     }
     for event in events:
@@ -262,6 +267,7 @@ def fetch_event_data(request):
                     for statistic in statistics_data:
                         period = statistic.get("period", "all")
                         name = statistic.get("name").replace("_", " ").title()
+                        t_name = translate_to_russian(name)
                         home = statistic.get("home", 0)
                         away = statistic.get("away", 0)
                         if period == '1st':
@@ -586,13 +592,11 @@ def fetch_event_data(request):
                                         tp.games.add(tg)
                                 event.tennis_points.add(tp)
             # перенести/конец
-
-
     return HttpResponse("Data fetched successfully")
 
 def get_players_in_team():
     headers = {
-        "X-RapidAPI-Key": "b4e32c39demsh21dc3591499b4f3p144d40jsn9a29de0bcb2a",
+        "X-RapidAPI-Key": "5191ba307fmshb68da4acf336ab6p1550dbjsn92030c4d49d7",
         "X-RapidAPI-Host": "sportscore1.p.rapidapi.com"
     }
     # перенести
@@ -643,7 +647,7 @@ def get_players_in_team():
 
 def get_h2h():
     headers = {
-        "X-RapidAPI-Key": "b4e32c39demsh21dc3591499b4f3p144d40jsn9a29de0bcb2a",
+        "X-RapidAPI-Key": "5191ba307fmshb68da4acf336ab6p1550dbjsn92030c4d49d7",
         "X-RapidAPI-Host": "sportscore1.p.rapidapi.com"
     }
     teams = Team.objects.all()
@@ -724,6 +728,10 @@ def add_sport_events_list_second(request):
             for event_data in response_data.get('DATA', []):
                 # Создайте записи для команд (Team)
                 events = event_data.get("EVENTS")
+                try :
+                    country_from_bd = Country.objects.get(name=event_data.get("COUNTRY_NAME"))
+                except:
+                    country_from_bd = Country.objects.create(name=event_data.get("COUNTRY_NAME"))
                 try:
                     season = Season.objects.get(rubrics=rubrics,season_second_api_id=event_data.get("TOURNAMENT_SEASON_ID"))
                 except:
@@ -733,7 +741,7 @@ def add_sport_events_list_second(request):
                         season_name = event_data.get("NAME"),
                         league_name = event_data.get("SHORT_NAME"),
                         logo_league = event_data.get("TOURNAMENT_IMAGE"),
-                        country = event_data.get("COUNTRY_NAME"),
+                        country = country_from_bd,
                         season_id = event_data.get("TOURNAMENT_ID")
                     )
                 for event in events:
@@ -807,6 +815,11 @@ def add_sport_events_list_second_online_gou(request):
                 # Создайте записи для команд (Team)
                 events = event_data.get("EVENTS")
                 try:
+                    country_from_bd = Country.objects.get(name=event_data.get("COUNTRY_NAME"))
+                except:
+                    country_from_bd = Country.objects.create(name=event_data.get("COUNTRY_NAME"))
+
+                try:
                     season = Season.objects.get(rubrics=rubrics,season_second_api_id=event_data.get("TOURNAMENT_SEASON_ID"))
                 except:
                     season = Season.objects.create(
@@ -815,7 +828,6 @@ def add_sport_events_list_second_online_gou(request):
                         season_name = event_data.get("NAME"),
                         league_name=event_data.get("SHORT_NAME"),
                         logo_league = event_data.get("TOURNAMENT_IMAGE"),
-                        country = event_data.get("COUNTRY_NAME"),
                         season_id = event_data.get("TOURNAMENT_ID")
                     )
                 for event in events:

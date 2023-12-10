@@ -62,7 +62,7 @@
                 {% get_country_seasons as grouped_seasons %}
                 {% for country, seasons in grouped_seasons.items %}
                 <div data-country="{{ country }}">
-                    <h2>{{ country }}</h2>
+                    <h2><img src="{{country.image.url}}" width="20" height="20" alt="team">&nbsp;{{ country }} </h2>
                 </div>
                 <ul>
                     {% for season in seasons %}
@@ -74,7 +74,8 @@
                                 hx-push-url="true"
                                 hx-indicator="#content-loader"
                                 hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''"
-                        >{{ season.league_name }}</a
+                        ><img src="{{season.logo_league}}" width="20" height="20" alt="team">&nbsp;{{ season.league_name }}
+                        </a
                         >
                     </li>
                     {% endfor %}
@@ -144,7 +145,7 @@
                     </div>
                 </div>
 
-                <ul class="events__list">
+                <ul class="events__list" id ="event-container">
                     {% for league_name, events_in_league in events.items %}
 
                     <li class="events__item event">
@@ -277,9 +278,7 @@
                         </div>
                         <div class="event__match-list">
                             {% for event in events_in_league %}
-
                                 {% if event %}
-
                                 <a class="event__match-item" href="{% url 'events_detail' event.slug %}"
                                     hx-get="{% url 'events_detail' event.slug %}"
                                 hx-target="#main-content" hx-history-elt="#main-content"
@@ -438,9 +437,7 @@
                                             });
                                         </script>
                                 </a>
-
                                 {% endif %}
-
                             {% endfor %}
                         </div>
                     </li>
@@ -579,7 +576,9 @@
                         </div>
                     </li>
                     {% endfor %}
+
                 </ul>
+                <button class="btn ps-button" style="margin-left:40%;width:20%; display:none; " id="load-more-button">Посмотреть еще</button>
                 <div class="pagination">
 					<span class="step-links">
 						{% if events_page.has_previous %}
