@@ -266,16 +266,16 @@ class Season(models.Model):
         verbose_name = 'Лига'
         verbose_name_plural = 'Лиги'
 
-class Country(models.Model):
-    name = models.CharField(max_length=150)
-    image = models.ImageField('Флаг',default='default/russia_flag.jpg')
-
-    def __str__(self):
-        return f'{self.name}'
-
-    class Meta:
-        verbose_name = 'Страна'
-        verbose_name_plural = 'Страны'
+# class Country(models.Model):
+#     name = models.CharField(max_length=150)
+#     image = models.ImageField('Флаг',default='default/russia_flag.jpg')
+#
+#     def __str__(self):
+#         return f'{self.name}'
+#
+#     class Meta:
+#         verbose_name = 'Страна'
+#         verbose_name_plural = 'Страны'
 
 class PopularSeasons(models.Model):
     season = models.ForeignKey(Season,verbose_name="Лига",on_delete=models.CASCADE)
