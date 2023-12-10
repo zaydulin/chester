@@ -63,7 +63,7 @@ def get_context(request):
         return "upcoming"
     elif url.endswith("end/"):
         return "end"
-    elif url.endswith("football/"):
+    elif url.endswith("football/") or url.endswith("volleyball/") or url.endswith("hockey/") or url.endswith("basketball/") or url.endswith("tennis/") or url.endswith("handball/") or url.endswith("cybersport/") or url.endswith("baseball/") or url.endswith("cricket/") or url.endswith("snooker/") or url.endswith("table-tennis/") or url.endswith("table-tennis/") or url.endswith("badminton/") :
         return "now"
     else:
         return None
