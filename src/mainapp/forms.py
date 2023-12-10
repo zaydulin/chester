@@ -2,7 +2,7 @@ from django import forms
 from .models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.forms import ClearableFileInput
-from captcha.fields import CaptchaField
+#from captcha.fields import CaptchaField
 
 class LoginForm(forms.Form):
     username = forms.CharField(label="Ник на сайте", max_length=100, widget=forms.TextInput(attrs={'placeholder': 'username'}))
