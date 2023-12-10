@@ -28,7 +28,7 @@ ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", ["*"])
 
 INSTALLED_APPS = [
     "daphne",
-    "events",
+    "events.apps.EventsConfig",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -40,9 +40,10 @@ INSTALLED_APPS = [
     "ckeditor",
     "ckeditor_uploader",
     "ipware",
+    "django_celery_results",
     # app (Приложения)
-    "mainapp",
-    "rapidapi",
+    "mainapp.apps.MainappConfig",
+    "rapidapi.apps.RapidapiConfig",
 ]
 
 MIDDLEWARE = [
@@ -79,40 +80,6 @@ TEMPLATES = [
 
 ASGI_APPLICATION = "_project.asgi.application"
 WSGI_APPLICATION = "_project.wsgi.application"
-
-# CSRF_TRUSTED_ORIGINS = "https://chestersbets.works-all.ru"
-CSRF_TRUSTED_ORIGINS = ("https://chestersbets.works-all.ru",)
-
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [("cb-redis", 6379)],
-            "capacity": 1024 * 1024,
-        },
-    }
-}
-
-
-CELERY_BEAT_SCHEDULE = {
-    'add_sport_events_task': {
-        'task': 'events.tasks.add_sport_events_list_second',
-        'schedule': crontab(hour=0),
-    },
-    'fetch_event_data': {
-        'task': 'events.tasks.fetch_event_data_for_second',
-        'schedule': timedelta(seconds=10),
-    },
-}
-
-CSRF_COOKIE_SECURE = True
-CSRF_USE_SESSIONS = True
-
-RECAPTCHA_PUBLIC_KEY = "6Lezmb8oAAAAAO65cpU3w6qIu1vAzGd-nzyx0CKJ"
-RECAPTCHA_PRIVATE_KEY = "6Lezmb8oAAAAAF3vLlbePB9gJWPNfnybWj0YHjRb"
-RECAPTCHA_DEFAULT_ACTION = "generic"
-RECAPTCHA_SCORE_THRESHOLD = 0.5
-LOGIN_URL = "/login/"
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
@@ -285,3 +252,47 @@ SITE_ID = 1
 RANDOM_URL_CHARSET = f"{ascii_lowercase}{ascii_uppercase}{digits}"
 RANDOM_URL_LENGTH = 32
 RANDOM_URL_MAX_TRIES = 4
+
+# Websocket settings
+# CSRF_TRUSTED_ORIGINS = "https://chestersbets.works-all.ru"
+CSRF_TRUSTED_ORIGINS = ("https://chestersbets.works-all.ru",)
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("cb-redis", 6379)],
+            "capacity": 1024 * 1024,
+        },
+    }
+}
+
+# Celery settings
+CELERY_BROKER_URL = f"redis://{env.str('DJANGO_REDIS_HOST', 'localhost')}:6379/2"
+CELERY_ACCEPT_CONTENT = ["application/json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = "json"
+
+CELERY_BEAT_SCHEDULE = {
+    "add_sport_events_task": {
+        "task": "events.tasks.add_sport_events_list_second",
+        "schedule": crontab(
+            hour="*/23",
+        ),
+    },
+    "fetch_event_data": {
+        "task": "events.tasks.fetch_event_data_for_second",
+        "schedule": timedelta(minutes=30),
+    },
+}
+CELERY_RESULT_BACKEND = "django-db"
+
+# CSRF SETTINGS
+CSRF_COOKIE_SECURE = True
+CSRF_USE_SESSIONS = True
+
+RECAPTCHA_PUBLIC_KEY = "6Lezmb8oAAAAAO65cpU3w6qIu1vAzGd-nzyx0CKJ"
+RECAPTCHA_PRIVATE_KEY = "6Lezmb8oAAAAAF3vLlbePB9gJWPNfnybWj0YHjRb"
+RECAPTCHA_DEFAULT_ACTION = "generic"
+RECAPTCHA_SCORE_THRESHOLD = 0.5
+LOGIN_URL = "/login/"
