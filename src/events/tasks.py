@@ -46,7 +46,7 @@ def add_sport_events_list():
     }
 
     current_date = date.today()
-    with open('add_sport_events_list.txt', 'w') as file:
+    with open('/var/www/chester/add_sport_events_list.txt', 'w') as file:
         file.write('its works\n')
     end_date = current_date +timedelta(days=6)
     api_rubric_ids = Rubrics.objects.filter(second_api=False).values_list('api_id', flat=True).distinct()
@@ -733,7 +733,7 @@ def add_sport_events_list_second_online_gou():
     second_url = "https://flashlive-sports.p.rapidapi.com/v1/events/live-list"
 
     second_api_rubric_ids = Rubrics.objects.filter(second_api=True).values_list("api_id", flat=True).distinct()
-    with open('add_sport_events_list_second_online_gou.txt', 'w') as file:
+    with open('/var/www/chester/add_sport_events_list_second_online_gou.txt', 'w') as file:
         file.write('its works\n')
     for rubric_id in second_api_rubric_ids:
         rubric_id_q = str(rubric_id)
@@ -818,7 +818,7 @@ def fetch_event_data_for_second():
         "X-RapidAPI-Key": "b4e32c39demsh21dc3591499b4f3p144d40jsn9a29de0bcb2a",
         "X-RapidAPI-Host": "flashlive-sports.p.rapidapi.com",
     }
-    with open('fetch_event_data_for_second.txt', 'w') as file:
+    with open('/var/www/chester/fetch_event_data_for_second.txt', 'w') as file:
         file.write('its works\n')
     for event in events:
         querystring = {"locale": "en_INT", "event_id": event.second_event_api_id}
