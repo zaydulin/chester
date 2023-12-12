@@ -275,15 +275,55 @@ CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
 
 CELERY_BEAT_SCHEDULE = {
-    "add_sport_events_task": {
+    "add_sport_events_second_task": {
         "task": "events.tasks.add_sport_events_list_second",
         "schedule": crontab(
             hour="*/23",
         ),
     },
-    "fetch_event_data": {
+    "add_sport_events_second_online_task": {
+        "task": "events.tasks.add_sport_events_list_second_online_gou",
+        "schedule": crontab(
+            hour="*/23",
+        ),
+    },
+    "get_team_players_second": {
+        "task": "events.tasks.get_team_players_second",
+        "schedule": crontab(
+            hour="*/23",
+        ),
+    },
+    "get_h2h_second": {
+        "task": "events.tasks.get_h2h_second",
+        "schedule": crontab(
+            hour="*/23",
+        ),
+    },
+    "fetch_event_data_for_second": {
         "task": "events.tasks.fetch_event_data_for_second",
-        "schedule": timedelta(minutes=30),
+        "schedule": timedelta(minutes=1),
+    },
+    "add_sport_events_list": {
+        "task": "events.tasks.add_sport_events_list",
+        "schedule": crontab(
+            hour="*/23",
+        ),
+    },
+    "fetch_event_data": {
+        "task": "events.tasks.fetch_event_data",
+        "schedule": timedelta(minutes=1),
+    },
+    "get_players_in_team": {
+        "task": "events.tasks.get_players_in_team",
+        "schedule": crontab(
+            hour="*/23",
+        ),
+    },
+    "get_h2h": {
+        "task": "events.tasks.get_h2h",
+        "schedule": crontab(
+            hour="*/23",
+        ),
     },
 }
 CELERY_RESULT_BACKEND = "django-db"
