@@ -231,17 +231,20 @@ class EventsEndView(CustomHtmxMixin, DetailView):
         return context
 
 
-class EventsUpcomingView(CustomHtmxMixin, DetailView):
+class EventsUpcomingView(CustomHtmxMixin, ListView):
     """Категории"""
-
+    paginate_by = 10
     model = Rubrics
     template_name = "event-list.html"
     slug_field = "slug"
-    paginate_by = 2
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        rubric = context["object"]
+        rubric_slug = self.kwargs['slug']
+
+
+        rubric = Rubrics.objects.get(slug=rubric_slug)
+        context['rubrics'] = rubric
         rubric.events.set(rubric.events.all())
 
         sidebar_baners = Baners.objects.filter(type=1)
@@ -261,7 +264,6 @@ class EventsUpcomingView(CustomHtmxMixin, DetailView):
 
         events = Events.objects.filter(status=3, rubrics=rubric).order_by("section__league_name", "-start_at")
 
-        # Pagination
         paginator = Paginator(events, 20)  # 20 events per page
         page = self.request.GET.get("page")
 
@@ -707,4 +709,11 @@ class PlayerView(CustomHtmxMixin, TemplateView):
 
         return context
 
-
+def get_next_elements(request):
+    offset = int(request.GET['offset'])
+    rubrics= int(request.GET['rubrics'])
+    status= int(request.GET['status'])
+    rubrics = Rubrics.objects.get(id=rubrics)
+    events = Events.objects.filter(rubrics = rubrics,status=status).order_by("section__league_name", "-start_at")[offset:offset+20]
+    context={ 'events':events , 'offset': offset+10}
+    return render(request,'event_list_elements.html',context)

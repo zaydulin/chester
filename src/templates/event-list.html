@@ -13,14 +13,14 @@
         id="refresh">
 </a>
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-<main class="events sp-container">
+<main class="events sp-container" id="sp-container">
     <div class="events__left-banners side-banners left">
         {% for baner in sidebar_baners_left %}
         <a href="{{ baner.slug }}" class="adv-link"><img src="{{ baner.baner.url }}" alt="logo" /></a>
         {% endfor %}
     </div>
     <div class="events__main event-container">
-        <div class="events__sidebar">
+        <div class="events__sidebar" id="side-bar">
             <h3>Популярные</h3>
             {% get_popular_seasons as seasons %}
             <ul class="events__tour-list">
@@ -103,7 +103,7 @@
             </div>
             {% endif %}
             <div class="events__list-info">
-                <div class="events__togglers">
+                <div class="events__togglers" id="events-togglers">
                     <div class="events__togglers-btns-cont">
                         <div class="events__togglers-btns">
                             {% get_context request as contexturl %}
@@ -145,457 +145,36 @@
                     </div>
                 </div>
 
-                <ul class="events__list" id ="event-container">
-                    {% for league_name, events_in_league in events.items %}
-
-                    <li class="events__item event">
-                        <div class="event__tour {% if league_name.is_bookmarked %}like{% endif %}">
-
-                            <a id="toggle_season_bookmark-{{league_name.id}}" style="cursosr:pointer;" class="event__like">
-                                    <svg
-                                            stroke="currentColor"
-                                            fill="currentColor"
-                                            stroke-width="0"
-                                            viewBox="0 0 16 16"
-                                            color="#ffa830"
-                                            height="1em"
-                                            width="1em"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            style="display:none;color: rgb(255, 168, 48)"
-                                            id ="season_bookmarked-{{league_name.id}}"
-                                    >
-
-                                        <path
-                                                d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
-                                    </svg>
-
-                                    <svg
-                                            stroke="currentColor"
-                                            fill="currentColor"
-                                            stroke-width="0"
-                                            viewBox="0 0 16 16"
-                                            height="1em"
-                                            width="1em"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            id ="season_not_bookmarked-{{league_name.id}}"
-                                    >
-
-                                        <path
-                                                d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"></path>
-                                    </svg>
-                            </a>
-                            <script>
-                                document.addEventListener("DOMContentLoaded", function() {
-                                    // Get references to the SVG elements
-                                    var bookmarkedSVG = document.getElementById("season_bookmarked-"+"{{league_name.id}}");
-                                    var notBookmarkedSVG = document.getElementById("season_not_bookmarked-"+"{{league_name.id}}");
-
-                                    // Assuming is_event_bookmarked is a boolean variable
-                                    var isEventBookmarked = {{ league_name.is_bookmarked|lower }}; // Convert to lower case for boolean interpretation
-
-                                    // Function to toggle display based on the bookmarked status
-                                    function toggleSVGDisplay() {
-                                        if (isEventBookmarked) {
-                                            bookmarkedSVG.style.display = "block";
-                                            notBookmarkedSVG.style.display = "none";
-                                        } else {
-                                            bookmarkedSVG.style.display = "none";
-                                            notBookmarkedSVG.style.display = "block";
-                                        }
-                                    }
-
-                                    // Initial display based on the initial value of is_event_bookmarked
-                                    toggleSVGDisplay();
-                                });
-
-                                $(document).ready(function() {
-                                    $("#toggle_season_bookmark-{{league_name.id}}").click(function(event) {
-                                        event.preventDefault();
-
-                                        var event_id = "{{ league_name.id }}";
-                                        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-
-                                        if ("{{ user.is_authenticated }}" === "True") {
-                                            var isAlreadyActive = $(this).hasClass("active");
-
-                                            $.ajax({
-                                                type: "POST",
-                                                url: "/toggle_bookmark_post/",
-                                                headers: {
-                                                    'X-CSRFToken': csrftoken
-                                                },
-                                                data: {
-                                                    "bookmark_type": 'season',
-                                                    "event_id": event_id,
-                                                },
-                                                success: function(response) {
-
-                                                    var bookmarkedSVG = document.getElementById("season_bookmarked-"+"{{ league_name.id }}");
-                                                    var notBookmarkedSVG = document.getElementById("season_not_bookmarked-"+"{{ league_name.id }}");
-
-                                                    // Toggle the display of the SVGs
-                                                    if (bookmarkedSVG.style.display === "block") {
-                                                        bookmarkedSVG.style.display = "none";
-                                                        notBookmarkedSVG.style.display = "block";
-                                                    } else {
-                                                        bookmarkedSVG.style.display = "block";
-                                                        notBookmarkedSVG.style.display = "none";
-                                                    }
-                                                },
-                                                error: function(error) {
-                                                    console.error(error);
-                                                },
-                                                complete: function() {
-                                                    let evnbookmrkd = $("#season_not_bookmarked-"+"{{ league_name.id }}");
-                                                    let evbookmrkd = $("#season_bookmarked-"+"{{ league_name.id }}");
-
-                                                     let isBookmarkedVisible = evbookmrkd.is(":visible");
-
-                                                    // Toggle the display property of the first SVG based on the visibility of the second SVG
-                                                    if (isBookmarkedVisible) {
-                                                        evnbookmrkd.css("display", "none");
-                                                    } else {
-                                                        evnbookmrkd.css("display", "block");
-                                                    }
-                                                                    }
-                                            });
-                                        } else {
-                                            alert("Вы не авторизованы. Пожалуйста, войдите в аккаунт.");
-                                        }
-                                    });
-                                });
-                            </script>
-                            <a
-                                    href="{% url 'season_detail' league_name.slug  %}"
-                                    hx-get="{% url 'season_detail' league_name.slug  %}"
-                                    hx-target="#main-content" hx-history-elt="#main-content"
-                                    hx-push-url="true"
-                                    hx-indicator="#content-loader"
-                                    hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''">
-                                <img width="25" height="25" src="{{ league_name.logo_league }}" alt="logo" />
-                                <span>{{ league_name }}</span>
-                            </a>
-                        </div>
-                        <div class="event__match-list">
-                            {% for event in events_in_league %}
-                                {% if event %}
-                                <a class="event__match-item" href="{% url 'events_detail' event.slug %}"
-                                    hx-get="{% url 'events_detail' event.slug %}"
-                                hx-target="#main-content" hx-history-elt="#main-content"
-                                hx-push-url="true"
-                                hx-indicator="#content-loader"
-                                hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''"
-
-                                >
-                                    <div class="event__match-item-left">
-                                        <button id="toggle_bookmark_event-{{event.id}}" class="event__like" style="cursor:pointer;">
-                                            <svg
-                                                    stroke="currentColor"
-                                                    fill="currentColor"
-                                                    stroke-width="0"
-                                                    viewBox="0 0 16 16"
-                                                    color="#ffa830"
-                                                    height="1em"
-                                                    width="1em"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    style="display:none;color: rgb(255, 168, 48)"
-                                                    id="event_bookmarked-{{event.id}}"
-                                            >
-                                                <path
-                                                        d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                                                ></path>
-                                            </svg>
-                                            <svg
-                                                    stroke="currentColor"
-                                                    fill="currentColor"
-                                                    stroke-width="0"
-                                                    viewBox="0 0 16 16"
-                                                    height="1em"
-                                                    width="1em"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    id="event_not_bookmarked-{{event.id}}"
-                                            >
-                                                <path
-                                                        d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"
-                                                ></path>
-                                            </svg>
-                                        </button>
-                                        <div class="event__start-time">
-                                            <span>{{event.get_start_time}}{% if event.status == 3 %} {{ event.get_start_date }}{% endif %}</span>
-                                        </div>
-                                        <div class="event__period">
-                                            <span>{% if event.half %}{% if event.half == 'FT' %}Завершен{% else %}{{event.half}}{% endif %}{%else%} Предстоит{% endif %}</span>
-                                        </div>
-                                    </div>
-                                    <div class="event__match">
-                                       <div class="event__match-left">
-                                            <h2 class="event__home-team match-team">
-                                                <span>{{event.home_team.name}}</span>
-                                                <img src="{{event.home_team.logo}}" width="20" height="20" alt="team">
-                                            </h2>
-                                            <div class="event__score">
-                                                {% if event.status != 3%}
-                                                <span>{{event.home_score}}</span>
-                                                <span>-</span>
-
-                                                <span>{{event.away_score}}</span>
-                                                {% else %}
-                                                <span>0</span>
-                                                <span>-</span>
-                                                <span>0</span>
-                                                {% endif %}
-                                            </div>
-                                            <h2 class="event__away-team match-team">
-                                                <img src="{{event.away_team.logo}}" width="20" height="20" alt="team">
-                                                <span>{{event.away_team.name}}</span>
-                                            </h2>
-                                        </div>
-                                       <div class="event__match-mob-score mob-score">
-                                            <div>{{event.home_score}}</div>
-                                            <div>{{event.away_score}}</div>
-                                        </div>
-                                    </div>
-                                    <script>
-                                            document.addEventListener("DOMContentLoaded", function() {
-                                                // Get references to the SVG elements
-                                                var bookmarkedSVG = document.getElementById("event_bookmarked-"+"{{event.id}}");
-                                                var notBookmarkedSVG = document.getElementById("event_not_bookmarked-"+"{{event.id}}");
-
-                                                // Assuming is_event_bookmarked is a boolean variable
-                                                var isEventBookmarked = {{ event.is_bookmarked|lower }}; // Convert to lower case for boolean interpretation
-
-                                                // Function to toggle display based on the bookmarked status
-                                                function toggleSVGDisplay() {
-                                                    if (isEventBookmarked) {
-                                                        bookmarkedSVG.style.display = "block";
-                                                        notBookmarkedSVG.style.display = "none";
-                                                    } else {
-                                                        bookmarkedSVG.style.display = "none";
-                                                        notBookmarkedSVG.style.display = "block";
-                                                    }
-                                                }
-
-                                                // Initial display based on the initial value of is_event_bookmarked
-                                                toggleSVGDisplay();
-                                            });
-
-                                            $(document).ready(function() {
-                                                $("#toggle_bookmark_event-{{event.id}}").click(function(event) {
-                                                    event.preventDefault();
-
-                                                    var event_id = "{{ event.id }}";
-                                                    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-
-                                                    if ("{{ user.is_authenticated }}" === "True") {
-                                                        var isAlreadyActive = $(this).hasClass("active");
-
-                                                        $.ajax({
-                                                            type: "POST",
-                                                            url: "/toggle_bookmark_post/",
-                                                            headers: {
-                                                                'X-CSRFToken': csrftoken
-                                                            },
-                                                            data: {
-                                                                "bookmark_type": 'event',
-                                                                "event_id": event_id,
-                                                            },
-                                                            success: function(response) {
-
-                                                                var bookmarkedSVG = document.getElementById("event_bookmarked-"+"{{event.id}}");
-                                                                var notBookmarkedSVG = document.getElementById("event_not_bookmarked-"+"{{event.id}}");
-
-                                                                // Toggle the display of the SVGs
-                                                                if (bookmarkedSVG.style.display === "block") {
-                                                                    bookmarkedSVG.style.display = "none";
-                                                                    notBookmarkedSVG.style.display = "block";
-                                                                } else {
-                                                                    bookmarkedSVG.style.display = "block";
-                                                                    notBookmarkedSVG.style.display = "none";
-                                                                }
-                                                            },
-                                                            error: function(error) {
-                                                                console.error(error);
-                                                            },
-                                                            complete: function() {
-                                                                let evnbookmrkd = $("#event_not_bookmarked-"+"{{event.id}}");
-                                                                let evbookmrkd = $("#event_bookmarked-"+"{{event.id}}");
-
-                                                                 let isBookmarkedVisible = evbookmrkd.is(":visible");
-
-                                                                // Toggle the display property of the first SVG based on the visibility of the second SVG
-                                                                if (isBookmarkedVisible) {
-                                                                    evnbookmrkd.css("display", "none");
-                                                                } else {
-                                                                    evnbookmrkd.css("display", "block");
-                                                                }
-                                                                                }
-                                                        });
-                                                    } else {
-                                                        alert("Вы не авторизованы. Пожалуйста, войдите в аккаунт.");
-                                                    }
-                                                });
-                                            });
-                                        </script>
-                                </a>
-                                {% endif %}
-                            {% endfor %}
-                        </div>
-                    </li>
-                    <li class="events__item-mob event-mobile">
-                        <div class="event__tour {% if league_name.is_bookmarked %}like{% endif %}">
-                            <form
-                                    method="post"
-                                    action="{% url 'toggle_bookmark' 'season' league_name.id %}"
-                                    hx-get="{% url 'toggle_bookmark' 'season' league_name.id %}"
-                                    hx-target="#main-content" hx-history-elt="#main-content"
-                                    hx-push-url="true"
-                                    hx-indicator="#content-loader"
-                                    hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''">
-                                {% csrf_token %}
-                                <input type="hidden" name="league_name_id" value="{{ league_name.id }}" />
-                                <button type="submit" class="event__like">
-                                    {% if league_name.is_bookmarked %}
-                                    <svg
-                                            stroke="currentColor"
-                                            fill="currentColor"
-                                            stroke-width="0"
-                                            viewBox="0 0 16 16"
-                                            color="#ffa830"
-                                            height="1em"
-                                            width="1em"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            style="color: rgb(255, 168, 48)">
-                                        <path
-                                                d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
-                                    </svg>
-                                    {% else %}
-                                    <svg
-                                            stroke="currentColor"
-                                            fill="currentColor"
-                                            stroke-width="0"
-                                            viewBox="0 0 16 16"
-                                            height="1em"
-                                            width="1em"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                                d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"></path>
-                                    </svg>
-                                    {% endif %}
-                                </button>
-                            </form>
-                            <a
-                                    href="{% url 'season_detail' league_name.slug  %}"
-                                    hx-get="{% url 'season_detail' league_name.slug  %}"
-                                    hx-target="#main-content" hx-history-elt="#main-content"
-                                    hx-push-url="true"
-                                    hx-indicator="#content-loader"
-                                    hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''">
-                                <img width="25" height="25" src="{{ league_name.logo_league }}" alt="logo" />
-                                <span>{{ league_name }}</span>
-                            </a>
-                        </div>
-                        <div class="event__match-list">
-
-                            {% for event in events_in_league %}
-                            {% if event %}
-                            <a class="event__match-item" href="{% url 'events_detail' event.slug %}">
-                                <div class="event__match-item-left">
-                                    <form
-                                            method="post"
-                                            action="{% url 'toggle_bookmark' 'event' event.id %}"
-                                            hx-get="{% url 'toggle_bookmark' 'event' event.id %}"
-                                            hx-target="#main-content" hx-history-elt="#main-content"
-                                            hx-push-url="true"
-                                            hx-indicator="#content-loader"
-                                            hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="event_id" value="{{ event.id }}" />
-                                        <button class="event__like">
-                                            {% if event.is_bookmarked %}
-                                            <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 16 16" color="#ffa830" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg" style="color: rgb(255, 168, 48)">
-                                                <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
-                                            </svg>
-
-                                            {% else %}
-                                            <svg
-                                                    stroke="currentColor"
-                                                    fill="currentColor"
-                                                    stroke-width="0"
-                                                    viewBox="0 0 16 16"
-                                                    height="1em"
-                                                    width="1em"
-                                                    xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                        d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"></path>
-                                            </svg>
-                                            {% endif %}
-                                        </button>
-                                    </form>
-                                    <div class="event__start-time">
-                                        <span>{{event.get_start_time}}{% if event.status == 3 %} {{ event.get_start_date }}{% endif %}</span>
-                                    </div>
-                                    <div class="event__period">
-                                        <span>{% if event.half %}{% if event.half == 'FT' %}Завершен{% else %}{{event.half}}{% endif %}{%else%} Предстоит{% endif %}</span>
-                                    </div>
-                                </div>
-                                <div class="event__match">
-                                    <div style="" href="{% url 'team_detail' event.home_team.slug %}" hx-get="{% url 'team_detail' event.home_team.slug %}" hx-target="#main-content" hx-history-elt="#main-content" hx-push-url="true" hx-indicator="#content-loader" hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''">
-                                        <h2 class="event__home-team match-team">
-                                            <span>{{event.home_team.name}}</span>
-                                            <picture><source srcset="{{event.home_team.logo}}" type="image/webp"><img src="{{event.home_team.logo}}" width="20" height="20" alt="team"></picture>
-                                        </h2>
-                                    </div>
-                                    <div style=" min-width: 50px;" class="event__score">
-                                        {% if event.status != 3%}
-                                        <span>{{event.home_score}}</span>
-                                        <span>-</span>
-
-                                        <span>{{event.away_score}}</span>
-                                        {% else %}
-                                        <span>0</span>
-                                        <span>-</span>
-                                        <span>0</span>
-                                        {% endif %}
-                                    </div>
-                                    <div style="" href="{% url 'team_detail' event.away_team.slug %}" hx-get="{% url 'team_detail' event.away_team.slug %}" hx-target="#main-content" hx-history-elt="#main-content" hx-push-url="true" hx-indicator="#content-loader" hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''">
-                                        <h2 class="event__away-team match-team">
-                                            <span>{{event.away_team.name}}</span>
-                                            <picture><source srcset="{{event.away_team.logo}}" type="image/webp"><img src="{{event.away_team.logo}}" width="20" height="20" alt="team"></picture>
-                                        </h2>
-                                    </div>
-                                    <div class="event__match-mob-score mob-score">
-                                        <div>{{event.home_score}}</div>
-                                        <div>{{event.away_score}}</div>
-                                    </div>
-                                </div>
-
-                            </a>
-                            {% endif %}
-                            {% endfor %}
-
-                        </div>
-                    </li>
-                    {% endfor %}
-
+                <ul class="events__list" id="ul-info">
+                    {% include 'event_list_elements.html'%}
                 </ul>
-                <button class="btn ps-button" style="margin-left:40%;width:20%; display:none; " id="load-more-button">Посмотреть еще</button>
-                <div class="pagination">
-					<span class="step-links">
-						{% if events_page.has_previous %}
-						<a href="?page=1">&laquo; Первая</a>
-						<a href="?page={{ events_page.previous_page_number }}">Предыдущая</a>
-						{% endif %}
+                <script>
+// Находим все элементы с id="ul-info"
+var ulInfoElements = document.querySelectorAll('#ul-info');
 
-						<span class="current-page"
-                        >{{ events_page.number }} из {{ events_page.paginator.num_pages }}</span
-                        >
+// Находим все элементы с id="div-with-info"
+var divWithInfoElements = document.querySelectorAll('#div-with-info');
 
-						{% if events_page.has_next %}
-						<a href="?page={{ events_page.next_page_number }}">Следующая</a>
-						<a href="?page={{ events_page.paginator.num_pages }}">Последняя &raquo;</a>
-						{% endif %}
-					</span>
-                </div>
+// Проверяем, есть ли у нас оба элемента и есть ли ulInfo вообще
+if (ulInfoElements.length > 0 && divWithInfoElements.length > 1) {
+    // Берем первый ulInfo
+    var firstUlInfo = ulInfoElements[0];
+
+    // Начиная со второго divWithInfo
+    for (var i = 1; i < divWithInfoElements.length; i++) {
+        // Перемещаем текущий divWithInfo внутрь первого ulInfo
+        firstUlInfo.appendChild(divWithInfoElements[i]);
+    }
+}
+                    var sideBarElements = document.querySelectorAll('#sp-container');
+                    if (sideBarElements.length > 1) {
+                        // Удаляем второй элемент из DOM
+                        sideBarElements[1].parentNode.removeChild(sideBarElements[1]);
+                    }
+                </script>
+
+
+
             </div>
             {% if gorizont_baners_footer%}
             <div class="events__center-banners center-banners center-banners__bottom">
