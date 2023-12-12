@@ -148,6 +148,7 @@
                 <ul class="events__list" id="ul-info">
                     {% include 'event_list_elements.html'%}
                 </ul>
+
                 <script>
 // Находим все элементы с id="ul-info"
 var ulInfoElements = document.querySelectorAll('#ul-info');
@@ -172,8 +173,6 @@ if (ulInfoElements.length > 0 && divWithInfoElements.length > 1) {
                         sideBarElements[1].parentNode.removeChild(sideBarElements[1]);
                     }
                 </script>
-
-
 
             </div>
             {% if gorizont_baners_footer%}
