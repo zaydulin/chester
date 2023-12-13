@@ -1,6 +1,5 @@
 import os
 from datetime import timedelta
-from celery import Celery
 from celery.schedules import crontab
 from environs import Env
 from pathlib import Path
