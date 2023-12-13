@@ -18,7 +18,7 @@ backcall==0.2.0
 beautifulsoup4==4.12.2
 billiard==4.1.0
 bleach==6.0.0
-celery==5.3.4
+celery==5.3.6
 certifi==2022.12.7
 cffi==1.15.1
 channels==4.0.0
