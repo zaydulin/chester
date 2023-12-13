@@ -13,5 +13,7 @@ celery_app.config_from_object("django.conf:settings", namespace="CELERY")
 # Указываем параметр для сохранения текущего поведения при повторных попытках соединения с брокером при старте
 broker_connection_retry_on_startup = True
 
+broker_connection_retry=False
+
 # Автоматическое обнаружение и регистрация всех задач Django из файлов tasks.py
 celery_app.autodiscover_tasks()
