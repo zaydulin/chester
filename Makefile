@@ -31,7 +31,3 @@ test:
 	docker-compose -f $(docker_file) exec cb-app python manage.py test
 celery:
 	docker-compose -f $(docker_file) exec cb-celery celery -A _project worker --loglevel=info
-task1:
-	docker-compose -f $(docker_file) exec cb-celery celery -A _project call events.tasks.add_sport_events_list_second
-task01:
-	docker-compose -f $(docker_file) exec cb-app celery -A _project call events.tasks.add_sport_events_list_second
