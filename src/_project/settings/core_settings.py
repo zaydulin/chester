@@ -1,6 +1,5 @@
 import os
 from datetime import timedelta
-
 from celery.schedules import crontab
 from environs import Env
 from pathlib import Path
@@ -284,19 +283,19 @@ CELERY_BEAT_SCHEDULE = {
     "add_sport_events_second_online_task": {
         "task": "events.tasks.add_sport_events_list_second_online_gou",
         "schedule": crontab(
-            hour="*/1",
+            hour="*/2",
         ),
     },
     "get_team_players_second": {
         "task": "events.tasks.get_team_players_second",
         "schedule": crontab(
-            hour="*/2",
+            hour="*/3",
         ),
     },
     "get_h2h_second": {
         "task": "events.tasks.get_h2h_second",
         "schedule": crontab(
-            hour="*/3",
+            hour="*/4",
         ),
     },
     "fetch_event_data_for_second": {
@@ -306,7 +305,7 @@ CELERY_BEAT_SCHEDULE = {
     "add_sport_events_list": {
         "task": "events.tasks.add_sport_events_list",
         "schedule": crontab(
-            hour="*/1",
+            hour="*/5",
         ),
     },
     "fetch_event_data": {
@@ -316,13 +315,13 @@ CELERY_BEAT_SCHEDULE = {
     "get_players_in_team": {
         "task": "events.tasks.get_players_in_team",
         "schedule": crontab(
-            hour="*/2",
+            hour="*/6",
         ),
     },
     "get_h2h": {
         "task": "events.tasks.get_h2h",
         "schedule": crontab(
-            hour="*/3",
+            hour="*/7",
         ),
     },
 }

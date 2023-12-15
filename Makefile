@@ -29,3 +29,5 @@ migrate:
 	docker-compose -f $(docker_file) exec cb-app python manage.py migrate
 test:
 	docker-compose -f $(docker_file) exec cb-app python manage.py test
+celery:
+	docker-compose -f $(docker_file) exec cb-celery celery -A _project worker --loglevel=info
