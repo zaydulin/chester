@@ -30,6 +30,12 @@ migrate:
 test:
 	docker-compose -f $(docker_file) exec cb-app python manage.py test
 celery:
+<<<<<<< HEAD
 	docker-compose -f $(docker_file) exec cb-celery celery -A _project worker --loglevel=debug
 celery2:
 	docker-compose -f $(docker_file) exec cb-celery celery -A _project inspect active
+=======
+	docker-compose -f $(docker_file) exec cb-celery celery -A _project worker --loglevel=info
+celery:
+	docker-compose -f $(docker_file) exec cb-celery celery -A _project inspect registered
+>>>>>>> refs/remotes/origin/master
