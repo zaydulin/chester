@@ -31,5 +31,5 @@ test:
 	docker-compose -f $(docker_file) exec cb-app python manage.py test
 celery:
 	docker-compose -f $(docker_file) exec cb-celery celery -A _project worker --loglevel=info
-celery:
+celery2:
 	docker-compose -f $(docker_file) exec cb-celery celery -A _project inspect registered
