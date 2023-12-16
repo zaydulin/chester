@@ -283,7 +283,10 @@ CELERY_BEAT_SCHEDULE = {
             hour="*/1",
         ),
     },
+<<<<<<< HEAD
+=======
 
+>>>>>>> refs/remotes/origin/master
 }
 CELERY_RESULT_BACKEND = "django-db"
 
