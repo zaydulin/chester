@@ -27,7 +27,6 @@ COPY        ./src/* ${PROJECTPATH}
 RUN         chown -R ${USER} ${PROJECTPATH}
 USER        ${USER}
 
-RUN         chown nobody:nogroup "celerybeat-schedule"
-USER        nobody
+
 
 
