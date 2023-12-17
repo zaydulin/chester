@@ -33,4 +33,8 @@ celery:
 	docker-compose -f $(docker_file) exec cb-celery celery -A _project worker --loglevel=debug
 celery2:
 	docker-compose -f $(docker_file) exec cb-celery celery -A _project inspect active
+celery3:
+	docker-compose -f $(docker_file) exec cb-celery celery -A _project call events.tasks.add_sport_events_list_second
+
+
 
