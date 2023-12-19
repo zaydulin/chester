@@ -548,7 +548,7 @@ def get_players_in_team():
     querystring = {"page": "1"}
     teams =Team.objects.filter(players=None)
     for team in teams:
-        url_team = base_url_team.format(team)
+        url_team = base_url_team.format(team.api_team_id)
 
         response_players_in_team = requests.get(url_team, headers=headers, params=querystring)
         if response_players_in_team.status_code == 200:
