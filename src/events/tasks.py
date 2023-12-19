@@ -548,7 +548,7 @@ def get_players_in_team():
     querystring = {"page": "1"}
     teams =Team.objects.filter(players=None)
     for team in teams:
-        url_team = base_url_team.format()
+        url_team = base_url_team.format(team)
 
         response_players_in_team = requests.get(url_team, headers=headers, params=querystring)
         if response_players_in_team.status_code == 200:
@@ -593,12 +593,13 @@ def get_h2h():
         "X-RapidAPI-Key": "5191ba307fmshb68da4acf336ab6p1550dbjsn92030c4d49d7",
         "X-RapidAPI-Host": "sportscore1.p.rapidapi.com"
     }
-    teams = Team.objects.all()
-    for team in teams:
-        team_id_for_h2h = team.api_team_id
+    events = Events.objects.filter(status=3)
+    for event in events:
+        home_team = event.home_team.api_team_id
+        away_team = event.away_team.api_team_id
 
-        base_events_bytTID_url = "https://sportscore1.p.rapidapi.com/teams/{}/events"
-        events_bytTID_url = base_events_bytTID_url.format(team_id_for_h2h)
+        base_events_bytTID_url = "https://sportscore1.p.rapidapi.com/teams/{}/h2h-events/{}"
+        events_bytTID_url = base_events_bytTID_url.format(home_team,away_team)
         querystring = {"page": "1"}
 
         response_for_events_bytTID = requests.get(events_bytTID_url, headers=headers,
@@ -643,7 +644,7 @@ def get_h2h():
                                         league_logo=h2hdata.get("league").get("logo"),
                                         start_at=h2hdata.get("start_at")
                                     )
-                                team.h2h.add(h2h_stat)
+                                event.h2h.add(h2h_stat)
                             else:
                                 pass
     return HttpResponse("Data fetched successfully")
