@@ -41,7 +41,7 @@ def add_sport_events_list():
     base_url = "https://sportscore1.p.rapidapi.com/sports/{}/events/date/{}"
 
     headers = {
-        "X-RapidAPI-Key": "5191ba307fmshb68da4acf336ab6p1550dbjsn92030c4d49d7",
+        "X-RapidAPI-Key": "cf7852fbf6msh75da5fe8ff1e761p13ab0cjsnefb46346c951",
         "X-RapidAPI-Host": "sportscore1.p.rapidapi.com"
     }
 
@@ -161,7 +161,7 @@ def fetch_event_data():
     )
     base_url = "https://sportscore1.p.rapidapi.com/events/{}"
     headers = {
-        "X-RapidAPI-Key": "5191ba307fmshb68da4acf336ab6p1550dbjsn92030c4d49d7",
+        "X-RapidAPI-Key": "cf7852fbf6msh75da5fe8ff1e761p13ab0cjsnefb46346c951",
         "X-RapidAPI-Host": "sportscore1.p.rapidapi.com"
     }
     for event in events:
@@ -539,7 +539,7 @@ def fetch_event_data():
 @shared_task
 def get_players_in_team():
     headers = {
-        "X-RapidAPI-Key": "5191ba307fmshb68da4acf336ab6p1550dbjsn92030c4d49d7",
+        "X-RapidAPI-Key": "cf7852fbf6msh75da5fe8ff1e761p13ab0cjsnefb46346c951",
         "X-RapidAPI-Host": "sportscore1.p.rapidapi.com"
     }
     # перенести
@@ -590,7 +590,7 @@ def get_players_in_team():
 @shared_task
 def get_h2h():
     headers = {
-        "X-RapidAPI-Key": "5191ba307fmshb68da4acf336ab6p1550dbjsn92030c4d49d7",
+        "X-RapidAPI-Key": "cf7852fbf6msh75da5fe8ff1e761p13ab0cjsnefb46346c951",
         "X-RapidAPI-Host": "sportscore1.p.rapidapi.com"
     }
     events = Events.objects.filter(status=3)
