@@ -1,5 +1,7 @@
 import json
+from time import sleep
 from django.utils import timezone
+from django.db.utils import DataError
 from celery import shared_task
 from django.http import HttpResponse
 import requests
@@ -13,13 +15,16 @@ from events.models import Rubrics, Events, Team, Season, Player, Incidents, Peri
 import re
 
 def translate_to_russian(name):
-    # Создайте экземпляр переводчика
-    translator = Translator()
+    # Слишком много запросов к апи - не работает такска add_sport_events_list
+    #
+    # # Создайте экземпляр переводчика
+    # translator = Translator()
+    #
+    # # Переведите имя на русский язык
+    # translated_name = translator.translate(name, src="en", dest="ru").text
 
-    # Переведите имя на русский язык
-    translated_name = translator.translate(name, src="en", dest="ru").text
-
-    return translated_name
+    # return translated_name
+    return name
 
 def get_unique_season_slug(base_slug):
     try:
@@ -46,8 +51,9 @@ def add_sport_events_list():
     }
 
     current_date = date.today()
-    with open('/var/www/chester/add_sport_events_list.txt', 'w') as file:
-        file.write('its works\n')
+    # это логи ?
+    # with open('/var/www/chester/add_sport_events_list.txt', 'w') as file:
+    #     file.write('its works\n')
     end_date = current_date +timedelta(days=6)
     api_rubric_ids = Rubrics.objects.filter(second_api=False).values_list('api_id', flat=True).distinct()
     count_event = 0
@@ -109,6 +115,7 @@ def add_sport_events_list():
 
                     venue =  event_data.get("section", {})
                     if venue:
+                        # слишком много запросов к API
                         country_name = venue.get("name")
                         country_name_ru = translate_to_russian(country_name)
                         try:
@@ -149,15 +156,16 @@ def add_sport_events_list():
             else:
                 print(f"Error fetching data for {date_str} and api_team_id {api_rubric_id}: {response}")
             current_date += timedelta(days=1)
-    return HttpResponse("Data fetched successfully")
+    return {"response": "Data fetched successfully"}
+    # return HttpResponse("Data fetched successfully")
 
 @shared_task
 def fetch_event_data():
     current_datetime = timezone.now()
     yesterday = current_datetime - timedelta(days=1)
     events = Events.objects.filter(
-        Q(start_at__date=yesterday)
-                         | Q(start_at__date=current_datetime.date())
+        Q(start_at=yesterday)
+                         | Q(start_at=current_datetime.date())
     )
     base_url = "https://sportscore1.p.rapidapi.com/events/{}"
     headers = {
@@ -166,7 +174,6 @@ def fetch_event_data():
     }
     for event in events:
         url = base_url.format(event.event_api_id)
-        time.sleep(1)
         response = requests.get(url, headers=headers)
         if event.rubrics.api_id != 2 :
             if response.status_code == 200:
@@ -534,7 +541,9 @@ def fetch_event_data():
                                         tp.games.add(tg)
                                 event.tennis_points.add(tp)
             # перенести/конец
-    return HttpResponse("Data fetched successfully")
+    # return HttpResponse("Data fetched successfully")
+    return {"response": "Data fetched successfully"}
+
 
 @shared_task
 def get_players_in_team():
@@ -585,7 +594,9 @@ def get_players_in_team():
                         )
                 team.players.add(player)
                 count += 1
-    return HttpResponse("Data fetched successfully")
+    # return HttpResponse("Data fetched successfully")
+    return {"response": "Data fetched successfully"}
+
 
 @shared_task
 def get_h2h():
@@ -604,7 +615,6 @@ def get_h2h():
 
         response_for_events_bytTID = requests.get(events_bytTID_url, headers=headers,
                                                   params=querystring)
-
         if response_for_events_bytTID.status_code == 200:
             data_events_TID = response_for_events_bytTID.json().get("data", [])
             for item in data_events_TID:
@@ -647,7 +657,8 @@ def get_h2h():
                                 event.h2h.add(h2h_stat)
                             else:
                                 pass
-    return HttpResponse("Data fetched successfully")
+    # return HttpResponse("Data fetched successfully")
+    return {"response": "Data fetched successfully"}
 
 
 #Вторая апи
@@ -726,16 +737,19 @@ def add_sport_events_list_second():
                                 section=season,
                             )
         else:
-            return HttpResponse(f"Error  - {second_response.status_code} - {second_response.json()}")
-    return HttpResponse("Data fetched successfully")
+    #         return HttpResponse(f"Error  - {second_response.status_code} - {second_response.json()}")
+    # return HttpResponse("Data fetched successfully")
+            return {"response": f"Error  - {second_response.status_code} - {second_response.json()}"}
+        return {"response": "Data fetched successfully"}
 
 @shared_task
 def add_sport_events_list_second_online_gou():
     second_url = "https://flashlive-sports.p.rapidapi.com/v1/events/live-list"
 
     second_api_rubric_ids = Rubrics.objects.filter(second_api=True).values_list("api_id", flat=True).distinct()
-    with open('/var/www/chester/add_sport_events_list_second_online_gou.txt', 'w') as file:
-        file.write('its works\n')
+    # это логи ?
+    # with open('/var/www/chester/add_sport_events_list_second_online_gou.txt', 'w') as file:
+    #     file.write('its works\n')
     for rubric_id in second_api_rubric_ids:
         rubric_id_q = str(rubric_id)
         querystring = {"timezone": "-4", "locale": "ru_RU", "sport_id": rubric_id_q}
@@ -806,9 +820,11 @@ def add_sport_events_list_second_online_gou():
                                 section=season,
                             )
         else:
-            return HttpResponse(f"Error  - {second_response.status_code} - {second_response.json()}")
-
-    return HttpResponse("Data fetched successfully")
+    #         return HttpResponse(f"Error  - {second_response.status_code} - {second_response.json()}")
+    #
+    # return HttpResponse("Data fetched successfully")
+            return {"response": f"Error  - {second_response.status_code} - {second_response.json()}"}
+        return {"response": "Data fetched successfully"}
 
 @shared_task
 def fetch_event_data_for_second():
@@ -819,8 +835,9 @@ def fetch_event_data_for_second():
         "X-RapidAPI-Key": "b4e32c39demsh21dc3591499b4f3p144d40jsn9a29de0bcb2a",
         "X-RapidAPI-Host": "flashlive-sports.p.rapidapi.com",
     }
-    with open('/var/www/chester/fetch_event_data_for_second.txt', 'w') as file:
-        file.write('its works\n')
+    # это логи ?
+    # with open('/var/www/chester/fetch_event_data_for_second.txt', 'w') as file:
+    #     file.write('its works\n')
     for event in events:
         querystring = {"locale": "en_INT", "event_id": event.second_event_api_id}
         response = requests.get(url, headers=headers, params=querystring)
@@ -876,8 +893,8 @@ def fetch_event_data_for_second():
                                     h_result=item.get("H_RESULT"),
                                     team_mark=item.get("TEAM_MARK"),
                                 )
-
-    return HttpResponse("Data fetched successfully")
+    return {"response": "Data fetched successfully"}
+    # return HttpResponse("Data fetched successfully")
 
 @shared_task
 def get_team_players_second():
@@ -951,8 +968,10 @@ def get_team_players_second():
                                     )
                                 event.home_team.players.add(player)
                     count += 1
-    return HttpResponse("Data "
-                        "fetched successfully")
+    return {"response": "Data fetched successfully"}
+    #
+    # return HttpResponse("Data "
+    #                     "fetched successfully")
 
 @shared_task
 def get_h2h_second():
@@ -960,7 +979,7 @@ def get_h2h_second():
         "X-RapidAPI-Key": "b4e32c39demsh21dc3591499b4f3p144d40jsn9a29de0bcb2a",
         "X-RapidAPI-Host": "flashlive-sports.p.rapidapi.com"
     }
-    events = Events.objects.filter(second_api_team_id__isnull = False)
+    events = Events.objects.filter(second_event_api_id__isnull = False)
     for event in events:
         second_url = "https://flashlive-sports.p.rapidapi.com/v1/events/h2h"
         second_querystring = {"locale": "en_INT", "event_id": event.second_event_api_id}
@@ -1005,4 +1024,6 @@ def get_h2h_second():
                                     team_mark=item.get("TEAM_MARK"),
                                 )
                                 event.h2h.add(h2h)
-    return HttpResponse("Data fetched successfully")
+    # return HttpResponse("Data fetched successfully")
+    return {"response": "Data fetched successfully"}
+

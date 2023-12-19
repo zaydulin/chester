@@ -167,7 +167,7 @@ class H2H(models.Model):
     away_team_LOGO = models.ImageField("away_team_LOGO",default="default/generals/no-image.jpg", blank=True, null=True)
     league = models.CharField("Название", max_length=500, null=True)
     league_logo = models.ImageField("Изображения",default="default/generals/no-image.jpg", blank=True, null=True)
-    start_at = models.DateTimeField('Начало', null=True)
+    start_at = models.CharField('Начало', max_length=500, null=True)
     h_result = models.CharField("H_RESULT", max_length=500, blank=True, null=True)
     team_mark = models.CharField("TEAM_MARK", max_length=500, blank=True, null=True)
 
@@ -202,7 +202,6 @@ class Team(models.Model):
     logo = models.ImageField("Изображения",default="default/generals/no-image.jpg", blank=True, null=True)
     players = models.ManyToManyField('Player',verbose_name="Игроки")
 
-
     def save(self, *args, **kwargs):
         loop_num = 0
         unique = False
@@ -236,7 +235,8 @@ class Season(models.Model):
     league_id = models.CharField("ID лиги", max_length=500,null=True)
     season_id = models.CharField("ID сезона", max_length=500,null=True)
     season_second_api_id = models.CharField("API ID 2", max_length=500, null=True)
-    logo_league = models.ImageField("Изображения",default="default/generals/no-image.jpg", blank=True, null=True)
+    logo_league = models.ImageField("Изображения", default="default/generals/no-image.jpg", blank=True, null=True,
+                                    max_length=500)
     description = models.TextField("Описание", null=True)
     popular = models.BooleanField(default=False)
     country = models.ForeignKey("Country", on_delete=models.CASCADE, blank=True, null=True)
@@ -281,7 +281,6 @@ class PopularSeasons(models.Model):
 
     def __str__(self):
         return f'Position - {self.position} , League - {self.season},'
-
 
     class Meta:
         verbose_name = 'Популярная Лига'
@@ -338,5 +337,3 @@ class Player(models.Model):
     class Meta:
         verbose_name = 'Игрок'
         verbose_name_plural = 'Игроки'
-
-
