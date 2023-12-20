@@ -1089,3 +1089,4 @@ def delete_events(request):
                 event.delete()
             else:
                 previous_slug = current_slug
+    return HttpResponse("Data fetched successfully")
