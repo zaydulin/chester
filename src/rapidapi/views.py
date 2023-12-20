@@ -10,7 +10,8 @@ from datetime import date ,timedelta
 from events.models import Rubrics, Events, Team, Season, Player, Incidents, Periods, GameStatistic, H2H, TennisPoints, \
     TennisGames, Points , Country
 from django.utils import timezone
-from django.db.models import Q,transaction
+from django.db.models import Q
+from django.db import transaction
 import time
 from datetime import datetime
 
