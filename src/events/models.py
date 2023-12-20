@@ -107,9 +107,17 @@ class Events(models.Model):
 
     def get_start_time(self):
         if self.start_at:
-            # Convert the DateTime to the local timezone if necessary
-            local_start_time = timezone.localtime(self.start_at)
-            return local_start_time.strftime('%H:%M')
+            # Разделение даты и времени
+            date, time = self.start_at.split(' ')
+            # Разделение года, месяца и дня
+            year, month, day = date.split('-')
+            # Объединение месяца и дня
+            formatted_date = f"{month}-{day}"
+
+            # Получение времени
+            formatted_time = time[:5]  # Берем только часы и минуты
+
+            return f"{formatted_time}"
         return None
 
     def get_start_date(self):
@@ -266,7 +274,7 @@ class Season(models.Model):
 
 class Country(models.Model):
     name = models.CharField(max_length=150)
-    image = models.ImageField('Флаг',default='default/russia_flag.jpg')
+    image = models.CharField(verbose_name='Флаг в формате flag-icon flag-icon-<название>',max_length=150)
 
     def __str__(self):
         return f'{self.name}'
