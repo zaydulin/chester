@@ -1,7 +1,6 @@
 import json
 import re
 from uuid import uuid4
-
 import requests
 from django.http import HttpResponse
 from django.shortcuts import redirect
@@ -11,7 +10,7 @@ from datetime import date ,timedelta
 from events.models import Rubrics, Events, Team, Season, Player, Incidents, Periods, GameStatistic, H2H, TennisPoints, \
     TennisGames, Points , Country
 from django.utils import timezone
-from django.db.models import Q
+from django.db.models import Q,transaction
 import time
 from datetime import datetime
 
@@ -706,7 +705,6 @@ def get_h2h(request):
     return HttpResponse("Data fetched successfully")
 
 
-
 def add_sport_events_list_second(request):
 
     second_url = "https://flashlive-sports.p.rapidapi.com/v1/events/list"
@@ -1080,3 +1078,14 @@ def get_h2h_second(request):
     return HttpResponse("Data fetched successfully")
 
 
+def delete_events(request):
+    events = Events.objects.all().order_by('slug')
+    previous_slug = None
+
+    with transaction.atomic():
+        for event in events:
+            current_slug = event.slug
+            if current_slug == previous_slug:
+                event.delete()
+            else:
+                previous_slug = current_slug
