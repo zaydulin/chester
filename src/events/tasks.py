@@ -688,12 +688,13 @@ def add_sport_events_list_second():
                         rubrics=rubrics, season_second_api_id=event_data.get("TOURNAMENT_SEASON_ID")
                     )
                 except:
+                    country_from_db, created = Country.objects.get_or_create(name=event_data.get("COUNTRY_NAME"))
                     season = Season.objects.create(
                         rubrics=rubrics,
                         season_second_api_id=event_data.get("TOURNAMENT_SEASON_ID"),
                         season_name=event_data.get("NAME"),
                         logo_league=event_data.get("TOURNAMENT_IMAGE"),
-                        country=event_data.get("COUNTRY_NAME"),
+                        country=country_from_db,
                     )
                 for event in events:
                     homeimg_base = event.get("HOME_IMAGES")
