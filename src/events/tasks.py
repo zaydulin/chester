@@ -21,8 +21,8 @@ HEADER_FOR_FIRST_API = {
     }
 
 HEADER_FOR_SECOND_API = {
-    "X-RapidAPI-Key": "5191ba307fmshb68da4acf336ab6p1550dbjsn92030c4d49d7",
-    "X-RapidAPI-Host": "flashlive-sports.p.rapidapi.com"
+    "X-RapidAPI-Key": "3c2c69a66emsh150918b07b51e08p1ec75fjsnd644541cecff",
+	"X-RapidAPI-Host": "flashlive-sports.p.rapidapi.com"
 }
 
 def translate_to_russian(name):
