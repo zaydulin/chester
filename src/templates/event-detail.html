@@ -1099,20 +1099,20 @@
                             (
                             {% for period in event.periods.all %}
                             <span style="
-    padding: 5px;
-    border: 2px solid black;
-    border-radius: 5px;
-    color: black; /* Чтобы цвет цифры был черным */
-    background-color: white;">{{period.home_score}} - {{period.away_score}},</span>
+                                padding: 5px;
+                                border: 2px solid black;
+                                border-radius: 5px;
+                                color: black; /* Чтобы цвет цифры был черным */
+                                background-color: white;">{{period.home_score}} - {{period.away_score}},</span>
                             {% endfor %}
                             )
                             {% else %}
                             <span style="
-    padding: 5px;
-    border: 2px solid black;
-    border-radius: 5px;
-    color: black; /* Чтобы цвет цифры был черным */
-    background-color: white;">(0-0)</span>
+                            padding: 5px;
+                            border: 2px solid black;
+                            border-radius: 5px;
+                            color: black; /* Чтобы цвет цифры был черным */
+                            background-color: white;">(0-0)</span>
                             {% endif %}
                             {% endif %}
                         </div>
@@ -2142,7 +2142,11 @@ getIncidents();
         awayScore = data['message']['away_score']
         const scoreElements = document.querySelectorAll("#score");
         scoreElements.forEach(function (scoreElement) {
-            scoreElement.innerHTML = `<span>${homeScore} - ${awayScore}</span>`;
+            scoreElement.innerHTML = `<span style="padding: 5px;
+    border: 2px solid black;
+    border-radius: 5px;
+    color: black;
+    background-color: white;">${homeScore} - ${awayScore}</span>`;
         });
 
         const scoreawayElements = document.querySelectorAll("#score-away-head");
