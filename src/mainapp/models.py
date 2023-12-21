@@ -32,6 +32,7 @@ class GeneralSettings(models.Model):
     logo_light = models.ImageField("Логотип светлый", blank=True, null=True)
     favicon = models.ImageField("Фавикон", blank=True, null=True)
     name = models.CharField("Название", max_length=500, blank=True, null=True)
+    headerImage = models.ImageField("Шапка сайта", blank=True, null=True)
     content = models.TextField("Контент", max_length=500, blank=True, null=True)
     copyright_text = models.CharField("© Копирайт", max_length=500, blank=True, null=True)
     registration = models.PositiveSmallIntegerField("Регистрация", choices=REGISTRATION, default=1)
