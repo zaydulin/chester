@@ -22,13 +22,13 @@
             <div class="event-info__score">
                 <div class="event-info__tournament">
 
-                    <form method="post" 
-                    action="{% url 'toggle_bookmark' 'season' season.id %}"
-                    hx-get="{% url 'toggle_bookmark' 'season' season.id  %}"
-        hx-target="#main-content"
-        hx-push-url="true"
-        hx-indicator="#content-loader"
-        hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''">
+                    <form method="post"
+                          action="{% url 'toggle_bookmark' 'season' season.id %}"
+                          hx-get="{% url 'toggle_bookmark' 'season' season.id  %}"
+                          hx-target="#main-content"
+                          hx-push-url="true"
+                          hx-indicator="#content-loader"
+                          hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''">
                         {% csrf_token %}
                         <input type="hidden" name="event_id" value="{{ event.id }}">
                         <button class="event__like">
@@ -112,13 +112,13 @@
                         <li class="events__item event">
                             <div class="event__tour like">
 
-                                <form method="post" 
-                                action="{% url 'toggle_bookmark' 'season' league_name.id %}"
-                                hx-get="{% url 'toggle_bookmark' 'season' league_name.id  %}"
-        hx-target="#main-content"
-        hx-push-url="true"
-        hx-indicator="#content-loader"
-        hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''">
+                                <form method="post"
+                                      action="{% url 'toggle_bookmark' 'season' league_name.id %}"
+                                      hx-get="{% url 'toggle_bookmark' 'season' league_name.id  %}"
+                                      hx-target="#main-content"
+                                      hx-push-url="true"
+                                      hx-indicator="#content-loader"
+                                      hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''">
                                     {% csrf_token %}
                                     <input type="hidden" name="league_name_id" value="{{ league_name.id }}">
                                     <button type="submit" class="event__like">
@@ -156,11 +156,11 @@
                                     </button>
                                 </form>
                                 <a href="{% url 'season_detail' league_name.slug  %}"
-                                hx-get="{% url 'season_detail' league_name.slug  %}"
-        hx-target="#main-content"
-        hx-push-url="true"
-        hx-indicator="#content-loader"
-        hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''">
+                                   hx-get="{% url 'season_detail' league_name.slug  %}"
+                                   hx-target="#main-content"
+                                   hx-push-url="true"
+                                   hx-indicator="#content-loader"
+                                   hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''">
                                     <img width="25" height="25" src="{{ league_name.logo_league }}" alt="logo" />
                                     <span>{{ league_name }}</span>
                                 </a>
@@ -169,12 +169,12 @@
                             {% if event.status != 1 and event.status != 3 %}
                             <div class="event__match-list">
                                 <a href="{% url 'events_detail' event.slug %}"
-                                hx-get="{% url 'events_detail' event.slug  %}"
-        hx-target="#main-content"
-        hx-push-url="true"
-        hx-indicator="#content-loader"
-        hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''" 
-        class="event__match-item">
+                                   hx-get="{% url 'events_detail' event.slug  %}"
+                                   hx-target="#main-content"
+                                   hx-push-url="true"
+                                   hx-indicator="#content-loader"
+                                   hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''"
+                                   class="event__match-item">
                                     <div class="event__match-item-left">
                                         <form method="post" action="{% url 'toggle_bookmark' 'event' event.id %}">
                                             {% csrf_token %}
@@ -291,17 +291,16 @@
                     {% endfor %}
                     <ul class="events__list">
                         {% for league_name, events_in_league in events.items %}
-
                         <li class="events__item event">
                             <div class="event__tour like">
 
-                                <form method="post" 
-                                action="{% url 'toggle_bookmark' 'season' league_name.id %}"
-                                hx-get="{% url 'toggle_bookmark' 'season' league_name.id  %}"
-        hx-target="#main-content"
-        hx-push-url="true"
-        hx-indicator="#content-loader"
-        hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''">
+                                <form method="post"
+                                      action="{% url 'toggle_bookmark' 'season' league_name.id %}"
+                                      hx-get="{% url 'toggle_bookmark' 'season' league_name.id  %}"
+                                      hx-target="#main-content"
+                                      hx-push-url="true"
+                                      hx-indicator="#content-loader"
+                                      hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''">
                                     {% csrf_token %}
                                     <input type="hidden" name="league_name_id" value="{{ league_name.id }}">
                                     <button type="submit" class="event__like">
@@ -339,11 +338,11 @@
                                     </button>
                                 </form>
                                 <a href="{% url 'season_detail' league_name.slug  %}"
-                                 hx-get="{% url 'season_detail' league_name.slug  %}"
-        hx-target="#main-content"
-        hx-push-url="true"
-        hx-indicator="#content-loader"
-        hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''">
+                                   hx-get="{% url 'season_detail' league_name.slug  %}"
+                                   hx-target="#main-content"
+                                   hx-push-url="true"
+                                   hx-indicator="#content-loader"
+                                   hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''">
                                     <img width="25" height="25" src="{{ league_name.logo_league }}" alt="logo" />
                                     <span>{{ league_name }}</span>
                                 </a>
@@ -351,22 +350,22 @@
                             {% for event in events_in_league %}
                             {% if event.status != 2 and event.status != 4 %}
                             <div class="event__match-list">
-                                <a 
-                                href="{% url 'events_detail' event.slug %}"
-                                hx-get="{% url 'events_detail' event.slug %}"
-        hx-target="#main-content"
-        hx-push-url="true"
-        hx-indicator="#content-loader"
-        hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''"
-                                class="event__match-item">
+                                <a
+                                        href="{% url 'events_detail' event.slug %}"
+                                        hx-get="{% url 'events_detail' event.slug %}"
+                                        hx-target="#main-content"
+                                        hx-push-url="true"
+                                        hx-indicator="#content-loader"
+                                        hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''"
+                                        class="event__match-item">
                                     <div class="event__match-item-left">
-                                        <form method="post" 
-                                        action="{% url 'toggle_bookmark' 'event' event.id %}"
-                                        hx-get="{% url 'toggle_bookmark' 'event' event.id %}"
-        hx-target="#main-content"
-        hx-push-url="true"
-        hx-indicator="#content-loader"
-        hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''"
+                                        <form method="post"
+                                              action="{% url 'toggle_bookmark' 'event' event.id %}"
+                                              hx-get="{% url 'toggle_bookmark' 'event' event.id %}"
+                                              hx-target="#main-content"
+                                              hx-push-url="true"
+                                              hx-indicator="#content-loader"
+                                              hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''"
                                         >
                                             {% csrf_token %}
                                             <input type="hidden" name="event_id" value="{{ event.id }}">

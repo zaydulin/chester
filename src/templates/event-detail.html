@@ -1091,7 +1091,7 @@
 
                     <div class="event-info__img-info img-info">
                         <div class="img-info__score" id="score">{{event.home_score}}-{{event.away_score}}</div>
-                        <img src="{{ event.rubrics.cover.url }}" alt="bg" class="img-info__background" />
+                        <img src="{{ event.rubrics.icon.url }}" alt="bg" class="img-info__background" />
                         <div class="img-info__period">{% if event.get_correct_half == None %} Матч не начался{% else %}{{ event.get_correct_half }}{% endif %}</div>
                         <div class="img-info__periods-data">
                             {% if event.rubrics.id == 1 or event.rubrics.id == 3 or event.rubrics.id == 4 %}
