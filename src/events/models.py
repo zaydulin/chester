@@ -119,14 +119,22 @@ class Events(models.Model):
             # Получение времени
             formatted_time = time[:5]  # Берем только часы и минуты
 
-            return f"{formatted_time}"
+            return f"{formatted_date}"
         return None
 
     def get_start_date(self):
         if self.start_at:
-            # Convert the DateTime to the local timezone if necessary
-            local_start_time = timezone.localtime(self.start_at)
-            return local_start_time.strftime('%Y-%m-%d')
+            # Разделение даты и времени
+            date, time = self.start_at.split(' ')
+            # Разделение года, месяца и дня
+            year, month, day = date.split('-')
+            # Объединение месяца и дня
+            formatted_date = f"{month}-{day}"
+
+            # Получение времени
+            formatted_time = time[:5]  # Берем только часы и минуты
+
+            return f"{formatted_time}"
         return None
 
     def __str__(self):
