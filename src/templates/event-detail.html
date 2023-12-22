@@ -2142,7 +2142,9 @@ getIncidents();
 
     chatSocket.onmessage = function (e) {
         const data = JSON.parse(e.data);
-        if (homeScore === null) {
+        homeScore = data['message']['home_score']
+        awayScore = data['message']['away_score']
+         if (homeScore === null) {
             homeScore = 0;
         }
 
