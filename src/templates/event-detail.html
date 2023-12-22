@@ -2142,8 +2142,13 @@ getIncidents();
 
     chatSocket.onmessage = function (e) {
         const data = JSON.parse(e.data);
-        homeScore = data['message']['home_score']
-        awayScore = data['message']['away_score']
+        if (homeScore === null) {
+            homeScore = 0;
+        }
+
+        if (awayScore === null) {
+            awayScore = 0;
+        }
         const scoreElements = document.querySelectorAll("#score");
         scoreElements.forEach(function (scoreElement) {
             scoreElement.innerHTML = `<span style="padding: 5px;
