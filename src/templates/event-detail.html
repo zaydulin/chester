@@ -125,7 +125,7 @@
                                 ></path>
                             </svg>
                         </a>
-                        <span class="event-team__point" id="score-home-head">{{ event.home_score }}</span>
+                        <span class="event-team__point" id="score-home-head">{% if not event.home_score %} 0 {% else %}{{ event.home_score }}{% endif %}</span>
                     </div>
                 </div>
                 <div class="event-info__team event-team away">
@@ -174,7 +174,7 @@
                                 ></path>
                             </svg>
                         </a>
-                        <span class="event-team__point" id="score-away-head">{{ event.away_score }}</span>
+                        <span class="event-team__point" id="score-away-head">{% if not event.away_score %} 0 {% else %}{{ event.away_score }}{% endif %}</span>
                     </div>
                 </div>
             </div>

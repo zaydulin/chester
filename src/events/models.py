@@ -102,7 +102,9 @@ class Events(models.Model):
 
             # Преобразуем текст в slug
             self.slug = f'smotret-online-{slugify(slug_text)}'
-
+        if self.home_score == '' or self.away_score == '':
+            self.home_score = 0
+            self.away_score = 0
         super(Events, self).save(*args, **kwargs)
 
     def get_start_time(self):
