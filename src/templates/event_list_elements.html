@@ -404,10 +404,10 @@
                                             </div>
                                             <div style=" min-width: 50px;" class="event__score">
                                                 {% if event.status != 3%}
-                                                <span>{% if event.home_score == 'None' %} 0 {% else %}{{event.home_score}}{% endif %}</span>
+                                                <span>{{event.home_score}}</span>
                                                 <span>-</span>
 
-                                                <span>{% if event.away_score == 'None' %} 0 {% else %}{{event.away_score}}{% endif %}</span>
+                                                <span> 0 {{event.away_score}}</span>
                                                 {% else %}
                                                 <span>0</span>
                                                 <span>-</span>
