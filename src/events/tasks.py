@@ -21,8 +21,8 @@ HEADER_FOR_FIRST_API = {
     }
 
 HEADER_FOR_SECOND_API = {
-    "X-RapidAPI-Key": "3c2c69a66emsh150918b07b51e08p1ec75fjsnd644541cecff",
-	"X-RapidAPI-Host": "flashlive-sports.p.rapidapi.com"
+    "X-RapidAPI-Key": "2c3e3979d9msh681089ec516355fp16def5jsnf0c663351e89",
+    "X-RapidAPI-Host": "flashlive-sports.p.rapidapi.com"
 }
 
 def translate_to_russian(name):
@@ -731,7 +731,7 @@ def add_sport_events_list_second():
     #         return HttpResponse(f"Error  - {second_response.status_code} - {second_response.json()}")
     # return HttpResponse("Data fetched successfully")
             return {"response": f"Error  - {second_response.status_code} - {second_response.json()}"}
-        return {"response": "Data fetched successfully"}
+        return {"response": "add_sport_events_list_second successfully"}
 
 @shared_task
 def add_sport_events_list_second_online_gou():
@@ -812,7 +812,7 @@ def add_sport_events_list_second_online_gou():
     #
     # return HttpResponse("Data fetched successfully")
             return {"response": f"Error  - {second_response.status_code} - {second_response.json()}"}
-        return {"response": "Data fetched successfully"}
+        return {"response": "add_sport_events_list_second_online_gou successfully"}
 
 @shared_task
 def fetch_event_data_for_second():
@@ -877,7 +877,7 @@ def fetch_event_data_for_second():
                                     h_result=item.get("H_RESULT"),
                                     team_mark=item.get("TEAM_MARK"),
                                 )
-    return {"response": "Data fetched successfully"}
+    return {"response": "fetch_event_data_for_second successfully"}
     # return HttpResponse("Data fetched successfully")
 
 @shared_task
@@ -948,7 +948,7 @@ def get_team_players_second():
                                     )
                                 event.home_team.players.add(player)
                     count += 1
-    return {"response": "Data fetched successfully"}
+    return {"response": "get_team_players_second successfully"}
     #
     # return HttpResponse("Data "
     #                     "fetched successfully")
@@ -1002,5 +1002,5 @@ def get_h2h_second():
                                 )
                                 event.h2h.add(h2h)
     # return HttpResponse("Data fetched successfully")
-    return {"response": "Data fetched successfully"}
+    return {"response": "get_h2h_second successfully"}
 
