@@ -719,7 +719,7 @@ def add_sport_events_list_second():
                                 name=event_data.get("NAME_PART_2"),
                                 description=event_data,
                                 title=event_data.get("SHORT_NAME"),
-                                status=2,
+                                status=3,
                                 home_team=home_team,
                                 away_team=away_team,
                                 home_score=event.get("HOME_SCORE_CURRENT"),
