@@ -73,10 +73,6 @@
                     <!-- Индикатор загрузки (например, spinner) --><i class="fas fa-spinner fa-spin"></i>
                 </div>
             </div>
-            <div style="    align-items: center;
-    display: flex;
-    justify-content: center;
-    padding: 5px;"> <span style="color: #999;">{{ event.start_at}} </span></div>
             <div class="event-info__teams" >
                 <div class="event-info__team event-team home">
                     <a
@@ -1095,8 +1091,8 @@
 
                     <div class="event-info__img-info img-info">
                         <div class="img-info__score" id="score">{{event.home_score}}-{{event.away_score}}</div>
-                        <img src="{{ event.rubrics.icon.url }}" alt="bg" class="img-info__background" />
-                        <div class="img-info__period" style="display: inline-block;padding: 5px;border: 2px solid black;border-radius: 5px;color: black; background-color: white;">{% if event.get_correct_half == None %} Матч не начался{% else %}{{ event.get_correct_half }}{% endif %}</div>
+                        <img src="{{ event.rubrics.cover.url }}" alt="bg" class="img-info__background" />
+                        <div class="img-info__period" style="display: inline-block;padding: 5px;border: 2px solid black;border-radius: 5px;color: black; background-color: white;">{% if event.get_correct_half == None %} Матч начнется {{ event.start_at }} {% else %}{{ event.get_correct_half }}{% endif %}</div>
                         <div class="img-info__periods-data">
                             {% if event.rubrics.id == 1 or event.rubrics.id == 3 or event.rubrics.id == 4 %}
                             {% if event.periods.exists%}
@@ -2056,7 +2052,7 @@ function getIncidents() {
             let incidentBlock = document.getElementById('incidents-footbal');
             let teamClass = response.incident_team === 2 ? ' away' : '';
             if (Object.keys(response).length !== 0) {
-                if (response.incident_id)) {
+                if (response.incident_id) {
 
                 if (response.incident_type === 'goal' ){
                     incidentBlock.insertAdjacentHTML(
@@ -2153,13 +2149,7 @@ getIncidents();
         }
         const scoreElements = document.querySelectorAll("#score");
         scoreElements.forEach(function (scoreElement) {
-            scoreElement.innerHTML = `<span style="padding: 5px;
-    border: 2px solid black;
-    border-radius: 5px;
-    color: black;
-    background-color: white;
-
-    ">${homeScore} - ${awayScore}</span>`;
+            scoreElement.innerHTML = `<span>${homeScore} - ${awayScore}</span>`;
         });
 
         const scoreawayElements = document.querySelectorAll("#score-away-head");

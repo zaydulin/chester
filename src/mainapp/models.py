@@ -2,16 +2,12 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.urls import reverse
-import uuid
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser, Group, Permission
 from dadata import Dadata
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 from datetime import date
-from ipware import get_client_ip  # Import the function to get the client's IP address
-from django.contrib.auth.signals import user_logged_in
-from django.db.models import Q
 from events.models import Events
 
 
