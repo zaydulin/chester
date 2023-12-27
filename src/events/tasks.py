@@ -21,8 +21,8 @@ HEADER_FOR_FIRST_API = {
     }
 
 HEADER_FOR_SECOND_API = {
-    "X-RapidAPI-Key": "2c3e3979d9msh681089ec516355fp16def5jsnf0c663351e89",
-    "X-RapidAPI-Host": "flashlive-sports.p.rapidapi.com"
+    "X-RapidAPI-Key": "ace1ac1235mshff34ba869a73b8bp15c3acjsn55619d47d5f9",
+	"X-RapidAPI-Host": "flashlive-sports.p.rapidapi.com"
 }
 
 def translate_to_russian(name):
@@ -742,7 +742,7 @@ def add_sport_events_list_second_online_gou():
     # with open('/var/www/chester/add_sport_events_list_second_online_gou.txt', 'w') as file:
     #     file.write('its works\n')
     for rubric_id in second_api_rubric_ids:
-        rubric_id_q = str(rubric_id)
+        rubric_id_q = int(rubric_id)
         querystring = {"timezone": "-4", "locale": "ru_RU", "sport_id": rubric_id_q}
 
 
@@ -818,10 +818,6 @@ def add_sport_events_list_second_online_gou():
 def fetch_event_data_for_second():
     events = Events.objects.filter(second_event_api_id__isnull=False)
     url = "https://flashlive-sports.p.rapidapi.com/v1/events/data"
-
-    # это логи ?
-    # with open('/var/www/chester/fetch_event_data_for_second.txt', 'w') as file:
-    #     file.write('its works\n')
     for event in events:
         querystring = {"locale": "en_INT", "event_id": event.second_event_api_id}
         response = requests.get(url, headers=HEADER_FOR_SECOND_API, params=querystring)
@@ -846,7 +842,6 @@ def fetch_event_data_for_second():
                 groups = el.get("GROUPS")
                 for group in groups:
                     items = group.get("ITEMS", [])
-
                     for item in items:
                         hi = item.get("HOME_IMAGES")
                         ai = item.get("AWAY_IMAGES")
@@ -864,7 +859,7 @@ def fetch_event_data_for_second():
                                 h_result=item.get("H_RESULT"),
                                 team_mark=item.get("TEAM_MARK"),
                             ).exists():
-                                H2H.objects.create(
+                                h2h = H2H.objects.create(
                                     home_score=item.get("HOME_SCORE_FULL"),
                                     away_score=item.get("AWAY_SCORE_FULL"),
                                     name=item.get("EVENT_NAME"),
@@ -877,6 +872,7 @@ def fetch_event_data_for_second():
                                     h_result=item.get("H_RESULT"),
                                     team_mark=item.get("TEAM_MARK"),
                                 )
+                                event.h2h.add(h2h)
     return {"response": "fetch_event_data_for_second successfully"}
     # return HttpResponse("Data fetched successfully")
 
@@ -888,18 +884,18 @@ def get_team_players_second():
         querystring = {"locale": "ru_RU", "event_id": event.second_event_api_id}
         response = requests.get(url, headers=HEADER_FOR_SECOND_API, params=querystring)
         if response.status_code == 200:
-            count = 0
             response_data = response.json().get("DATA")
             for data in response_data:
                 formation_name = data.get("FORMATION_NAME")
                 formations = data.get("FORMATIONS",[])
                 for formation in formations:
+                    team_line = formation.get("FORMATION_LINE")
                     members = formation.get("MEMBERS",[])
                     for player in members:
                         try:
                             player = Player.objects.get(player_id=player["id"])
                         except Player.DoesNotExist:
-                            if count < 1:
+                            if team_line == 1:
                                 if formation_name == 'Starting Lineups':
                                     player = Player.objects.create(
                                         player_id=player["PLAYER_ID"],
@@ -923,7 +919,7 @@ def get_team_players_second():
                                         number=player["PLAYER_NUMBER"],
                                     )
                                 event.home_team.players.add(player)
-                            elif count == 1 :
+                            elif team_line == 2 :
                                 if formation_name == 'Starting Lineups':
                                     player = Player.objects.create(
                                         player_id=player["PLAYER_ID"],
@@ -946,8 +942,7 @@ def get_team_players_second():
                                         main_player=False,
                                         number=player["PLAYER_NUMBER"],
                                     )
-                                event.home_team.players.add(player)
-                    count += 1
+                                event.away_team.players.add(player)
     return {"response": "get_team_players_second successfully"}
     #
     # return HttpResponse("Data "

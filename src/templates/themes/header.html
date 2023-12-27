@@ -3,7 +3,13 @@
 {% load events_tag %}
 {% load views_tracker %}
 
-
+<style>
+.header__left {
+    align-items: start;
+    display: flex;
+    position: absolute;
+    margin: 60px;
+}</style>
 <header class="header">
     <div
             id="animation_container"
@@ -42,10 +48,11 @@
             <source srcset="{% get_current_logo %}" type="image/webp"/>
             <img src="{% get_current_logo %}" alt="logo"
             /></picture>
-        <div class="header__right">
+
+        <div class="header__left">
             {% event_search_form %}
-
-
+        </div>
+        <div class="header__right">
             {% if user.is_authenticated %}
                 <a href="{% url 'edit_profile' %}"
                    hx-get="{% url 'edit_profile' %}"
