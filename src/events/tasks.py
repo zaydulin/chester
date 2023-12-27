@@ -751,7 +751,7 @@ def add_sport_events_list_second_online_gou():
 
     for rubric_id in second_api_rubric_ids:
         rubric_id_q = str(rubric_id)
-        querystring = {"timezone": "-4", "locale": "ru_RU", "sport_id": rubric_id_q}
+        querystring = {"timezone": "-4","sport_id": rubric_id_q, "locale": "ru_RU" }
 
 
         rubrics = Rubrics.objects.get(second_api=True, api_id=rubric_id)
