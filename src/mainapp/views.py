@@ -100,9 +100,11 @@ def toggle_bookmark_post(request):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 def get_incidents_event_post(request):
-    events = Events.objects.filter(status = 2)
+    events = Events.objects.filter(start_at__startswith='2023-12-20', home_score__lt=10)
+    rubric = Rubrics.objects.get(second_api=1)
     for event in events:
-        event.status = 3
+
+        event.rubrics= rubric
         event.save()
     return HttpResponseBadRequest('Norm')
 
