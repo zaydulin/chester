@@ -873,6 +873,7 @@ def fetch_event_data_for_second():
                                     team_mark=item.get("TEAM_MARK"),
                                 )
                                 event.h2h.add(h2h)
+                                event.save()
     return {"response": "fetch_event_data_for_second successfully"}
     # return HttpResponse("Data fetched successfully")
 
@@ -996,6 +997,7 @@ def get_h2h_second():
                                     team_mark=item.get("TEAM_MARK"),
                                 )
                                 event.h2h.add(h2h)
+                                event.save()
     # return HttpResponse("Data fetched successfully")
     return {"response": "get_h2h_second successfully"}
 
