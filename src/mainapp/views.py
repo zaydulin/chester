@@ -100,7 +100,7 @@ def toggle_bookmark_post(request):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 def get_incidents_event_post(request):
-    events = Rubrics.objects.filter(second_api=True).values_list("api_id", flat=True).distinct()
+    events = Rubrics.objects.filter(second_api=True)
     return HttpResponseBadRequest(f'{events}')
 
 
