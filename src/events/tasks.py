@@ -21,8 +21,8 @@ HEADER_FOR_FIRST_API = {
     }
 
 HEADER_FOR_SECOND_API = {
-    "X-RapidAPI-Key": "ace1ac1235mshff34ba869a73b8bp15c3acjsn55619d47d5f9",
-	"X-RapidAPI-Host": "flashlive-sports.p.rapidapi.com"
+    "X-RapidAPI-Key": "8636abad1emshbded257aeac6b6fp1553d1jsnd0b014e3fb4d",
+    "X-RapidAPI-Host": "flashlive-sports.p.rapidapi.com"
 }
 
 def translate_to_russian(name):
@@ -660,12 +660,12 @@ def get_h2h():
 def add_sport_events_list_second():
     second_url = "https://flashlive-sports.p.rapidapi.com/v1/events/list"
 
-    base_querystring = {"timezone": "-4", "indent_days": "-1", "locale": "ru_RU", "sport_id": ""}
+    base_querystring = {"timezone": "-4", "indent_days": "-12", "locale": "ru_RU", "sport_id": ""}
     second_api_rubric_ids = Rubrics.objects.filter(second_api=True).values_list("api_id", flat=True).distinct()
 
     for rubric_id in second_api_rubric_ids:
         rubric_id_q = str(rubric_id)
-        querystring = {"timezone": "-4", "indent_days": "7", "locale": "ru_RU", "sport_id": rubric_id_q}
+        querystring = {"timezone": "-4", "indent_days": "-12", "locale": "ru_RU", "sport_id": rubric_id_q}
         rubrics = Rubrics.objects.get(second_api=True, api_id=rubric_id)
         second_response = requests.get(second_url, headers=HEADER_FOR_SECOND_API, params=querystring)
         if second_response.status_code == 200:
