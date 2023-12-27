@@ -664,7 +664,7 @@ def add_sport_events_list_second():
 
     for rubric_id in second_api_rubric_ids:
         rubric_id_q = str(rubric_id)
-        querystring = {"timezone": "-4", "indent_days": "-7", "locale": "ru_RU", "sport_id": rubric_id_q}
+        querystring = {"timezone": "-4", "indent_days": "-7", "locale": "ru_RU", "sport_id": "1"}
         rubrics = Rubrics.objects.get(second_api=True, api_id=rubric_id)
         second_response = requests.get(second_url, headers=HEADER_FOR_SECOND_API, params=querystring)
         if second_response.status_code == 200:
