@@ -660,12 +660,11 @@ def get_h2h():
 def add_sport_events_list_second():
     second_url = "https://flashlive-sports.p.rapidapi.com/v1/events/list"
 
-    base_querystring = {"timezone": "-4", "indent_days": "-12", "locale": "ru_RU", "sport_id": ""}
     second_api_rubric_ids = Rubrics.objects.filter(second_api=True).values_list("api_id", flat=True).distinct()
 
     for rubric_id in second_api_rubric_ids:
         rubric_id_q = str(rubric_id)
-        querystring = {"timezone": "-4", "indent_days": "-12", "locale": "ru_RU", "sport_id": rubric_id_q}
+        querystring = {"timezone": "-4", "indent_days": "-7", "locale": "ru_RU", "sport_id": rubric_id_q}
         rubrics = Rubrics.objects.get(second_api=True, api_id=rubric_id)
         second_response = requests.get(second_url, headers=HEADER_FOR_SECOND_API, params=querystring)
         if second_response.status_code == 200:
@@ -689,6 +688,13 @@ def add_sport_events_list_second():
                 for event in events:
                     homeimg_base = event.get("HOME_IMAGES")
                     awayimg_base = event.get("AWAY_IMAGES")
+                    status = event.get("STAGE_TYPE")
+                    if status == 'SCHEDULED':
+                        status_id = 3
+                    elif status == 'LIVE':
+                        status_id = 1
+                    elif status == 'FINISHED':
+                        status_id = 2
                     if homeimg_base is not None and awayimg_base is not None:
                         try:
                             home_team = Team.objects.get(second_api_team_id=event.get("HOME_PARTICIPANT_IDS")[-1])
@@ -719,7 +725,7 @@ def add_sport_events_list_second():
                                 name=event_data.get("NAME_PART_2"),
                                 description=event_data,
                                 title=event_data.get("SHORT_NAME"),
-                                status=3,
+                                status=status_id,
                                 home_team=home_team,
                                 away_team=away_team,
                                 home_score=event.get("HOME_SCORE_CURRENT"),
