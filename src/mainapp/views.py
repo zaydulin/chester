@@ -100,8 +100,10 @@ def toggle_bookmark_post(request):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 def get_incidents_event_post(request):
-    events = Rubrics.objects.filter(second_api=True)
-    return HttpResponseBadRequest(f'{events}')
+    events = Rubrics.objects.filter(second_api=True).values_list("api_id", flat=True).distinct()
+    for rubric_id in events:
+        print('-----id-------', rubric_id)
+    return HttpResponse('ok')
 
 
 class EditProfileView(CustomHtmxMixin, TemplateView):
