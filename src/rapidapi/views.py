@@ -15,6 +15,10 @@ from django.db import transaction
 import time
 from datetime import datetime
 
+HEADER_FOR_SECOND_API_GOU = {
+    "X-RapidAPI-Key": "898cbcc75bmsh175375da7c16d33p131157jsn1e68df18e834",
+	"X-RapidAPI-Host": "flashlive-sports.p.rapidapi.com"
+}
 # Create your views here.
 def translate_to_russian(name):
     # Создайте экземпляр переводчика
@@ -793,90 +797,82 @@ def add_sport_events_list_second(request):
     return HttpResponse("Data fetched successfully")
 
 def add_sport_events_list_second_online_gou(request):
-
     second_url = "https://flashlive-sports.p.rapidapi.com/v1/events/live-list"
 
-    second_api_rubric_ids = Rubrics.objects.filter(second_api=True).values_list('api_id', flat=True).distinct()
+    second_api_rubric_ids = Rubrics.objects.filter(second_api=True).values_list("api_id", flat=True).distinct()
 
     for rubric_id in second_api_rubric_ids:
         rubric_id_q = str(rubric_id)
-        querystring = {"timezone":"-4","locale":"ru_RU","sport_id":rubric_id_q}
-
-        second_headers = {
-            "X-RapidAPI-Key": "b4e32c39demsh21dc3591499b4f3p144d40jsn9a29de0bcb2a",
-            "X-RapidAPI-Host": "flashlive-sports.p.rapidapi.com"
-        }
-        rubrics = Rubrics.objects.get(second_api=True,api_id=rubric_id)
-        second_response = requests.get(second_url, headers=second_headers, params=querystring)
-        if second_response.status_code ==200:
+        print(rubric_id_q)
+        querystring = {"timezone": "-4","sport_id": rubric_id_q, "locale": "ru_RU" }
+        rubrics = Rubrics.objects.get(second_api=True, api_id=rubric_id)
+        second_response = requests.get(second_url, headers=HEADER_FOR_SECOND_API_GOU, params=querystring)
+        if second_response.status_code == 200:
             response_data = second_response.json()
-            for event_data in response_data.get('DATA', []):
-                # Создайте записи для команд (Team)
+            for event_data in response_data.get("DATA", []):
                 events = event_data.get("EVENTS")
                 try:
-                    country_from_bd = Country.objects.get(name=event_data.get("COUNTRY_NAME"))
+                    season_sountry = Country.objects.get(name=event_data.get("COUNTRY_NAME"))
                 except:
-                    country_from_bd = Country.objects.create(name=event_data.get("COUNTRY_NAME"))
-
+                    season_sountry = Country.objects.create(name=event_data.get("COUNTRY_NAME"))
                 try:
-                    season = Season.objects.get(rubrics=rubrics,season_second_api_id=event_data.get("TOURNAMENT_SEASON_ID"))
-                except:
+                    season = Season.objects.get(
+                        rubrics=rubrics, season_second_api_id=event_data.get("TOURNAMENT_SEASON_ID")
+                    )
+                except Season.DoesNotExist:
                     season = Season.objects.create(
-                        rubrics = rubrics,
+                        rubrics=rubrics,
                         season_second_api_id=event_data.get("TOURNAMENT_SEASON_ID"),
-                        season_name = event_data.get("NAME"),
-                        league_name=event_data.get("SHORT_NAME"),
-                        logo_league = event_data.get("TOURNAMENT_IMAGE"),
-                        season_id = event_data.get("TOURNAMENT_ID")
+                        season_name=event_data.get("NAME"),
+                        logo_league=event_data.get("TOURNAMENT_IMAGE"),
+                        country=season_sountry,
                     )
                 for event in events:
-                    homeimg_base = event.get('HOME_IMAGES')
-                    awayimg_base = event.get('AWAY_IMAGES')
-                    if homeimg_base is not None and  awayimg_base is not None:
-                        try:
+                    homeimg_base = event.get("HOME_IMAGES")
+                    awayimg_base = event.get("AWAY_IMAGES")
+                    if homeimg_base is not None and awayimg_base is not None:
+                        if Team.objects.filter(second_api_team_id=event.get("HOME_PARTICIPANT_IDS")[-1]).exists():
                             home_team = Team.objects.get(second_api_team_id=event.get("HOME_PARTICIPANT_IDS")[-1])
-                        except:
+                        else:
                             home_team = Team.objects.create(
                                 second_api_team_id=event.get("HOME_PARTICIPANT_IDS")[-1],
-                                name=event.get('HOME_NAME'),
-                                logo=event.get('HOME_IMAGES')[-1],
-                                rubrics=rubrics
+                                name=event.get("HOME_NAME"),
+                                logo=event.get("HOME_IMAGES")[-1],
+                                rubrics=rubrics,
                             )
-                        try:
+                        if Team.objects.filter(second_api_team_id=event.get("AWAY_PARTICIPANT_IDS")[-1]).exists():
                             away_team = Team.objects.get(second_api_team_id=event.get("AWAY_PARTICIPANT_IDS")[-1])
-                        except:
+                        else:
                             away_team = Team.objects.create(
                                 second_api_team_id=event.get("AWAY_PARTICIPANT_IDS")[-1],
-                                name=event.get('AWAY_NAME'),
-                                logo=event.get('AWAY_IMAGES')[-1],
-                                rubrics=rubrics
+                                name=event.get("AWAY_NAME"),
+                                logo=event.get("AWAY_IMAGES")[-1],
+                                rubrics=rubrics,
                             )
 
-                        if not  Events.objects.filter(
+                        if not Events.objects.filter(
                                 rubrics=rubrics,
-                                second_event_api_id=event.get('EVENT_ID'),
-                            ).exists():
+                                second_event_api_id=event.get("EVENT_ID"),
+                        ).exists():
                             Events.objects.create(
                                 rubrics=rubrics,
-                                second_event_api_id=event.get('EVENT_ID'),
-                                start_at= datetime.utcfromtimestamp(event.get('START_TIME')),
-                                name= event_data.get('NAME_PART_2'),
-                                description= event_data,
-                                title= event_data.get('SHORT_NAME'),
-                                status= 1,
-                                home_team= home_team,
-                                away_team= away_team,
-                                home_score= event.get('HOME_SCORE_CURRENT'),
-                                away_score= event.get('AWAY_SCORE_CURRENT'),
-                                half= event.get('ROUND'),
-                                section = season
+                                second_event_api_id=event.get("EVENT_ID"),
+                                start_at=datetime.utcfromtimestamp(event.get("START_TIME")),
+                                name=event_data.get("NAME_PART_2"),
+                                description=event_data,
+                                title=event_data.get("SHORT_NAME"),
+                                status=1,
+                                home_team=home_team,
+                                away_team=away_team,
+                                home_score=event.get("HOME_SCORE_CURRENT"),
+                                away_score=event.get("AWAY_SCORE_CURRENT"),
+                                half=event.get("ROUND"),
+                                section=season,
                             )
-                            print('евент создан')
-        else :
-            return HttpResponse(f'Error  - {second_response.status_code} - {second_response.json()}')
-    get_team_players(request)
-    return HttpResponse("Data "
-                        "fetched successfully")
+        else:
+            return HttpResponse(f"Error  - {second_response.status_code} - {second_response.json()}")
+    return HttpResponse(f"success")
+
 def get_team_players(request):
     url = "https://flashlive-sports.p.rapidapi.com/v1/events/lineups"
     headers = {
