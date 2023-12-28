@@ -260,13 +260,13 @@
         <ul>
              {% for season in seasons %}
              <a
-                            href="{% url 'season_detail'  season.season.slug %}"
-                            hx-get="{% url 'season_detail' season.season.slug %}"
+                            href="{% url 'season_detail'  season.slug %}"
+                            hx-get="{% url 'season_detail' season.slug %}"
                             hx-target="#main-content" hx-history-elt="#main-content"
                             hx-push-url="true"
                             hx-indicator="#content-loader"
                             hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''">
-                 {{season.season.league_name}}
+                 {{season.league_name}}
              </a>
              {% endfor %}
         </ul>
