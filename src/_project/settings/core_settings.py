@@ -291,7 +291,7 @@ CELERY_BEAT_SCHEDULE = {
     },
     "fetch_event_data_for_second": {
         "task": "events.tasks.fetch_event_data_for_second",
-        "schedule": timedelta(minutes=100),
+        "schedule": timedelta(minutes=10),
     },
 }
 CELERY_RESULT_BACKEND = "django-db"

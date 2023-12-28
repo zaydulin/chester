@@ -752,8 +752,6 @@ def add_sport_events_list_second_online_gou():
     for rubric_id in second_api_rubric_ids:
         rubric_id_q = str(rubric_id)
         querystring = {"timezone": "-4","sport_id": rubric_id_q, "locale": "ru_RU" }
-
-
         rubrics = Rubrics.objects.get(second_api=True, api_id=rubric_id)
         second_response = requests.get(second_url, headers=HEADER_FOR_SECOND_API_GOU, params=querystring)
         if second_response.status_code == 200:
@@ -795,26 +793,26 @@ def add_sport_events_list_second_online_gou():
                                 logo=event.get("AWAY_IMAGES")[-1],
                                 rubrics=rubrics,
                             )
-
-                        if not Events.objects.filter(
+                    if not Events.objects.filter(
                             rubrics=rubrics,
                             second_event_api_id=event.get("EVENT_ID"),
-                        ).exists():
-                            Events.objects.create(
-                                rubrics=rubrics,
-                                second_event_api_id=event.get("EVENT_ID"),
-                                start_at=datetime.utcfromtimestamp(event.get("START_TIME")),
-                                name=event_data.get("NAME_PART_2"),
-                                description=event_data,
-                                title=event_data.get("SHORT_NAME"),
-                                status=1,
-                                home_team=home_team,
-                                away_team=away_team,
-                                home_score=event.get("HOME_SCORE_CURRENT"),
-                                away_score=event.get("AWAY_SCORE_CURRENT"),
-                                half=event.get("ROUND"),
-                                section=season,
-                            )
+                    ).exists():
+                        Events.objects.create(
+                            rubrics=rubrics,
+                            second_event_api_id=event.get("EVENT_ID"),
+                            start_at=datetime.utcfromtimestamp(event.get("START_TIME")),
+                            name=event_data.get("NAME_PART_2"),
+                            description=event_data,
+                            title=event_data.get("SHORT_NAME"),
+                            status=1,
+                            home_team=home_team,
+                            away_team=away_team,
+                            home_score=event.get("HOME_SCORE_CURRENT"),
+                            away_score=event.get("AWAY_SCORE_CURRENT"),
+                            half=event.get("ROUND"),
+                            section=season,
+                        )
+
         else:
     #         return HttpResponse(f"Error  - {second_response.status_code} - {second_response.json()}")
     #
