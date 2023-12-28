@@ -257,9 +257,8 @@
         <p>Лиги</p>
         {% get_country_seasons as grouped_seasons %}
         {% for country, seasons in grouped_seasons.items %}
-        {% get_popular_seasons as seasons %}
         <ul>
-             {% for season in seasons%}
+             {% for season in seasons %}
              <a
                             href="{% url 'season_detail'  season.season.slug %}"
                             hx-get="{% url 'season_detail' season.season.slug %}"
