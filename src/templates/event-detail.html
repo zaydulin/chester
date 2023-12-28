@@ -1076,19 +1076,7 @@
                         <div class="img-info__score" id="score" style="color: black;">{% if not event.home_score %} 0 - 0 {% else %}{{event.home_score}}-{{event.away_score}}{% endif %}</div>
                         <img src="{{ event.rubrics.cover.url }}" alt="bg" class="img-info__background" />
                         <div class="img-info__period" style="color: black;">{% if not event.get_correct_half  %} Матч начнется {{ event.start_at }} {% else %}{% endif %}</div>
-                        <div class="img-info__periods-data">
-                            {% if event.rubrics.id == 1 or event.rubrics.id == 3 or event.rubrics.id == 4 %}
-                            {% if event.periods.exists%}
-                            (
-                            {% for period in event.periods.all %}
-                            <span style="color: black;">{{period.home_score}} - {{period.away_score}},</span>
-                            {% endfor %}
-                            )
-                            {% else %}
-                            <span style="color: black;" >(0-0)</span>
-                            {% endif %}
-                            {% endif %}
-                        </div>
+
                     </div>
                     <!---Футбол--->
                 </div>
