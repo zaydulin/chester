@@ -64,6 +64,15 @@ class Pages(models.Model):
     def get_absolute_url(self):
         return reverse("pages", kwargs={"slug": self.slug})
 
+    def save(self, *args, **kwargs):
+        try:
+            super().save(*args, **kwargs)
+        except Exception as e:
+            # При возникновении ошибки сохраняем ее в текстовый файл
+            error_message = f"Error saving Page with id {self.id}: {str(e)}"
+            with open('error_log.txt', 'a') as file:
+                file.write(error_message + '\n')
+
     class Meta:
         verbose_name = "Страница"
         verbose_name_plural = "Страницы"
