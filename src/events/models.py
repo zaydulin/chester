@@ -259,7 +259,7 @@ class Season(models.Model):
     popular = models.BooleanField(default=False)
     country = models.ForeignKey("Country", on_delete=models.CASCADE, blank=True, null=True)
     def __str__(self):
-        return f'{self.league_name} - {self.season_name}'
+        return f'{self.season_name}'
 
     def save(self, *args, **kwargs):
         loop_num = 0
