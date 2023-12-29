@@ -57,7 +57,8 @@ class Pages(models.Model):
     description = models.TextField("Описание", null=True)
     title = models.CharField("Заголовок", max_length=500, null=True)
     content = models.TextField("Мета-описание", max_length=500, null=True)
-    slug = models.SlugField("Ссылка", max_length=160, unique=True)
+    slug = models.SlugField("Ссылка на сайте", max_length=160, unique=True ,blank=True, null=True)
+    other_link = models.TextField("Ссылка на другой источник", blank=True,null=True)
     picture = models.ImageField("Изображениe", blank=True, null=True)
 
     def get_absolute_url(self):
