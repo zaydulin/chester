@@ -25,7 +25,6 @@ class ViewsInline(admin.TabularInline):
 
 class UserAdmin(admin.ModelAdmin):
     inlines = [ViewsInline, BookmarksInline]
-admin.site.register(User)
 
 class GeneralSettingsAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):
