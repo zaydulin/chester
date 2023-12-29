@@ -153,7 +153,7 @@
             {% get_rubric_max_six as rubrics %}
             {% for rubric in rubrics %}
                 <li class="header__nav-link {% if forloop.counter > 2 %} desktop{% endif %} {% if request.session.rubric_active == rubric.slug %}active{% endif %}">
-                    <a class="header__nav-text" href="{{ rubric.get_absolute_url }}" >
+                    <a class="header__nav-text" href="{{ rubric.get_absolute_url }}">
                         <picture>
                             <source srcset="{{ rubric.icon.url }}" type="image/webp"/>
                             <img src="{{ rubric.icon.url }}" alt="img"/>
@@ -176,7 +176,7 @@
                     {% get_rubric_six as rubrics %}
                     {% for rubric in rubrics %}
                         <li>
-                            <a href="{{ rubric.get_absolute_url }}" target="_blank">
+                            <a href="{{ rubric.get_absolute_url }}" >
                                 <picture>
                                     <source srcset="{{ rubric.icon2.url }}" type="image/webp"/>
                                     <img src="{{ rubric.icon2.url }}" alt="img" width="20" height="20"/>
@@ -241,7 +241,7 @@
             {% get_rubric_three as rubrics %}
             {% for rubric in rubrics %}
                 <li class="mob-list-sports__item">
-                    <a class="mob-list-sports__item-name" href="{{ rubric.get_absolute_url }}" target="_blank">
+                    <a class="mob-list-sports__item-name" href="{{ rubric.get_absolute_url }}" >
                         <picture>
                             <source srcset="{{ rubric.icon.url }}" type="image/webp"/>
                             <img src="{{ rubric.icon.url }}" alt="img"/>
