@@ -25,6 +25,7 @@ class ViewsInline(admin.TabularInline):
 
 class UserAdmin(admin.ModelAdmin):
     inlines = [ViewsInline, BookmarksInline]
+admin.site.register(User)
 
 class GeneralSettingsAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):
@@ -61,6 +62,14 @@ class PagesAdminForm(forms.ModelForm):
 class PagesAdmin(admin.ModelAdmin):
     form = PagesAdminForm
     prepopulated_fields = {"slug": ('name',), }
+    fieldsets = [
+        ('Ссылка', {
+            'fields': ['other_link','picture'],
+        }),
+        ('Страницы', {
+            'fields': ['name', 'description', 'title', 'content', 'slug'],
+        })
+    ]
 
 
 
