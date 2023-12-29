@@ -7,13 +7,27 @@
             <ul>
                 {% get_pages_footer as pages %}
                 {% for page in pages %}
-
+                    {% if page.picture %}
                      <li>
                         <a href="{{ page.other_link }}">
-                            <img style="height:150px;width:300px;" src="{{ page.picture.url }}">
+                            <img style="height:100px;width:300px;" src="{{ page.picture.url }}">
                         </a>
                     </li>
-
+                    {% elif not page.picture %}
+                    <li>
+                        <a
+                                href="{{ page.get_absolute_url }}"
+                                hx-get="{{ page.get_absolute_url }}"
+                                hx-target="#main-content"
+                                hx-push-url="true"
+                                hx-indicator="#content-loader"
+                                hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''"
+                                hx-custom='title'
+                        >
+                            {{ page.name }}
+                        </a>
+                    </li>
+                    {% endif %}
 
                 {% endfor %}
             </ul>
