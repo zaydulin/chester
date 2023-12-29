@@ -58,6 +58,7 @@ class Pages(models.Model):
     title = models.CharField("Заголовок", max_length=500, null=True)
     content = models.TextField("Мета-описание", max_length=500, null=True)
     slug = models.SlugField("Ссылка", max_length=160, unique=True)
+    picture = models.ImageField("Изображениe", blank=True, null=True)
 
     def get_absolute_url(self):
         return reverse("pages", kwargs={"slug": self.slug})

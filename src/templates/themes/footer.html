@@ -7,6 +7,15 @@
             <ul>
                 {% get_pages_footer as pages %}
                 {% for page in pages %}
+                    {% if page.picture %}
+                     <li>
+                        <a
+                                href="{{ page.slug }}"
+                        >
+                            <img style="height:150px;width:300px;" src="{{ page.picture.url }}">
+                        </a>
+                    </li>
+                    {% else %}
                     <li>
                         <a
                                 href="{{ page.get_absolute_url }}"
@@ -20,6 +29,8 @@
                             {{ page.name }}
                         </a>
                     </li>
+                    {% endif %}
+
                 {% endfor %}
             </ul>
             <p class="footer__copyright">&copy; {% get_current_copyright_text %}</p>
