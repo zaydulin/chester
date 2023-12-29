@@ -153,7 +153,7 @@
             {% get_rubric_max_six as rubrics %}
             {% for rubric in rubrics %}
                 <li class="header__nav-link {% if forloop.counter > 2 %} desktop{% endif %} {% if request.session.rubric_active == rubric.slug %}active{% endif %}">
-                    <a class="header__nav-text" href="{{ rubric.get_absolute_url }}" target="_blank">
+                    <a class="header__nav-text" href="{{ rubric.get_absolute_url }}" >
                         <picture>
                             <source srcset="{{ rubric.icon.url }}" type="image/webp"/>
                             <img src="{{ rubric.icon.url }}" alt="img"/>
