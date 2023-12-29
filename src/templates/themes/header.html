@@ -14,7 +14,13 @@
     background: linear-gradient(to left, #000, #1ac14d, #000);
 
 }
+
+.country__div:hover {
+    background-color: grey;
+}
+
 </style>
+
 <header class="header">
     <div
             id="animation_container"
@@ -266,21 +272,27 @@
         </div>
         <p>Лиги</p>
         {% get_country_seasons as grouped_seasons %}
-        {% for country, seasons in grouped_seasons.items %}
-        <ul>
-             {% for season in seasons %}
-             <a
-                            href="{% url 'season_detail'  season.slug %}"
-                            hx-get="{% url 'season_detail' season.slug %}"
-                            hx-target="#main-content" hx-history-elt="#main-content"
-                            hx-push-url="true"
-                            hx-indicator="#content-loader"
-                            hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''">
-                 {{season.season_name}}
-             </a>
-             {% endfor %}
-        </ul>
-        {% endfor %}
+                {% for country, seasons in grouped_seasons.items %}
+                <div class="country__div" data-country="{{ country }}"  style="cursor:pointer">
+                    <h2><i class="{{country.image}}"></i>&nbsp;{{ country }} </h2>
+                </div>
+                <ul>
+                    {% for season in seasons %}
+                    <li data-season="{{ season.season_name }}">
+                        <a
+                                href="{% url 'season_detail' season.slug %}"
+                                hx-get="{% url 'season_detail' season.slug %}"
+                                hx-target="#main-content" hx-history-elt="#main-content"
+                                hx-push-url="true"
+                                hx-indicator="#content-loader"
+                                hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''"
+                        ><img src="{{season.logo_league}}" width="20" height="20" alt="team">&nbsp;{{ season.season_name }}
+                        </a
+                        >
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% endfor %}
     </div>
 </div>
 
