@@ -106,7 +106,7 @@ def get_incidents_event_post(request):
     for season in seasons:
         if season.logo_league:
             # Получаем текущий URL изображения
-            current_image_url = season.logo_league.url
+            current_image_url = season.logo_league
 
             # Проверяем, содержит ли URL "www." и заменяем на "static"
             if 'www.' in current_image_url:
