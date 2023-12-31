@@ -755,6 +755,95 @@ def add_sport_events_list_second():
         return {"response": "add_sport_events_list_second successfully"}
 
 @shared_task
+def add_sport_events_list_second_future():
+    second_url = "https://flashlive-sports.p.rapidapi.com/v1/events/list"
+
+    second_api_rubric_ids = Rubrics.objects.filter(second_api=True).values_list("api_id", flat=True).distinct()
+
+    for rubric_id in second_api_rubric_ids:
+        rubric_id_q = str(rubric_id)
+        querystring = {"timezone": "-4", "indent_days": "7", "locale": "ru_RU", "sport_id": rubric_id_q}
+        rubrics = Rubrics.objects.get(second_api=True, api_id=rubric_id)
+        second_response = requests.get(second_url, headers=HEADER_FOR_SECOND_API, params=querystring)
+        if second_response.status_code == 200:
+            response_data = second_response.json()
+            for event_data in response_data.get("DATA", []):
+                # Создайте записи для команд (Team)
+                events = event_data.get("EVENTS")
+                logo_season = event_data.get("TOURNAMENT_IMAGE")
+                correct_logo_season = logo_season.replace('www.','static.')
+                try:
+                    season = Season.objects.get(
+                        rubrics=rubrics, season_second_api_id=event_data.get("TOURNAMENT_SEASON_ID")
+                    )
+                except:
+                    country_from_db, created = Country.objects.get_or_create(name=event_data.get("COUNTRY_NAME"))
+                    season = Season.objects.create(
+                        rubrics=rubrics,
+                        season_second_api_id=event_data.get("TOURNAMENT_SEASON_ID"),
+                        season_name=event_data.get("NAME"),
+                        logo_league=correct_logo_season,
+                        country=country_from_db,
+                    )
+                for event in events:
+                    homeimg_base = event.get("HOME_IMAGES")
+                    awayimg_base = event.get("AWAY_IMAGES")
+                    status = event.get("STAGE_TYPE")
+                    if status == 'SCHEDULED':
+                        status_id = 3
+                    elif status == 'LIVE':
+                        status_id = 1
+                    elif status == 'FINISHED':
+                        status_id = 2
+                    if homeimg_base is not None and awayimg_base is not None:
+                        logo_home = event.get("HOME_IMAGES")[-1]
+                        correct_home_logo = logo_home.replace('www.','static.')
+                        logo_away = event.get("AWAY_IMAGES")[-1]
+                        correct_away_logo = logo_away.replace('www.', 'static.')
+                        try:
+                            home_team = Team.objects.get(second_api_team_id=event.get("HOME_PARTICIPANT_IDS")[-1])
+                        except:
+
+                            home_team = Team.objects.create(
+                                second_api_team_id=event.get("HOME_PARTICIPANT_IDS")[-1],
+                                name=event.get("HOME_NAME"),
+                                logo=correct_home_logo,
+                                rubrics=rubrics,
+                            )
+                        try:
+                            away_team = Team.objects.get(second_api_team_id=event.get("AWAY_PARTICIPANT_IDS")[-1])
+                        except:
+                            away_team = Team.objects.create(
+                                second_api_team_id=event.get("AWAY_PARTICIPANT_IDS")[-1],
+                                name=event.get("AWAY_NAME"),
+                                logo=correct_away_logo,
+                                rubrics=rubrics,
+                            )
+                        if not Events.objects.filter(
+                            rubrics=rubrics, second_event_api_id=event.get("EVENT_ID")
+                        ).exists():
+                            Events.objects.create(
+                                rubrics=rubrics,
+                                second_event_api_id=event.get("EVENT_ID"),
+                                start_at=datetime.utcfromtimestamp(event.get("START_TIME")),
+                                name=event_data.get("NAME_PART_2"),
+                                description=event_data,
+                                title=event_data.get("SHORT_NAME"),
+                                status=status_id,
+                                home_team=home_team,
+                                away_team=away_team,
+                                home_score=event.get("HOME_SCORE_CURRENT"),
+                                away_score=event.get("AWAY_SCORE_CURRENT"),
+                                half=event.get("ROUND"),
+                                section=season,
+                            )
+        else:
+    #         return HttpResponse(f"Error  - {second_response.status_code} - {second_response.json()}")
+    # return HttpResponse("Data fetched successfully")
+            return {"response": f"Error  - {second_response.status_code} - {second_response.json()}"}
+        return {"response": "add_sport_events_list_second successfully"}
+
+@shared_task
 def add_sport_events_list_second_online_gou():
     second_url = "https://flashlive-sports.p.rapidapi.com/v1/events/live-list"
 

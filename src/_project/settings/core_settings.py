@@ -283,6 +283,12 @@ CELERY_BEAT_SCHEDULE = {
             hour="*/1",
         ),
     },
+    "add_sport_events_list_second_future": {
+        "task": "events.tasks.add_sport_events_list_second",
+        "schedule": crontab(
+            hour="*/1",
+        ),
+    },
     "add_sport_events_second_online_task": {
         "task": "events.tasks.add_sport_events_list_second_online_gou",
         "schedule": crontab(
