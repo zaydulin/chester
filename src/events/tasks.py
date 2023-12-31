@@ -682,7 +682,10 @@ def add_sport_events_list_second():
                 # Создайте записи для команд (Team)
                 events = event_data.get("EVENTS")
                 logo_season = event_data.get("TOURNAMENT_IMAGE")
-                correct_logo_season = logo_season.replace('www.','static.')
+                if logo_season:
+                    correct_logo_season = logo_season.replace('www.','static.')
+                else:
+                    correct_logo_season = ''
                 try:
                     season = Season.objects.get(
                         rubrics=rubrics, season_second_api_id=event_data.get("TOURNAMENT_SEASON_ID")
@@ -708,9 +711,15 @@ def add_sport_events_list_second():
                         status_id = 2
                     if homeimg_base is not None and awayimg_base is not None:
                         logo_home = event.get("HOME_IMAGES")[-1]
-                        correct_home_logo = logo_home.replace('www.','static.')
+                        if logo_home:
+                            correct_home_logo = logo_home.replace('www.', 'static.')
+                        else:
+                            correct_home_logo = ''
                         logo_away = event.get("AWAY_IMAGES")[-1]
-                        correct_away_logo = logo_away.replace('www.', 'static.')
+                        if logo_away:
+                            correct_away_logo = logo_away.replace('www.', 'static.')
+                        else:
+                            correct_away_logo = ''
                         try:
                             home_team = Team.objects.get(second_api_team_id=event.get("HOME_PARTICIPANT_IDS")[-1])
                         except:
@@ -771,7 +780,10 @@ def add_sport_events_list_second_future():
                 # Создайте записи для команд (Team)
                 events = event_data.get("EVENTS")
                 logo_season = event_data.get("TOURNAMENT_IMAGE")
-                correct_logo_season = logo_season.replace('www.','static.')
+                if logo_season:
+                    correct_logo_season = logo_season.replace('www.','static.')
+                else:
+                    correct_logo_season = ''
                 try:
                     season = Season.objects.get(
                         rubrics=rubrics, season_second_api_id=event_data.get("TOURNAMENT_SEASON_ID")
@@ -797,9 +809,15 @@ def add_sport_events_list_second_future():
                         status_id = 2
                     if homeimg_base is not None and awayimg_base is not None:
                         logo_home = event.get("HOME_IMAGES")[-1]
-                        correct_home_logo = logo_home.replace('www.','static.')
+                        if logo_home:
+                            correct_home_logo = logo_home.replace('www.','static.')
+                        else :
+                            correct_home_logo = ''
                         logo_away = event.get("AWAY_IMAGES")[-1]
-                        correct_away_logo = logo_away.replace('www.', 'static.')
+                        if logo_away:
+                            correct_away_logo = logo_away.replace('www.', 'static.')
+                        else :
+                            correct_away_logo = ''
                         try:
                             home_team = Team.objects.get(second_api_team_id=event.get("HOME_PARTICIPANT_IDS")[-1])
                         except:
@@ -859,7 +877,11 @@ def add_sport_events_list_second_online_gou():
             for event_data in response_data.get("DATA", []):
                 events = event_data.get("EVENTS")
                 logo_season = event_data.get("TOURNAMENT_IMAGE")
-                correct_logo_season = logo_season.replace('www.', 'static.')
+
+                if logo_season:
+                    correct_logo_season = logo_season.replace('www.', 'static.')
+                else:
+                    correct_logo_season = ''
                 try:
                     season_sountry = Country.objects.get(name=event_data.get("COUNTRY_NAME"))
                 except:
@@ -881,9 +903,15 @@ def add_sport_events_list_second_online_gou():
                     awayimg_base = event.get("AWAY_IMAGES")
                     if homeimg_base is not None and awayimg_base is not None:
                         logo_home = event.get("HOME_IMAGES")[-1]
-                        correct_home_logo = logo_home.replace('www.', 'static.')
+                        if logo_home:
+                            correct_home_logo = logo_home.replace('www.', 'static.')
+                        else:
+                            correct_home_logo = ''
                         logo_away = event.get("AWAY_IMAGES")[-1]
-                        correct_away_logo = logo_away.replace('www.', 'static.')
+                        if logo_away:
+                            correct_away_logo = logo_away.replace('www.', 'static.')
+                        else:
+                            correct_away_logo = ''
                         if Team.objects.filter(second_api_team_id=event.get("HOME_PARTICIPANT_IDS")[-1]).exists():
                             home_team = Team.objects.get(second_api_team_id=event.get("HOME_PARTICIPANT_IDS")[-1])
                         else:
