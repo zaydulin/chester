@@ -112,7 +112,7 @@ def fix_image_url(url):
     return decoded_url
 
 def get_incidents_event_post(request):
-    seasons = Season.objects.all()
+    seasons = Team.objects.all()
 
     for season in seasons:
         if season.logo_league:
@@ -120,8 +120,8 @@ def get_incidents_event_post(request):
             current_image_url = season.logo_league
 
             # Проверяем, содержит ли URL "/media/https%3A/", и заменяем его на "https://"
-            if '/media/https%3A/' in current_image_url:
-                new_image_url = current_image_url.replace('/media/https%3A/', 'https://')
+            if 'www.' in current_image_url:
+                new_image_url = current_image_url.replace('www.', 'static')
 
                 # Заменяем URL изображения на новый URL
                 season.logo_league = new_image_url
