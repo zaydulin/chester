@@ -181,7 +181,7 @@
                                                 <span>{{event.get_start_time}}{% if event.status == 3 %} {{ event.get_start_date }}{% endif %}</span>
                                             </div>
                                             <div class="event__period">
-                                                <span>{% if event.half %}{% if event.status == 2 %}Завершен{% elif event.status == 1 %} Прямой эфир {% endif %}{%else%} Предстоит{% endif %}</span>
+                                                <span>{% if event.status == 2 %}Завершен{% elif event.status == 1 %} Прямой эфир {% else %} Предстоит {% endif %} </span>
                                             </div>
                                         </div>
                                         <div class="event__match">
@@ -392,7 +392,7 @@
                                                 <span>{{event.get_start_time}}{% if event.status == 3 %} {{ event.get_start_date }}{% endif %}</span>
                                             </div>
                                             <div class="event__period">
-                                                <span>{% if event.half %}{% if event.half == 'FT' %}Завершен{% else %}{{event.half}}{% endif %}{%else%} Предстоит{% endif %}</span>
+                                                <span>{% if event.status == 2 %}Завершен{% elif event.status == 1 %} Прямой эфир {% else %} Предстоит {% endif %}</span>
                                             </div>
                                         </div>
                                         <div class="event__match">
