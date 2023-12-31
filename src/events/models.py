@@ -217,7 +217,7 @@ class Team(models.Model):
     api_team_id = models.PositiveIntegerField("ID команды",null=True)
     second_api_team_id = models.CharField("ID команды",max_length=150,null=True)
     description = models.TextField("Описание",null=True)
-    logo = models.ImageField("Изображения",default="default/generals/no-image.jpg", blank=True, null=True)
+    logo = models.TextField("Изображения", blank=True, null=True)
     players = models.ManyToManyField('Player',verbose_name="Игроки")
 
     def save(self, *args, **kwargs):

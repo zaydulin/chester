@@ -81,6 +81,10 @@ def add_sport_events_list():
                     away_team_data = event_data.get("away_team", {})
 
                     rubric = Rubrics.objects.get(second_api = False,api_id=api_rubric_id)
+                    logo_home = home_team_data.get("logo")
+                    correct_logo_home = logo_home.replace('www.','static.')
+                    logo_away = away_team_data.get("logo")
+                    correct_logo_away = logo_away.replace('www.', 'static.')
                     try:
                         home_team = Team.objects.get(api_team_id=home_team_data.get("id"))
                     except  Team.DoesNotExist  :
@@ -89,7 +93,7 @@ def add_sport_events_list():
                             name=home_team_data.get("name"),
                             rubrics=rubric,
                             api_team_id=home_team_data.get("id"),
-                            logo=home_team_data.get("logo"),
+                            logo=correct_logo_home,
                             description = home_team_data
                         )
 
@@ -102,7 +106,7 @@ def add_sport_events_list():
                             rubrics=rubric,
                             api_team_id=away_team_data.get("id") ,
 
-                            logo =away_team_data.get("logo"),
+                            logo =correct_logo_away,
                             description=away_team_data
                         )
                     #перенести/конец
@@ -114,7 +118,8 @@ def add_sport_events_list():
                     league = event_data.get("league", {})
                     if league:
                         league_name = league.get("name")
-                        league_logo = league.get("logo")
+                        logo = str(league.get("logo")),
+                        league_logo = logo.replace('www.','static.')
                         league_slug = league.get("slug")
                         league_id = league.get("id")
 
@@ -676,6 +681,8 @@ def add_sport_events_list_second():
             for event_data in response_data.get("DATA", []):
                 # Создайте записи для команд (Team)
                 events = event_data.get("EVENTS")
+                logo_season = event_data.get("TOURNAMENT_IMAGE")
+                correct_logo_season = logo_season.replace('www.','static.')
                 try:
                     season = Season.objects.get(
                         rubrics=rubrics, season_second_api_id=event_data.get("TOURNAMENT_SEASON_ID")
@@ -686,7 +693,7 @@ def add_sport_events_list_second():
                         rubrics=rubrics,
                         season_second_api_id=event_data.get("TOURNAMENT_SEASON_ID"),
                         season_name=event_data.get("NAME"),
-                        logo_league=event_data.get("TOURNAMENT_IMAGE"),
+                        logo_league=correct_logo_season,
                         country=country_from_db,
                     )
                 for event in events:
@@ -700,6 +707,10 @@ def add_sport_events_list_second():
                     elif status == 'FINISHED':
                         status_id = 2
                     if homeimg_base is not None and awayimg_base is not None:
+                        logo_home = event.get("HOME_IMAGES")[-1]
+                        correct_home_logo = logo_home.replace('www.','static.')
+                        logo_away = event.get("AWAY_IMAGES")[-1]
+                        correct_away_logo = logo_away.replace('www.', 'static.')
                         try:
                             home_team = Team.objects.get(second_api_team_id=event.get("HOME_PARTICIPANT_IDS")[-1])
                         except:
@@ -707,7 +718,7 @@ def add_sport_events_list_second():
                             home_team = Team.objects.create(
                                 second_api_team_id=event.get("HOME_PARTICIPANT_IDS")[-1],
                                 name=event.get("HOME_NAME"),
-                                logo=event.get("HOME_IMAGES")[-1],
+                                logo=correct_home_logo,
                                 rubrics=rubrics,
                             )
                         try:
@@ -716,7 +727,7 @@ def add_sport_events_list_second():
                             away_team = Team.objects.create(
                                 second_api_team_id=event.get("AWAY_PARTICIPANT_IDS")[-1],
                                 name=event.get("AWAY_NAME"),
-                                logo=event.get("AWAY_IMAGES")[-1],
+                                logo=correct_away_logo,
                                 rubrics=rubrics,
                             )
                         if not Events.objects.filter(
@@ -758,6 +769,8 @@ def add_sport_events_list_second_online_gou():
             response_data = second_response.json()
             for event_data in response_data.get("DATA", []):
                 events = event_data.get("EVENTS")
+                logo_season = event_data.get("TOURNAMENT_IMAGE")
+                correct_logo_season = logo_season.replace('www.', 'static.')
                 try:
                     season_sountry = Country.objects.get(name=event_data.get("COUNTRY_NAME"))
                 except:
@@ -771,20 +784,24 @@ def add_sport_events_list_second_online_gou():
                         rubrics=rubrics,
                         season_second_api_id=event_data.get("TOURNAMENT_SEASON_ID"),
                         season_name=event_data.get("NAME"),
-                        logo_league=event_data.get("TOURNAMENT_IMAGE"),
+                        logo_league=correct_logo_season,
                         country=season_sountry,
                     )
                 for event in events:
                     homeimg_base = event.get("HOME_IMAGES")
                     awayimg_base = event.get("AWAY_IMAGES")
                     if homeimg_base is not None and awayimg_base is not None:
+                        logo_home = event.get("HOME_IMAGES")[-1]
+                        correct_home_logo = logo_home.replace('www.', 'static.')
+                        logo_away = event.get("AWAY_IMAGES")[-1]
+                        correct_away_logo = logo_away.replace('www.', 'static.')
                         if Team.objects.filter(second_api_team_id=event.get("HOME_PARTICIPANT_IDS")[-1]).exists():
                             home_team = Team.objects.get(second_api_team_id=event.get("HOME_PARTICIPANT_IDS")[-1])
                         else:
                             home_team = Team.objects.create(
                                 second_api_team_id=event.get("HOME_PARTICIPANT_IDS")[-1],
                                 name=event.get("HOME_NAME"),
-                                logo=event.get("HOME_IMAGES")[-1],
+                                logo=correct_home_logo,
                                 rubrics=rubrics,
                             )
                         if Team.objects.filter(second_api_team_id=event.get("AWAY_PARTICIPANT_IDS")[-1]).exists():
@@ -793,7 +810,7 @@ def add_sport_events_list_second_online_gou():
                             away_team = Team.objects.create(
                                 second_api_team_id=event.get("AWAY_PARTICIPANT_IDS")[-1],
                                 name=event.get("AWAY_NAME"),
-                                logo=event.get("AWAY_IMAGES")[-1],
+                                logo=correct_away_logo,
                                 rubrics=rubrics,
                             )
 
@@ -878,6 +895,22 @@ def fetch_event_data_for_second():
                                     h_result=item.get("H_RESULT"),
                                     team_mark=item.get("TEAM_MARK"),
                                 )
+                                event.h2h.add(h2h)
+                                event.save()
+                            else:
+                                h2h = H2H.objects.filter(
+                                home_score=item.get("HOME_SCORE_FULL"),
+                                away_score=item.get("AWAY_SCORE_FULL"),
+                                name=item.get("EVENT_NAME"),
+                                home_team_NAME=item.get("HOME_PARTICIPANT"),
+                                home_team_LOGO=item.get("HOME_IMAGES")[-1],
+                                away_team_NAME=item.get("AWAY_PARTICIPANT"),
+                                away_team_LOGO=item.get("AWAY_IMAGES")[-1],
+                                league=item.get("EVENT_NAME"),
+                                start_at=datetime.utcfromtimestamp(item.get("START_TIME")),
+                                h_result=item.get("H_RESULT"),
+                                team_mark=item.get("TEAM_MARK"),
+                                ).first()
                                 event.h2h.add(h2h)
                                 event.save()
     return {"response": "fetch_event_data_for_second successfully"}
