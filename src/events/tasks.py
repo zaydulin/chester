@@ -21,12 +21,12 @@ HEADER_FOR_FIRST_API = {
     }
 
 HEADER_FOR_SECOND_API = {
-    "X-RapidAPI-Key": "8636abad1emshbded257aeac6b6fp1553d1jsnd0b014e3fb4d",
+    "X-RapidAPI-Key": "11047ab519mshed06c5cc71509fep168f75jsn077ef01d5d10",
     "X-RapidAPI-Host": "flashlive-sports.p.rapidapi.com"
 }
 HEADER_FOR_SECOND_API_GOU = {
-    "X-RapidAPI-Key": "898cbcc75bmsh175375da7c16d33p131157jsn1e68df18e834",
-	"X-RapidAPI-Host": "flashlive-sports.p.rapidapi.com"
+    "X-RapidAPI-Key": "11047ab519mshed06c5cc71509fep168f75jsn077ef01d5d10",
+    "X-RapidAPI-Host": "flashlive-sports.p.rapidapi.com"
 }
 
 def translate_to_russian(name):
