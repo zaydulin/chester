@@ -100,9 +100,20 @@ def toggle_bookmark_post(request):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 def get_incidents_event_post(request):
-    events = Rubrics.objects.filter(second_api=True).values_list("api_id", flat=True).distinct()
-    for rubric_id in events:
-        print('-----id-------', rubric_id)
+    seasons = Season.objects.all()
+
+    for season in seasons:
+        if season.logo_league:
+            # Получаем текущий URL изображения
+            current_image_url = season.logo_league.url
+
+            # Проверяем, содержит ли URL "www." и заменяем на "static"
+            if 'www.' in current_image_url:
+                new_image_url = current_image_url.replace('www.', 'static.')
+
+                # Заменяем URL изображения на новый URL с помощью статического метода Django
+                season.logo_league = new_image_url
+                season.save()
     return HttpResponse('ok')
 
 

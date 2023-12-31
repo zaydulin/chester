@@ -238,7 +238,7 @@ class Team(models.Model):
 
         super(Team, self).save(*args, **kwargs)
     def __str__(self):
-        return f'{self.name} - {self.api_team_id}'
+        return f'{self.name} - {self.second_api_team_id}'
 
     class Meta:
         verbose_name = 'Команда'
