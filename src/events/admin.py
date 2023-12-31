@@ -10,12 +10,16 @@ class SeasonAdmin(admin.ModelAdmin):
     search_fields = ['slug', 'name']
     list_filter = ['rubrics']
 
+class CountryAdmin(admin.ModelAdmin):
+    list_display = ['name','image']
+
+
 admin.site.register(Events, EventsAdmin)
 admin.site.register(Rubrics)
 admin.site.register(Team)
 admin.site.register(Season,SeasonAdmin)
 admin.site.register(Player)
-admin.site.register(Country)
+admin.site.register(Country, CountryAdmin)
 admin.site.register(Incidents)
 admin.site.register(Periods)
 admin.site.register(GameStatistic)
