@@ -14,7 +14,6 @@ from django.http import HttpResponseRedirect, HttpResponseBadRequest, JsonRespon
 from django.urls import reverse
 from django.contrib.contenttypes.models import ContentType
 from datetime import datetime, timedelta
-import urllib.parse
 
 class CustomHtmxMixin:
     def dispatch(self, request, *args, **kwargs):
@@ -100,31 +99,21 @@ def toggle_bookmark_post(request):
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
-
-def fix_image_url(url):
-    # Удаляем префикс /media/https%3A/
-    if url.startswith('/media/https%3A/'):
-        url = url[len('/media/https%3A/'):]
-
-    # Декодируем URL
-    decoded_url = urllib.parse.unquote(url)
-
-    return decoded_url
-
 def get_incidents_event_post(request):
-    seasons = Team.objects.all()
+
+    seasons = Season.objects.all()
 
     for season in seasons:
-        if season.logo:
+        if season.logo_league:
             # Получаем текущий URL изображения
-            current_image_url = season.logo
+            current_image_url = season.logo_league.url
 
-            # Проверяем, содержит ли URL "/media/https%3A/", и заменяем его на "https://"
-            if 'static' in current_image_url:
-                new_image_url = current_image_url.replace('static', 'static.')
+            # Проверяем, содержит ли URL "www." и заменяем на "static"
+            if 'www.' in current_image_url:
+                new_image_url = current_image_url.replace('www.', 'static.')
 
-                # Заменяем URL изображения на новый URL
-                season.logo = new_image_url
+                # Заменяем URL изображения на новый URL с помощью статического метода Django
+                season.logo_league = new_image_url
                 season.save()
     return HttpResponse('ok')
 
