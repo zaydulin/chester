@@ -120,8 +120,8 @@ def get_incidents_event_post(request):
             current_image_url = season.logo
 
             # Проверяем, содержит ли URL "/media/https%3A/", и заменяем его на "https://"
-            if 'www.' in current_image_url:
-                new_image_url = current_image_url.replace('www.', 'static')
+            if 'static' in current_image_url:
+                new_image_url = current_image_url.replace('static', 'static.')
 
                 # Заменяем URL изображения на новый URL
                 season.logo = new_image_url
