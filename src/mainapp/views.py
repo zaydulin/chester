@@ -115,16 +115,16 @@ def get_incidents_event_post(request):
     seasons = Team.objects.all()
 
     for season in seasons:
-        if season.logo_league:
+        if season.logo:
             # Получаем текущий URL изображения
-            current_image_url = season.logo_league
+            current_image_url = season.logo
 
             # Проверяем, содержит ли URL "/media/https%3A/", и заменяем его на "https://"
             if 'www.' in current_image_url:
                 new_image_url = current_image_url.replace('www.', 'static')
 
                 # Заменяем URL изображения на новый URL
-                season.logo_league = new_image_url
+                season.logo = new_image_url
                 season.save()
     return HttpResponse('ok')
 
