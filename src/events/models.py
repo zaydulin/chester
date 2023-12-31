@@ -253,8 +253,7 @@ class Season(models.Model):
     league_id = models.CharField("ID лиги", max_length=500,null=True)
     season_id = models.CharField("ID сезона", max_length=500,null=True)
     season_second_api_id = models.CharField("API ID 2", max_length=500, null=True)
-    logo_league = models.ImageField("Изображения", default="default/generals/no-image.jpg", blank=True, null=True,
-                                    max_length=500)
+    logo_league = models.TextField("Изображения", blank=True, null=True,)
     description = models.TextField("Описание", null=True)
     popular = models.BooleanField(default=False)
     country = models.ForeignKey("Country", on_delete=models.CASCADE, blank=True, null=True)
