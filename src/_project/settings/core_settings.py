@@ -284,7 +284,7 @@ CELERY_BEAT_SCHEDULE = {
         ),
     },
     "add_sport_events_list_second_future": {
-        "task": "events.tasks.add_sport_events_list_second",
+        "task": "events.tasks.add_sport_events_list_second_future",
         "schedule": crontab(
             hour="*/1",
         ),
