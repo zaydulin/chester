@@ -46,8 +46,36 @@ def get_popular_seasons():
 
 
 @register.simple_tag()
-def get_country_seasons():
-    seasons = Season.objects.filter(country__isnull=False).order_by("country")
+def get_country_seasons(request):
+    url = request.path
+    if url.startswith("football/") :
+        rubric_id = 1
+    elif url.startswith("volleyball/"):
+        rubric_id = 12
+    elif url.startswith("hockey/"):
+        rubric_id = 4
+    elif url.startswith("basketball/") :
+        rubric_id = 3
+    elif url.startswith("tennis/") :
+        rubric_id = 2
+    elif url.startswith("handball/") :
+        rubric_id = 7
+    elif url.startswith("cybersport/") :
+        rubric_id = 36
+    elif url.startswith("baseball/") :
+        rubric_id = 6
+    elif url.startswith("cricket/") :
+        rubric_id = 13
+    elif url.startswith("snooker/") :
+        rubric_id = 15
+    elif url.startswith("table-tennis/") :
+        rubric_id = 25
+    elif url.startswith("badminton/"):
+        rubric_id = 21
+    else:
+        rubric_id = 1
+
+    seasons = Season.objects.filter(country__isnull=False,rubrics__api_id=rubric_id).order_by("country")
 
     grouped_seasons = {}
     for country, season_group in groupby(seasons, key=lambda season: season.country):
