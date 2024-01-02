@@ -2106,7 +2106,8 @@ getIncidents();
         const data = JSON.parse(e.data);
         const newHomeScore = data['message']['home_score'];
         const newAwayScore = data['message']['away_score'];
-
+        const eventSlug = data['message']['event_slug'];
+        console.log(eventSlug)
         // Check if new scores are not null, update the previous scores
         if (newHomeScore !== null) {
             previousHomeScore = newHomeScore;
