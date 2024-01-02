@@ -2107,19 +2107,24 @@ getIncidents();
         const newHomeScore = data['message']['home_score'];
         const newAwayScore = data['message']['away_score'];
         const eventSlug = data['message']['event_slug'];
-        console.log(eventSlug)
+
         // Check if new scores are not null, update the previous scores
-        if (newHomeScore !== null) {
-            previousHomeScore = newHomeScore;
+        if (eventSlug === '{{ event.slug }}') {
+            // Check if new scores are not null, update the previous scores
+            if (newHomeScore !== null) {
+                previousHomeScore = newHomeScore;
+            }
+
+            if (newAwayScore !== null) {
+                previousAwayScore = newAwayScore;
+            }
         }
 
-        if (newAwayScore !== null) {
-            previousAwayScore = newAwayScore;
-        }
 
         // Use previous scores if the new scores are null
-        const homeScore = newHomeScore !== null ? newHomeScore : previousHomeScore;
-        const awayScore = newAwayScore !== null ? newAwayScore : previousAwayScore;
+        const homeScore = (eventSlug === '{{ event.slug }}' && newHomeScore !== null) ? newHomeScore : previousHomeScore;
+        const awayScore = (eventSlug === '{{ event.slug }}' && newAwayScore !== null) ? newAwayScore : previousAwayScore;
+
 
         const scoreElements = document.querySelectorAll("#score");
         scoreElements.forEach(function (scoreElement) {
