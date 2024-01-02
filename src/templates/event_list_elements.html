@@ -1,7 +1,10 @@
-
 {% for league_name, events_in_league in events.items %}
                     {% if forloop.last %}
-                    <div hx-get="?page={{page_obj.number|add:1}}" id="div-with-info" hx-trigger="revealed" hx-swap="afterend" hx-target="this" >
+                        {% if page_obj.number == paginator.num_pages %}
+                        <div id="div-with-info">
+                        {% else %}
+                        <div hx-get="?page={{page_obj.number|add:1}}" id="div-with-info" hx-trigger="revealed" hx-swap="afterend" hx-target="this" >
+                            {% endif %}
                         {% else %}
                         <div id="div-with-info">
                             {% endif %}
