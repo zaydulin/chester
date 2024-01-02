@@ -2104,15 +2104,22 @@ getIncidents();
 
     chatSocket.onmessage = function (e) {
         const data = JSON.parse(e.data);
-        homeScore = data['message']['home_score']
-        awayScore = data['message']['away_score']
-        if (homeScore === null) {
-            homeScore = 0;
+        const newHomeScore = data['message']['home_score'];
+        const newAwayScore = data['message']['away_score'];
+
+        // Check if new scores are not null, update the previous scores
+        if (newHomeScore !== null) {
+            previousHomeScore = newHomeScore;
         }
 
-        if (awayScore === null) {
-            awayScore = 0;
+        if (newAwayScore !== null) {
+            previousAwayScore = newAwayScore;
         }
+
+        // Use previous scores if the new scores are null
+        const homeScore = newHomeScore !== null ? newHomeScore : previousHomeScore;
+        const awayScore = newAwayScore !== null ? newAwayScore : previousAwayScore;
+
         const scoreElements = document.querySelectorAll("#score");
         scoreElements.forEach(function (scoreElement) {
             scoreElement.innerHTML = `<span>${homeScore} - ${awayScore}</span>`;
