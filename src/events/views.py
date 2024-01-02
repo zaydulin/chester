@@ -54,9 +54,12 @@ class HomeView(CustomHtmxMixin, DetailView):
         context["sidebar_baners_left"] = sidebar_baners_left
 
         events = Events.objects.filter(status=1, rubrics=rubric).order_by("section__league_name", "-start_at")
-
+        events_count = events.count()
         # Pagination
-        paginator = Paginator(events, 20)  # 20 events per page
+        if events_count < 20:
+            paginator = Paginator(events, events_count)
+        elif events_count >= 20:
+            paginator = Paginator(events, 20)
         page = self.request.GET.get("page")
 
         try:
@@ -73,7 +76,7 @@ class HomeView(CustomHtmxMixin, DetailView):
         context['title'] = f'{rubric.name} | Прямой эфир'
         context['meta_content'] = f'{rubric.name} | Прямой эфир'
         context["events"] = grouped_events
-        context["events_page"] = events_page  # Pass the paginated events to the template
+        context["page_obj"] = events_page  # Pass the paginated events to the template
 
         return context
 
@@ -110,7 +113,12 @@ class EventsNow(CustomHtmxMixin, DetailView):
         events = Events.objects.filter(status=1, rubrics=rubric).order_by("section__league_name", "-start_at")
 
         # Pagination
-        paginator = Paginator(events, 20)  # 20 events per page
+        events_count = events.count()
+        # Pagination
+        if events_count < 20:
+            paginator = Paginator(events, events_count)
+        elif events_count >= 20:
+            paginator = Paginator(events, 20)
         page = self.request.GET.get("page")
 
         try:
@@ -150,7 +158,7 @@ class EventsNow(CustomHtmxMixin, DetailView):
         context['meta_content'] = f'{rubric.name} | Прямой эфир'
 
         context["events"] = grouped_events
-        context["events_page"] = events_page  # Pass the paginated events to the template
+        context["page_obj"] = events_page  # Pass the paginated events to the template
 
         return context
 
@@ -185,8 +193,12 @@ class EventsEndView(CustomHtmxMixin, DetailView):
 
         events = Events.objects.filter(status=2, rubrics=rubric).order_by("section__league_name", "-start_at")
 
+        events_count = events.count()
         # Pagination
-        paginator = Paginator(events, 20)  # 20 events per page
+        if events_count < 20:
+            paginator = Paginator(events, events_count)
+        elif events_count >= 20:
+            paginator = Paginator(events, 20)
         page = self.request.GET.get("page")
 
         try:
@@ -226,7 +238,7 @@ class EventsEndView(CustomHtmxMixin, DetailView):
         context['meta_content'] = f'{rubric.name} | Завершенные'
 
         context["events"] = grouped_events
-        context["events_page"] = events_page  # Pass the paginated events to the template
+        context["page_obj"] = events_page  # Pass the paginated events to the template
 
         return context
 
@@ -264,7 +276,12 @@ class EventsUpcomingView(CustomHtmxMixin, ListView):
 
         events = Events.objects.filter(status=3, rubrics=rubric).order_by("section__league_name", "-start_at")
 
-        paginator = Paginator(events, 20)  # 20 events per page
+        events_count = events.count()
+        # Pagination
+        if events_count < 20:
+            paginator = Paginator(events, events_count)
+        elif events_count >= 20:
+            paginator = Paginator(events, 20)
         page = self.request.GET.get("page")
 
         try:
@@ -304,7 +321,7 @@ class EventsUpcomingView(CustomHtmxMixin, ListView):
         context['title'] = f'{rubric.name} | Предстоящие'
         context['meta_content'] = f'{rubric.name} | Предстоящие'
         context["events"] = grouped_events
-        context["events_page"] = events_page  # Pass the paginated events to the template
+        context["page_obj"] = events_page  # Pass the paginated events to the template
 
         return context
 

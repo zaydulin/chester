@@ -2015,8 +2015,6 @@ function getIncidents() {
         },
         success: function(response) {
 
-
-            console.log(response);
             let incidentBlock = document.getElementById('incidents-footbal');
             let teamClass = response.incident_team === 2 ? ' away' : '';
             if (Object.keys(response).length !== 0) {
@@ -2108,7 +2106,7 @@ getIncidents();
         const data = JSON.parse(e.data);
         homeScore = data['message']['home_score']
         awayScore = data['message']['away_score']
-         if (homeScore === null) {
+        if (homeScore === null) {
             homeScore = 0;
         }
 

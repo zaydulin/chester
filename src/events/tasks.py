@@ -859,7 +859,7 @@ def add_sport_events_list_second_future():
     #         return HttpResponse(f"Error  - {second_response.status_code} - {second_response.json()}")
     # return HttpResponse("Data fetched successfully")
             return {"response": f"Error  - {second_response.status_code} - {second_response.json()}"}
-        return {"response": "add_sport_events_list_second successfully"}
+        return {"response": "add_sport_events_list_second_future successfully"}
 
 @shared_task
 def add_sport_events_list_second_online_gou():
