@@ -16,6 +16,17 @@
 .country__div:hover {
     background-color: grey;
 }
+.events__tour-list li a {
+    font-weight: 500;
+    margin: 5px 0 0 0;
+    font-size: 16px;
+    color: #000;
+
+}
+
+.events__tour-list li a:hover {
+    color: #0056b3;
+}
 </style>
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <main class="events sp-container" id="sp-container">
@@ -47,7 +58,7 @@
             <div class="events__search-tour">
 
             </div>
-            <div>
+            <div  id="country-list">
                 {% get_country_seasons request as grouped_seasons %}
                 {% for country, seasons in grouped_seasons.items %}
                 <div class="country__div" data-country="{{ country }}"  style="cursor:pointer;">
@@ -71,6 +82,7 @@
                 </ul>
                 {% endfor %}
             </div>
+            <button id="show-more-button">Показать еще</button>
             {% if sidebar_baners %}
             <div class="events__center-banners side-banners sidebar">
                 {% for baner in sidebar_baners %}

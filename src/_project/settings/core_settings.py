@@ -95,10 +95,10 @@ DATABASES = {
     }
 }
 # DATABASES = {
-#    "default": {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
+#     "default": {
+#          'ENGINE': 'django.db.backends.sqlite3',
+#          'NAME': BASE_DIR / 'db.sqlite3',
+#      }
 # }
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -297,7 +297,7 @@ CELERY_BEAT_SCHEDULE = {
     },
     "fetch_event_data_for_second": {
         "task": "events.tasks.fetch_event_data_for_second",
-        "schedule": timedelta(minutes=10),
+        "schedule": crontab(hour="*", minute="1"),
     },
 }
 CELERY_RESULT_BACKEND = "django-db"

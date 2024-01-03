@@ -956,7 +956,7 @@ def add_sport_events_list_second_online_gou():
 
 @shared_task
 def fetch_event_data_for_second():
-    events = Events.objects.filter(second_event_api_id__isnull=False)
+    events = Events.objects.filter(~Q(status=3),second_event_api_id__isnull=False)
     url = "https://flashlive-sports.p.rapidapi.com/v1/events/data"
     for event in events:
         querystring = {"locale": "en_INT", "event_id": event.second_event_api_id}
