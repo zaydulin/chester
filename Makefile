@@ -34,7 +34,7 @@ celery:
 celery2:
 	docker-compose -f $(docker_file) exec cb-celery celery -A _project inspect active
 celery-stop:
-	docker-compose -f $(docker_file) exec cb-celery ps aux | grep 'celery -A _project worker' | awk '{print $2}' | xargs kill -9
+	docker-compose -f $(docker_file) exec cb-celery kill -9 $(ps aux | grep 'celery -A _project worker' | awk '{print $2}')
 celery-start:
 	docker-compose -f $(docker_file) exec cb-celery celery -A project worker --detach
 
