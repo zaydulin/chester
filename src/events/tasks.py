@@ -46,7 +46,7 @@ def create_tournament():
         rubric_id_q = str(rubric_id)
         querystring_tournaments_list = {"sport_id": rubric_id_q, "locale": "ru_RU"}
         rubrics = Rubrics.objects.get(second_api=True, api_id=rubric_id)
-        response_tournaments_list = requests.get(tournaments_list_url, headers=HEADER_FOR_SECOND_API, params=querystring_tournaments_list)
+        response_tournaments_list = requests.get(tournaments_list_url, headers=HEADER_FOR_SECOND_API,params=querystring_tournaments_list)
         if response_tournaments_list.status_code == 200:
             tournaments_data = response_tournaments_list.json()
             for tournament_data in tournaments_data.get("DATA", []):
@@ -82,15 +82,13 @@ def create_tournament():
 @shared_task
 def create_events_of_tournament():
     second_url = "https://flashlive-sports.p.rapidapi.com/v1/tournaments/fixtures"
-
     second_api_rubric_ids = Rubrics.objects.filter(second_api=True).values_list("api_id", flat=True).distinct()
-
     for rubric_id in second_api_rubric_ids:
         seasons = Season.objects.filter(rubrics__api_id=rubric_id)
         for season in seasons:
-            stages =  season.stages.all()
+            stages = season.stages.all()
             for stage in stages:
-                querystring = {"locale":"ru_RU","tournament_stage_id":str(stage.stage_id),"page":"1"}
+                querystring = {"locale": "ru_RU", "tournament_stage_id": str(stage.stage_id), "page": "1"}
                 rubrics = Rubrics.objects.get(second_api=True, api_id=rubric_id)
                 second_response = requests.get(second_url, headers=HEADER_FOR_SECOND_API, params=querystring)
                 if second_response.status_code == 200:
@@ -105,21 +103,22 @@ def create_events_of_tournament():
                             correct_logo_season = ''
                         try:
                             season = Season.objects.get(
-                                rubrics=rubrics, season_second_api_id=event_data.get("TOURNAMENT_STAGE_ID")
+                                rubrics=rubrics, season_id=event_data.get("TOURNAMENT_SEASON_ID")
                             )
                             season.logo_league = correct_logo_season
                             season.season_name = event_data.get("NAME")
-                            season.season_second_api_id = event_data.get("TOURNAMENT_SEASON_ID")
+                            season.season_second_api_id = event_data.get("TOURNAMENT_STAGE_ID")
                             season.save()
                         except:
-                            country_from_db, created = Country.objects.get_or_create(name=event_data.get("COUNTRY_NAME"))
+                            country_from_db, created = Country.objects.get_or_create(
+                                name=event_data.get("COUNTRY_NAME"))
                             season = Season.objects.create(
                                 rubrics=rubrics,
-                                season_second_api_id=event_data.get("TOURNAMENT_SEASON_ID"),
+                                season_second_api_id=event_data.get("TOURNAMENT_STAGE_ID"),
                                 season_name=event_data.get("NAME"),
                                 logo_league=correct_logo_season,
                                 league_name=event_data.get("NAME"),
-                                season_id=event_data.get("TOURNAMENT_STAGE_ID"),
+                                season_id=event_data.get("TOURNAMENT_SEASON_ID"),
                                 country=country_from_db,
                             )
                         for event in events:
@@ -144,7 +143,8 @@ def create_events_of_tournament():
                                 else:
                                     correct_away_logo = ''
                                 try:
-                                    home_team = Team.objects.get(second_api_team_id=event.get("HOME_PARTICIPANT_IDS")[-1])
+                                    home_team = Team.objects.get(
+                                        second_api_team_id=event.get("HOME_PARTICIPANT_IDS")[-1])
                                 except:
 
                                     home_team = Team.objects.create(
@@ -154,7 +154,8 @@ def create_events_of_tournament():
                                         rubrics=rubrics,
                                     )
                                 try:
-                                    away_team = Team.objects.get(second_api_team_id=event.get("AWAY_PARTICIPANT_IDS")[-1])
+                                    away_team = Team.objects.get(
+                                        second_api_team_id=event.get("AWAY_PARTICIPANT_IDS")[-1])
                                 except:
                                     away_team = Team.objects.create(
                                         second_api_team_id=event.get("AWAY_PARTICIPANT_IDS")[-1],
@@ -180,11 +181,13 @@ def create_events_of_tournament():
                                         half=event.get("ROUND"),
                                         section=season,
                                     )
+                elif second_response.status_code == 404:
+                    season.delete()
                 else:
                     #         return HttpResponse(f"Error  - {second_response.status_code} - {second_response.json()}")
                     # return HttpResponse("Data fetched successfully")
                     return {"response": f"Error  - {second_response.status_code} - {second_response.json()}"}
-            return {"response": "add_sport_events_list_second successfully"}
+    return {"response": "add_sport_events_list_second successfully"}
 @shared_task
 def fetch_event_data_for_second():
     events = Events.objects.filter(~Q(status=3),second_event_api_id__isnull=False)
