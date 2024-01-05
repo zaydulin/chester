@@ -278,19 +278,13 @@ CELERYD_LOG_FILE = "/var/www/chester/celery.log"
 
 CELERY_BEAT_SCHEDULE = {
     "add_sport_events_second_task": {
-        "task": "events.tasks.add_sport_events_list_second",
+        "task": "events.tasks.create_tournament",
         "schedule": crontab(
             hour="*/1",
         ),
     },
     "add_sport_events_list_second_future": {
-        "task": "events.tasks.add_sport_events_list_second_future",
-        "schedule": crontab(
-            hour="*/1",
-        ),
-    },
-    "add_sport_events_second_online_task": {
-        "task": "events.tasks.add_sport_events_list_second_online_gou",
+        "task": "events.tasks.create_events_of_tournament",
         "schedule": crontab(
             hour="*/1",
         ),

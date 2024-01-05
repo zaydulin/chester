@@ -251,12 +251,14 @@ class Season(models.Model):
     league_name = models.CharField("Название лиги", max_length=500, null=True)
     slug = models.SlugField("Ссылка", max_length=160, unique=True,blank=True)
     league_id = models.CharField("ID лиги", max_length=500,null=True)
-    season_id = models.CharField("ID сезона", max_length=500,null=True)
+    season_id = models.CharField("ACTUAL_TOURNAMENT_SEASON_ID", max_length=500,null=True)
     season_second_api_id = models.CharField("API ID 2", max_length=500, null=True)
     logo_league = models.TextField("Изображения", blank=True, null=True,)
     description = models.TextField("Описание", null=True)
     popular = models.BooleanField(default=False)
     country = models.ForeignKey("Country", on_delete=models.CASCADE, blank=True, null=True)
+    stages = models.ManyToManyField("Stages", verbose_name="Стадии")
+
     def __str__(self):
         return f'{self.season_name}'
 
@@ -280,7 +282,13 @@ class Season(models.Model):
     class Meta:
         verbose_name = 'Лига'
         verbose_name_plural = 'Лиги'
+class Stages(models.Model):
+    stage_id = models.TextField("Stage_Id", null=True)
+    stage_name = models.TextField("Stage_Name", null=True)
 
+    class Meta:
+        verbose_name = 'Стадия'
+        verbose_name_plural = 'Стадии'
 class Country(models.Model):
     name = models.CharField(max_length=150)
     image = models.CharField(verbose_name='Флаг в формате flag-icon flag-icon-<название>',max_length=150)
