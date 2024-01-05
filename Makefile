@@ -40,4 +40,4 @@ postgre2:
 postgre3:
     docker-compose -f $(docker_file) exec cb-db psql -u admin -h localhost -d db_chester -p qwe123QWE
 postgre4:
-    docker-compose -f $(docker_file) exec cb-db DROP DATABASE db_chester;
+    docker-compose -f $(docker_file) exec cb-db DROP DATABASE db_chester
