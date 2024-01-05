@@ -34,7 +34,9 @@ celery:
 celery2:
 	docker-compose -f $(docker_file) exec cb-celery celery -A _project inspect active
 celery-stop:
-	docker-compose -f $(docker_file) exec cb-celery celery --help
+	docker-compose -f $(docker_file) exec cb-celery systemctl stop celery
+celery-delete:
+	docker-compose -f $(docker_file) exec cb-celery celery -A _project purge
 celery-start:
-	docker-compose -f $(docker_file) exec cb-celery celery -A project worker --detach
+	docker-compose -f $(docker_file) exec cb-celery systemctl start celery
 
