@@ -33,5 +33,5 @@ celery:
 	docker-compose -f $(docker_file) exec cb-celery celery -A _project worker --loglevel=debug
 celery-delete:
 	docker-compose -f $(docker_file) exec cb-celery celery -A _project purge
-postgres:
-	docker-compose -f $(docker_file) exec cb-db DROP TABLE db_chester
+postgres :
+	docker-compose -f $(docker_file) cb-db DROP TABLE db_chester
