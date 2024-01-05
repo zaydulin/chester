@@ -31,16 +31,7 @@ test:
 	docker-compose -f $(docker_file) exec cb-app python manage.py test
 celery:
 	docker-compose -f $(docker_file) exec cb-celery celery -A _project worker --loglevel=debug
-celery2:
-	docker-compose -f $(docker_file) exec cb-celery celery -A _project inspect active
-celery-stop:
-	docker-compose -f $(docker_file) exec cb-celery celery stop
-celery-stop2:
-	docker-compose -f $(docker_file) exec cb-app systemctl stop celery
-celery-stop3:
-	docker-compose -f $(docker_file) exec cb-celery celery systemctl stop
 celery-delete:
 	docker-compose -f $(docker_file) exec cb-celery celery -A _project purge
-celery-start:
-	docker-compose -f $(docker_file) exec cb-celery systemctl start celery
-
+postgre:
+    docker-compose -f $(docker_file) exec cb-app sudo -u postgres psql
