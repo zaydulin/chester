@@ -33,7 +33,3 @@ celery:
 	docker-compose -f $(docker_file) exec cb-celery celery -A _project worker --loglevel=debug
 celery-delete:
 	docker-compose -f $(docker_file) exec cb-celery celery -A _project purge
-postgre2:
-    docker-compose -f $(docker_file) exec cb-db psql -u admin -h localhost -d db_chester
-postgre3:
-    docker-compose -f $(docker_file) exec cb-db psql -u admin -h localhost -d db_chester -p qwe123QWE
