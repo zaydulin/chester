@@ -34,7 +34,7 @@ celery:
 celery2:
 	docker-compose -f $(docker_file) exec cb-celery celery -A _project inspect active
 celery-stop:
-	docker-compose -f $(docker_file) exec cb-celery celery pkill -f 'celery worker'
+	docker-compose -f $(docker_file) exec cb-celery celery kill -f 'celery worker'
 celery-start:
 	docker-compose -f $(docker_file) exec cb-celery celery -A project worker --detach
 
