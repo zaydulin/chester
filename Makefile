@@ -34,4 +34,4 @@ celery:
 celery-delete:
 	docker-compose -f $(docker_file) exec cb-celery celery -A _project purge
 postgre:
-    docker-compose -f $(docker_file) exec cb-app sudo -u postgres psql
+    docker-compose -f $(docker_file) sudo -u postgres psql
