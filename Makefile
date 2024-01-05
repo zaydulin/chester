@@ -33,6 +33,8 @@ celery:
 	docker-compose -f $(docker_file) exec cb-celery celery -A _project worker --loglevel=debug
 celery2:
 	docker-compose -f $(docker_file) exec cb-celery celery -A _project inspect active
-
-
+celery-stop:
+	docker-compose -f $(docker_file) exec cb-celery pkill -f 'celery -A _project worker'
+celery-start:
+	docker-compose -f $(docker_file) exec cb-celery celery -A project worker --detach
 
