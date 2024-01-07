@@ -72,7 +72,10 @@ def create_tournament():
                 for stage in stages:
                     stage_id = stage.get("STAGE_ID")
                     stage_name = stage.get("STAGE_NAME")
-                    stage_bd = Stages.objects.create(stage_id=stage_id,stage_name=stage_name)
+                    try :
+                        stage_bd = Stages.objects.create(stage_id=stage_id)
+                    except:
+                        stage_bd = Stages.objects.create(stage_id=stage_id,stage_name=stage_name)
                     season.stages.add(stage_bd)
         else:
             return {"response": f"Error  - {response_tournaments_list.status_code} - {response_tournaments_list.json()}"}
