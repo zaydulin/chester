@@ -42,7 +42,7 @@ def create_tournament():
     tournaments_list_url = "https://flashlive-sports.p.rapidapi.com/v1/tournaments/list"
     second_api_rubric_ids = Rubrics.objects.filter(second_api=True).values_list("api_id", flat=True).distinct()
 
-    for rubric_id in second_api_rubric_ids:
+    for rubric_id in [1,2,3,4,12,7,36,6,15,13,25,21]:
         rubric_id_q = str(rubric_id)
         querystring_tournaments_list = {"sport_id": rubric_id_q, "locale": "ru_RU"}
         rubrics = Rubrics.objects.get(second_api=True, api_id=rubric_id)
@@ -83,7 +83,7 @@ def create_tournament():
 def create_events_of_tournament():
     second_url = "https://flashlive-sports.p.rapidapi.com/v1/tournaments/fixtures"
     second_api_rubric_ids = Rubrics.objects.filter(second_api=True).values_list("api_id", flat=True).distinct()
-    for rubric_id in second_api_rubric_ids:
+    for rubric_id in [1,2,3,4,12,7,36,6,15,13,25,21]:
         seasons = Season.objects.filter(rubrics__api_id=rubric_id)
         for season in seasons:
             stages = season.stages.all()
@@ -182,6 +182,10 @@ def create_events_of_tournament():
                                         section=season,
                                     )
                 elif second_response.status_code == 404:
+                    try:
+                        stage.delete()
+                    except:
+                        pass
                     try:
                         season.delete()
                     except:
