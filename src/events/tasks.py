@@ -77,7 +77,7 @@ def create_tournament():
         else:
             return {"response": f"Error  - {response_tournaments_list.status_code} - {response_tournaments_list.json()}"}
 
-        return {"response": "create_tournament successfully"}
+    return {"response": "create_tournament successfully"}
 
 @shared_task
 def create_events_of_tournament():
