@@ -280,7 +280,7 @@ CELERY_BEAT_SCHEDULE = {
     "create_tournament": {
         "task": "events.tasks.create_tournament",
         "schedule": crontab(
-            hour="*/2",
+            hour="*/1",
         ),
     },
     "create_events_of_tournament": {
