@@ -295,18 +295,18 @@ CELERY_BEAT_SCHEDULE = {
     #         hour="*/1",
     #     ),
     # },
-    "create_events_of_tournament_id3": {
-        "task": "events.tasks.create_events_of_tournament_id3",
-        "schedule": crontab(
-            hour="*/1",
-        ),
-    },
-    # "create_events_of_tournament_id4": {
-    #     "task": "events.tasks.create_events_of_tournament_id4",
+    # "create_events_of_tournament_id3": {
+    #     "task": "events.tasks.create_events_of_tournament_id3",
     #     "schedule": crontab(
     #         hour="*/1",
     #     ),
     # },
+    "create_events_of_tournament_id4": {
+        "task": "events.tasks.create_events_of_tournament_id4",
+        "schedule": crontab(
+            hour="*/1",
+        ),
+    },
     # "create_events_of_tournament_id5": {
     #     "task": "events.tasks.create_events_of_tournament_id5",
     #     "schedule": crontab(
@@ -357,7 +357,7 @@ CELERY_BEAT_SCHEDULE = {
     # },
     "fetch_event_data_for_second": {
         "task": "events.tasks.fetch_event_data_for_second",
-        "schedule": crontab(hour="*", minute="1"),
+        "schedule": crontab(hour="*", minute="2"),
     },
 }
 CELERY_RESULT_BACKEND = "django-db"
