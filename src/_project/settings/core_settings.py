@@ -283,12 +283,78 @@ CELERY_BEAT_SCHEDULE = {
             hour="*/1",
         ),
     },
-    "create_events_of_tournament": {
-        "task": "events.tasks.create_events_of_tournament",
+    # "create_events_of_tournament_id1": {
+    #     "task": "events.tasks.create_events_of_tournament_id1",
+    #     "schedule": crontab(
+    #         hour="*/1",
+    #     ),
+    # },
+    # "create_events_of_tournament_id2": {
+    #     "task": "events.tasks.create_events_of_tournament_id2",
+    #     "schedule": crontab(
+    #         hour="*/1",
+    #     ),
+    # },
+    "create_events_of_tournament_id3": {
+        "task": "events.tasks.create_events_of_tournament_id3",
         "schedule": crontab(
             hour="*/1",
         ),
     },
+    # "create_events_of_tournament_id4": {
+    #     "task": "events.tasks.create_events_of_tournament_id4",
+    #     "schedule": crontab(
+    #         hour="*/1",
+    #     ),
+    # },
+    # "create_events_of_tournament_id5": {
+    #     "task": "events.tasks.create_events_of_tournament_id5",
+    #     "schedule": crontab(
+    #         hour="*/1",
+    #     ),
+    # },
+    # "create_events_of_tournament_id6": {
+    #     "task": "events.tasks.create_events_of_tournament_id6",
+    #     "schedule": crontab(
+    #         hour="*/1",
+    #     ),
+    # },
+    # "create_events_of_tournament_id7": {
+    #     "task": "events.tasks.create_events_of_tournament_id7",
+    #     "schedule": crontab(
+    #         hour="*/1",
+    #     ),
+    # },
+    # "create_events_of_tournament_id8": {
+    #     "task": "events.tasks.create_events_of_tournament_id8",
+    #     "schedule": crontab(
+    #         hour="*/1",
+    #     ),
+    # },
+    # "create_events_of_tournament_id9": {
+    #     "task": "events.tasks.create_events_of_tournament_id9",
+    #     "schedule": crontab(
+    #         hour="*/1",
+    #     ),
+    # },
+    # "create_events_of_tournament_id10": {
+    #     "task": "events.tasks.create_events_of_tournament_id10",
+    #     "schedule": crontab(
+    #         hour="*/1",
+    #     ),
+    # },
+    # "create_events_of_tournament_id11": {
+    #     "task": "events.tasks.create_events_of_tournament_id11",
+    #     "schedule": crontab(
+    #         hour="*/1",
+    #     ),
+    # },
+    # "create_events_of_tournament_id12": {
+    #     "task": "events.tasks.create_events_of_tournament_id12",
+    #     "schedule": crontab(
+    #         hour="*/1",
+    #     ),
+    # },
     "fetch_event_data_for_second": {
         "task": "events.tasks.fetch_event_data_for_second",
         "schedule": crontab(hour="*", minute="1"),
