@@ -11,7 +11,7 @@ from events.models import Rubrics, Events, Team, Season, Player, Incidents, Peri
 HEADER_FOR_FIRST_API = {
         "X-RapidAPI-Key": "3b1726a15fmshc58a145e91a5846p197521jsn5a6af790e789",
         "X-RapidAPI-Host": "sportscore1.p.rapidapi.com"
-    }
+}
 
 HEADER_FOR_SECOND_API = {
     "X-RapidAPI-Key": "11047ab519mshed06c5cc71509fep168f75jsn077ef01d5d10",

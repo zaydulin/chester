@@ -9,5 +9,6 @@ urlpatterns = [
     path('fetch_event_data/', views.fetch_event_data, name='fetch_event_data'),
     path('fetch_event_data_for_second/', views.fetch_event_data_for_second, name='fetch_event_data_for_second'),
     path('clear_db/', views.clear_db, name='clear_db'),
+    path('create_tournament/', views.create_tournament, name='create_tournament'),
 
 ]

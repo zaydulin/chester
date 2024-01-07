@@ -8,7 +8,7 @@ from django.utils.text import slugify
 from googletrans import Translator
 from datetime import date ,timedelta
 from events.models import Rubrics, Events, Team, Season, Player, Incidents, Periods, GameStatistic, H2H, TennisPoints, \
-    TennisGames, Points , Country
+    TennisGames, Points , Country,Stages
 from django.utils import timezone
 from django.db.models import Q
 from django.db import transaction
@@ -16,8 +16,8 @@ import time
 from datetime import datetime
 
 HEADER_FOR_SECOND_API_GOU = {
-    "X-RapidAPI-Key": "898cbcc75bmsh175375da7c16d33p131157jsn1e68df18e834",
-	"X-RapidAPI-Host": "flashlive-sports.p.rapidapi.com"
+    'X-RapidAPI-Key': '11047ab519mshed06c5cc71509fep168f75jsn077ef01d5d10',
+    'X-RapidAPI-Host': 'flashlive-sports.p.rapidapi.com'
 }
 # Create your views here.
 def translate_to_russian(name):
@@ -1078,8 +1078,52 @@ def get_h2h_second(request):
 def clear_db(request):
     season = Season.objects.all()
     events = Events.objects.all()
+    stages = Stages.objects.all()
     for event in events:
         event.delete()
     for event in season:
         event.delete()
+    for event in stages:
+        event.delete()
     return HttpResponse('ok')
+
+def create_tournament(request):
+    tournaments_list_url = "https://flashlive-sports.p.rapidapi.com/v1/tournaments/list"
+    second_api_rubric_ids = Rubrics.objects.filter(second_api=True).values_list("api_id", flat=True).distinct()
+
+    for rubric_id in second_api_rubric_ids:
+        rubric_id_q = str(rubric_id)
+        querystring_tournaments_list = {"sport_id": rubric_id_q, "locale": "ru_RU"}
+        rubrics = Rubrics.objects.get(second_api=True, api_id=rubric_id)
+        response_tournaments_list = requests.get(tournaments_list_url, headers=HEADER_FOR_SECOND_API_GOU,params=querystring_tournaments_list)
+        if response_tournaments_list.status_code == 200:
+            tournaments_data = response_tournaments_list.json()
+            for tournament_data in tournaments_data.get("DATA", []):
+                country_name = tournament_data.get('COUNTRY_NAME')
+                if Country.objects.filter(name=country_name).exists():
+                    country = Country.objects.get(name=country_name)
+                else:
+                    country = Country.objects.create(name=country_name)
+                season_id = tournament_data.get("ACTUAL_TOURNAMENT_SEASON_ID")
+                try:
+                    season = Season.objects.get(
+                        rubrics=rubrics,
+                        season_id=season_id,
+                    )
+                except:
+                    season = Season.objects.create(
+                        rubrics=rubrics,
+                        league_name=tournament_data.get("LEAGUE_NAME"),
+                        season_id=season_id,
+                        country = country
+                    )
+                stages = tournament_data.get("STAGES")
+                for stage in stages:
+                    stage_id = stage.get("STAGE_ID")
+                    stage_name = stage.get("STAGE_NAME")
+                    stage_bd = Stages.objects.create(stage_id=stage_id,stage_name=stage_name)
+                    season.stages.add(stage_bd)
+        else:
+            return HttpResponse(f"Error  - {response_tournaments_list.status_code} - {response_tournaments_list.json()}")
+
+    return HttpResponse("create_tournament successfully")
