@@ -33,3 +33,5 @@ celery:
 	docker-compose -f $(docker_file) exec cb-celery celery -A _project worker --loglevel=debug
 celery-delete:
 	docker-compose -f $(docker_file) exec cb-celery celery -A _project purge
+celery-on:
+	docker-compose -f $(docker_file) exec cb-celery celery -A _project worker -l info -c 13
