@@ -1076,8 +1076,6 @@ def get_h2h_second(request):
 
 
 def delete_h2h(request):
-    events = H2H.objects.all()
-    for event in events:
-        event.delete()
+    events = Season.objects.filter(rubrics__api_id=1)
 
-    return HttpResponse('ok')
+    return HttpResponse(events)
