@@ -301,48 +301,48 @@ CELERY_BEAT_SCHEDULE = {
     #         hour="*/1",
     #     ),
     # },
-    "create_events_of_tournament_id4": {
-        "task": "events.tasks.create_events_of_tournament_id4",
-        "schedule": crontab(
-            hour="*/1",
-        ),
-    },
-    "create_events_of_tournament_id5": {
-        "task": "events.tasks.create_events_of_tournament_id12",
-        "schedule": crontab(
-            hour="*/1",
-        ),
-    },
-    "create_events_of_tournament_id6": {
-        "task": "events.tasks.create_events_of_tournament_id36",
-        "schedule": crontab(
-            hour="*/1",
-        ),
-    },
+    # "create_events_of_tournament_id4": {
+    #     "task": "events.tasks.create_events_of_tournament_id4",
+    #     "schedule": crontab(
+    #         hour="*/1",
+    #     ),
+    # },
+    # "create_events_of_tournament_id5": {
+    #     "task": "events.tasks.create_events_of_tournament_id12",
+    #     "schedule": crontab(
+    #         hour="*/1",
+    #     ),
+    # },
+    # "create_events_of_tournament_id6": {
+    #     "task": "events.tasks.create_events_of_tournament_id36",
+    #     "schedule": crontab(
+    #         hour="*/1",
+    #     ),
+    # },
     # "create_events_of_tournament_id7": {
-    #     "task": "events.tasks.create_events_of_tournament_id7",
+    #     "task": "events.tasks.create_events_of_tournament_id6",
     #     "schedule": crontab(
     #         hour="*/1",
     #     ),
     # },
-    # "create_events_of_tournament_id8": {
-    #     "task": "events.tasks.create_events_of_tournament_id8",
-    #     "schedule": crontab(
-    #         hour="*/1",
-    #     ),
-    # },
-    # "create_events_of_tournament_id9": {
-    #     "task": "events.tasks.create_events_of_tournament_id9",
-    #     "schedule": crontab(
-    #         hour="*/1",
-    #     ),
-    # },
-    # "create_events_of_tournament_id10": {
-    #     "task": "events.tasks.create_events_of_tournament_id10",
-    #     "schedule": crontab(
-    #         hour="*/1",
-    #     ),
-    # },
+    "create_events_of_tournament_id8": {
+        "task": "events.tasks.create_events_of_tournament_id15",
+        "schedule": crontab(
+            hour="*/1",
+        ),
+    },
+    "create_events_of_tournament_id9": {
+        "task": "events.tasks.create_events_of_tournament_id25",
+        "schedule": crontab(
+            hour="*/1",
+        ),
+    },
+    "create_events_of_tournament_id10": {
+        "task": "events.tasks.create_events_of_tournament_id21",
+        "schedule": crontab(
+            hour="*/1",
+        ),
+    },
     # "create_events_of_tournament_id11": {
     #     "task": "events.tasks.create_events_of_tournament_id11",
     #     "schedule": crontab(
