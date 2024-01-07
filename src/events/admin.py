@@ -16,6 +16,7 @@ class CountryAdmin(admin.ModelAdmin):
 
 admin.site.register(Events, EventsAdmin)
 admin.site.register(Rubrics)
+admin.site.register(Stages)
 admin.site.register(Team)
 admin.site.register(Season,SeasonAdmin)
 admin.site.register(Player)
