@@ -182,7 +182,10 @@ def create_events_of_tournament():
                                         section=season,
                                     )
                 elif second_response.status_code == 404:
-                    season.delete()
+                    try:
+                        season.delete()
+                    except:
+                        pass
                 else:
                     #         return HttpResponse(f"Error  - {second_response.status_code} - {second_response.json()}")
                     # return HttpResponse("Data fetched successfully")
