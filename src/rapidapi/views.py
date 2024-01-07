@@ -1075,15 +1075,9 @@ def get_h2h_second(request):
     return HttpResponse("Data fetched successfully")
 
 
-def delete_events(request):
-    events = Events.objects.all().order_by('slug')
-    previous_slug = None
+def delete_h2h(request):
+    events = H2H.objects.all()
+    for event in events:
+        event.delete()
 
-    with transaction.atomic():
-        for event in events:
-            current_slug = event.slug
-            if current_slug == previous_slug:
-                event.delete()
-            else:
-                previous_slug = current_slug
-    return HttpResponse(events)
+    return HttpResponse('ok')
