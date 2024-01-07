@@ -33,5 +33,3 @@ celery:
 	docker-compose -f $(docker_file) exec cb-celery celery -A _project worker --loglevel=debug
 celery-delete:
 	docker-compose -f $(docker_file) exec cb-celery celery -A _project purge
-postgres-delete:
-    docker-compose -f $(docker_file) exec cb-db psql -U postgres -d db_chester -c "DROP SCHEMA public CASCADE; CREATE SCHEMA public;"

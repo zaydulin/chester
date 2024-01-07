@@ -277,13 +277,13 @@ CELERYD_LOG_FORMAT = "[%(asctime)s: %(levelname)s/%(processName)s] %(message)s"
 CELERYD_LOG_FILE = "/var/www/chester/celery.log"
 
 CELERY_BEAT_SCHEDULE = {
-    "add_sport_events_second_task": {
+    "create_tournament": {
         "task": "events.tasks.create_tournament",
         "schedule": crontab(
-            hour="*/1",
+            hour="*/2",
         ),
     },
-    "add_sport_events_list_second_future": {
+    "create_events_of_tournament": {
         "task": "events.tasks.create_events_of_tournament",
         "schedule": crontab(
             hour="*/1",

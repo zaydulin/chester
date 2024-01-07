@@ -77,7 +77,7 @@ def create_tournament():
         else:
             return {"response": f"Error  - {response_tournaments_list.status_code} - {response_tournaments_list.json()}"}
 
-        return {"response": "add_sport_events_list_second successfully"}
+        return {"response": "create_tournament successfully"}
 
 @shared_task
 def create_events_of_tournament():
@@ -187,7 +187,7 @@ def create_events_of_tournament():
                     #         return HttpResponse(f"Error  - {second_response.status_code} - {second_response.json()}")
                     # return HttpResponse("Data fetched successfully")
                     return {"response": f"Error  - {second_response.status_code} - {second_response.json()}"}
-    return {"response": "add_sport_events_list_second successfully"}
+    return {"response": "create_events_of_tournament successfully"}
 @shared_task
 def fetch_event_data_for_second():
     events = Events.objects.filter(~Q(status=3),second_event_api_id__isnull=False)
