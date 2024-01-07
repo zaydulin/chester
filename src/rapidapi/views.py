@@ -1075,7 +1075,11 @@ def get_h2h_second(request):
     return HttpResponse("Data fetched successfully")
 
 
-def delete_h2h(request):
-    events = Season.objects.filter(rubrics__api_id=1)
-
-    return HttpResponse(events)
+def clear_db(request):
+    season = Season.objects.all()
+    events = Events.objects.all()
+    for event in events:
+        event.delete()
+    for event in season:
+        event.delete()
+    return HttpResponse('ok')

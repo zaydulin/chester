@@ -8,6 +8,6 @@ urlpatterns = [
     path('add_sport_events_list_second_online_gou/', views.add_sport_events_list_second_online_gou, name='add_sport_events_list_second_online_gou'),
     path('fetch_event_data/', views.fetch_event_data, name='fetch_event_data'),
     path('fetch_event_data_for_second/', views.fetch_event_data_for_second, name='fetch_event_data_for_second'),
-    path('delete_h2h/', views.delete_h2h, name='delete_h2h'),
+    path('clear_db/', views.clear_db, name='clear_db'),
 
 ]
