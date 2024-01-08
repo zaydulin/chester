@@ -67,7 +67,7 @@
                     <div class="country__div" data-country="{{ country }}"  style="cursor:pointer;">
                 {% endif %}
                         <h2 style="font-weight: 500;"><i class="{{country.image}}"></i>&nbsp;{{ country }} </h2>
-                    </div>
+
                         <ul>
                             {% for season in seasons %}
                             <li data-season="{{ season.season_name }}">
@@ -84,6 +84,7 @@
                             </li>
                             {% endfor %}
                         </ul>
+                        </div>
                 {% endfor %}
                 <button id="show-more-button">Показать еще</button>
                 <script>
