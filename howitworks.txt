@@ -1,0 +1,17 @@
+task create_tournament
+Выполняет лишь одну задачу это создание лиги и добавление в нее стадий
+в стадиях есть id которые сохраняется в них а потом мы кидаем запрос по этому
+ид в task create_events_of_tournament_id
+task create_events_of_tournament_id1 и с др айди(create_events_of_tournament_id2,create_events_of_tournament_id3,
+create_events_of_tournament_id4 ...)
+Дозаполеняет модель лиги и создает новую модель События(Evetns)
+нужно чтобы таски запускались в определенные дни
+"schedule": crontab(
+            minute=0,
+            hour=1,
+            day_of_week='monday',
+),
+вроде так это делается
+
+task fetch_event_data_for_second
+обновляет счет матча и его статус (онлайн предстоящие завершенные)

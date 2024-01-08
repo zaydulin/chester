@@ -1509,6 +1509,7 @@ def fetch_event_data_for_second():
             event.save()
         else:
             return {"response": f"Error fetch - {response.status_code} - {response.json()}"}
+        # пока оставить
         # second_url = "https://flashlive-sports.p.rapidapi.com/v1/events/h2h"
         #
         # second_querystring = {"locale": "en_INT", "event_id": event.second_event_api_id}
@@ -1570,7 +1571,7 @@ def fetch_event_data_for_second():
         #                         event.save()
     return {"response": "fetch_event_data_for_second successfully"}
     # return HttpResponse("Data fetched successfully")
-
+# не нужное,но пока не удалять
 # @shared_task
 # def add_sport_events_list_second():
 #     second_url = "https://flashlive-sports.p.rapidapi.com/v1/events/list"
