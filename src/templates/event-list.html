@@ -61,13 +61,14 @@
             <div  id="country-list">
                 {% get_country_seasons request as grouped_seasons %}
                 {% for country, seasons in grouped_seasons.items %}
+                <div>
                 {% if forloop.counter >= 25 %}
                     <div class="country__div none" data-country="{{ country }}"  style="cursor:pointer;">
                 {% else %}
                     <div class="country__div" data-country="{{ country }}"  style="cursor:pointer;">
                 {% endif %}
                         <h2 style="font-weight: 500;"><i class="{{country.image}}"></i>&nbsp;{{ country }} </h2>
-
+                    </div>
                         <ul>
                             {% for season in seasons %}
                             <li data-season="{{ season.season_name }}">
@@ -84,7 +85,7 @@
                             </li>
                             {% endfor %}
                         </ul>
-                        </div>
+                </div>
                 {% endfor %}
                 <button id="show-more-button">Показать еще</button>
                 <script>
