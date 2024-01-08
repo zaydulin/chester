@@ -37,50 +37,50 @@ def get_unique_season_slug(base_slug):
     except Season.DoesNotExist:
         return base_slug
 # Вторая апи
-@shared_task
-def create_tournament():
-    tournaments_list_url = "https://flashlive-sports.p.rapidapi.com/v1/tournaments/list"
-    second_api_rubric_ids = Rubrics.objects.filter(second_api=True).values_list("api_id", flat=True).distinct()
-
-    for rubric_id in [1,2,3,4,12,7,36,6,15,13,25,21]:
-        rubric_id_q = str(rubric_id)
-        querystring_tournaments_list = {"sport_id": rubric_id_q, "locale": "ru_RU"}
-        rubrics = Rubrics.objects.get(second_api=True, api_id=rubric_id)
-        response_tournaments_list = requests.get(tournaments_list_url, headers=HEADER_FOR_SECOND_API,params=querystring_tournaments_list)
-        if response_tournaments_list.status_code == 200:
-            tournaments_data = response_tournaments_list.json()
-            for tournament_data in tournaments_data.get("DATA", []):
-                country_name = tournament_data.get('COUNTRY_NAME')
-                if Country.objects.filter(name=country_name).exists():
-                    country = Country.objects.get(name=country_name)
-                else:
-                    country = Country.objects.create(name=country_name)
-                season_id = tournament_data.get("ACTUAL_TOURNAMENT_SEASON_ID")
-                try:
-                    season = Season.objects.get(
-                        rubrics=rubrics,
-                        season_id=season_id,
-                    )
-                except:
-                    season = Season.objects.create(
-                        rubrics=rubrics,
-                        league_name=tournament_data.get("LEAGUE_NAME"),
-                        season_id=season_id,
-                        country = country
-                    )
-                stages = tournament_data.get("STAGES")
-                for stage in stages:
-                    stage_id = stage.get("STAGE_ID")
-                    stage_name = stage.get("STAGE_NAME")
-                    try :
-                        stage_bd = Stages.objects.create(stage_id=stage_id)
-                    except:
-                        stage_bd = Stages.objects.create(stage_id=stage_id,stage_name=stage_name)
-                    season.stages.add(stage_bd)
-        else:
-            return {"response": f"Error  - {response_tournaments_list.status_code} - {response_tournaments_list.json()}"}
-
-    return {"response": "create_tournament successfully"}
+# @shared_task
+# def create_tournament():
+#     tournaments_list_url = "https://flashlive-sports.p.rapidapi.com/v1/tournaments/list"
+#     second_api_rubric_ids = Rubrics.objects.filter(second_api=True).values_list("api_id", flat=True).distinct()
+#
+#     for rubric_id in [1,2,3,4,12,7,36,6,15,13,25,21]:
+#         rubric_id_q = str(rubric_id)
+#         querystring_tournaments_list = {"sport_id": rubric_id_q, "locale": "ru_RU"}
+#         rubrics = Rubrics.objects.get(second_api=True, api_id=rubric_id)
+#         response_tournaments_list = requests.get(tournaments_list_url, headers=HEADER_FOR_SECOND_API,params=querystring_tournaments_list)
+#         if response_tournaments_list.status_code == 200:
+#             tournaments_data = response_tournaments_list.json()
+#             for tournament_data in tournaments_data.get("DATA", []):
+#                 country_name = tournament_data.get('COUNTRY_NAME')
+#                 if Country.objects.filter(name=country_name).exists():
+#                     country = Country.objects.get(name=country_name)
+#                 else:
+#                     country = Country.objects.create(name=country_name)
+#                 season_id = tournament_data.get("ACTUAL_TOURNAMENT_SEASON_ID")
+#                 try:
+#                     season = Season.objects.get(
+#                         rubrics=rubrics,
+#                         season_id=season_id,
+#                     )
+#                 except:
+#                     season = Season.objects.create(
+#                         rubrics=rubrics,
+#                         league_name=tournament_data.get("LEAGUE_NAME"),
+#                         season_id=season_id,
+#                         country = country
+#                     )
+#                 stages = tournament_data.get("STAGES")
+#                 for stage in stages:
+#                     stage_id = stage.get("STAGE_ID")
+#                     stage_name = stage.get("STAGE_NAME")
+#                     try :
+#                         stage_bd = Stages.objects.create(stage_id=stage_id)
+#                     except:
+#                         stage_bd = Stages.objects.create(stage_id=stage_id,stage_name=stage_name)
+#                     season.stages.add(stage_bd)
+#         else:
+#             return {"response": f"Error  - {response_tournaments_list.status_code} - {response_tournaments_list.json()}"}
+#
+#     return {"response": "create_tournament successfully"}
 
 # @shared_task
 # def create_events_of_tournament_id1():
