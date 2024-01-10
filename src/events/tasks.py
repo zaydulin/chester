@@ -43,56 +43,56 @@ def get_unique_season_slug(base_slug):
         return base_slug
 
 
-# done optimization
-@shared_task
-def create_tournament():
-    tournaments_list_url = "https://flashlive-sports.p.rapidapi.com/v1/tournaments/list"
-
-    for rubric_id in [1, 2, 3, 4, 12, 7, 36, 6, 15, 13, 25, 21]:
-        rubric_id_q = str(rubric_id)
-        querystring_tournaments_list = {"sport_id": rubric_id_q, "locale": "ru_RU"}
-        rubrics = Rubrics.objects.get(second_api=True, api_id=rubric_id)
-        response_tournaments_list = requests.get(
-            tournaments_list_url,
-            headers=HEADER_FOR_SECOND_API,
-            params=querystring_tournaments_list
-        )
-        if response_tournaments_list.status_code == 200:
-            tournaments_data = response_tournaments_list.json()
-            for tournament_data in tournaments_data.get("DATA", []):
-                country_name = tournament_data.get('COUNTRY_NAME')
-                country, created = Country.objects.get_or_create(
-                    name=country_name
-                )
-                season_id = tournament_data.get("ACTUAL_TOURNAMENT_SEASON_ID")
-                fields = {
-                    "league_name": tournament_data.get("LEAGUE_NAME"),
-                    "country": country
-                }
-                season, created = Season.objects.get_or_create(
-                    rubrics=rubrics,
-                    season_id=season_id,
-                    defaults=fields
-                )
-                stages = tournament_data.get("STAGES")
-                stages_list = []
-                for stage in stages:
-                    stage_id = stage.get("STAGE_ID")
-                    stage_name = stage.get("STAGE_NAME")
-                    stage_db = Stages(
-                        stage_id=stage_id
-                    )
-                    if stage_name:
-                        stage_db.stage_name = stage_name
-                    stages_list.append(stage_db)
-                stages = Stages.objects.bulk_create(stages_list)
-                season.stages.add(stages)
-        else:
-            return {
-                "response": f"Error  - {response_tournaments_list.status_code} - {response_tournaments_list.json()}"}
-
-    return {"response": "create_tournament successfully"}
-
+# # done optimization
+# @shared_task
+# def create_tournament():
+#     tournaments_list_url = "https://flashlive-sports.p.rapidapi.com/v1/tournaments/list"
+#
+#     for rubric_id in [1]:
+#         rubric_id_q = str(rubric_id)
+#         querystring_tournaments_list = {"sport_id": rubric_id_q, "locale": "ru_RU"}
+#         rubrics = Rubrics.objects.get(api_id=rubric_id)
+#         response_tournaments_list = requests.get(
+#             tournaments_list_url,
+#             headers=HEADER_FOR_SECOND_API,
+#             params=querystring_tournaments_list
+#         )
+#         if response_tournaments_list.status_code == 200:
+#             tournaments_data = response_tournaments_list.json()
+#             for tournament_data in tournaments_data.get("DATA", []):
+#                 country_name = tournament_data.get('COUNTRY_NAME')
+#                 country, created = Country.objects.get_or_create(
+#                     name=country_name
+#                 )
+#                 season_id = tournament_data.get("ACTUAL_TOURNAMENT_SEASON_ID")
+#                 fields = {
+#                     "league_name": tournament_data.get("LEAGUE_NAME"),
+#                     "country": country
+#                 }
+#                 season, created = Season.objects.get_or_create(
+#                     rubrics=rubrics,
+#                     season_id=season_id,
+#                     defaults=fields
+#                 )
+#                 stages = tournament_data.get("STAGES")
+#                 stages_list = []
+#                 for stage in stages:
+#                     stage_id = stage.get("STAGE_ID")
+#                     stage_name = stage.get("STAGE_NAME")
+#                     stage_db = Stages(
+#                         stage_id=stage_id
+#                     )
+#                     if stage_name:
+#                         stage_db.stage_name = stage_name
+#                     stages_list.append(stage_db)
+#                 stages = Stages.objects.bulk_create(stages_list)
+#                 season.stages.add(*stages)
+#         else:
+#             return {
+#                 "response": f"Error  - {response_tournaments_list.status_code} - {response_tournaments_list.json()}"}
+#
+#     return {"response": "create_tournament successfully"}
+#
 
 def create_events_of_tournament(rubric_id):
     second_url = "https://flashlive-sports.p.rapidapi.com/v1/tournaments/fixtures"
@@ -120,9 +120,15 @@ def create_events_of_tournament(rubric_id):
                         correct_logo_season = logo_season.replace('www.', 'static.')
                     else:
                         correct_logo_season = ''
-                    country_from_db, created = Country.objects.get_or_create(
-                        name=event_data.get("COUNTRY_NAME")
-                    )
+                    country_name = event_data.get("COUNTRY_NAME")
+                    if not country_name:
+                        country_from_db = Country.objects.get_or_create(
+                            name="Мир"
+                        )
+                    else:
+                        country_from_db, created = Country.objects.get_or_create(
+                            name=event_data.get("COUNTRY_NAME")
+                        )
                     season, created = Season.objects.get_or_create(
                         rubrics=rubrics,
                         season_id=event_data.get("TOURNAMENT_SEASON_ID")
@@ -202,53 +208,53 @@ def create_events_of_tournament(rubric_id):
                 return {"response": f"Error  - {second_response.status_code} - {second_response.json()}"}
     return {"response": "create_events_of_tournament successfully"}
 
-
-@shared_task
-def create_events_of_tournament_id1():
-    create_events_of_tournament(1)
-    return {"response": "create_events_of_tournament successfully"}
-
-
-@shared_task
-def create_events_of_tournament_id2():
-    create_events_of_tournament(2)
-    return {"response": "create_events_of_tournament successfully"}
-
-
-@shared_task
-def create_events_of_tournament_id3():
-    create_events_of_tournament(3)
-    return {"response": "create_events_of_tournament successfully"}
-
-
-@shared_task
-def create_events_of_tournament_id4():
-    create_events_of_tournament(4)
-    return {"response": "create_events_of_tournament successfully"}
-
-
-@shared_task
-def create_events_of_tournament_id6():
-    create_events_of_tournament(6)
-    return {"response": "create_events_of_tournament successfully"}
-
-
-@shared_task
-def create_events_of_tournament_id11():
-    create_events_of_tournament(11)
-    return {"response": "create_events_of_tournament successfully"}
-
-
-@shared_task
-def create_events_of_tournament_id12():
-    create_events_of_tournament(12)
-    return {"response": "create_events_of_tournament successfully"}
-
-
-@shared_task
-def create_events_of_tournament_id15():
-    create_events_of_tournament(15)
-    return {"response": "create_events_of_tournament successfully"}
+#
+# @shared_task
+# def create_events_of_tournament_id1():
+#     create_events_of_tournament(1)
+#     return {"response": "create_events_of_tournament successfully"}
+#
+#
+# @shared_task
+# def create_events_of_tournament_id2():
+#     create_events_of_tournament(2)
+#     return {"response": "create_events_of_tournament successfully"}
+#
+#
+# @shared_task
+# def create_events_of_tournament_id3():
+#     create_events_of_tournament(3)
+#     return {"response": "create_events_of_tournament successfully"}
+#
+#
+# @shared_task
+# def create_events_of_tournament_id4():
+#     create_events_of_tournament(4)
+#     return {"response": "create_events_of_tournament successfully"}
+#
+#
+# @shared_task
+# def create_events_of_tournament_id6():
+#     create_events_of_tournament(6)
+#     return {"response": "create_events_of_tournament successfully"}
+#
+#
+# @shared_task
+# def create_events_of_tournament_id11():
+#     create_events_of_tournament(11)
+#     return {"response": "create_events_of_tournament successfully"}
+#
+#
+# @shared_task
+# def create_events_of_tournament_id12():
+#     create_events_of_tournament(12)
+#     return {"response": "create_events_of_tournament successfully"}
+#
+#
+# @shared_task
+# def create_events_of_tournament_id15():
+#     create_events_of_tournament(15)
+#     return {"response": "create_events_of_tournament successfully"}
 
 
 @shared_task
@@ -256,17 +262,17 @@ def create_events_of_tournament_id21():
     create_events_of_tournament(21)
     return {"response": "create_events_of_tournament successfully"}
 
-
-@shared_task
-def create_events_of_tournament_id25():
-    create_events_of_tournament(25)
-    return {"response": "create_events_of_tournament successfully"}
-
-
-@shared_task
-def create_events_of_tournament_id36():
-    create_events_of_tournament(36)
-    return {"response": "create_events_of_tournament successfully"}
+#
+# @shared_task
+# def create_events_of_tournament_id25():
+#     create_events_of_tournament(25)
+#     return {"response": "create_events_of_tournament successfully"}
+#
+#
+# @shared_task
+# def create_events_of_tournament_id36():
+#     create_events_of_tournament(36)
+#     return {"response": "create_events_of_tournament successfully"}
 
 
 @shared_task
@@ -355,7 +361,9 @@ def fetch_event_data_for_second():
         #                         event.save()
     return {"response": "fetch_event_data_for_second successfully"}
     # return HttpResponse("Data fetched successfully")
-# не нужное,но пока не удалять
+
+#
+# # не нужное,но пока не удалять
 # @shared_task
 # def add_sport_events_list_second():
 #     second_url = "https://flashlive-sports.p.rapidapi.com/v1/events/list"
@@ -374,7 +382,7 @@ def fetch_event_data_for_second():
 #                 events = event_data.get("EVENTS")
 #                 logo_season = event_data.get("TOURNAMENT_IMAGE")
 #                 if logo_season:
-#                     correct_logo_season = logo_season.replace('www.','static.')
+#                     correct_logo_season = logo_season.replace('www.', 'static.')
 #                 else:
 #                     correct_logo_season = ''
 #                 try:
@@ -431,7 +439,7 @@ def fetch_event_data_for_second():
 #                                 rubrics=rubrics,
 #                             )
 #                         if not Events.objects.filter(
-#                             rubrics=rubrics, second_event_api_id=event.get("EVENT_ID")
+#                                 rubrics=rubrics, second_event_api_id=event.get("EVENT_ID")
 #                         ).exists():
 #                             Events.objects.create(
 #                                 rubrics=rubrics,
@@ -449,10 +457,11 @@ def fetch_event_data_for_second():
 #                                 section=season,
 #                             )
 #         else:
-#     #         return HttpResponse(f"Error  - {second_response.status_code} - {second_response.json()}")
-#     # return HttpResponse("Data fetched successfully")
+#             #         return HttpResponse(f"Error  - {second_response.status_code} - {second_response.json()}")
+#             # return HttpResponse("Data fetched successfully")
 #             return {"response": f"Error  - {second_response.status_code} - {second_response.json()}"}
 #         return {"response": "add_sport_events_list_second successfully"}
+#
 #
 # @shared_task
 # def add_sport_events_list_second_future():
@@ -472,7 +481,7 @@ def fetch_event_data_for_second():
 #                 events = event_data.get("EVENTS")
 #                 logo_season = event_data.get("TOURNAMENT_IMAGE")
 #                 if logo_season:
-#                     correct_logo_season = logo_season.replace('www.','static.')
+#                     correct_logo_season = logo_season.replace('www.', 'static.')
 #                 else:
 #                     correct_logo_season = ''
 #                 try:
@@ -501,13 +510,13 @@ def fetch_event_data_for_second():
 #                     if homeimg_base is not None and awayimg_base is not None:
 #                         logo_home = event.get("HOME_IMAGES")[-1]
 #                         if logo_home:
-#                             correct_home_logo = logo_home.replace('www.','static.')
-#                         else :
+#                             correct_home_logo = logo_home.replace('www.', 'static.')
+#                         else:
 #                             correct_home_logo = ''
 #                         logo_away = event.get("AWAY_IMAGES")[-1]
 #                         if logo_away:
 #                             correct_away_logo = logo_away.replace('www.', 'static.')
-#                         else :
+#                         else:
 #                             correct_away_logo = ''
 #                         try:
 #                             home_team = Team.objects.get(second_api_team_id=event.get("HOME_PARTICIPANT_IDS")[-1])
@@ -529,7 +538,7 @@ def fetch_event_data_for_second():
 #                                 rubrics=rubrics,
 #                             )
 #                         if not Events.objects.filter(
-#                             rubrics=rubrics, second_event_api_id=event.get("EVENT_ID")
+#                                 rubrics=rubrics, second_event_api_id=event.get("EVENT_ID")
 #                         ).exists():
 #                             Events.objects.create(
 #                                 rubrics=rubrics,
@@ -547,10 +556,11 @@ def fetch_event_data_for_second():
 #                                 section=season,
 #                             )
 #         else:
-#     #         return HttpResponse(f"Error  - {second_response.status_code} - {second_response.json()}")
-#     # return HttpResponse("Data fetched successfully")
+#             #         return HttpResponse(f"Error  - {second_response.status_code} - {second_response.json()}")
+#             # return HttpResponse("Data fetched successfully")
 #             return {"response": f"Error  - {second_response.status_code} - {second_response.json()}"}
 #         return {"response": "add_sport_events_list_second_future successfully"}
+#
 #
 # @shared_task
 # def add_sport_events_list_second_online_gou():
@@ -560,7 +570,7 @@ def fetch_event_data_for_second():
 #
 #     for rubric_id in second_api_rubric_ids:
 #         rubric_id_q = str(rubric_id)
-#         querystring = {"timezone": "-4","sport_id": rubric_id_q, "locale": "ru_RU" }
+#         querystring = {"timezone": "-4", "sport_id": rubric_id_q, "locale": "ru_RU"}
 #         rubrics = Rubrics.objects.get(second_api=True, api_id=rubric_id)
 #         second_response = requests.get(second_url, headers=HEADER_FOR_SECOND_API_GOU, params=querystring)
 #         if second_response.status_code == 200:
@@ -644,12 +654,12 @@ def fetch_event_data_for_second():
 #         else:
 #             return {"response": f"Error  - {second_response.status_code} - {second_response.json()}"}
 #     return {"response": "add_sport_events_list_second_online_gou successfully"}
-
-
+#
+#
 # @shared_task
 # def get_team_players_second():
 #     url = "https://flashlive-sports.p.rapidapi.com/v1/events/lineups"
-#     events = Events.objects.filter(second_event_api_id__isnull = False ,status=1)
+#     events = Events.objects.filter(second_event_api_id__isnull=False, status=1)
 #     for event in events:
 #         querystring = {"locale": "ru_RU", "event_id": event.second_event_api_id}
 #         response = requests.get(url, headers=HEADER_FOR_SECOND_API, params=querystring)
@@ -657,10 +667,10 @@ def fetch_event_data_for_second():
 #             response_data = response.json().get("DATA")
 #             for data in response_data:
 #                 formation_name = data.get("FORMATION_NAME")
-#                 formations = data.get("FORMATIONS",[])
+#                 formations = data.get("FORMATIONS", [])
 #                 for formation in formations:
 #                     team_line = formation.get("FORMATION_LINE")
-#                     members = formation.get("MEMBERS",[])
+#                     members = formation.get("MEMBERS", [])
 #                     for player in members:
 #                         try:
 #                             player = Player.objects.get(player_id=player["id"])
@@ -677,7 +687,7 @@ def fetch_event_data_for_second():
 #                                         main_player=True,
 #                                         number=player["PLAYER_NUMBER"],
 #                                     )
-#                                 else :
+#                                 else:
 #                                     player = Player.objects.create(
 #                                         player_id=player["PLAYER_ID"],
 #                                         slug=f'{player["PLAYER_FULL_NAME"]} + {player["PLAYER_ID"]}',
@@ -689,7 +699,7 @@ def fetch_event_data_for_second():
 #                                         number=player["PLAYER_NUMBER"],
 #                                     )
 #                                 event.home_team.players.add(player)
-#                             elif team_line == 2 :
+#                             elif team_line == 2:
 #                                 if formation_name == 'Starting Lineups':
 #                                     player = Player.objects.create(
 #                                         player_id=player["PLAYER_ID"],
@@ -718,10 +728,10 @@ def fetch_event_data_for_second():
 #     # return HttpResponse("Data "
 #     #                     "fetched successfully")
 #
+#
 # @shared_task
 # def get_h2h_second():
-#
-#     events = Events.objects.filter(second_event_api_id__isnull = False)
+#     events = Events.objects.filter(second_event_api_id__isnull=False)
 #     for event in events:
 #         second_url = "https://flashlive-sports.p.rapidapi.com/v1/events/h2h"
 #         second_querystring = {"locale": "en_INT", "event_id": event.second_event_api_id}
