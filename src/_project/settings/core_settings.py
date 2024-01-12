@@ -280,31 +280,31 @@ CELERY_BEAT_SCHEDULE = {
     # "create_tournament": {
     #     "task": "events.tasks.create_tournament",
     #     "schedule": crontab(
-    #         hour="*/1",
+    #         minute="*/5",
     #     ),
     # },
     # "create_events_of_tournament_id1": {
     #     "task": "events.tasks.create_events_of_tournament_id1",
     #     "schedule": crontab(
-    #         hour="*/1",
+    #         minute="*/5",
     #     ),
     # },
     # "create_events_of_tournament_id2": {
     #     "task": "events.tasks.create_events_of_tournament_id2",
     #     "schedule": crontab(
-    #         hour="*/1",
+    #         minute="*/5",
     #     ),
     # },
     # "create_events_of_tournament_id3": {
     #     "task": "events.tasks.create_events_of_tournament_id3",
     #     "schedule": crontab(
-    #         hour="*/1",
+    #         minute="*/5",
     #     ),
     # },
     # "create_events_of_tournament_id4": {
     #     "task": "events.tasks.create_events_of_tournament_id4",
     #     "schedule": crontab(
-    #         hour="*/1",
+    #         minute="*/5",
     #     ),
     # },
     # "create_events_of_tournament_id5": {
@@ -316,7 +316,7 @@ CELERY_BEAT_SCHEDULE = {
     # "create_events_of_tournament_id6": {
     #     "task": "events.tasks.create_events_of_tournament_id36",
     #     "schedule": crontab(
-    #         hour="*/1",
+    #         minute="*/5",
     #     ),
     # },
     # "create_events_of_tournament_id7": {
@@ -343,22 +343,46 @@ CELERY_BEAT_SCHEDULE = {
             hour="*/1",
         ),
     },
+    # "add_sport_events_list_second": {
+    #     "task": "events.tasks.add_sport_events_list_second",
+    #     "schedule": crontab(
+    #         minute="*/5",
+    #     ),
+    # },
     # "create_events_of_tournament_id11": {
     #     "task": "events.tasks.create_events_of_tournament_id11",
     #     "schedule": crontab(
-    #         hour="*/1",
+    #         minute="*/5",
     #     ),
     # },
     # "create_events_of_tournament_id12": {
     #     "task": "events.tasks.create_events_of_tournament_id12",
     #     "schedule": crontab(
-    #         hour="*/1",
+    #         minute="*/5",
     #     ),
     # },
     "fetch_event_data_for_second": {
         "task": "events.tasks.fetch_event_data_for_second",
         "schedule": crontab(hour="*", minute="2"),
     },
+    # "create_events_of_tournament_id15": {
+    #     "task": "events.tasks.create_events_of_tournament_id15",
+    #     "schedule": crontab(
+    #         minute="*/5",
+    #     ),
+    # },
+    # "create_events_of_tournament_id25": {
+    #     "task": "events.tasks.create_events_of_tournament_id25",
+    #     "schedule": crontab(
+    #         minute="*/5",
+    #     ),
+    # },
+    # "create_events_of_tournament_id36": {
+    #     "task": "events.tasks.create_events_of_tournament_id36",
+    #     "schedule": crontab(
+    #         minute="*/5",
+    #     ),
+    # },
 }
 CELERY_RESULT_BACKEND = "django-db"
 
