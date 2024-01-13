@@ -279,25 +279,6 @@ def create_events_of_tournament_id36():
     return {"response": "create_events_of_tournament successfully"}
 
 
-
-@shared_task
-def create_events_of_tournament_id21():
-    create_events_of_tournament(21)
-    return {"response": "create_events_of_tournament successfully"}
-
-
-@shared_task
-def create_events_of_tournament_id25():
-    create_events_of_tournament(25)
-    return {"response": "create_events_of_tournament successfully"}
-
-
-@shared_task
-def create_events_of_tournament_id36():
-    create_events_of_tournament(36)
-    return {"response": "create_events_of_tournament successfully"}
-
-
 @shared_task
 def fetch_event_data_for_second():
     today = datetime.now().date()
