@@ -15,3 +15,5 @@ celery_app.conf.broker_connection_retry_on_startup = True
 
 # Автоматическое обнаружение и регистрация всех задач Django из файлов tasks.py
 celery_app.autodiscover_tasks()
+
+celery_app.conf.timezone = 'Europe/Moscow'
