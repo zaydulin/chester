@@ -102,7 +102,7 @@ def create_events_of_tournament(rubric_id):
         for stage in stages:
             querystring = {"locale": "ru_RU", "tournament_stage_id": str(stage.stage_id), "page": "1"}
             rubrics = Rubrics.objects.get(
-                second_api=True,
+                # second_api=True,
                 api_id=rubric_id
             )
             second_response = requests.get(
@@ -208,53 +208,59 @@ def create_events_of_tournament(rubric_id):
                 return {"response": f"Error  - {second_response.status_code} - {second_response.json()}"}
     return {"response": "create_events_of_tournament successfully"}
 
-#
-# @shared_task
-# def create_events_of_tournament_id1():
-#     create_events_of_tournament(1)
-#     return {"response": "create_events_of_tournament successfully"}
-#
-#
-# @shared_task
-# def create_events_of_tournament_id2():
-#     create_events_of_tournament(2)
-#     return {"response": "create_events_of_tournament successfully"}
-#
-#
-# @shared_task
-# def create_events_of_tournament_id3():
-#     create_events_of_tournament(3)
-#     return {"response": "create_events_of_tournament successfully"}
-#
-#
-# @shared_task
-# def create_events_of_tournament_id4():
-#     create_events_of_tournament(4)
-#     return {"response": "create_events_of_tournament successfully"}
-#
-#
-# @shared_task
-# def create_events_of_tournament_id6():
-#     create_events_of_tournament(6)
-#     return {"response": "create_events_of_tournament successfully"}
-#
-#
-# @shared_task
-# def create_events_of_tournament_id11():
-#     create_events_of_tournament(11)
-#     return {"response": "create_events_of_tournament successfully"}
-#
-#
-# @shared_task
-# def create_events_of_tournament_id12():
-#     create_events_of_tournament(12)
-#     return {"response": "create_events_of_tournament successfully"}
-#
-#
-# @shared_task
-# def create_events_of_tournament_id15():
-#     create_events_of_tournament(15)
-#     return {"response": "create_events_of_tournament successfully"}
+
+@shared_task
+def create_events_of_tournament_id1():
+    create_events_of_tournament(1)
+    return {"response": "create_events_of_tournament successfully"}
+
+
+@shared_task
+def create_events_of_tournament_id2():
+    create_events_of_tournament(2)
+    return {"response": "create_events_of_tournament successfully"}
+
+
+@shared_task
+def create_events_of_tournament_id3():
+    create_events_of_tournament(3)
+    return {"response": "create_events_of_tournament successfully"}
+
+
+@shared_task
+def create_events_of_tournament_id4():
+    create_events_of_tournament(4)
+    return {"response": "create_events_of_tournament successfully"}
+
+
+@shared_task
+def create_events_of_tournament_id6():
+    create_events_of_tournament(6)
+    return {"response": "create_events_of_tournament successfully"}
+
+
+@shared_task
+def create_events_of_tournament_id7():
+    create_events_of_tournament(7)
+    return {"response": "create_events_of_tournament successfully"}
+
+
+@shared_task
+def create_events_of_tournament_id12():
+    create_events_of_tournament(12)
+    return {"response": "create_events_of_tournament successfully"}
+
+
+@shared_task
+def create_events_of_tournament_id13():
+    create_events_of_tournament(13)
+    return {"response": "create_events_of_tournament successfully"}
+
+
+@shared_task
+def create_events_of_tournament_id15():
+    create_events_of_tournament(15)
+    return {"response": "create_events_of_tournament successfully"}
 
 
 @shared_task
@@ -262,17 +268,34 @@ def create_events_of_tournament_id21():
     create_events_of_tournament(21)
     return {"response": "create_events_of_tournament successfully"}
 
-#
-# @shared_task
-# def create_events_of_tournament_id25():
-#     create_events_of_tournament(25)
-#     return {"response": "create_events_of_tournament successfully"}
-#
-#
-# @shared_task
-# def create_events_of_tournament_id36():
-#     create_events_of_tournament(36)
-#     return {"response": "create_events_of_tournament successfully"}
+@shared_task
+def create_events_of_tournament_id25():
+    create_events_of_tournament(25)
+    return {"response": "create_events_of_tournament successfully"}
+
+@shared_task
+def create_events_of_tournament_id36():
+    create_events_of_tournament(36)
+    return {"response": "create_events_of_tournament successfully"}
+
+
+
+@shared_task
+def create_events_of_tournament_id21():
+    create_events_of_tournament(21)
+    return {"response": "create_events_of_tournament successfully"}
+
+
+@shared_task
+def create_events_of_tournament_id25():
+    create_events_of_tournament(25)
+    return {"response": "create_events_of_tournament successfully"}
+
+
+@shared_task
+def create_events_of_tournament_id36():
+    create_events_of_tournament(36)
+    return {"response": "create_events_of_tournament successfully"}
 
 
 @shared_task
