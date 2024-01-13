@@ -22,6 +22,13 @@ HEADER_FOR_SECOND_API_GOU = {
     "X-RapidAPI-Host": "flashlive-sports.p.rapidapi.com"
 }
 
+HEADER_FOR_LIVE_STREAM = {
+    "X-RapidAPI-Key": "11047ab519mshed06c5cc71509fep168f75jsn077ef01d5d10",
+	"X-RapidAPI-Host": "free-football-soccer-videos1.p.rapidapi.com"
+}
+
+
+
 def get_unique_season_slug(base_slug):
     try:
         existing_season = Season.objects.get(slug=base_slug)
@@ -1588,6 +1595,26 @@ def fetch_event_data_for_second():
                             event.save()
 
     return {"response": "fetch_event_data_for_second successfully"}
+
+@shared_task
+def get_match_stream_link():
+    url = "https://free-football-soccer-videos1.p.rapidapi.com/v1/"
+
+    response = requests.get(url, headers=HEADER_FOR_LIVE_STREAM)
+    if response.status_code == 200:
+        data = response.json()
+        for item in data:
+            side1 = item.get("side1").get("name")
+            side2 = item.get("side2").get("name")
+            date = item.get("date")
+            date_only = date.split("T")[0]
+            embed = item.get("embed")
+            name = item.get("competition").get("name")
+            event = Events.objects.filter(home_team__name = side1,away_team__name = side2,start_at__startwith=date_only).first()
+            if event.count == 0:
+                event = Events.objects.filter(home_team__name=side2, away_team__name=side1,start_at__startwith=date_only).first()
+            event.match_stream_link = embed
+            event.save()
 
 @shared_task
 def create_additional_info_for_events():
