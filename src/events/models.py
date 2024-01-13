@@ -62,6 +62,8 @@ class Events(models.Model):
     statistic = models.ManyToManyField("GameStatistic",verbose_name='Статистика за матч',blank=True)
     tennis_points = models.ManyToManyField("TennisPoints",verbose_name='Теннисные очки',blank=True)
     h2h = models.ManyToManyField("H2H", verbose_name='H2H', blank=True)
+    h2h_status = models.BooleanField('H2H созданы',default=False)
+    match_stream_link = models.TextField("Ссылка на онлайн трансляцию")
 
     def get_absolute_url(self):
         return reverse('events', kwargs={"slug": self.slug})
@@ -200,7 +202,7 @@ class Periods(models.Model):
     event_api_id =models.PositiveIntegerField("ID API")
     home_score = models.IntegerField("Очки дома")
     away_score = models.IntegerField("Очки гостей")
-    period_number = models.PositiveIntegerField("Номер периода")
+    period_number = models.CharField("Номер периода" , max_length=150)
 
     def __str__(self):
         return f'{self.event_api_id} - Dom - {self.home_score} - Guests - {self.away_score} - Period - {self.period_number}'
@@ -313,22 +315,29 @@ class PopularSeasons(models.Model):
 
 class Incidents(models.Model):
     rubrics = models.ForeignKey(Rubrics, verbose_name='Рубрики', on_delete=models.CASCADE)
-    incident_type = models.CharField("Тип", max_length=500, null=True)
-    player = models.ForeignKey('Player',on_delete=models.CASCADE,verbose_name="Игрок",blank=True,null=True,related_name='incidents_player')
-    player_two_in = models.ForeignKey('Player',on_delete=models.CASCADE,verbose_name="Игрок",blank=True,null=True,related_name='incidents_player_two_in')
-    player_team = models.PositiveIntegerField('Событие команды',null=True)
-    description = models.TextField("Описание", null=True)
-    card_type = models.CharField("Цвет карточки",max_length=150,blank=True)
+    incident_api_id = models.CharField("incident_api_id", max_length=500, null=True)
+    incident_team = models.PositiveIntegerField('Событие команды',null=True)
     time = models.CharField("Время события",max_length=150,blank=True)
-    inj_time = models.CharField("Доп время",max_length=150,blank=True)
-    scoring_team = models.CharField("Команда забившая",max_length=150,blank=True)
+    incident_participants = models.ManyToManyField("IncidentParticipants",verbose_name='Участники инцидента',blank=True)
 
     def __str__(self):
-        return f'{self.incident_type} - {self.player}'
+        return f'{self.incident_team} - {self.incident_api_id}'
 
     class Meta:
         verbose_name = 'Событие(голы и тд)'
         verbose_name_plural = 'События(голы и тд)'
+class IncidentParticipants(models.Model):
+    incident_type =  models.CharField("Тип события", max_length=500, null=True)
+    participant_name = models.CharField("Имя игрока", max_length=500, null=True)
+    incident_name = models.CharField("Название события", max_length=500, null=True)
+    participant_id =  models.CharField("ID API события", max_length=500, null=True)
+
+    def __str__(self):
+        return f'{self.incident_type} - {self.participant_name}'
+
+    class Meta:
+        verbose_name = 'Участники инцидента'
+        verbose_name_plural = 'Участники инцидента'
 
 class GameStatistic(models.Model):
     period = models.CharField('Период', max_length=500)
