@@ -480,8 +480,6 @@ def get_match_stream_link():
             embed = item.get("embed")
             name = item.get("competition").get("name")
             event = Events.objects.filter(rubrics__api_id=rubric_id,home_team__name = side1,away_team__name = side2,start_at__startswith=date_only).first()
-            if event.count == 0:
-                event = Events.objects.filter(home_team__name=side2, away_team__name=side1,start_at__startswith=date_only).first()
             event.match_stream_link = embed
             event.save()
 
