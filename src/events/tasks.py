@@ -303,12 +303,12 @@ def fetch_event_data(rubric_id):
     gamestatistic_events = Events.objects.filter(status=1, rubrics=rubric)
     response = requests.get(url, headers=HEADER_FOR_SECOND_API, params=querystring)
     if response.status_code == 200:
-        response_data = response.json().get("DATA")
+        response_data = response.json().get("DATA", [])
         for item in response_data:
             event_id = item.get("EVENT_ID")
-            status = response_data.get("STAGE_TYPE")
-            hsc = response_data.get("HOME_SCORE_CURRENT")
-            asc = response_data.get("AWAY_SCORE_CURRENT")
+            status = item.get("STAGE_TYPE")
+            hsc = item.get("HOME_SCORE_CURRENT")
+            asc = item.get("AWAY_SCORE_CURRENT")
             event = Events.objects.get(second_event_api_id=event_id,rubrics=rubric)
             if status == "FINISHED":
                 event.status = 2

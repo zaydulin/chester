@@ -199,7 +199,7 @@ class H2H(models.Model):
         verbose_name_plural = 'H2H'
 
 class Periods(models.Model):
-    event_api_id =models.PositiveIntegerField("ID API")
+    event_api_id =models.CharField("ID API", max_length=150)
     home_score = models.IntegerField("Очки дома")
     away_score = models.IntegerField("Очки гостей")
     period_number = models.CharField("Номер периода" , max_length=150)
