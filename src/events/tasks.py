@@ -347,7 +347,7 @@ def fetch_event_data(rubric_id):
                 for item in data_items:
                     incident_id = item.get('INCIDENT_ID')
                     incident_team = item.get('INCIDENT_TEAM')
-                    incident_time = item.get('INCIDENT_TIME')
+                    incident_time = item.get('INCIDENT_TIME','0')
                     if event.incidents.filter(incident_api_id = incident_id, rubrics = rubric).exists():
                         incident = event.incidents.get(incident_api_id = incident_id,rubrics = rubric)
                     else:
