@@ -396,7 +396,7 @@ CELERY_BEAT_SCHEDULE = {
     # },
     "get_match_stream_link_football": {
         "task": "events.tasks.get_match_stream_link",
-        "schedule": crontab(hour="*/1"),
+        "schedule": crontab(hour="*"),
     },
     "fetch_event_data_id1": {
         "task": "events.tasks.fetch_event_data_id1",
@@ -404,47 +404,47 @@ CELERY_BEAT_SCHEDULE = {
     },
     "fetch_event_data_id2": {
         "task": "events.tasks.fetch_event_data_id2",
-        "schedule": crontab(hour="*/1"),
+        "schedule": crontab(hour="*"),
     },
     "fetch_event_data_id3": {
         "task": "events.tasks.fetch_event_data_id3",
-        "schedule": crontab(hour="*/1"),
+        "schedule": crontab(hour="*"),
     },
     "fetch_event_data_id4": {
         "task": "events.tasks.fetch_event_data_id4",
-        "schedule": crontab(hour="*/1"),
+        "schedule": crontab(hour="*"),
     },
     "fetch_event_data_id6": {
         "task": "events.tasks.fetch_event_data_id6",
-        "schedule": crontab(hour="*/1"),
+        "schedule": crontab(hour="*"),
     },
     "fetch_event_data_id7": {
         "task": "events.tasks.fetch_event_data_id7",
-        "schedule": crontab(hour="*/1"),
+        "schedule": crontab(hour="*"),
     },
     "fetch_event_data_id12": {
         "task": "events.tasks.fetch_event_data_id12",
-        "schedule": crontab(hour="*/1"),
+        "schedule": crontab(hour="*"),
     },
     "fetch_event_data_id13": {
         "task": "events.tasks.fetch_event_data_id13",
-        "schedule": crontab(hour="*/1"),
+        "schedule": crontab(hour="*"),
     },
     "fetch_event_data_id15": {
         "task": "events.tasks.fetch_event_data_id15",
-        "schedule": crontab(hour="*/1"),
+        "schedule": crontab(hour="*"),
     },
     "fetch_event_data_id21": {
         "task": "events.tasks.fetch_event_data_id21",
-        "schedule": crontab(hour="*/1"),
+        "schedule": crontab(hour="*"),
     },
     "fetch_event_data_id25": {
         "task": "events.tasks.fetch_event_data_id25",
-        "schedule": crontab(hour="*/1"),
+        "schedule": crontab(hour="*"),
     },
     "fetch_event_data_i36": {
         "task": "events.tasks.fetch_event_data_id36",
-        "schedule": crontab(hour="*/1"),
+        "schedule": crontab(hour="*"),
     },
 }
 CELERY_RESULT_BACKEND = "django-db"
