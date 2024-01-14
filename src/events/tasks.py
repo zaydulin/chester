@@ -309,15 +309,16 @@ def fetch_event_data(rubric_id):
             status = item.get("STAGE_TYPE")
             hsc = item.get("HOME_SCORE_CURRENT")
             asc = item.get("AWAY_SCORE_CURRENT")
-            event = Events.objects.get(second_event_api_id=event_id,rubrics=rubric)
-            if status == "FINISHED":
-                event.status = 2
-            elif status == "LIVE":
-                event.status = 1
-            event.home_score = hsc
-            event.away_score = asc
+            event = Events.objects.filter(second_event_api_id=event_id, rubrics=rubric).first()
+            if event:
+                if status == "FINISHED":
+                    event.status = 2
+                elif status == "LIVE":
+                    event.status = 1
+                event.home_score = hsc
+                event.away_score = asc
 
-            event.save()
+                event.save()
     else:
         return {"response": f"Error fetch - {response.status_code} - {response.json()}"}
 
@@ -338,7 +339,7 @@ def fetch_event_data(rubric_id):
                     period = Periods.objects.create(event_api_id = event.second_event_api_id,home_score = data.get('RESULT_HOME'),away_score = data.get('RESULT_AWAY') ,period_number= stage_name )
                     event.periods.add(period)
                     event.save()
-                data_items = data.get("ITEMS")
+                data_items = data.get("ITEMS", [])
                 for item in data_items:
                     incident_id = item.get('INCIDENT_ID')
                     incident_team = item.get('INCIDENT_TEAM')
@@ -376,7 +377,7 @@ def fetch_event_data(rubric_id):
                 stage_name = data.get("STAGE_NAME")
                 groups = data.get("GROUPS")
                 for group in groups:
-                    items = group.get("ITEMS")
+                    items = group.get("ITEMS", [])
                     for item in items:
                         incident_name = item.get("INCIDENT_NAME")
                         value_home = item.get("VALUE_HOME")
