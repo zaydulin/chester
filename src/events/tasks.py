@@ -480,8 +480,11 @@ def get_match_stream_link():
             embed = item.get("embed")
             name = item.get("competition").get("name")
             event = Events.objects.filter(rubrics__api_id=rubric_id,home_team__name = side1,away_team__name = side2,start_at__startswith=date_only).first()
-            event.match_stream_link = embed
-            event.save()
+            try:
+                event.match_stream_link = embed
+                event.save()
+            except:
+                pass
 
 @shared_task
 def create_additional_info_for_events(rubric_id):
@@ -618,8 +621,7 @@ def create_additional_info_for_events(rubric_id):
                                 event.away_team.players.add(player)
     return {"response": "create_additional_info_for_events successfully"}
 
-#
-#
+
 # @shared_task
 # def get_h2h_second():
 #     events = Events.objects.filter(second_event_api_id__isnull=False)
