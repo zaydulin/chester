@@ -336,13 +336,7 @@ def fetch_event_data(rubric_id):
                     period.away_score = data.get('RESULT_AWAY')
                     period.save()
                 else:
-                    home_score = data.get('RESULT_HOME')
-                    away_score = data.get('RESULT_AWAY')
-                    if not home_score:
-                        home_score = 0
-                    if not away_score:
-                        away_score = 0
-                    period = Periods.objects.create(event_api_id = event.second_event_api_id,home_score = home_score,away_score = away_score ,period_number= stage_name )
+                    period = Periods.objects.create(event_api_id = event.second_event_api_id,home_score = data.get('RESULT_HOME',0),away_score = data.get('RESULT_AWAY',0) ,period_number= stage_name )
                     event.periods.add(period)
                     event.save()
                 data_items = data.get("ITEMS", [])
