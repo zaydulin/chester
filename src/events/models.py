@@ -200,8 +200,8 @@ class H2H(models.Model):
 
 class Periods(models.Model):
     event_api_id =models.CharField("ID API", max_length=150)
-    home_score = models.IntegerField("Очки дома")
-    away_score = models.IntegerField("Очки гостей")
+    home_score = models.IntegerField("Очки дома",default=0)
+    away_score = models.IntegerField("Очки гостей",default=0)
     period_number = models.CharField("Номер периода" , max_length=150)
 
     def __str__(self):
