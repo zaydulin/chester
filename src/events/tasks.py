@@ -329,7 +329,7 @@ def fetch_event_data(rubric_id):
         if incidents_response.status_code == 200:
             incidents_response_data = incidents_response.json().get("DATA", [])
             for data in incidents_response_data:
-                stage_name = data.get('STAGE_NAME')
+                stage_name = data.get('STAGE_NAME',0)
                 if event.periods.filter(period_number=stage_name,event_api_id = event.second_event_api_id).exists():
                     period = event.periods.get(period_number=stage_name)
                     period.home_score = data.get('RESULT_HOME')
@@ -374,7 +374,7 @@ def fetch_event_data(rubric_id):
         if gamestatistic_response.status_code == 200:
             gamestatistic_response_data = gamestatistic_response.json().get("DATA", [])
             for data in gamestatistic_response_data:
-                stage_name = data.get("STAGE_NAME")
+                stage_name = data.get("STAGE_NAME",0)
                 groups = data.get("GROUPS")
                 for group in groups:
                     items = group.get("ITEMS", [])
