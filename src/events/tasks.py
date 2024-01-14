@@ -292,10 +292,10 @@ def create_events_of_tournament_id36():
 
 
 @shared_task
-def fetch_event_data_for_second():
+def fetch_event_data(rubric_id):
     url = "https://flashlive-sports.p.rapidapi.com/v1/events/live-update"
     incidents_url = "https://flashlive-sports.p.rapidapi.com/v1/events/summary-incidents"
-    rubric_id = 1
+
     querystring = {"locale": "ru_RU", "sport_id": rubric_id}
 
     rubric = Rubrics.objects.get(api_id = rubric_id)
@@ -395,12 +395,81 @@ def fetch_event_data_for_second():
 
     return {"response": "fetch_event_data_for_second successfully"}
 
+#обновление событий
+@shared_task
+def fetch_event_data_id1():
+    fetch_event_data(1)
+    return {"response": "fetch_event_data_id1 successfully"}
+
+
+@shared_task
+def fetch_event_data_id2():
+    fetch_event_data(2)
+    return {"response": "fetch_event_data_id2 successfully"}
+
+
+@shared_task
+def fetch_event_data_id3():
+    fetch_event_data(3)
+    return {"response": "fetch_event_data_id3 successfully"}
+
+
+@shared_task
+def fetch_event_data_id4():
+    fetch_event_data(4)
+    return {"response": "fetch_event_data_id4 successfully"}
+
+
+@shared_task
+def fetch_event_data_id6():
+    fetch_event_data(6)
+    return {"response": "fetch_event_data_id6 successfully"}
+
+
+@shared_task
+def fetch_event_data_id7():
+    fetch_event_data(7)
+    return {"response": "fetch_event_data_id7 successfully"}
+
+
+@shared_task
+def fetch_event_data_id12():
+    fetch_event_data(12)
+    return {"response": "fetch_event_data_id12 successfully"}
+
+
+@shared_task
+def fetch_event_data_id13():
+    fetch_event_data(13)
+    return {"response": "fetch_event_data_id13 successfully"}
+
+
+@shared_task
+def fetch_event_data_id15():
+    fetch_event_data(15)
+    return {"response": "fetch_event_data_id15 successfully"}
+
+
+@shared_task
+def fetch_event_data_id21():
+    fetch_event_data(21)
+    return {"response": "fetch_event_data_id21 successfully"}
+
+@shared_task
+def fetch_event_data_id25():
+    fetch_event_data(25)
+    return {"response": "fetch_event_data_id25 successfully"}
+
+@shared_task
+def fetch_event_data_id36():
+    fetch_event_data(36)
+    return {"response": "fetch_event_data_id36 successfully"}
 
 @shared_task
 def get_match_stream_link():
     url = "https://free-football-soccer-videos1.p.rapidapi.com/v1/"
-
     response = requests.get(url, headers=HEADER_FOR_LIVE_STREAM)
+    rubric_id = 1
     if response.status_code == 200:
         data = response.json()
         for item in data:
@@ -410,17 +479,16 @@ def get_match_stream_link():
             date_only = date.split("T")[0]
             embed = item.get("embed")
             name = item.get("competition").get("name")
-            event = Events.objects.filter(home_team__name = side1,away_team__name = side2,start_at__startwith=date_only).first()
+            event = Events.objects.filter(rubrics__api_id=rubric_id,home_team__name = side1,away_team__name = side2,start_at__startwith=date_only).first()
             if event.count == 0:
                 event = Events.objects.filter(home_team__name=side2, away_team__name=side1,start_at__startwith=date_only).first()
             event.match_stream_link = embed
             event.save()
 
 @shared_task
-def create_additional_info_for_events():
+def create_additional_info_for_events(rubric_id):
     today = datetime.now().date()
     today_str = today.strftime('%Y-%m-%d')
-    rubric_id = 1
     rubric = Rubrics.objects.get(api_id=rubric_id)
     events_h2h = Events.objects.filter(~Q(status=2), h2h_status=False, rubrics=rubric,second_event_api_id__isnull=False, start_at__startswith=today_str)
     for event in events_h2h:
@@ -485,80 +553,73 @@ def create_additional_info_for_events():
             event.save()
         else:
             return {"response": f"Error create_additional_info_for_events - {response.status_code} - {response.json()}"}
-
+    second_url = "https://flashlive-sports.p.rapidapi.com/v1/events/lineups"
+    events = Events.objects.filter(rubrics__api_id=rubric_id)
+    for event in events:
+        querystring = {"locale": "ru_RU", "event_id": event.second_event_api_id}
+        response = requests.get(second_url, headers=HEADER_FOR_SECOND_API, params=querystring)
+        if response.status_code == 200:
+            response_data = response.json().get("DATA")
+            for data in response_data:
+                formation_name = data.get("FORMATION_NAME")
+                formations = data.get("FORMATIONS", [])
+                for formation in formations:
+                    team_line = formation.get("FORMATION_LINE")
+                    members = formation.get("MEMBERS", [])
+                    for player in members:
+                        try:
+                            player = Player.objects.get(player_id=player["id"])
+                        except Player.DoesNotExist:
+                            if team_line == 1:
+                                if formation_name == 'Starting Lineups':
+                                    player = Player.objects.create(
+                                        player_id=player["PLAYER_ID"],
+                                        slug=f'{player["PLAYER_FULL_NAME"]} + {player["PLAYER_ID"]}',
+                                        name=player["PLAYER_FULL_NAME"],
+                                        photo=f'https://www.flashscore.com/res/image/data/{player["LPI"]}',
+                                        position_name=player["PLAYER_POSITION"],
+                                        description=player,
+                                        main_player=True,
+                                        number=player["PLAYER_NUMBER"],
+                                    )
+                                else:
+                                    player = Player.objects.create(
+                                        player_id=player["PLAYER_ID"],
+                                        slug=f'{player["PLAYER_FULL_NAME"]} + {player["PLAYER_ID"]}',
+                                        name=player["PLAYER_FULL_NAME"],
+                                        photo=f'https://www.flashscore.com/res/image/data/{player["LPI"]}',
+                                        position_name=player["PLAYER_POSITION"],
+                                        description=player,
+                                        main_player=False,
+                                        number=player["PLAYER_NUMBER"],
+                                    )
+                                event.home_team.players.add(player)
+                            elif team_line == 2:
+                                if formation_name == 'Starting Lineups':
+                                    player = Player.objects.create(
+                                        player_id=player["PLAYER_ID"],
+                                        slug=f'{player["PLAYER_FULL_NAME"]} + {player["PLAYER_ID"]}',
+                                        name=player["PLAYER_FULL_NAME"],
+                                        photo=f'https://www.flashscore.com/res/image/data/{player["LPI"]}',
+                                        position_name=player["PLAYER_POSITION"],
+                                        description=player,
+                                        main_player=True,
+                                        number=player["PLAYER_NUMBER"],
+                                    )
+                                else:
+                                    player = Player.objects.create(
+                                        player_id=player["PLAYER_ID"],
+                                        slug=f'{player["PLAYER_FULL_NAME"]} + {player["PLAYER_ID"]}',
+                                        name=player["PLAYER_FULL_NAME"],
+                                        photo=f'https://www.flashscore.com/res/image/data/{player["LPI"]}',
+                                        position_name=player["PLAYER_POSITION"],
+                                        description=player,
+                                        main_player=False,
+                                        number=player["PLAYER_NUMBER"],
+                                    )
+                                event.away_team.players.add(player)
     return {"response": "create_additional_info_for_events successfully"}
 
-# @shared_task
-# def get_team_players_second():
-#     url = "https://flashlive-sports.p.rapidapi.com/v1/events/lineups"
-#     events = Events.objects.filter(second_event_api_id__isnull=False, status=1)
-#     for event in events:
-#         querystring = {"locale": "ru_RU", "event_id": event.second_event_api_id}
-#         response = requests.get(url, headers=HEADER_FOR_SECOND_API, params=querystring)
-#         if response.status_code == 200:
-#             response_data = response.json().get("DATA")
-#             for data in response_data:
-#                 formation_name = data.get("FORMATION_NAME")
-#                 formations = data.get("FORMATIONS", [])
-#                 for formation in formations:
-#                     team_line = formation.get("FORMATION_LINE")
-#                     members = formation.get("MEMBERS", [])
-#                     for player in members:
-#                         try:
-#                             player = Player.objects.get(player_id=player["id"])
-#                         except Player.DoesNotExist:
-#                             if team_line == 1:
-#                                 if formation_name == 'Starting Lineups':
-#                                     player = Player.objects.create(
-#                                         player_id=player["PLAYER_ID"],
-#                                         slug=f'{player["PLAYER_FULL_NAME"]} + {player["PLAYER_ID"]}',
-#                                         name=player["PLAYER_FULL_NAME"],
-#                                         photo=f'https://www.flashscore.com/res/image/data/{player["LPI"]}',
-#                                         position_name=player["PLAYER_POSITION"],
-#                                         description=player,
-#                                         main_player=True,
-#                                         number=player["PLAYER_NUMBER"],
-#                                     )
-#                                 else:
-#                                     player = Player.objects.create(
-#                                         player_id=player["PLAYER_ID"],
-#                                         slug=f'{player["PLAYER_FULL_NAME"]} + {player["PLAYER_ID"]}',
-#                                         name=player["PLAYER_FULL_NAME"],
-#                                         photo=f'https://www.flashscore.com/res/image/data/{player["LPI"]}',
-#                                         position_name=player["PLAYER_POSITION"],
-#                                         description=player,
-#                                         main_player=False,
-#                                         number=player["PLAYER_NUMBER"],
-#                                     )
-#                                 event.home_team.players.add(player)
-#                             elif team_line == 2:
-#                                 if formation_name == 'Starting Lineups':
-#                                     player = Player.objects.create(
-#                                         player_id=player["PLAYER_ID"],
-#                                         slug=f'{player["PLAYER_FULL_NAME"]} + {player["PLAYER_ID"]}',
-#                                         name=player["PLAYER_FULL_NAME"],
-#                                         photo=f'https://www.flashscore.com/res/image/data/{player["LPI"]}',
-#                                         position_name=player["PLAYER_POSITION"],
-#                                         description=player,
-#                                         main_player=True,
-#                                         number=player["PLAYER_NUMBER"],
-#                                     )
-#                                 else:
-#                                     player = Player.objects.create(
-#                                         player_id=player["PLAYER_ID"],
-#                                         slug=f'{player["PLAYER_FULL_NAME"]} + {player["PLAYER_ID"]}',
-#                                         name=player["PLAYER_FULL_NAME"],
-#                                         photo=f'https://www.flashscore.com/res/image/data/{player["LPI"]}',
-#                                         position_name=player["PLAYER_POSITION"],
-#                                         description=player,
-#                                         main_player=False,
-#                                         number=player["PLAYER_NUMBER"],
-#                                     )
-#                                 event.away_team.players.add(player)
-#     return {"response": "get_team_players_second successfully"}
-#     #
-#     # return HttpResponse("Data "
-#     #                     "fetched successfully")
 #
 #
 # @shared_task
