@@ -1076,15 +1076,10 @@ def get_h2h_second(request):
 
 
 def clear_db(request):
-    season = Season.objects.all()
-    events = Events.objects.all()
-    stages = Stages.objects.all()
+    events = Events.objects.filter(start_at__startswith="2024-01-13")
     for event in events:
-        event.delete()
-    for event in season:
-        event.delete()
-    for event in stages:
-        event.delete()
+        event.status = 2
+        event.save()
     return HttpResponse('ok')
 
 def create_tournament(request):
