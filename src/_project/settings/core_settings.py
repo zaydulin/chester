@@ -381,13 +381,13 @@ CELERY_BEAT_SCHEDULE = {
         ),
     },
     # вск
-    # "create_tournament": {
-    #     "task": "events.tasks.create_tournament",
-    #     "schedule": crontab(
-    #         hour = 3,
-    #         day_of_week="sun"
-    #     ),
-    # },
+    "create_tournament": {
+        "task": "events.tasks.create_tournament",
+        "schedule": crontab(
+            hour="4",
+            day_of_week="sun"
+        ),
+    },
     # "add_sport_events_list_second": {
     #     "task": "events.tasks.add_sport_events_list_second",
     #     "schedule": crontab(
@@ -400,7 +400,7 @@ CELERY_BEAT_SCHEDULE = {
     },
     "fetch_event_data_id1": {
         "task": "events.tasks.fetch_event_data_id1",
-        "schedule": crontab(hour="*/1"),
+        "schedule": crontab(hour="*"),
     },
     "fetch_event_data_id2": {
         "task": "events.tasks.fetch_event_data_id2",
