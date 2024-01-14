@@ -295,6 +295,7 @@ def create_events_of_tournament_id36():
 def fetch_event_data(rubric_id):
     url = "https://flashlive-sports.p.rapidapi.com/v1/events/live-update"
     incidents_url = "https://flashlive-sports.p.rapidapi.com/v1/events/summary-incidents"
+    statistics_url = "https://flashlive-sports.p.rapidapi.com/v1/events/statistics"
 
     querystring = {"locale": "ru_RU", "sport_id": rubric_id}
 
@@ -374,7 +375,7 @@ def fetch_event_data(rubric_id):
     # gamestatistic
     for event in gamestatistic_events:
         gamestatistic_querystring = {"locale": "ru_RU", "event_id":event.second_event_api_id}
-        gamestatistic_response = requests.get(url, headers=HEADER_FOR_SECOND_API, params=gamestatistic_querystring)
+        gamestatistic_response = requests.get(statistics_url, headers=HEADER_FOR_SECOND_API, params=gamestatistic_querystring)
         if gamestatistic_response.status_code == 200:
             gamestatistic_response_data = gamestatistic_response.json().get("DATA", [])
             for data in gamestatistic_response_data:
