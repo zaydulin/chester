@@ -357,7 +357,7 @@ def fetch_event_data(rubric_id):
                             incident_team = incident_team,
                             time = incident_time
                         )
-                    incident_participants = item.get('INCIDENT_PARTICIPANTS')
+                    incident_participants = item.get('INCIDENT_PARTICIPANTS',[])
                     for participant in incident_participants:
                         incident_type = participant.get("INCIDENT_TYPE")
                         participant_name = participant.get("PARTICIPANT_NAME")
