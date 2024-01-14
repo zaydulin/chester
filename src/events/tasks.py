@@ -485,6 +485,7 @@ def get_match_stream_link():
                 event.save()
             except:
                 pass
+    return {"response": "get_match_stream_link successfully"}
 
 @shared_task
 def create_additional_info_for_events(rubric_id):
