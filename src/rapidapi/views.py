@@ -1076,30 +1076,11 @@ def get_h2h_second(request):
 
 
 def clear_db(request):
-    events13 = Events.objects.filter(start_at__startswith="2024-01-13")
-    for event in events13:
+    events07 = Events.objects.filter(start_at__startswith="2024-01-07")
+    for event in events07:
         event.status = 2
         event.save()
-    events12 = Events.objects.filter(start_at__startswith="2024-01-12")
-    for event in events12:
-        event.status = 2
-        event.save()
-    events11 = Events.objects.filter(start_at__startswith="2024-01-11")
-    for event in events11:
-        event.status = 2
-        event.save()
-    events09 = Events.objects.filter(start_at__startswith="2024-01-09")
-    for event in events09:
-        event.status = 2
-        event.save()
-    events08 = Events.objects.filter(start_at__startswith="2024-01-08")
-    for event in events08:
-        event.status = 2
-        event.save()
-    events10 = Events.objects.filter(start_at__startswith="2024-01-10")
-    for event in events10:
-        event.status = 2
-        event.save()
+
     return HttpResponse('ok')
 
 def create_tournament(request):
