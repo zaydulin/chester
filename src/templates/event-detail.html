@@ -1127,7 +1127,6 @@
                                 <div class="football-rev__event-description">
                                     <div class="football-rev__textbox">
                                         <div class="football-rev__textbox-flex">
-
                                             {% if part.incident_type == 'GOAL' %}
                                             <span class="football-rev__name">{{ part.participant_name }}</span>
                                             <svg
@@ -1160,7 +1159,7 @@
                                             2-го периода
                                             {%endif%}
                                             {% elif incident.incident_type == 'SUBSTITUTION_IN' %}
-                                            <span class="football-rev__name">{{part.participant_name=}}</span>
+                                            <span class="football-rev__name">{{part.participant_name}}</span>
                                             <div class="football-rev__footer-item">
                                                       <span>
                                                         <svg
