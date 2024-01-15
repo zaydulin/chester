@@ -306,7 +306,7 @@ def fetch_event_data(rubric_id):
 
     events = Events.objects.filter(
         ~Q(status=2),
-        start_at__startswith__in=[today_str, tomorrow_str],
+        (Q(start_at__startswith=today_str) | Q(start_at__startswith=tomorrow_str)),
         rubrics=rubric,
     )
     url = "https://flashlive-sports.p.rapidapi.com/v1/events/data"
