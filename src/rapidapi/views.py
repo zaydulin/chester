@@ -1072,12 +1072,21 @@ def get_h2h_second(request):
 
 
 def clear_db(request):
-    events07 = Events.objects.filter(start_at__startswith="2024-01-07")
-    for event in events07:
-        event.status = 2
-        event.save()
+    rubric_id = 4
+    rubric = Rubrics.objects.get(api_id=rubric_id)
+    today = datetime.now().date()
+    tomorrow = today + timedelta(days=1)
 
-    return HttpResponse('ok')
+    today_str = today.strftime('%Y-%m-%d')
+    tomorrow_str = tomorrow.strftime('%Y-%m-%d')
+
+    events = Events.objects.filter(
+        ~Q(status=2),
+        (Q(start_at__startswith=today_str) | Q(start_at__startswith=tomorrow_str)),
+        rubrics=rubric,
+    )
+
+    return HttpResponse(f'{events}')
 
 def create_tournament(request):
     tournaments_list_url = "https://flashlive-sports.p.rapidapi.com/v1/tournaments/list"
