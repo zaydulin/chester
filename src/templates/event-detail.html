@@ -1152,7 +1152,7 @@
                                             {% elif part.incident_type == 'RED_CARD' %}
                                             <span class="football-rev__name">{{ part.participant_name }}</span>
                                             <img class="football-rev__img-event" src="{% static 'docs/img/red-card.png' %}"width="10" height="12" />
-                                            {% elif incident.incident_type == 'SUBSTITUTION_IN' %}
+                                            {% elif part.incident_type == 'SUBSTITUTION_IN' %}
                                             <span class="football-rev__name">{{part.participant_name}}</span>
                                             <div class="football-rev__footer-item">
                                                       <span>
@@ -1190,7 +1190,7 @@
                                                         </svg>
                                                       </span>
                                             </div>
-                                            {% elif incident.incident_type == 'SUBSTITUTION_OUT' %}
+                                            {% elif part.incident_type == 'SUBSTITUTION_OUT' %}
                                             <span class="football-rev__name">{{part.participant_name}}</span>
                                             <div class="football-rev__footer-item">
                                                       <span>
@@ -1228,8 +1228,8 @@
                                                         </svg>
                                                       </span>
                                             </div>
-                                            {% elif incident.incident_type == 'injuryTime'%}
-                                            Дополнительно время {{incident.inj_time}}
+                                            {% elif part.incident_type == 'ASSISTANCE'%}
+                                            Дополнительно время {{incident.participant_name}}
                                             {% else %}
                                             <span class="football-rev__name">{{part.incident_type}} {{part.participant_name}} {{part.incident_name}} {{part.participant_id}}</span>
                                             {% endif %}
