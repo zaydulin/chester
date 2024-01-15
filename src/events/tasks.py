@@ -306,6 +306,7 @@ def fetch_event_data(rubric_id):
 
     events = Events.objects.filter(
         ~Q(status=2),
+        (Q(start_at__startswith=today_str) | Q(start_at__startswith=tomorrow_str)),
         rubrics=rubric,
     )
     url = "https://flashlive-sports.p.rapidapi.com/v1/events/data"
@@ -402,7 +403,7 @@ def fetch_event_data(rubric_id):
                             event.statistic.add(gamestatistic)
                             event.save()
 
-    return {"response": "fetch_event_data_for_second successfully"}
+    return {"response": f"fetch_event_data_for_second successfully{events}"}
 
 #обновление событий
 @shared_task
