@@ -1086,7 +1086,7 @@ def clear_db(request):
         rubrics=rubric,
     )
 
-    return HttpResponse(f'{events}')
+    return HttpResponse(f'{events.count()}')
 
 def create_tournament(request):
     tournaments_list_url = "https://flashlive-sports.p.rapidapi.com/v1/tournaments/list"
