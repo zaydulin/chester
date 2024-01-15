@@ -1120,15 +1120,16 @@
                     <div class="football-rev__main" >
                         <div id="incidents-footbal">
                             {% for incident in event.incidents.all %}
-                            <div class="football-rev__event {% if incident.player_team == 2 %} away{% else %} {% endif %}">
-                                <div class="football-rev__time">{{ incident.time }}'</div>
+                            <div class="football-rev__event {% if incident.incident_team == 2 %} away{% else %} {% endif %}">
+                                <div class="football-rev__time">{{ incident.time }}</div>
+                                {% for part in incident.incident_participants.all%}
                                 <div class="football-rev__event-description">
                                     <div class="football-rev__textbox">
                                         <div class="football-rev__textbox-flex">
 
 
-                                            {% if incident.incident_type == 'goal' %}
-                                            <span class="football-rev__name">{{ incident.player.name }}</span>
+                                            {% if part.incident_type == 'GOAL' %}
+                                            <span class="football-rev__name">{{ part.participant_name }}</span>
                                             <svg
                                                     stroke="currentColor"
                                                     fill="currentColor"
@@ -1146,14 +1147,13 @@
                                                 ></path>
                                                 <path d="m8.5 11 1.5 4h4l1.5-4L12 8.5z"></path>
                                             </svg>
-                                            {% elif incident.incident_type == 'card' %}
-                                            <span class="football-rev__name">{{ incident.player.name }}</span>
-                                            {% if incident.card_type == 'Yellow' %}
+                                            {% elif part.incident_type == 'YELLOW_CARD' %}
+                                            <span class="football-rev__name">{{ part.participant_name }}</span>
                                             <img class="football-rev__img-event" src="{% static 'docs/img/penalty.png' %}"width="10" height="12" />
-                                            {% elif incident.card_type == 'Red' %}
+                                            {% elif part.incident_type == 'RED_CARD' %}
+                                            <span class="football-rev__name">{{ part.participant_name }}</span>
                                             <img class="football-rev__img-event" src="{% static 'docs/img/red-card.png' %}"width="10" height="12" />
-                                            {% endif %}
-                                            {% elif incident.incident_type == 'period' %}
+                                            {% elif part.incident_type == 'period' %}
                                             Конец {% if incident.time == '45'%}
                                             1-го периода
                                             {%elif incident.time == '90'%}
@@ -1204,6 +1204,8 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                {% endfor %}
                             </div>
                             {% endfor %}
                         </div>
@@ -1601,17 +1603,9 @@
                         {% for period in event.periods.all %}
                         <label>
                             <input value="{{period.period_number}}" type="radio" name="stats-toggle" checked />
-                            <span>{% if period.period_number == '1'%}
-                                        1-ый тайм
-                                    {% elif period.period_number == '2' %}
-                                        2-ой тайм
-                                    {% elif period.period_number == '3' %}
-                                        3-ий тайм
-                                    {% elif period.period_number == '4' %}
-                                        4-ый тайм
-                                    {% else %}
-                                        {{ period.period_number }}-тайм
-                                    {% endif%}</span>
+                            <span>
+                                {{ period.period_number }}
+                            </span>
                         </label>
                         {% endfor %}
                     </div>

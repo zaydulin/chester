@@ -291,7 +291,7 @@ def create_events_of_tournament_id36():
     return {"response": "create_events_of_tournament successfully"}
 
 
-@shared_task
+
 def fetch_event_data(rubric_id):
     incidents_url = "https://flashlive-sports.p.rapidapi.com/v1/events/summary-incidents"
     statistics_url = "https://flashlive-sports.p.rapidapi.com/v1/events/statistics"
@@ -497,7 +497,6 @@ def get_match_stream_link():
                 pass
     return {"response": "get_match_stream_link successfully"}
 
-@shared_task
 def create_additional_info_for_events(rubric_id):
     today = datetime.now().date()
     today_str = today.strftime('%Y-%m-%d')
@@ -632,7 +631,54 @@ def create_additional_info_for_events(rubric_id):
                                 event.away_team.players.add(player)
     return {"response": "create_additional_info_for_events successfully"}
 
-
+@shared_task
+def create_additional_info_for_events_1():
+    create_additional_info_for_events(1)
+    return {"response": "create_additional_info_for_events1 successfully"}
+@shared_task
+def create_additional_info_for_events_2():
+    create_additional_info_for_events(2)
+    return {"response": "create_additional_info_for_events2 successfully"}
+@shared_task
+def create_additional_info_for_events_3():
+    create_additional_info_for_events(3)
+    return {"response": "create_additional_info_for_events3 successfully"}
+@shared_task
+def create_additional_info_for_events_4():
+    create_additional_info_for_events(4)
+    return {"response": "create_additional_info_for_events4 successfully"}
+@shared_task
+def create_additional_info_for_events_6():
+    create_additional_info_for_events(6)
+    return {"response": "create_additional_info_for_events6 successfully"}
+@shared_task
+def create_additional_info_for_events_7():
+    create_additional_info_for_events(7)
+    return {"response": "create_additional_info_for_events7 successfully"}
+@shared_task
+def create_additional_info_for_events_12():
+    create_additional_info_for_events(12)
+    return {"response": "create_additional_info_for_events12 successfully"}
+@shared_task
+def create_additional_info_for_events_13():
+    create_additional_info_for_events(13)
+    return {"response": "create_additional_info_for_events13 successfully"}
+@shared_task
+def create_additional_info_for_events_15():
+    create_additional_info_for_events(15)
+    return {"response": "create_additional_info_for_events15 successfully"}
+@shared_task
+def create_additional_info_for_events_21():
+    create_additional_info_for_events(21)
+    return {"response": "create_additional_info_for_events21 successfully"}
+@shared_task
+def create_additional_info_for_events_25():
+    create_additional_info_for_events(25)
+    return {"response": "create_additional_info_for_events25 successfully"}
+@shared_task
+def create_additional_info_for_events_36():
+    create_additional_info_for_events(36)
+    return {"response": "create_additional_info_for_events36 successfully"}
 # @shared_task
 # def get_h2h_second():
 #     events = Events.objects.filter(second_event_api_id__isnull=False)
