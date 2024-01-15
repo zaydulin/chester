@@ -1122,7 +1122,7 @@
                             {% for incident in event.incidents.all %}
                             <div class="football-rev__event {% if incident.incident_team == 2 %} away{% else %} {% endif %}">
                                 <div class="football-rev__time">{{ incident.time }}</div>
-                                {% for part in incident.incident_participants.first%}
+                                {% for part in incident.incident_participants.all.first%}
                                 <div class="football-rev__event-description">
                                     <div class="football-rev__textbox">
                                         <div class="football-rev__textbox-flex">
