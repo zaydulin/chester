@@ -1152,12 +1152,6 @@
                                             {% elif part.incident_type == 'RED_CARD' %}
                                             <span class="football-rev__name">{{ part.participant_name }}</span>
                                             <img class="football-rev__img-event" src="{% static 'docs/img/red-card.png' %}"width="10" height="12" />
-                                            {% elif part.incident_type == 'period' %}
-                                            Конец {% if incident.time == '45'%}
-                                            1-го периода
-                                            {%elif incident.time == '90'%}
-                                            2-го периода
-                                            {%endif%}
                                             {% elif incident.incident_type == 'SUBSTITUTION_IN' %}
                                             <span class="football-rev__name">{{part.participant_name}}</span>
                                             <div class="football-rev__footer-item">
