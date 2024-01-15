@@ -312,14 +312,17 @@ def fetch_event_data(rubric_id):
             asc = item.get("AWAY_SCORE_CURRENT")
             event = Events.objects.filter(second_event_api_id=event_id, rubrics=rubric).first()
             if event:
-                if status == "FINISHED":
-                    event.status = 2
-                elif status == "LIVE":
-                    event.status = 1
                 event.home_score = hsc
                 event.away_score = asc
-
                 event.save()
+
+                if status == "FINISHED":
+                    event.status = 2
+                    event.save()
+                elif status == "LIVE":
+                    event.status = 1
+                    event.save()
+
     else:
         return {"response": f"Error fetch - {response.status_code} - {response.json()}"}
 
@@ -372,6 +375,8 @@ def fetch_event_data(rubric_id):
                         )
                         incident.incident_participants.add(incident_participant)
                         incident.save()
+                    event.incidents.add(incident)
+                    event.save()
     # gamestatistic
     for event in gamestatistic_events:
         gamestatistic_querystring = {"locale": "ru_RU", "event_id":event.second_event_api_id}
