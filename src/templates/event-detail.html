@@ -1122,12 +1122,10 @@
                             {% for incident in event.incidents.all %}
                             <div class="football-rev__event {% if incident.incident_team == 2 %} away{% else %} {% endif %}">
                                 <div class="football-rev__time">{{ incident.time }}</div>
-                                {% for part in incident.incident_participants.all%}
+                                {% for part in incident.incident_participants.first%}
                                 <div class="football-rev__event-description">
                                     <div class="football-rev__textbox">
                                         <div class="football-rev__textbox-flex">
-
-
                                             {% if part.incident_type == 'GOAL' %}
                                             <span class="football-rev__name">{{ part.participant_name }}</span>
                                             <svg
@@ -1149,7 +1147,7 @@
                                             </svg>
                                             {% elif part.incident_type == 'YELLOW_CARD' %}
                                             <span class="football-rev__name">{{ part.participant_name }}</span>
-                                            <img class="football-rev__img-event" src="{% static 'docs/img/penalty.png' %}"width="10" height="12" />
+                                            <img class="football-rev__img-event" src="{% static 'docs/img/yellow-card.png' %}"width="10" height="12" />
                                             {% elif part.incident_type == 'RED_CARD' %}
                                             <span class="football-rev__name">{{ part.participant_name }}</span>
                                             <img class="football-rev__img-event" src="{% static 'docs/img/red-card.png' %}"width="10" height="12" />
