@@ -293,38 +293,33 @@ def create_events_of_tournament_id36():
 
 @shared_task
 def fetch_event_data(rubric_id):
-    url = "https://flashlive-sports.p.rapidapi.com/v1/events/live-update"
     incidents_url = "https://flashlive-sports.p.rapidapi.com/v1/events/summary-incidents"
     statistics_url = "https://flashlive-sports.p.rapidapi.com/v1/events/statistics"
-
-    querystring = {"locale": "ru_RU", "sport_id": rubric_id}
-
     rubric = Rubrics.objects.get(api_id = rubric_id)
     incidents_events = Events.objects.filter(status=1, rubrics=rubric)
     gamestatistic_events = Events.objects.filter(status=1, rubrics=rubric)
-    response = requests.get(url, headers=HEADER_FOR_SECOND_API, params=querystring)
-    if response.status_code == 200:
-        response_data = response.json().get("DATA", [])
-        for item in response_data:
-            event_id = item.get("EVENT_ID")
-            status = item.get("STAGE_TYPE")
-            hsc = item.get("HOME_SCORE_CURRENT")
-            asc = item.get("AWAY_SCORE_CURRENT")
-            event = Events.objects.filter(second_event_api_id=event_id, rubrics=rubric).first()
-            if event:
-                event.home_score = hsc
-                event.away_score = asc
-                event.save()
-
-                if status == "FINISHED":
-                    event.status = 2
-                    event.save()
-                elif status == "LIVE":
-                    event.status = 1
-                    event.save()
-
-    else:
-        return {"response": f"Error fetch - {response.status_code} - {response.json()}"}
+    today = datetime.now().date()
+    today_str = today.strftime('%Y-%m-%d')
+    events = Events.objects.filter(
+        ~Q(status=2),
+        start_at__startswith=today_str,
+        rubrics=rubric,
+    )
+    url = "https://flashlive-sports.p.rapidapi.com/v1/events/data"
+    for event in events:
+        querystring = {"locale": "en_INT", "event_id": event.second_event_api_id}
+        response = requests.get(url, headers=HEADER_FOR_SECOND_API, params=querystring)
+        if response.status_code == 200:
+            response_data = response.json().get("DATA").get("EVENT")
+            hsc = response_data.get("HOME_SCORE_CURRENT")
+            asc = response_data.get("AWAY_SCORE_CURRENT")
+            status = response_data.get("STAGE_TYPE")
+            event.home_score = hsc
+            event.away_score = asc
+            event.status = EVENT_STATUSES[status]
+            event.save()
+        else:
+            return {"response": f"Error fetch - {response.status_code} - {response.json()}"}
 
     #incidents
     for event in incidents_events:

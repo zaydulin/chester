@@ -950,10 +950,6 @@ def fetch_event_data_for_second(request):
     events = Events.objects.filter(second_event_api_id__isnull = False)
     url = "https://flashlive-sports.p.rapidapi.com/v1/events/data"
 
-    headers = {
-        "X-RapidAPI-Key": "b4e32c39demsh21dc3591499b4f3p144d40jsn9a29de0bcb2a",
-        "X-RapidAPI-Host": "flashlive-sports.p.rapidapi.com"
-    }
     for event in events:
         querystring = {"locale": "en_INT", "event_id":event.second_event_api_id }
         response = requests.get(url, headers=headers, params=querystring)
