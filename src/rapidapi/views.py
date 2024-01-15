@@ -8,12 +8,13 @@ from django.utils.text import slugify
 from googletrans import Translator
 from datetime import date ,timedelta
 from events.models import Rubrics, Events, Team, Season, Player, Incidents, Periods, GameStatistic, H2H, TennisPoints, \
-    TennisGames, Points , Country,Stages
+    TennisGames, Points , Country,Stages,IncidentParticipants
 from django.utils import timezone
 from django.db.models import Q
 from django.db import transaction
 import time
 from datetime import datetime
+from django.db.models import Count
 
 HEADER_FOR_SECOND_API_GOU = {
     'X-RapidAPI-Key': '11047ab519mshed06c5cc71509fep168f75jsn077ef01d5d10',
@@ -1072,21 +1073,16 @@ def get_h2h_second(request):
 
 
 def clear_db(request):
-    rubric_id = 4
-    rubric = Rubrics.objects.get(api_id=rubric_id)
-    today = datetime.now().date()
-    tomorrow = today + timedelta(days=1)
+    duplicates = IncidentParticipants.objects.values('participant_id').annotate(count=Count('participant_id')).filter(
+        count__gt=1)
 
-    today_str = today.strftime('%Y-%m-%d')
-    tomorrow_str = tomorrow.strftime('%Y-%m-%d')
+    # Оставляем только одну запись для каждого participant_id (удаляем дубликаты)
+    for duplicate in duplicates:
+        duplicate_records = IncidentParticipants.objects.filter(participant_id=duplicate['participant_id'])
+        # Оставляем первую запись и удаляем остальные
+        duplicate_records[1:].delete()
 
-    events = Events.objects.filter(
-        ~Q(status=2),
-        (Q(start_at__startswith=today_str) | Q(start_at__startswith=tomorrow_str)),
-        rubrics=rubric,
-    )
-
-    return HttpResponse(f'{events.count()}')
+    return HttpResponse(f'ок')
 
 def create_tournament(request):
     tournaments_list_url = "https://flashlive-sports.p.rapidapi.com/v1/tournaments/list"

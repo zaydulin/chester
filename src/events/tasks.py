@@ -366,13 +366,16 @@ def fetch_event_data(rubric_id):
                         participant_name = participant.get("PARTICIPANT_NAME")
                         participant_id = participant.get("PARTICIPANT_ID")
                         incident_name = participant.get("PARTICIPANT_NAME")
-                        incident_participant = IncidentParticipants.objects.create(
-                            incident_type= incident_type,
-                            participant_name = participant_name,
-                            incident_name = incident_name,
-                            participant_id = participant_id
-                        )
-                        incident.incident_participants.add(incident_participant)
+                        if IncidentParticipants.objects.filter(participant_id=participant_id).exists():
+                            pass
+                        else:
+                            incident_participant = IncidentParticipants.objects.create(
+                                incident_type= incident_type,
+                                participant_name = participant_name,
+                                incident_name = incident_name,
+                                participant_id = participant_id
+                            )
+                            incident.incident_participants.add(incident_participant)
                         incident.save()
                     event.incidents.add(incident)
                     event.save()
@@ -401,7 +404,7 @@ def fetch_event_data(rubric_id):
                                 away=value_away
                             )
                             event.statistic.add(gamestatistic)
-                            event.save()
+                        event.save()
 
     return {"response": f"fetch_event_data_for_second successfully{events}"}
 
