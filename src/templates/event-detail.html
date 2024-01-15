@@ -1158,9 +1158,8 @@
                                                 <img class="football-rev__img-event" src="{% static 'docs/img/red-card.png' %}"width="10" height="12" />
                                                 {% elif part.incident_type == 'SUBSTITUTION_IN' %}
                                                 <span class="football-rev__name">{{part.participant_name}}</span>
-
                                                 {%  elif part.incident_type == 'SUBSTITUTION_OUT' %}
-                                                <span class="football-rev__name">{{part.participant_name}}</span>
+                                                <span class="football-rev__name">{{part.participant_name}}
                                                 <div class="football-rev__footer-item">
                                                   <span>
                                                     <svg
@@ -1198,7 +1197,8 @@
                                                   </span>
                                                 </div>
                                                 {% elif part.incident_type == 'ASSISTANCE'%}
-                                                Дополнительно время {{incident.participant_name}}
+                                                <span class="football-rev__name">{{part.participant_name}}</span>
+                                                     <img class="football-rev__img-event" src="{% static 'docs/img/assist.png' %}"width="10" height="12" />
                                                 {% else %}
                                                 <span class="football-rev__name">{{part.incident_type}} {{part.participant_name}} {{part.incident_name}} {{part.participant_id}}</span>
                                                 {% endif %}
