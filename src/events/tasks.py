@@ -299,14 +299,14 @@ def fetch_event_data(rubric_id):
     incidents_events = Events.objects.filter(status=1, rubrics=rubric)
     gamestatistic_events = Events.objects.filter(status=1, rubrics=rubric)
     today = datetime.now().date()
-    tomorrow = today + timedelta(days=1)
+    tomorrow = today - timedelta(days=1)
 
     today_str = today.strftime('%Y-%m-%d')
     tomorrow_str = tomorrow.strftime('%Y-%m-%d')
 
     events = Events.objects.filter(
         ~Q(status=2),
-        status=1,
+        (Q(start_at__startswith=today_str) | Q(start_at__startswith=tomorrow_str)),
         rubrics=rubric,
     )
     url = "https://flashlive-sports.p.rapidapi.com/v1/events/data"
