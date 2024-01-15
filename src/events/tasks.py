@@ -1,6 +1,6 @@
 from celery import shared_task
 import requests
-from datetime import datetime
+from datetime import datetime,timedelta
 from .models import Rubrics, Season, Team, Events, H2H, Country
 from django.db.models import Q
 from events.models import Rubrics, Events, Team, Season, Player, Incidents, Periods, GameStatistic, H2H, TennisPoints, \
@@ -299,10 +299,14 @@ def fetch_event_data(rubric_id):
     incidents_events = Events.objects.filter(status=1, rubrics=rubric)
     gamestatistic_events = Events.objects.filter(status=1, rubrics=rubric)
     today = datetime.now().date()
+    tomorrow = today + timedelta(days=1)
+
     today_str = today.strftime('%Y-%m-%d')
+    tomorrow_str = tomorrow.strftime('%Y-%m-%d')
+
     events = Events.objects.filter(
         ~Q(status=2),
-        start_at__startswith=today_str,
+        start_at__startswith__in=[today_str, tomorrow_str],
         rubrics=rubric,
     )
     url = "https://flashlive-sports.p.rapidapi.com/v1/events/data"
