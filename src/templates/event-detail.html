@@ -1202,25 +1202,7 @@
                                 {% endfor %}
                             </div>
                             {% endfor %}
-                            <script>$(document).ready(function() {
-    // Iterate over each block with id starting with "incident_num_"
-    $('[id^="incident_num_"]').each(function() {
-      var container = $(this);
 
-      // Find all child blocks with class "football-rev__event-description"
-      var descriptions = container.find('.football-rev__event-description');
-
-      // Check if there are multiple descriptions
-      if (descriptions.length > 1) {
-        // Combine the HTML content of all descriptions into the first one
-        descriptions.first().find('.football-rev__textbox-flex').append('<hr>'); // Add a separator if needed
-        descriptions.slice(1).each(function() {
-          descriptions.first().find('.football-rev__textbox-flex').append($(this).html());
-          $(this).remove(); // Remove the combined descriptions
-        });
-      }
-    });
-  });</script>
                         </div>
                         <div class="football-rev__score" id="score"><span>{{event.home_score}} - {{event.away_score}}</span></div>
 
@@ -2200,6 +2182,26 @@ getIncidents();
 
 
 </script>
+<script>
+                            $(document).ready(function() {
+    // Iterate over each block with id starting with "incident_num_"
+    $('[id^="incident_num_"]').each(function() {
+      var container = $(this);
+
+      // Find all child blocks with class "football-rev__event-description"
+      var descriptions = container.find('.football-rev__event-description');
+
+      // Check if there are multiple descriptions
+      if (descriptions.length > 1) {
+        // Combine the HTML content of all descriptions into the first one
+        descriptions.first().find('.football-rev__textbox-flex').append('<hr>'); // Add a separator if needed
+        descriptions.slice(1).each(function() {
+          descriptions.first().find('.football-rev__textbox-flex').append($(this).html());
+          $(this).remove(); // Remove the combined descriptions
+        });
+      }
+    });
+  });</script>
 {% endblock content %}
 
 
