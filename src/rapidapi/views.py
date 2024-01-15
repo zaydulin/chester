@@ -1080,7 +1080,8 @@ def clear_db(request):
     for duplicate in duplicates:
         duplicate_records = IncidentParticipants.objects.filter(participant_id=duplicate['participant_id'])
         # Оставляем первую запись и удаляем остальные
-        duplicate_records[1:].delete()
+        for record in duplicate_records[1:]:
+            record.delete()
 
     return HttpResponse(f'ок')
 
