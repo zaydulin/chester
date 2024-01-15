@@ -1084,7 +1084,7 @@
                             text-align: center;
                             text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">{% if event.status == 3  %}  Матч начнется {{ event.start_at }} {% elif event.status == 2 %} Матч уже прошел {{ event.start_at }} {% elif event.status == 1 %}Матч начался {{ event.start_at }}{% endif %}</div>
                     </div>
-                    <div id="div_with_translation">
+                    <div id="div_with_translation" style="display:none">
                         {{event.match_stream_link|safe}}
                     </div>
                     <script>
