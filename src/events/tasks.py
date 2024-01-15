@@ -394,8 +394,13 @@ def fetch_event_data(rubric_id):
                         incident_name = item.get("INCIDENT_NAME")
                         value_home = item.get("VALUE_HOME")
                         value_away = item.get("VALUE_AWAY")
-                        if event.statistic.filter(period=stage_name,name=incident_name,home=value_home,away=value_away ).exists():
-                            pass
+                        if event.statistic.filter(name=incident_name).exists():
+                            gamestatistic = event.statistic.filter(name=incident_name).first()
+                            gamestatistic.period = stage_name
+                            gamestatistic.home = value_home
+                            gamestatistic.away = value_away
+                            gamestatistic.save()
+
                         else:
                             gamestatistic = GameStatistic.objects.create(
                                 period=stage_name,
