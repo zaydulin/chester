@@ -6,6 +6,9 @@ class EventsAdmin(admin.ModelAdmin):
     search_fields = ['slug', 'name']
     list_filter = ['rubrics']
 
+class IncidentsAdmin(admin.ModelAdmin):
+    search_fields = ['incident_api_id']
+
 class SeasonAdmin(admin.ModelAdmin):
     search_fields = ['slug', 'name']
     list_filter = ['rubrics']
@@ -21,7 +24,7 @@ admin.site.register(Team)
 admin.site.register(Season,SeasonAdmin)
 admin.site.register(Player)
 admin.site.register(Country, CountryAdmin)
-admin.site.register(Incidents)
+admin.site.register(Incidents,IncidentsAdmin)
 admin.site.register(IncidentParticipants)
 admin.site.register(Periods)
 admin.site.register(GameStatistic)
