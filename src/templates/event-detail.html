@@ -1190,7 +1190,7 @@ updateCurrentTimeAttribute();
                     <div class="football-rev__main" >
                         <div id="incidents-footbal">
                             {% for incident in event.incidents.all %}
-                            {% if incident.incident_participants.exists %}
+                            {% if incident.incident_participants.exists or incident.time.lenght > 3 %}
                             <div class="football-rev__event {% if incident.incident_team == 2 %} away{% else %} {% endif %}" id="incident_num_{{forloop.counter}}">
                                 <div class="football-rev__time">{{ incident.time }}</div>
                                 {% for part in incident.incident_participants.all %}
