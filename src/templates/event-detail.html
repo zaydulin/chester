@@ -1274,9 +1274,14 @@ updateCurrentTimeAttribute();
                                                     </svg>
                                                   </span>
                                                 </div>
+                                                {%  elif part.incident_type ==   OWN_GOAL %}
+                                                    <span class="football-rev__name">{{part.participant_name}}
+                                                    <div class="football-rev__footer-item">
+                                                         <img class="football-rev__img-event" src="{% static 'docs/img/assist.png' %}"width="10" height="12" />
+                                                    </div>
                                                 {% elif part.incident_type == 'ASSISTANCE'%}
                                                 <span class="football-rev__name">{{part.participant_name}}</span>
-                                                     <img class="football-rev__img-event" src="{% static 'docs/img/assist.png' %}"width="10" height="12" />
+                                                     <img class="football-rev__img-event" src="{% static 'docs/img/penalty.png' %}"width="10" height="12" />
                                                 {% else %}
                                                 <span class="football-rev__name">{{part.incident_type}} {{part.participant_name}} {{part.incident_name}} {{part.participant_id}}</span>
                                                 {% endif %}
