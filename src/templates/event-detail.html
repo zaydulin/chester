@@ -1669,12 +1669,15 @@ updateCurrentTimeAttribute();
                     <h5 class="stats__header">Статистика</h5>
                     <div class="stats__togglers">
                         {% for period in event.periods.all %}
+                        {% if period.period_number == '0' %}
+                        {% else %}
                         <label>
                             <input value="{{period.period_number}}" type="radio" name="stats-toggle" checked />
                             <span>
                                 {{ period.period_number }}
                             </span>
                         </label>
+                        {% endif %}
                         {% endfor %}
                     </div>
                     <div class="stats__teams">
@@ -1688,6 +1691,8 @@ updateCurrentTimeAttribute();
                         </div>
                     </div>
                     {% for period in event.periods.all %}
+                      {% if period.period_number == '0' %}
+                    {% else %}
                     <ul data-value="{{period.period_number}}" class="stats__list">
                         {% for statistic in event.statistic.all%}
                         {% if statistic.period == period.period_number %}
@@ -1701,6 +1706,7 @@ updateCurrentTimeAttribute();
                         Нет информации
                         {% endfor %}
                     </ul>
+                     {% endif %}
                     {% endfor %}
                 </div>
                 {% for baner in sidebar_baners %}
