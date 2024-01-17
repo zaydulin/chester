@@ -374,87 +374,97 @@ CELERY_BEAT_SCHEDULE = {
         ),
     },
     "create_additional_info_for_events_1": {
-        "task": "events.tasks.create_additional_info_for_events_1",
+        "task": "events.tasks.create_additional_info_for_events_id1",
         "schedule": crontab(
             hour="4",
             minute="40",
+            day_of_week="mon-sun"
         ),
     },
     "create_additional_info_for_events_2": {
-        "task": "events.tasks.create_additional_info_for_events_2",
+        "task": "events.tasks.create_additional_info_for_events_id2",
         "schedule": crontab(
             hour="4",
             minute="50",
+            day_of_week="mon-sun"
         ),
     },
     "create_additional_info_for_events_3": {
-        "task": "events.tasks.create_additional_info_for_events_3",
+        "task": "events.tasks.create_additional_info_for_events_id3",
         "schedule": crontab(
             hour="5",
-            minute="10",
+            day_of_week="mon-sun"
         ),
     },
     "create_additional_info_for_events_4": {
-        "task": "events.tasks.create_additional_info_for_events_4",
+        "task": "events.tasks.create_additional_info_for_events_id4",
         "schedule": crontab(
             hour="5",
-            minute="20",
+            minute="10",
+            day_of_week="mon-sun"
         ),
     },
     "create_additional_info_for_events_6": {
-        "task": "events.tasks.create_additional_info_for_events_6",
+        "task": "events.tasks.create_additional_info_for_events_id6",
         "schedule": crontab(
             hour="5",
-            minute="30",
+            minute="20",
+            day_of_week="mon-sun"
         ),
     },
     "create_additional_info_for_events_7": {
-        "task": "events.tasks.create_additional_info_for_events_7",
+        "task": "events.tasks.create_additional_info_for_events_id7",
         "schedule": crontab(
             hour="5",
-            minute="40",
+            minute="30",
+            day_of_week="mon-sun"
         ),
     },
     "create_additional_info_for_events_12": {
-        "task": "events.tasks.create_additional_info_for_events_12",
+        "task": "events.tasks.create_additional_info_for_events_id12",
         "schedule": crontab(
             hour="5",
-            minute="50",
+            minute="40",
+            day_of_week="mon-sun"
         ),
     },
     "create_additional_info_for_events_13": {
-        "task": "events.tasks.create_additional_info_for_events_13",
+        "task": "events.tasks.create_additional_info_for_events_id13",
         "schedule": crontab(
-            hour="6",
-            minute="10",
+            hour="5",
+            minute="50",
+            day_of_week="mon-sun"
         ),
     },
     "create_additional_info_for_events_15": {
-        "task": "events.tasks.create_additional_info_for_events_15",
+        "task": "events.tasks.create_additional_info_for_events_id15",
         "schedule": crontab(
             hour="6",
-            minute="20",
+            day_of_week="mon-sun"
         ),
     },
     "create_additional_info_for_events_21": {
-        "task": "events.tasks.create_additional_info_for_events_21",
+        "task": "events.tasks.create_additional_info_for_events_id21",
         "schedule": crontab(
             hour="6",
-            minute="20",
+            minute="10",
+            day_of_week="mon-sun"
         ),
     },
     "create_additional_info_for_events_25": {
-        "task": "events.tasks.create_additional_info_for_events_25",
+        "task": "events.tasks.create_additional_info_for_events_id25",
         "schedule": crontab(
             hour="6",
             minute="20",
+            day_of_week="mon-sun"
         ),
     },
     "create_additional_info_for_events_36": {
-        "task": "events.tasks.create_additional_info_for_events_36",
+        "task": "events.tasks.create_additional_info_for_events_id36",
         "schedule": crontab(
             hour="6",
-            minute="20",
+            minute="30",
+            day_of_week="mon-sun"
         ),
     },
 
@@ -466,12 +476,6 @@ CELERY_BEAT_SCHEDULE = {
             day_of_week="sun"
         ),
     },
-    # "add_sport_events_list_second": {
-    #     "task": "events.tasks.add_sport_events_list_second",
-    #     "schedule": crontab(
-    #         minute="*/5",
-    #     ),
-    # },
     "get_match_stream_link_football": {
         "task": "events.tasks.get_match_stream_link",
         "schedule": crontab(minute="*"),
