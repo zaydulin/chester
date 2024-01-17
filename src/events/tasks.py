@@ -396,7 +396,6 @@ def fetch_event_data(rubric_id):
                         value_away = item.get("VALUE_AWAY")
                         if event.statistic.filter(period=stage_name,name=incident_name).exists():
                             gamestatistic = event.statistic.filter(period=stage_name,name=incident_name).first()
-                            gamestatistic.period = stage_name
                             gamestatistic.home = value_home
                             gamestatistic.away = value_away
                             gamestatistic.save()
@@ -512,7 +511,7 @@ def create_additional_info_for_events(rubric_id):
     events_h2h = Events.objects.filter(~Q(status=2), h2h_status=False, rubrics=rubric,second_event_api_id__isnull=False, start_at__startswith=today_str)
     for event in events_h2h:
         url = "https://flashlive-sports.p.rapidapi.com/v1/events/h2h"
-        querystring = {"locale": "en_INT", "event_id": event.second_event_api_id}
+        querystring = {"locale": "ru_RU", "event_id": event.second_event_api_id}
         response = requests.get(url, headers=HEADER_FOR_SECOND_API, params=querystring)
         if response.status_code == 200:
             second_response_data = response.json().get("DATA", [])
