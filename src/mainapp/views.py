@@ -99,36 +99,6 @@ def toggle_bookmark_post(request):
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
-def get_incidents_event_post(request):
-    if request.method == 'POST':
-        event_slug = request.POST.get('event_slug')
-        last_incident_id = request.POST.get('last_incident_id')
-        event = Events.objects.get(slug = event_slug)
-        incident = event.incidents.last()
-        if incident.id != int(last_incident_id) :
-            player_name = ""
-            player_name_second = ""
-            if incident.player:
-                player_name =  incident.player.name
-            if incident.player_two_in:
-                player_name_second =  incident.player_two_in.name
-
-            data = {"incident_type":incident.incident_type,
-                    "incident_id":int(incident.id),
-                    "incident_team":incident.player_team,
-                    "card_color":incident.card_type,
-                    "player_replacement_first":player_name,
-                    "player_replacement_second":player_name_second,
-                    "scoring_team":incident.scoring_team,
-                    "time":incident.time,
-                    "inj_time":incident.inj_time,
-                    }
-            return JsonResponse(data)
-        else:
-            return JsonResponse({})
-    else:
-        return HttpResponseBadRequest('Invalid')
-
 
 class EditProfileView(CustomHtmxMixin, TemplateView):
     template_name = 'profile.html'
