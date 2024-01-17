@@ -336,23 +336,9 @@ def fetch_event_data(rubric_id):
                         rubrics=rubric,
                         defaults={
                             "incident_team": item.get('INCIDENT_TEAM'),
-                            "incident_time": item.get('INCIDENT_TIME', '0')
+                            "time": item.get('INCIDENT_TIME', '0')
                         }
                     )
-                    # incident_participants_objs = []
-                    #
-                    # incident_participants = item.get('INCIDENT_PARTICIPANTS', [])
-                    # for participant in incident_participants:
-                    #     incident_participant = IncidentParticipants(
-                    #         incident_type=participant.get("INCIDENT_TYPE"),
-                    #         participant_name=participant.get("PARTICIPANT_NAME"),
-                    #         incident_name=participant.get("PARTICIPANT_NAME"),
-                    #         participant_id=participant.get("PARTICIPANT_ID")
-                    #     )
-                    #     incident_participants_objs.append(incident_participant)
-                    #     incident.incident_participants.add(incident_participant)
-                    #     # incident.save()
-                    #
                     incident_participants_objs = [
                         IncidentParticipants(
                             incident_type=participant.get("INCIDENT_TYPE"),
@@ -560,20 +546,29 @@ def create_additional_info_for_events(rubric_id):
                     for player in members:
                         player_id = player.get("PLAYER_ID")
                         if player_id:
+                            fields = {
+                                "slug": f'{player["PLAYER_FULL_NAME"]} + {player_id}',
+                                "name": player["PLAYER_FULL_NAME"],
+                                "position_name": player.get("PLAYER_POSITION"),
+                                "description": player,
+                                "main_player": True,
+                                "number": player.get("PLAYER_NUMBER"),
+                                "photo":  f'https://static.flashscore.com/res/image/data/{player.get("LPI")})'
+                            }
                             player = Player.objects.get_or_create(
                                 player_id=player_id,
-                                defaults={
-                                    "slug": f'{player["PLAYER_FULL_NAME"]} + {player["PLAYER_ID"]}',
-                                    "name": player["PLAYER_FULL_NAME"],
-                                    "position_name": player["PLAYER_POSITION"],
-                                    "description": player,
-                                    "main_player": True,
-                                    "number": player["PLAYER_NUMBER"],
-                                }
+                                # defaults={
+                                #     "slug": f'{player["PLAYER_FULL_NAME"]} + {player["PLAYER_ID"]}',
+                                #     "name": player["PLAYER_FULL_NAME"],
+                                #     "position_name": player["PLAYER_POSITION"],
+                                #     "description": player,
+                                #     "main_player": True,
+                                #     "number": player["PLAYER_NUMBER"],
+                                # }
                             )
-                            LPI = player.get("LPI")
-                            if LPI:
-                                setattr(player, "photo", f'https://static.flashscore.com/res/image/data/{LPI})')
+                            for field, value in fields.items():
+                                if value:
+                                    setattr(player, field, value)
                             if not formation_name == 'Starting Lineups':
                                 setattr(player, "main_player", False)
                             if team_line == 1:
