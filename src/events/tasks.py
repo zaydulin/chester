@@ -571,6 +571,7 @@ def create_additional_info_for_events(rubric_id):
                                     setattr(player, field, value)
                             if not formation_name == 'Starting Lineups':
                                 setattr(player, "main_player", False)
+                            player.save()
                             if team_line == 1:
                                 event.home_team.players.add(player)
                             elif team_line == 2:
