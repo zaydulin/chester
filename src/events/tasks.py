@@ -561,7 +561,7 @@ def create_additional_info_for_events(rubric_id):
                                 "number": player.get("PLAYER_NUMBER"),
                                 "photo": f'https://static.flashscore.com/res/image/data/{player.get("LPI")})'
                             }
-                            player = Player.objects.get_or_create(
+                            player, created = Player.objects.get_or_create(
                                 player_id=player_id,
                                 # defaults={
                                 #     "slug": f'{player["PLAYER_FULL_NAME"]} + {player["PLAYER_ID"]}',
