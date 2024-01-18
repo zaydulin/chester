@@ -339,17 +339,18 @@ def fetch_event_data(rubric_id):
                             "time": item.get('INCIDENT_TIME', '0')
                         }
                     )
-                    incident_participants_objs = [
-                        IncidentParticipants(
-                            incident_type=participant.get("INCIDENT_TYPE"),
-                            participant_name=participant.get("PARTICIPANT_NAME"),
-                            incident_name=participant.get("PARTICIPANT_NAME"),
-                            participant_id=participant.get("PARTICIPANT_ID")
+                    incident_participants_objs = []
+                    for participant in item.get('INCIDENT_PARTICIPANTS', []):
+                        incident_participant, created = IncidentParticipants.objects.get_or_create(
+                            participant_id=participant.get("PARTICIPANT_ID"),
+                            defaults={
+                                "incident_type": participant.get("INCIDENT_TYPE"),
+                                "participant_name": participant.get("PARTICIPANT_NAME"),
+                                "incident_name": participant.get("PARTICIPANT_NAME"),
+                            }
                         )
-                        for participant in item.get('INCIDENT_PARTICIPANTS', [])
-                    ]
-                    incident_participants = IncidentParticipants.objects.bulk_create(incident_participants_objs)
-                    incident.incident_participants.add(*incident_participants)
+                        incident_participants_objs.append(incident_participant)
+                    incident.incident_participants.add(*incident_participants_objs)
                     incident.save()
                     event.incidents.add(incident)
                     event.save()
@@ -373,12 +374,17 @@ def fetch_event_data(rubric_id):
                         incident_name = item.get("INCIDENT_NAME")
                         value_home = item.get("VALUE_HOME")
                         value_away = item.get("VALUE_AWAY")
-                        if not event.statistic.filter(
-                                period=stage_name,
-                                name=incident_name,
-                                home=value_home,
-                                away=value_away
-                        ).exists():
+                        if event.statistic.filter(name=incident_name).exists():
+                            gamestatistic = event.statistic.filter(name=incident_name).first()
+                            gamestatistic.period = stage_name
+                            gamestatistic.home = value_home
+                            gamestatistic.away = value_away
+                            gamestatistic.save()
+
+                        if event.statistic.filter(period=stage_name, name=incident_name, home=value_home,
+                                                  away=value_away).exists():
+                            pass
+                        else:
                             gamestatistic = GameStatistic.objects.create(
                                 period=stage_name,
                                 name=incident_name,
@@ -386,7 +392,7 @@ def fetch_event_data(rubric_id):
                                 away=value_away
                             )
                             event.statistic.add(gamestatistic)
-                            event.save()
+                        event.save()
 
     return {"response": f"fetch_event_data_for_second successfully{events}"}
 
@@ -553,9 +559,9 @@ def create_additional_info_for_events(rubric_id):
                                 "description": player,
                                 "main_player": True,
                                 "number": player.get("PLAYER_NUMBER"),
-                                "photo":  f'https://static.flashscore.com/res/image/data/{player.get("LPI")})'
+                                "photo": f'https://static.flashscore.com/res/image/data/{player.get("LPI")})'
                             }
-                            player = Player.objects.get_or_create(
+                            player, created = Player.objects.get_or_create(
                                 player_id=player_id,
                                 # defaults={
                                 #     "slug": f'{player["PLAYER_FULL_NAME"]} + {player["PLAYER_ID"]}',
