@@ -513,15 +513,24 @@ def create_additional_info_for_events(rubric_id):
                 for item in items:
                     hi = item.get("HOME_IMAGES")
                     ai = item.get("AWAY_IMAGES")
+                    logo_away, logo_home = item.get("AWAY_IMAGES")[-1], item.get("HOME_IMAGES")[-1]
+                    if logo_away:
+                        logo_away = logo_away.replace('www.', 'static.')
+                    else:
+                        logo_away = ''
+                    if logo_home:
+                        logo_home = logo_home.replace('www.', 'static.')
+                    else:
+                        logo_home = ''
                     if hi is not None and ai is not None:
                         h2h, created = H2H.objects.get_or_create(
                             home_score=item.get("HOME_SCORE_FULL"),
                             away_score=item.get("AWAY_SCORE_FULL"),
                             name=item.get("EVENT_NAME"),
                             home_team_NAME=item.get("HOME_PARTICIPANT"),
-                            home_team_LOGO=item.get("HOME_IMAGES")[-1],
+                            home_team_LOGO=logo_home,
                             away_team_NAME=item.get("AWAY_PARTICIPANT"),
-                            away_team_LOGO=item.get("AWAY_IMAGES")[-1],
+                            away_team_LOGO=logo_away,
                             league=item.get("EVENT_NAME"),
                             start_at=datetime.utcfromtimestamp(item.get("START_TIME")),
                             h_result=item.get("H_RESULT"),
