@@ -679,7 +679,7 @@ class PlayerView(CustomHtmxMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         player_slug = kwargs["slug"]
-        player = Player.objects.get(slug=player_slug)
+        player = Player.objects.filter(slug=player_slug).first()
         team = Team.objects.filter(Q(players=player)).first()
         event = Events.objects.filter(Q(home_team=team) | Q(away_team=team))
         # Pagination

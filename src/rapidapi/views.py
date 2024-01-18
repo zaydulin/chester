@@ -1073,12 +1073,12 @@ def get_h2h_second(request):
 
 
 def clear_db(request):
-    duplicates = Events.objects.values('second_event_api_id').annotate(count=Count('second_event_api_id')).filter(
+    duplicates = IncidentParticipants.objects.values('participant_id').annotate(count=Count('participant_id')).filter(
         count__gt=1)
 
     # Оставляем только одну запись для каждого participant_id (удаляем дубликаты)
     for duplicate in duplicates:
-        duplicate_records = Events.objects.filter(second_event_api_id=duplicate['second_event_api_id'])
+        duplicate_records = IncidentParticipants.objects.filter(second_event_api_id=duplicate['participant_id'])
         # Оставляем первую запись и удаляем остальные
         for record in duplicate_records[1:]:
             record.delete()
