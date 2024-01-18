@@ -355,7 +355,7 @@ class GameStatistic(models.Model):
 
 
 class Player(models.Model):
-    player_id = models.PositiveIntegerField('ID игрока API',null=True)
+    player_id = models.CharField('ID игрока API', max_length=10, null=True)
     slug = models.SlugField("Ссылка", max_length=160, unique=True)
     name = models.CharField("Имя игрока", max_length=500, null=True)
     photo = models.ImageField("Изображения",default="default/generals/no-image.jpg", blank=True, null=True)
