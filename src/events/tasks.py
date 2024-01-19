@@ -513,12 +513,14 @@ def create_additional_info_for_events(rubric_id):
                 for item in items:
                     hi = item.get("HOME_IMAGES")
                     ai = item.get("AWAY_IMAGES")
-                    logo_away, logo_home = item.get("AWAY_IMAGES")[-1], item.get("HOME_IMAGES")[-1]
+                    logo_away, logo_home = item.get("AWAY_IMAGES"), item.get("HOME_IMAGES")
                     if logo_away:
+                        logo_away = logo_away[-1]
                         logo_away = logo_away.replace('www.', 'static.')
                     else:
                         logo_away = ''
                     if logo_home:
+                        logo_home = logo_home[-1]
                         logo_home = logo_home.replace('www.', 'static.')
                     else:
                         logo_home = ''
