@@ -591,7 +591,7 @@ class SeasonView(CustomHtmxMixin, TemplateView):
                 event_content_type = ContentType.objects.get_for_model(event)
 
                 event_bookmarked = Bookmarks.objects.filter(
-                    user=user, content_type=event_content_type, object_id=event.id
+                    content_type=event_content_type, object_id=event.id
                 ).exists()
 
                 event.is_bookmarked = event_bookmarked
