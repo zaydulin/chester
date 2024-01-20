@@ -52,34 +52,30 @@ class HomeView(CustomHtmxMixin, DetailView):
 
         sidebar_baners_left = Baners.objects.filter(type=5)
         context["sidebar_baners_left"] = sidebar_baners_left
+
+        events = Events.objects.filter(status=1, rubrics=rubric).order_by("section__league_name", "-start_at")
+        events_count = events.count()
+        # Pagination
+        if events_count < 20:
+            paginator = Paginator(events, events_count)
+        elif events_count >= 20:
+            paginator = Paginator(events, 20)
+        page = self.request.GET.get("page")
+
         try:
-            events = Events.objects.filter(status=1, rubrics=rubric).order_by("section__league_name", "-start_at")
-            events_count = events.count()
-            # Pagination
-            if events_count < 20:
-                paginator = Paginator(events, events_count)
-            else:
-                paginator = Paginator(events, 20)
-            page = self.request.GET.get("page")
+            events_page = paginator.page(page)
+        except PageNotAnInteger:
+            events_page = paginator.page(1)
+        except EmptyPage:
+            events_page = paginator.page(paginator.num_pages)
 
-            try:
-                events_page = paginator.page(page)
-            except PageNotAnInteger:
-                events_page = paginator.page(1)
-            except EmptyPage:
-                events_page = paginator.page(paginator.num_pages)
+        grouped_events = {}
 
-            grouped_events = {}
-
-            for league_name, events_in_league in groupby(events_page, key=lambda event: event.section):
-                grouped_events[league_name] = list(events_in_league)
-            context["events"] = grouped_events
-            context["paginator"] = paginator
-        except ZeroDivisionError:
-            events_page = None
+        for league_name, events_in_league in groupby(events_page, key=lambda event: event.section):
+            grouped_events[league_name] = list(events_in_league)
         context['title'] = f'{rubric.name} | Прямой эфир'
         context['meta_content'] = f'{rubric.name} | Прямой эфир'
-
+        context["events"] = grouped_events
         context["page_obj"] = events_page  # Pass the paginated events to the template
 
         return context
@@ -113,60 +109,55 @@ class EventsNow(CustomHtmxMixin, DetailView):
 
         sidebar_baners_left = Baners.objects.filter(type=5)
         context["sidebar_baners_left"] = sidebar_baners_left
+
+        events = Events.objects.filter(status=1, rubrics=rubric).order_by("section__league_name", "-start_at")
+
+        # Pagination
+        events_count = events.count()
+        # Pagination
+        if events_count < 20:
+            paginator = Paginator(events, events_count)
+        elif events_count >= 20:
+            paginator = Paginator(events, 20)
+        page = self.request.GET.get("page")
+
         try:
-            events = Events.objects.filter(status=1, rubrics=rubric).order_by("section__league_name", "-start_at")
+            events_page = paginator.page(page)
+        except PageNotAnInteger:
+            events_page = paginator.page(1)
+        except EmptyPage:
+            events_page = paginator.page(paginator.num_pages)
 
-            # Pagination
-            events_count = events.count()
-            # Pagination
-            if events_count < 20:
-                paginator = Paginator(events, events_count)
-            else :
-                paginator = Paginator(events, 20)
-            page = self.request.GET.get("page")
-            try:
-                events_page = paginator.page(page)
-            except PageNotAnInteger:
-                events_page = paginator.page(1)
-            except EmptyPage:
-                events_page = paginator.page(paginator.num_pages)
-            except Exception as e:
-                events_page = None
-            grouped_events = {}
+        grouped_events = {}
 
-            user = self.request.user
+        user = self.request.user
 
-            for league_name, events_in_league in groupby(events_page, key=lambda event: event.section):
-                events_list = list(events_in_league)
-                for event in events_list:
-                    # Check if the event or event.section is in the user's bookmarks
-                    event_content_type = ContentType.objects.get_for_model(event)
-                    league_content_type = ContentType.objects.get_for_model(event.section) if event.section else None
+        for league_name, events_in_league in groupby(events_page, key=lambda event: event.section):
+            events_list = list(events_in_league)
+            for event in events_list:
+                # Check if the event or event.section is in the user's bookmarks
+                event_content_type = ContentType.objects.get_for_model(event)
+                league_content_type = ContentType.objects.get_for_model(event.section) if event.section else None
 
-                    event_bookmarked = Bookmarks.objects.filter(
-                        user=user, content_type=event_content_type, object_id=event.id
+                event_bookmarked = Bookmarks.objects.filter(
+                    user=user, content_type=event_content_type, object_id=event.id
+                ).exists()
+                league_bookmarked = (
+                    Bookmarks.objects.filter(
+                        user=user, content_type=league_content_type, object_id=event.section.id
                     ).exists()
-                    league_bookmarked = (
-                        Bookmarks.objects.filter(
-                            user=user, content_type=league_content_type, object_id=event.section.id
-                        ).exists()
-                        if event.section
-                        else False
-                    )
+                    if event.section
+                    else False
+                )
 
-                    event.is_bookmarked = event_bookmarked
-                    event.section.is_bookmarked = league_bookmarked if event.section else False
+                event.is_bookmarked = event_bookmarked
+                event.section.is_bookmarked = league_bookmarked if event.section else False
 
-                grouped_events[league_name] = events_list
-            context["events"] = grouped_events
-            context["paginator"] = paginator
-        except ZeroDivisionError :
-            events_page = None
-
+            grouped_events[league_name] = events_list
         context['title'] = f'{rubric.name} | Прямой эфир'
         context['meta_content'] = f'{rubric.name} | Прямой эфир'
 
-
+        context["events"] = grouped_events
         context["page_obj"] = events_page  # Pass the paginated events to the template
 
         return context
@@ -199,59 +190,55 @@ class EventsEndView(CustomHtmxMixin, DetailView):
 
         sidebar_baners_left = Baners.objects.filter(type=5)
         context["sidebar_baners_left"] = sidebar_baners_left
+
+        events = Events.objects.filter(status=2, rubrics=rubric).order_by("section__league_name", "-start_at")
+
+        events_count = events.count()
+        # Pagination
+        if events_count < 20:
+            paginator = Paginator(events, events_count)
+        elif events_count >= 20:
+            paginator = Paginator(events, 20)
+        page = self.request.GET.get("page")
+
         try:
-            events = Events.objects.filter(status=2, rubrics=rubric).order_by("section__league_name", "-start_at")
+            events_page = paginator.page(page)
+        except PageNotAnInteger:
+            events_page = paginator.page(1)
+        except EmptyPage:
+            events_page = paginator.page(paginator.num_pages)
 
-            events_count = events.count()
-            # Pagination
-            if events_count < 20:
-                paginator = Paginator(events, events_count)
-            else:
-                paginator = Paginator(events, 20)
-            page = self.request.GET.get("page")
+        grouped_events = {}
 
-            try:
-                events_page = paginator.page(page)
-            except PageNotAnInteger:
-                events_page = paginator.page(1)
-            except EmptyPage:
-                events_page = paginator.page(paginator.num_pages)
-            grouped_events = {}
+        user = self.request.user
 
-            user = self.request.user
-            for league_name, events_in_league in groupby(events_page, key=lambda event: event.section):
-                events_list = list(events_in_league)
-                for event in events_list:
-                    # Check if the event or event.section is in the user's bookmarks
-                    event_content_type = ContentType.objects.get_for_model(event)
-                    league_content_type = ContentType.objects.get_for_model(event.section) if event.section else None
-                    if user.is_authenticated:
-                        event_bookmarked = Bookmarks.objects.filter(
-                            user=user, content_type=event_content_type, object_id=event.id
+        for league_name, events_in_league in groupby(events_page, key=lambda event: event.section):
+            events_list = list(events_in_league)
+            for event in events_list:
+                # Check if the event or event.section is in the user's bookmarks
+                event_content_type = ContentType.objects.get_for_model(event)
+                league_content_type = ContentType.objects.get_for_model(event.section) if event.section else None
+                if user.is_authenticated:
+                    event_bookmarked = Bookmarks.objects.filter(
+                        user=user, content_type=event_content_type, object_id=event.id
+                    ).exists()
+                    league_bookmarked = (
+                        Bookmarks.objects.filter(
+                            user=user, content_type=league_content_type, object_id=event.section.id
                         ).exists()
-                        league_bookmarked = (
-                            Bookmarks.objects.filter(
-                                user=user, content_type=league_content_type, object_id=event.section.id
-                            ).exists()
-                            if event.section
-                            else False
-                        )
+                        if event.section
+                        else False
+                    )
 
-                        event.is_bookmarked = event_bookmarked
-                        event.section.is_bookmarked = league_bookmarked if event.section else False
+                    event.is_bookmarked = event_bookmarked
+                    event.section.is_bookmarked = league_bookmarked if event.section else False
 
-                grouped_events[league_name] = events_list
-            context["events"] = grouped_events
-            context["paginator"] = paginator
-
-        except ZeroDivisionError:
-            events_page = None
+            grouped_events[league_name] = events_list
         context['title'] = f'{rubric.name} | Завершенные'
         context['meta_content'] = f'{rubric.name} | Завершенные'
 
-
-        context["page_obj"] = events_page
-          # Pass the paginated events to the template
+        context["events"] = grouped_events
+        context["page_obj"] = events_page  # Pass the paginated events to the template
 
         return context
 
@@ -286,57 +273,54 @@ class EventsUpcomingView(CustomHtmxMixin, ListView):
 
         sidebar_baners_left = Baners.objects.filter(type=5)
         context["sidebar_baners_left"] = sidebar_baners_left
+
+        events = Events.objects.filter(status=3, rubrics=rubric).order_by("section__league_name", "-start_at")
+
+        events_count = events.count()
+        # Pagination
+        if events_count < 20:
+            paginator = Paginator(events, events_count)
+        elif events_count >= 20:
+            paginator = Paginator(events, 20)
+        page = self.request.GET.get("page")
+
         try:
-            events = Events.objects.filter(status=3, rubrics=rubric).order_by("section__league_name", "-start_at")
+            events_page = paginator.page(page)
+        except PageNotAnInteger:
+            events_page = paginator.page(1)
+        except EmptyPage:
+            events_page = paginator.page(paginator.num_pages)
 
-            events_count = events.count()
-            # Pagination
-            if events_count < 20:
-                paginator = Paginator(events, events_count)
-            else:
-                paginator = Paginator(events, 20)
-            page = self.request.GET.get("page")
+        grouped_events = {}
 
-            try:
-                events_page = paginator.page(page)
-            except PageNotAnInteger:
-                events_page = paginator.page(1)
-            except EmptyPage:
-                events_page = paginator.page(paginator.num_pages)
+        user = self.request.user
 
-            grouped_events = {}
-
-            user = self.request.user
-
-            for league_name, events_in_league in groupby(events_page, key=lambda event: event.section):
-                events_list = list(events_in_league)
-                for event in events_list:
-                    # Check if the event or event.section is in the user's bookmarks
-                    event_content_type = ContentType.objects.get_for_model(event)
-                    league_content_type = ContentType.objects.get_for_model(event.section) if event.section else None
-                    if user.is_authenticated:
-                        event_bookmarked = Bookmarks.objects.filter(
-                            user=user, content_type=event_content_type, object_id=event.id
+        for league_name, events_in_league in groupby(events_page, key=lambda event: event.section):
+            events_list = list(events_in_league)
+            for event in events_list:
+                # Check if the event or event.section is in the user's bookmarks
+                event_content_type = ContentType.objects.get_for_model(event)
+                league_content_type = ContentType.objects.get_for_model(event.section) if event.section else None
+                if user.is_authenticated:
+                    event_bookmarked = Bookmarks.objects.filter(
+                        user=user, content_type=event_content_type, object_id=event.id
+                    ).exists()
+                    league_bookmarked = (
+                        Bookmarks.objects.filter(
+                            user=user, content_type=league_content_type, object_id=event.section.id
                         ).exists()
-                        league_bookmarked = (
-                            Bookmarks.objects.filter(
-                                user=user, content_type=league_content_type, object_id=event.section.id
-                            ).exists()
-                            if event.section
-                            else False
-                        )
+                        if event.section
+                        else False
+                    )
 
-                        event.is_bookmarked = event_bookmarked
-                        event.section.is_bookmarked = league_bookmarked if event.section else False
+                    event.is_bookmarked = event_bookmarked
+                    event.section.is_bookmarked = league_bookmarked if event.section else False
 
-                grouped_events[league_name] = events_list
-            context["events"] = grouped_events
-            context["paginator"] = paginator
-        except ZeroDivisionError:
-            events_page = None
+            grouped_events[league_name] = events_list
+
         context['title'] = f'{rubric.name} | Предстоящие'
         context['meta_content'] = f'{rubric.name} | Предстоящие'
-
+        context["events"] = grouped_events
         context["page_obj"] = events_page  # Pass the paginated events to the template
 
         return context
