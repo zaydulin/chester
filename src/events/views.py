@@ -142,20 +142,20 @@ class EventsNow(CustomHtmxMixin, DetailView):
                     # Check if the event or event.section is in the user's bookmarks
                     event_content_type = ContentType.objects.get_for_model(event)
                     league_content_type = ContentType.objects.get_for_model(event.section) if event.section else None
-                    if self.request.user.is_authenticated:
-                        event_bookmarked = Bookmarks.objects.filter(
-                            user=user, content_type=event_content_type, object_id=event.id
-                        ).exists()
-                        league_bookmarked = (
-                            Bookmarks.objects.filter(
-                                user=user, content_type=league_content_type, object_id=event.section.id
-                            ).exists()
-                            if event.section
-                            else False
-                        )
 
-                        event.is_bookmarked = event_bookmarked
-                        event.section.is_bookmarked = league_bookmarked if event.section else False
+                    event_bookmarked = Bookmarks.objects.filter(
+                        user=user, content_type=event_content_type, object_id=event.id
+                    ).exists()
+                    league_bookmarked = (
+                        Bookmarks.objects.filter(
+                            user=user, content_type=league_content_type, object_id=event.section.id
+                        ).exists()
+                        if event.section
+                        else False
+                    )
+
+                    event.is_bookmarked = event_bookmarked
+                    event.section.is_bookmarked = league_bookmarked if event.section else False
 
                 grouped_events[league_name] = events_list
             context["events"] = grouped_events
@@ -350,7 +350,7 @@ class EventsView(CustomHtmxMixin,TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         event_slug = kwargs["slug"]
-        event = Events.objects.filter(slug=event_slug).first()
+        event = Events.objects.get(slug=event_slug)
         home_team = event.home_team
         away_team = event.away_team
 
