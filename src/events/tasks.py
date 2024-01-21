@@ -52,8 +52,8 @@ def get_unique_season_slug(base_slug):
 @shared_task
 def create_tournament():
     tournaments_list_url = "https://flashlive-sports.p.rapidapi.com/v1/tournaments/list"
-
-    for rubric_id in [1]:
+    ids = [1, 2, 3, 4, 6, 7, 12, 13, 15, 21, 25, 36]
+    for rubric_id in ids:
         rubric_id_q = str(rubric_id)
         querystring_tournaments_list = {"sport_id": rubric_id_q, "locale": "ru_RU"}
         rubrics = Rubrics.objects.get(api_id=rubric_id)
@@ -394,7 +394,7 @@ def fetch_event_data(rubric_id):
                             event.statistic.add(gamestatistic)
                         event.save()
 
-    return {"response": f"fetch_event_data_for_second successfully{events}"}
+    return {"response": f"fetch_event_data_for_second successfully"}
 
 
 # обновление событий
