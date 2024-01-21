@@ -75,7 +75,7 @@ class HomeView(CustomHtmxMixin, DetailView):
                 grouped_events[league_name] = list(events_in_league)
             context["events"] = grouped_events
             context["paginator"] = paginator
-        except ZeroDivisionError:
+        except :
             events_page = None
         context['title'] = f'{rubric.name} | Прямой эфир'
         context['meta_content'] = f'{rubric.name} | Прямой эфир'
@@ -160,7 +160,7 @@ class EventsNow(CustomHtmxMixin, DetailView):
                 grouped_events[league_name] = events_list
             context["events"] = grouped_events
             context["paginator"] = paginator
-        except ZeroDivisionError :
+        except :
             events_page = None
 
         context['title'] = f'{rubric.name} | Прямой эфир'
@@ -244,7 +244,7 @@ class EventsEndView(CustomHtmxMixin, DetailView):
             context["events"] = grouped_events
             context["paginator"] = paginator
 
-        except ZeroDivisionError:
+        except :
             events_page = None
         context['title'] = f'{rubric.name} | Завершенные'
         context['meta_content'] = f'{rubric.name} | Завершенные'
@@ -332,7 +332,7 @@ class EventsUpcomingView(CustomHtmxMixin, ListView):
                 grouped_events[league_name] = events_list
             context["events"] = grouped_events
             context["paginator"] = paginator
-        except ZeroDivisionError:
+        except :
             events_page = None
         context['title'] = f'{rubric.name} | Предстоящие'
         context['meta_content'] = f'{rubric.name} | Предстоящие'
