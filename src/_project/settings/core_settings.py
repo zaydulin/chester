@@ -281,8 +281,8 @@ CELERY_BEAT_SCHEDULE = {
     "create_events_of_tournament_id1": {
         "task": "events.tasks.create_events_of_tournament_id1",
         "schedule": crontab(
-            hour="4",
-            day_of_week="mon"
+            hour="*/1",
+
         ),
     },
     "create_events_of_tournament_id2": {
@@ -472,8 +472,8 @@ CELERY_BEAT_SCHEDULE = {
     "create_tournament": {
         "task": "events.tasks.create_tournament",
         "schedule": crontab(
-            hour="*/1",
-
+            hour="4",
+            day_of_week="sun"
         ),
     },
     "get_match_stream_link_football": {
