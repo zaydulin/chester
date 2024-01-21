@@ -36,4 +36,4 @@ celery-delete:
 celery-on:
 	docker-compose -f $(docker_file) exec cb-celery celery -A _project worker -l info -c 13
 celery-first:
-	celery -A _project call events.tasks.create_tournament
+	docker-compose -f $(docker_file) exec cb-celery celery -A _project call events.tasks.create_tournament
