@@ -472,8 +472,8 @@ CELERY_BEAT_SCHEDULE = {
     "create_tournament": {
         "task": "events.tasks.create_tournament",
         "schedule": crontab(
-            hour="4",
-            day_of_week="sun"
+            hour="*/1",
+
         ),
     },
     "get_match_stream_link_football": {
