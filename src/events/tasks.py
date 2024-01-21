@@ -5,6 +5,7 @@ from .models import Rubrics, Season, Team, Events, H2H, Country
 from django.db.models import Q
 from events.models import Rubrics, Events, Team, Season, Player, Incidents, Periods, GameStatistic, H2H, TennisPoints, \
     TennisGames, Points, Country, Stages, IncidentParticipants
+from django.utils.text import slugify
 
 HEADER_FOR_FIRST_API = {
     "X-RapidAPI-Key": "3b1726a15fmshc58a145e91a5846p197521jsn5a6af790e789",
@@ -32,20 +33,27 @@ EVENT_STATUSES = {
 }
 
 
-def get_unique_season_slug(base_slug):
-    try:
-        existing_season = Season.objects.get(slug=base_slug)
+def generate_event_slug(home_team, away_team, start_at):
+    # Создаем slug из полей home_team, away_team и start_at
+    slug_text = f'{home_team}+{away_team}+{start_at}'
 
-        slug_suffix = 1
-        while True:
-            new_slug = f"{base_slug}-{slug_suffix}"
-            if not Season.objects.filter(slug=new_slug).exists():
-                break
-            slug_suffix += 1
+    # Заменяем пробелы на тире
+    slug_text = slug_text.replace(' ', '-')
 
-        return new_slug
-    except Season.DoesNotExist:
-        return base_slug
+    # Словарь для замены русских букв на английские
+    translit_dict = {
+        'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'e', 'ё': 'yo',
+        'ж': 'zh', 'з': 'z', 'и': 'i', 'й': 'y', 'к': 'k', 'л': 'l', 'м': 'm',
+        'н': 'n', 'о': 'o', 'п': 'p', 'р': 'r', 'с': 's', 'т': 't', 'у': 'u',
+        'ф': 'f', 'х': 'h', 'ц': 'ts', 'ч': 'ch', 'ш': 'sh', 'щ': 'sch', 'ъ': '',
+        'ы': 'y', 'ь': '', 'э': 'e', 'ю': 'yu', 'я': 'ya'
+    }
+
+    # Преобразуем текст, заменяя русские буквы на английские
+    slug_text = ''.join(translit_dict.get(c.lower(), c) for c in slug_text)
+
+    # Преобразуем текст в slug
+    return f'smotret-online-{slugify(slug_text)}'
 
 
 # done optimization
@@ -196,6 +204,7 @@ def create_events_of_tournament(rubric_id):
                                     away_score=event.get("AWAY_SCORE_CURRENT"),
                                     half=event.get("ROUND"),
                                     section=season,
+                                    slug = generate_event_slug(event.get("HOME_NAME"),event.get("AWAY_NAME") ,datetime.utcfromtimestamp(event.get("START_TIME"))  ),
                                 ))
                     Events.objects.bulk_create(events_list)
             elif second_response.status_code == 404:
