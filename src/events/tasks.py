@@ -572,9 +572,11 @@ def create_additional_info_for_events(rubric_id):
                     members = formation.get("MEMBERS", [])
                     for player in members:
                         player_id = player.get("PLAYER_ID")
+                        original_name = player["PLAYER_FULL_NAME"]
+                        name_without_spaces = original_name.replace(" ", "")
                         if player_id:
                             fields = {
-                                "slug": f'{player["PLAYER_FULL_NAME"]} + {player_id}',
+                                "slug": f'{name_without_spaces}{player_id}',
                                 "name": player["PLAYER_FULL_NAME"],
                                 "position_name": player.get("PLAYER_POSITION"),
                                 "description": player,

@@ -1073,9 +1073,11 @@ def get_h2h_second(request):
 
 
 def clear_db(request):
-    events = Events.objects.all()
-    for event in events:
-        event.save()
+    players = Player.objects.all()
+    for player in players:
+        player_without_spaces = player.slug.replace(" ", "")
+        player.slug = player_without_spaces
+        player.save()
 
     return HttpResponse(f'ок')
 
