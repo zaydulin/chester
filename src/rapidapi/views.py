@@ -1075,7 +1075,7 @@ def get_h2h_second(request):
 def clear_db(request):
     players = Player.objects.all()
     for player in players:
-        player_without_spaces = player.slug.replace(" ", "")
+        player_without_spaces = player.slug.split('+', 1)[-1]
         player.slug = player_without_spaces
         player.save()
 
