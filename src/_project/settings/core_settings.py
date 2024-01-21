@@ -281,7 +281,8 @@ CELERY_BEAT_SCHEDULE = {
     "create_events_of_tournament_id1": {
         "task": "events.tasks.create_events_of_tournament_id1",
         "schedule": crontab(
-            hour="*/1",
+            hour="4",
+            day_of_week="mon"
         ),
     },
     "create_events_of_tournament_id2": {
@@ -375,9 +376,7 @@ CELERY_BEAT_SCHEDULE = {
     "create_additional_info_for_events_1": {
         "task": "events.tasks.create_additional_info_for_events_id1",
         "schedule": crontab(
-            hour="4",
-            minute="40",
-            day_of_week="mon-sun"
+            hour="*/1",
         ),
     },
     "create_additional_info_for_events_2": {
