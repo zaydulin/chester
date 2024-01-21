@@ -1,7 +1,10 @@
-
 {% for league_name, events_in_league in events.items %}
                     {% if forloop.last %}
-                    <div hx-get="?page={{page_obj.number|add:1}}" id="div-with-info" hx-trigger="revealed" hx-swap="afterend" hx-target="this" >
+                        {% if page_obj.number == paginator.num_pages %}
+                        <div id="div-with-info">
+                        {% else %}
+                        <div hx-get="?page={{page_obj.number|add:1}}" id="div-with-info" hx-trigger="revealed" hx-swap="afterend" hx-target="this" >
+                            {% endif %}
                         {% else %}
                         <div id="div-with-info">
                             {% endif %}
@@ -192,10 +195,10 @@
                                                 </h2>
                                                 <div class="event__score">
                                                     {% if event.status != 3%}
-                                                    <span>{% if not event.home_score %}0{% else %}{{event.home_score}}{% endif %}</span>
+                                                    <span>{{event.home_score}}</span>
                                                     <span>-</span>
 
-                                                    <span>{% if not event.away_score  %}0{% else %}{{event.away_score}}{% endif %}</span>
+                                                    <span>{{event.away_score}}</span>
                                                     {% else %}
                                                     <span>0</span>
                                                     <span>-</span>
@@ -404,10 +407,10 @@
                                             </div>
                                             <div style=" min-width: 50px;" class="event__score">
                                                 {% if event.status != 3%}
-                                               <span>{% if not event.home_score %}0{% else %}{{event.home_score}}{% endif %}</span>
-                                                    <span>-</span>
+                                                <span>{{event.home_score}}</span>
+                                                <span>-</span>
 
-                                                    <span>{% if not event.away_score %}0{% else %}{{event.away_score}}{% endif %}</span>
+                                                <span>{{event.away_score}}</span>
                                                 {% else %}
                                                 <span>0</span>
                                                 <span>-</span>
