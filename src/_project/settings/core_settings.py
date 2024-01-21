@@ -27,7 +27,7 @@ ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", ["*"])
 
 INSTALLED_APPS = [
     "daphne",
-    "events",
+    "events.apps.EventsConfig",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -282,7 +282,6 @@ CELERY_BEAT_SCHEDULE = {
         "task": "events.tasks.create_events_of_tournament_id1",
         "schedule": crontab(
             hour="*/1",
-
         ),
     },
     "create_events_of_tournament_id2": {
