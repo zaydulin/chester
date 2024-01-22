@@ -608,10 +608,7 @@ def create_additional_info_for_events(rubric_id):
 
 @shared_task
 def create_additional_info_for_events_id1():
-    ids = [1, 2, 3, 4, 6, 7, 12, 13, 15, 21, 25, 36]
-    for item in ids:
-        create_additional_info_for_events(item)
-    return {"response": "create_additional_info_for_events_id1 successfully"}
+    return create_additional_info_for_events(1)
 
 
 

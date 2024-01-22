@@ -376,7 +376,9 @@ CELERY_BEAT_SCHEDULE = {
     "create_additional_info_for_events_1": {
         "task": "events.tasks.create_additional_info_for_events_id1",
         "schedule": crontab(
-            hour="*/1",
+            hour="4",
+            minute="40",
+            day_of_week="mon-sun"
         ),
     },
     "create_additional_info_for_events_2": {
