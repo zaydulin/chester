@@ -379,15 +379,15 @@ class EventsView(CustomHtmxMixin,TemplateView):
         unique_users_count = Messages.objects.filter(event=event).values("user").distinct().count()
 
         if home_team:
-            home_team_players_main = home_team.players.filter(main_player=True)
-            home_team_players_not_main = home_team.players.filter(main_player=False)
+            home_team_players_main = home_team.players.filter(main_player=False)
+            home_team_players_not_main = home_team.players.filter(main_player=True)
         else:
             home_team_players_main = []
             home_team_players_not_main = []
 
         if away_team:
-            away_team_players_main = away_team.players.filter(main_player=True)
-            away_team_players_not_main = away_team.players.filter(main_player=False)
+            away_team_players_main = away_team.players.filter(main_player=False)
+            away_team_players_not_main = away_team.players.filter(main_player=True)
         else:
             away_team_players_main = []
             away_team_players_not_main = []

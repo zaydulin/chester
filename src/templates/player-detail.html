@@ -107,7 +107,7 @@
                             <div class="event__tour like">
                                 <form method="post" 
                                 action="{% url 'toggle_bookmark' 'season' league_name.id %}"
-                                hx-get="{% url 'toggle_bookmark' 'season' league_name  %}"
+                                hx-get="{% url 'toggle_bookmark' 'season' league_name.id  %}"
         hx-target="#main-content"
         hx-push-url="true"
         hx-indicator="#content-loader"
