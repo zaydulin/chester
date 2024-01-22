@@ -307,13 +307,13 @@
                         <div class="football-squads__rate rate">Рейтинг</div>
                     </div>
                     <ul class="football-squads__body">
-   <a href="{% url 'player_detail' player.slug %}"
-                                 hx-get="{% url 'player_detail' player.slug   %}"
-        hx-target="#main-content"
-        hx-push-url="true"
-        hx-indicator="#content-loader"
-        hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''"
-                                 style="color:black">
+                       <a href="{% url 'player_detail' player.slug %}"
+                            hx-get="{% url 'player_detail' player.slug   %}"
+                            hx-target="#main-content"
+                            hx-push-url="true"
+                            hx-indicator="#content-loader"
+                            hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''"
+                            style="color:black">
                             <li class="football-squads__body-item">
 
                                 <div class="football-squads__num">{% if player.number %}{{player.number}}{% else %}Н/И{% endif %}</div>
@@ -325,7 +325,7 @@
                                 <div class="football-squads__rate">{% if player.reiting %}{{ player.reiting }}{% else %}Н/И{%endif%}</div>
 
                             </li>
-</a>
+                        </a>
                     </ul>
                 </div>
                 <a href="{% url 'team_detail' team.slug %}"
