@@ -314,7 +314,8 @@
         hx-target="#main-content"
         hx-push-url="true"
         hx-indicator="#content-loader"
-        hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''">
+        hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''"
+                                 style="color:black">
                                 <div class="football-squads__num">{% if player.number %}{{player.number}}{% else %}Н/И{% endif %}</div>
                                 <div class="football-squads__name">
                                     <img src="{{ player.photo }}" width="20" height="20" />
