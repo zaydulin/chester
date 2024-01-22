@@ -569,6 +569,12 @@ def create_additional_info_for_events(rubric_id):
                 formations = data.get("FORMATIONS", [])
                 for formation in formations:
                     team_line = formation.get("FORMATION_LINE")
+                    if formation_name == 'Starting Lineups':
+                        status_team_line = False
+                    elif formation_name == 'Substitutes':
+                        status_team_line = True
+                    else :
+                        status_team_line = False
                     members = formation.get("MEMBERS", [])
                     for player in members:
                         player_id = player.get("PLAYER_ID")
@@ -578,7 +584,7 @@ def create_additional_info_for_events(rubric_id):
                                 "name": player["PLAYER_FULL_NAME"],
                                 "position_name": player.get("PLAYER_POSITION"),
                                 "description": player,
-                                "main_player": True,
+                                "main_player": status_team_line,
                                 "number": player.get("PLAYER_NUMBER"),
                                 "photo": f'https://static.flashscore.com/res/image/data/{player.get("LPI")})'
                             }
