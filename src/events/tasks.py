@@ -227,7 +227,10 @@ def create_events_of_tournament(rubric_id):
 
 @shared_task
 def create_events_of_tournament_id1():
-   return  create_events_of_tournament(1)
+    ids = [1, 2, 3, 4, 6, 7, 12, 13, 15, 21, 25, 36]
+    for item in ids:
+        create_additional_info_for_events(item)
+    return {"response": "create_additional_info_for_events_id1 successfully"}
 
 
 
