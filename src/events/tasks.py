@@ -74,6 +74,8 @@ def create_tournament():
             tournaments_data = response_tournaments_list.json()
             for tournament_data in tournaments_data.get("DATA", []):
                 country_name = tournament_data.get('COUNTRY_NAME')
+                if not country_name:
+                    country_name = 'Мир'
                 country, created = Country.objects.get_or_create(
                     name=country_name
                 )
