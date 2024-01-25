@@ -179,19 +179,25 @@ def create_events_of_tournament(rubric_id):
                                     "logo": correct_home_logo,
                                     "rubrics": rubrics
                                 }
-                                home_team, created = Team.objects.get_or_create(
-                                    second_api_team_id=event.get("HOME_PARTICIPANT_IDS")[-1],
-                                    defaults=fields
-                                )
+                                if Team.objects.filter(second_api_team_id=event.get("HOME_PARTICIPANT_IDS")[-1]).exists():
+                                    home_team = Team.objects.get(second_api_team_id=event.get("HOME_PARTICIPANT_IDS")[-1])
+                                else:
+                                    home_team, created = Team.objects.get_or_create(
+                                        second_api_team_id=event.get("HOME_PARTICIPANT_IDS")[-1],
+                                        defaults=fields
+                                    )
                                 fields = {
                                     "name": event.get("AWAY_NAME"),
                                     "logo": correct_away_logo,
                                     "rubrics": rubrics
                                 }
-                                away_team, created = Team.objects.get_or_create(
+                                if Team.objects.filter(second_api_team_id=event.get("AWAY_PARTICIPANT_IDS")[-1]).exists():
+                                    away_team = Team.objects.get(second_api_team_id=event.get("AWAY_PARTICIPANT_IDS")[-1])
+                                else:
+                                    away_team, created = Team.objects.get_or_create(
                                     second_api_team_id=event.get("AWAY_PARTICIPANT_IDS")[-1],
                                     defaults=fields
-                                )
+                                    )
                                 if not Events.objects.filter(
                                         rubrics=rubrics, second_event_api_id=event.get("EVENT_ID")
                                 ).exists():
