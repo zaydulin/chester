@@ -174,29 +174,25 @@ def create_events_of_tournament(rubric_id):
                                     correct_away_logo = logo_away.replace('www.', 'static.')
                                 else:
                                     correct_away_logo = ''
-                                fields = {
-                                    "name": event.get("HOME_NAME"),
-                                    "logo": correct_home_logo,
-                                    "rubrics": rubrics
-                                }
+
                                 if Team.objects.filter(second_api_team_id=event.get("HOME_PARTICIPANT_IDS")[-1]).exists():
                                     home_team = Team.objects.get(second_api_team_id=event.get("HOME_PARTICIPANT_IDS")[-1])
                                 else:
                                     home_team = Team.objects.create(
                                         second_api_team_id=event.get("HOME_PARTICIPANT_IDS")[-1],
-                                        defaults=fields
+                                        name=event.get("HOME_NAME"),
+                                        logo=correct_home_logo,
+                                        rubrics=rubrics
                                     )
-                                fields = {
-                                    "name": event.get("AWAY_NAME"),
-                                    "logo": correct_away_logo,
-                                    "rubrics": rubrics
-                                }
+
                                 if Team.objects.filter(second_api_team_id=event.get("AWAY_PARTICIPANT_IDS")[-1]).exists():
                                     away_team = Team.objects.get(second_api_team_id=event.get("AWAY_PARTICIPANT_IDS")[-1])
                                 else:
                                     away_team = Team.objects.create(
                                     second_api_team_id=event.get("AWAY_PARTICIPANT_IDS")[-1],
-                                    defaults=fields
+                                    name = event.get("AWAY_NAME"),
+                                    logo = correct_away_logo,
+                                    rubrics = rubrics
                                     )
                                 if not Events.objects.filter(
                                         rubrics=rubrics, second_event_api_id=event.get("EVENT_ID")
