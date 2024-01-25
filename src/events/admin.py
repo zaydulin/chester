@@ -5,6 +5,7 @@ from .models import *
 class EventsAdmin(admin.ModelAdmin):
     search_fields = ['slug', 'name']
     list_filter = ['rubrics']
+    list_display = ['rubrics__name', 'start_at', 'slug', 'get_status_display', 'home_team__name', 'away_team__name', 'section__league_name', 'match_stream_link']
 
 class IncidentsAdmin(admin.ModelAdmin):
     search_fields = ['incident_api_id']
