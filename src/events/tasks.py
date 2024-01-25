@@ -218,10 +218,6 @@ def create_events_of_tournament(rubric_id):
                         stage.delete()
                     except:
                         pass
-                    try:
-                        season.delete()
-                    except:
-                        pass
                     break
                 else:
                     break
