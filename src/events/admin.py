@@ -6,7 +6,7 @@ class EventsAdmin(admin.ModelAdmin):
     search_fields = ['slug', 'name']
     list_display = ['rubrics', 'start_at', 'slug', 'get_status_display', 'home_team', 'away_team',
                     'section', 'match_stream_link']
-    list_filter = ['rubrics']
+    list_filter = ['rubrics','section__country']
 
 class IncidentsAdmin(admin.ModelAdmin):
     search_fields = ['incident_api_id']
