@@ -176,7 +176,7 @@ def create_events_of_tournament(rubric_id):
                                     correct_away_logo = ''
 
                                 if Team.objects.filter(second_api_team_id=event.get("HOME_PARTICIPANT_IDS")[-1]).exists():
-                                    home_team = Team.objects.get(second_api_team_id=event.get("HOME_PARTICIPANT_IDS")[-1])
+                                    home_team = Team.objects.filter(second_api_team_id=event.get("HOME_PARTICIPANT_IDS")[-1]).first()
                                 else:
                                     home_team = Team.objects.create(
                                         second_api_team_id=event.get("HOME_PARTICIPANT_IDS")[-1],
@@ -186,7 +186,7 @@ def create_events_of_tournament(rubric_id):
                                     )
 
                                 if Team.objects.filter(second_api_team_id=event.get("AWAY_PARTICIPANT_IDS")[-1]).exists():
-                                    away_team = Team.objects.get(second_api_team_id=event.get("AWAY_PARTICIPANT_IDS")[-1])
+                                    away_team = Team.objects.filter(second_api_team_id=event.get("AWAY_PARTICIPANT_IDS")[-1]).first()
                                 else:
                                     away_team = Team.objects.create(
                                     second_api_team_id=event.get("AWAY_PARTICIPANT_IDS")[-1],
