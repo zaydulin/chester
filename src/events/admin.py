@@ -13,7 +13,7 @@ class IncidentsAdmin(admin.ModelAdmin):
 
 class SeasonAdmin(admin.ModelAdmin):
     search_fields = ['slug', 'name']
-    list_filter = ['rubrics']
+    list_filter = ['rubrics','country']
 
 class CountryAdmin(admin.ModelAdmin):
     list_display = ['name','image']
