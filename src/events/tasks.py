@@ -84,11 +84,11 @@ def create_tournament():
                 "league_name": tournament_data.get("LEAGUE_NAME"),
                 "country": country
             }
-            season, created = Season.objects.get_or_create(
-                rubrics=rubrics,
-                season_id=season_id,
-                defaults=fields
-            )
+            if  Season.objects.filter(rubrics=rubrics,season_id=season_id,league_name= tournament_data.get("LEAGUE_NAME"),country= country).exists():
+                season = Season.objects.filter(rubrics=rubrics,season_id=season_id,league_name= tournament_data.get("LEAGUE_NAME"),country= country).first()
+            else:
+                season = Season.objects.create(rubrics=rubrics, season_id=season_id,league_name=tournament_data.get("LEAGUE_NAME"), country=country)
+
             stages = tournament_data.get("STAGES")
             stages_list = []
             for stage in stages:
