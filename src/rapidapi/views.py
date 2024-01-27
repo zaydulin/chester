@@ -1074,14 +1074,14 @@ def get_h2h_second(request):
 
 
 def clear_db(request):
-    duplicate_teams = Team.objects.values('second_api_team_id').annotate(count=Count('id')).filter(count__gt=1)
+    duplicate_teams = Season.objects.values('season_id').annotate(count=Count('id')).filter(count__gt=1)
 
     # Переменная для хранения количества удаленных объектов
     total_deleted_teams = 0
 
     # Перебираем дубликаты и удаляем лишние объекты
     for duplicate_team in duplicate_teams:
-        team_objects = Team.objects.filter(second_api_team_id=duplicate_team['second_api_team_id'])
+        team_objects = Season.objects.filter(season_id=duplicate_team['season_id'])
 
         # Оставляем один объект с наименьшим идентификатором (можно изменить логику выбора)
         team_to_keep = team_objects.order_by('id').first()
