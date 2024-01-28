@@ -200,26 +200,26 @@ class EventsEndView(CustomHtmxMixin, DetailView):
         sidebar_baners_left = Baners.objects.filter(type=5)
         context["sidebar_baners_left"] = sidebar_baners_left
         try:
-            events = Events.objects.filter(status=2, rubrics=rubric).order_by("section__league_name", "-start_at")[:20]
-            #
-            # events_count = events.count()
-            # # Pagination
-            # if events_count < 20:
-            #     paginator = Paginator(events, events_count)
-            # else:
-            #     paginator = Paginator(events, 20)
-            # page = self.request.GET.get("page")
-            #
-            # try:
-            #     events_page = paginator.page(page)
-            # except PageNotAnInteger:
-            #     events_page = paginator.page(1)
-            # except EmptyPage:
-            #     events_page = paginator.page(paginator.num_pages)
+            events = Events.objects.filter(status=2, rubrics=rubric).order_by("section__league_name", "-start_at")
+
+            events_count = events.count()
+            # Pagination
+            if events_count < 20:
+                paginator = Paginator(events, events_count)
+            else:
+                paginator = Paginator(events, 20)
+            page = self.request.GET.get("page")
+
+            try:
+                events_page = paginator.page(page)
+            except PageNotAnInteger:
+                events_page = paginator.page(1)
+            except EmptyPage:
+                events_page = paginator.page(paginator.num_pages)
             grouped_events = {}
 
             user = self.request.user
-            for league_name, events_in_league in groupby(events, key=lambda event: event.section):
+            for league_name, events_in_league in groupby(events_page, key=lambda event: event.section):
                 events_list = list(events_in_league)
                 for event in events_list:
                     # Check if the event or event.section is in the user's bookmarks
@@ -242,7 +242,7 @@ class EventsEndView(CustomHtmxMixin, DetailView):
 
                 grouped_events[league_name] = events_list
             context["events"] = grouped_events
-            # context["paginator"] = paginator
+            context["paginator"] = paginator
 
         except :
             events_page = None
@@ -250,7 +250,7 @@ class EventsEndView(CustomHtmxMixin, DetailView):
         context['meta_content'] = f'{rubric.name} | Завершенные'
 
 
-        # context["page_obj"] = events_page
+        context["page_obj"] = events_page
           # Pass the paginated events to the template
 
         return context
