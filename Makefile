@@ -29,6 +29,8 @@ migrate:
 	docker-compose -f $(docker_file) exec cb-app python manage.py migrate
 piplist:
 	docker-compose -f $(docker_file) exec cb-app pip list
+collectstatic:
+	docker-compose -f $(docker_file) exec cb-app python manage.py collectstatic
 test:
 	docker-compose -f $(docker_file) exec cb-app python manage.py test
 celery:
