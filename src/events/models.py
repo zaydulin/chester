@@ -145,7 +145,7 @@ class Events(models.Model):
         return f'{self.section} - {self.name} - {status_str} - {self.start_at} - {self.rubrics.name}'
 
     class Meta:
-        indexes = [models.Index(fields=['name'])]
+        indexes = [models.Index(fields=['rubrics'])]
         verbose_name = 'Событие'
         verbose_name_plural = 'События'
 
