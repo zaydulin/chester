@@ -544,3 +544,7 @@ LOGIN_URL = "/login/"
 JAZZMIN_SETTINGS = {
     "site_brand": "Админ Панель"
 }
+INTERNAL_IPS = [
+    "45.9.43.8",
+
+]
