@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&amp;display=swap"
+      rel="stylesheet"
+    />
+    <title>Стартовый шаблон</title>
+    <link rel="stylesheet" href="./css/main.css" />
+    <script defer src="https://code.createjs.com/1.0.0/createjs.min.js"></script>
+  </head>
+  <body>
+    <header class="header">
+      <div
+        id="animation_container"
+        style="background-color: rgba(33, 143, 82, 1); maxwidth: 400px; width: 100%; height: 100px"
+      >
+        <div>
+          <canvas
+            id="canvas"
+            width="1138"
+            height="187"
+            style="
+              position: absolute;
+              display: block;
+              background-color: rgb(33, 143, 82);
+              width: 911px;
+              height: 150px;
+              margin: 0px auto;
+            "
+          ></canvas>
+        </div>
+        <div
+          id="dom_overlay_container"
+          style="
+            pointer-events: none;
+            overflow: hidden;
+            maxwidth: 400px;
+            width: 100%;
+            height: 100px;
+            position: absolute;
+            left: 0px;
+            top: 0px;
+            display: block;
+          "
+        ></div>
+      </div>
+      <div class="header__row container">
+        <img src="./img/logo.jpg" alt="logo" />
+        <div class="header__right">
+          <form class="header__search-container">
+            <input class="header__search" placeholder="Поиск" />
+            <button class="header__search-btn">
+              <svg
+                stroke="currentColor"
+                fill="none"
+                stroke-width="0"
+                viewBox="0 0 24 24"
+                height="1em"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M18.319 14.4326C20.7628 11.2941 20.542 6.75347 17.6569 3.86829 14.5327.744098 9.46734.744098 6.34315 3.86829 3.21895 6.99249 3.21895 12.0578 6.34315 15.182 9.22833 18.0672 13.769 18.2879 16.9075 15.8442 16.921 15.8595 16.9351 15.8745 16.9497 15.8891L21.1924 20.1317C21.5829 20.5223 22.2161 20.5223 22.6066 20.1317 22.9971 19.7412 22.9971 19.1081 22.6066 18.7175L18.364 14.4749C18.3493 14.4603 18.3343 14.4462 18.319 14.4326ZM16.2426 5.28251C18.5858 7.62565 18.5858 11.4246 16.2426 13.7678 13.8995 16.1109 10.1005 16.1109 7.75736 13.7678 5.41421 11.4246 5.41421 7.62565 7.75736 5.28251 10.1005 2.93936 13.8995 2.93936 16.2426 5.28251Z"
+                  fill="currentColor"
+                ></path>
+              </svg>
+            </button>
+          </form>
+          <a href="#" class="header__auth-links">
+            <span>Войти</span>
+            <svg
+              stroke="currentColor"
+              fill="none"
+              stroke-width="0"
+              viewBox="0 0 24 24"
+              height="1em"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M20 5H8V9H6V3H22V21H6V15H8V19H20V5Z" fill="currentColor"></path>
+              <path
+                d="M13.0743 16.9498 11.6601 15.5356 14.1957 13H2V11H14.1956L11.6601 8.46451 13.0743 7.05029 18.024 12 13.0743 16.9498Z"
+                fill="currentColor"
+              ></path>
+            </svg>
+          </a>
+          <a href="#" class="header__auth-links">
+            <span>Регистрация</span>
+            <svg
+              stroke="currentColor"
+              fill="currentColor"
+              stroke-width="0"
+              viewBox="0 0 24 24"
+              height="1em"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path fill="none" d="M0 0h24v24H0z"></path>
+              <path
+                d="M10 4h4v4h-4zM4 16h4v4H4zM4 10h4v4H4zM4 4h4v4H4zM16 4h4v4h-4zM11 17.86V20h2.1l5.98-5.97-2.12-2.12zM14 12.03V10h-4v4h2.03zM20.85 11.56l-1.41-1.41c-.2-.2-.51-.2-.71 0l-1.06 1.06 2.12 2.12 1.06-1.06c.2-.2.2-.51 0-.71z"
+              ></path>
+            </svg>
+          </a>
+          <a class="header__acc-link"><img src="./img/logo.jpg" /></a>
+          <a class="header__auth-links">
+            <span>Выйти</span>
+            <img src="./img/logout.png" width="12" height="12" />
+          </a>
+          <button class="header__burger-btn">
+            <svg
+              stroke="currentColor"
+              fill="none"
+              stroke-width="0"
+              viewBox="0 0 15 15"
+              height="1em"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M1.5 3C1.22386 3 1 3.22386 1 3.5 1 3.77614 1.22386 4 1.5 4H13.5C13.7761 4 14 3.77614 14 3.5 14 3.22386 13.7761 3 13.5 3H1.5ZM1 7.5C1 7.22386 1.22386 7 1.5 7H13.5C13.7761 7 14 7.22386 14 7.5 14 7.77614 13.7761 8 13.5 8H1.5C1.22386 8 1 7.77614 1 7.5ZM1 11.5C1 11.2239 1.22386 11 1.5 11H13.5C13.7761 11 14 11.2239 14 11.5 14 11.7761 13.7761 12 13.5 12H1.5C1.22386 12 1 11.7761 1 11.5Z"
+                fill="currentColor"
+              ></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <nav class="container header__nav">
+        <ul class="header__nav-ul">
+          <li class="header__nav-link active">
+            <a class="header__nav-text" href="/" target="_blank">
+              <img src="./img/football.png" alt="img" />
+              Футбол
+            </a>
+          </li>
+          <li class="header__nav-link">
+            <a class="header__nav-text" href="/hockey" target="_blank">
+              <img src="./img/hockey.png" alt="img" />
+              Хоккей
+            </a>
+          </li>
+          <li class="header__nav-link">
+            <a class="header__nav-text" href="/basketball" target="_blank">
+              <img src="./img/basketball.png" alt="img" />
+              Баскетбол
+            </a>
+          </li>
+          <li class="header__nav-link desktop">
+            <a class="header__nav-text" href="/tennis" target="_blank">
+              <img src="./img/tennis.png" alt="img" />
+              Теннис
+            </a>
+          </li>
+          <li class="header__nav-link desktop">
+            <a class="header__nav-text" href="/volleyball" target="_blank">
+              <img src="./img/volleyball.png" alt="img" />
+              Волейбол
+            </a>
+          </li>
+          <li class="header__nav-link desktop">
+            <a class="header__nav-text" href="/handball" href="#" target="_blank">
+              <img src="./img/handball.png" alt="img" />
+              Гандбол
+            </a>
+          </li>
+          <li id="other-sport-btn" class="header__nav-link desktop" style="position: relative">
+            <span class="header__nav-text">
+              <img src="./img/arrow-down.svg" alt="arrow" />
+              Еще
+            </span>
+            <ul class="header__other-sports">
+              <li>
+                <a href="/cybersport" target="_blank">
+                  <img src="./img/cybersport-white-black.png" alt="img" width="20" height="20" />
+                  Киберспорт
+                </a>
+              </li>
+              <li>
+                <a href="/baseball" target="_blank">
+                  <img src="./img/baseball-white-black.png" alt="img" width="20" height="20" />
+                  Бейсбол
+                </a>
+              </li>
+              <li>
+                <a href="/snooker" target="_blank">
+                  <img src="./img/snooker.png" alt="img" width="20" height="20" />
+                  Снукер
+                </a>
+              </li>
+              <li>
+                <a href="/cricket" target="_blank">
+                  <img src="./img/cricket-white-black.png" alt="img" width="20" height="20" />
+                  Крикет
+                </a>
+              </li>
+              <li>
+                <a href="/table-tennis" target="_blank">
+                  <img src="./img/table-tennis-white-black.png" alt="img" width="20" height="20" />
+                  Настольный теннис
+                </a>
+              </li>
+              <li>
+                <a href="/badminton" target="_blank">
+                  <img src="./img/badminton-white-black.png" alt="img" width="20" height="20" />
+                  Бадминтон
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li id="other-sport-mobile-btn" class="header__nav-link mobile" style="position: relative">
+            <span class="header__nav-text">
+              <img src="./img/arrow-down.svg" alt="arrow" />
+              Другие
+            </span>
+          </li>
+          <li class="header__nav-link">
+            <a class="header__nav-text" href="/favorite">
+              <svg
+                class="header__favorite"
+                stroke="currentColor"
+                fill="currentColor"
+                stroke-width="0"
+                viewBox="0 0 16 16"
+                height="1em"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
+                ></path>
+              </svg>
+              Избранное
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <nav class="header__burger-other-sports mob-list-sports">
+        <ul class="container mob-list-sports__container">
+          <li class="mob-list-sports__item">
+            <a class="mob-list-sports__item-name" href="/tennis" target="_blank">
+              <img src="./img/tennis.png" alt="img" />
+              Теннис
+            </a>
+          </li>
+          <li class="mob-list-sports__item">
+            <a class="mob-list-sports__item-name" href="/volleyball" target="_blank">
+              <img src="./img/volleyball.png" alt="img" />
+              Волейбол
+            </a>
+          </li>
+          <li class="mob-list-sports__item">
+            <a class="mob-list-sports__item-name" href="/handball" target="_blank">
+              <img src="./img/handball.png" alt="img" />
+              Гандбол
+            </a>
+          </li>
+          <li class="mob-list-sports__item">
+            <a class="mob-list-sports__item-name" href="/cybersport" target="_blank">
+              <img src="./img/cybersport.png" alt="img" />
+              Киберспорт
+            </a>
+          </li>
+          <li class="mob-list-sports__item">
+            <a class="mob-list-sports__item-name" href="/baseball" target="_blank">
+              <img src="./img/baseball.png" alt="img" />
+              Бейсбол
+            </a>
+          </li>
+          <li class="mob-list-sports__item">
+            <a class="mob-list-sports__item-name" href="/snooker" target="_blank">
+              <img src="./img/snooker.png" alt="img" />
+              Снукер
+            </a>
+          </li>
+          <li class="mob-list-sports__item">
+            <a class="mob-list-sports__item-name" href="/cricket" target="_blank">
+              <img src="./img/cricket.png" alt="img" />
+              Крикет
+            </a>
+          </li>
+          <li class="mob-list-sports__item">
+            <a class="mob-list-sports__item-name" href="/table-tennis" target="_blank">
+              <img src="./img/table-tennis.png" alt="img" />
+              Настольный теннис
+            </a>
+          </li>
+          <li class="mob-list-sports__item">
+            <a class="mob-list-sports__item-name" href="/badminton" target="_blank">
+              <img src="./img/badminton.png" alt="img" />
+              Бадминтон
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+    <div class="pop-leagues-mob">
+      <div class="pop-leagues-mob__leagues">
+        <div class="pop-leagues-mob__header">
+          <h3>Конкуренция</h3>
+          <button class="pop-leagues-mob__close-btn">
+            <svg
+              stroke="currentColor"
+              fill="currentColor"
+              stroke-width="0"
+              viewBox="0 0 16 16"
+              height="1em"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"
+              ></path>
+            </svg>
+          </button>
+        </div>
+        <p>Лиги</p>
+        <ul>
+          <li><a href="/">Англия: Премьер-лига</a></li>
+          <li><a href="/">Германия: Бундеслига</a></li>
+          <li><a href="/">Европа: Евро</a></li>
+          <li><a href="/">Европа: Лига Европы</a></li>
+          <li><a href="/">Европа: Лига конференций УЕФА</a></li>
+          <li><a href="/">Европа: Лига наций УЕФА</a></li>
+          <li><a href="/">Европа: Лига чемпионов</a></li>
+          <li><a href="/">Испания: Примера</a></li>
+          <li><a href="/">Италия: Серия А</a></li>
+          <li><a href="/">Мир: Чемпионат мира</a></li>
+          <li><a href="/">Франция: Первая лига</a></li>
+        </ul>
+      </div>
+    </div>
+    <main class="events sp-container">
+      <div class="events__left-banners side-banners left">
+        <a class="adv-link"><img src="./img/1xbet.gif" alt="logo" /></a>
+      </div>
+      <div class="events__main event-container">
+        <div class="events__sidebar">
+          <h3>Популярные</h3>
+          <ul class="events__tour-list">
+            <li><a>Английская лига</a></li>
+            <li><a>Английская лига</a></li>
+            <li><a>Английская лига</a></li>
+            <li><a>Английская лига</a></li>
+            <li><a>Английская лига</a></li>
+            <li><a>Английская лига</a></li>
+          </ul>
+          <h3 class="events__other-leagues">Другие лиги</h3>
+          <div class="events__search-tour">
+            <input placeholder="national screening" />
+            <button>
+              <svg
+                stroke="currentColor"
+                fill="none"
+                stroke-width="0"
+                viewBox="0 0 24 24"
+                height="1em"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M18.319 14.4326C20.7628 11.2941 20.542 6.75347 17.6569 3.86829 14.5327.744098 9.46734.744098 6.34315 3.86829 3.21895 6.99249 3.21895 12.0578 6.34315 15.182 9.22833 18.0672 13.769 18.2879 16.9075 15.8442 16.921 15.8595 16.9351 15.8745 16.9497 15.8891L21.1924 20.1317C21.5829 20.5223 22.2161 20.5223 22.6066 20.1317 22.9971 19.7412 22.9971 19.1081 22.6066 18.7175L18.364 14.4749C18.3493 14.4603 18.3343 14.4462 18.319 14.4326ZM16.2426 5.28251C18.5858 7.62565 18.5858 11.4246 16.2426 13.7678 13.8995 16.1109 10.1005 16.1109 7.75736 13.7678 5.41421 11.4246 5.41421 7.62565 7.75736 5.28251 10.1005 2.93936 13.8995 2.93936 16.2426 5.28251Z"
+                  fill="currentColor"
+                ></path>
+              </svg>
+            </button>
+          </div>
+          <div class="events__center-banners side-banners sidebar">
+            <a class="adv-link"><img src="./img/1xbet.gif" alt="logo" /></a>
+            <a class="adv-link"><img src="./img/1xbet.gif" alt="logo" /></a>
+          </div>
+        </div>
+        <div>
+          <div class="events__center-banners center-banners center-banners__top">
+            <a class="adv-link"><img src="./img/astra.gif" alt="logo" /></a>
+          </div>
+          <div class="events__list-info">
+            <div class="events__togglers">
+              <div class="events__togglers-btns-cont">
+                <div class="events__togglers-btns">
+                  <label class="events__toggle">
+                    <input value="live" name="events__toggle" type="radio" checked />
+                    <span>Прямой эфир</span>
+                  </label>
+                  <label class="events__toggle">
+                    <input value="past" name="events__toggle" type="radio" />
+                    <span>Завершенные</span>
+                  </label>
+                  <label class="events__toggle">
+                    <input value="future" name="events__toggle" type="radio" />
+                    <span>Предстоящие</span>
+                  </label>
+                </div>
+              </div>
+              <div class="events__calendar calendar">
+                <button class="calendar__prev">
+                  <svg
+                    stroke="currentColor"
+                    fill="currentColor"
+                    stroke-width="0"
+                    viewBox="0 0 1024 1024"
+                    height="1em"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                    style="transform: rotate(180deg)"
+                  >
+                    <path
+                      d="M271.653 1023.192c-8.685 0-17.573-3.432-24.238-10.097-13.33-13.33-13.33-35.144 0-48.474L703.67 508.163 254.08 58.573c-13.33-13.331-13.33-35.145 0-48.475 13.33-13.33 35.143-13.33 48.473 0L776.38 483.925c13.33 13.33 13.33 35.143 0 48.473l-480.492 480.694c-6.665 6.665-15.551 10.099-24.236 10.099z"
+                    ></path>
+                  </svg>
+                </button>
+                <div class="calendar__date">
+                  <svg
+                    stroke="currentColor"
+                    fill="currentColor"
+                    stroke-width="0"
+                    viewBox="0 0 16 16"
+                    height="1em"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"
+                    ></path>
+                  </svg>
+                  <span>05 / 10 ЧТ</span>
+                </div>
+                <button class="calendar__next">
+                  <svg
+                    stroke="currentColor"
+                    fill="currentColor"
+                    stroke-width="0"
+                    viewBox="0 0 1024 1024"
+                    height="1em"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M271.653 1023.192c-8.685 0-17.573-3.432-24.238-10.097-13.33-13.33-13.33-35.144 0-48.474L703.67 508.163 254.08 58.573c-13.33-13.331-13.33-35.145 0-48.475 13.33-13.33 35.143-13.33 48.473 0L776.38 483.925c13.33 13.33 13.33 35.143 0 48.473l-480.492 480.694c-6.665 6.665-15.551 10.099-24.236 10.099z"
+                    ></path>
+                  </svg>
+                </button>
+                <ul class="calendar__dropdown">
+                  <li class="calendar__item active">05 / 10 ЧТ</li>
+                  <li class="calendar__item">05 / 10 ЧТ</li>
+                  <li class="calendar__item">05 / 10 ЧТ</li>
+                  <li class="calendar__item">05 / 10 ЧТ</li>
+                  <li class="calendar__item">05 / 10 ЧТ</li>
+                  <li class="calendar__item">05 / 10 ЧТ</li>
+                  <li class="calendar__item">05 / 10 ЧТ</li>
+                </ul>
+              </div>
+            </div>
+            <div class="events__center-banners"></div>
+            <ul class="events__list">
+              <li class="events__item event">
+                <div class="event__tour like">
+                  <button class="event__like">
+                    <svg
+                      stroke="currentColor"
+                      fill="currentColor"
+                      stroke-width="0"
+                      viewBox="0 0 16 16"
+                      color="#ffa830"
+                      height="1em"
+                      width="1em"
+                      xmlns="http://www.w3.org/2000/svg"
+                      style="color: rgb(255, 168, 48)"
+                    >
+                      <path
+                        d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
+                      ></path>
+                    </svg>
+                  </button>
+                  <img width="12" height="12" src="./img/logo.jpg" alt="logo" />
+                  <span>Англия: английская премьер-лига</span>
+                </div>
+                <div class="event__match-list">
+                  <a class="event__match-item">
+                    <div class="event__match-item-left">
+                      <button class="event__like">
+                        <svg
+                          stroke="currentColor"
+                          fill="currentColor"
+                          stroke-width="0"
+                          viewBox="0 0 16 16"
+                          height="1em"
+                          width="1em"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"
+                          ></path>
+                        </svg>
+                      </button>
+                      <div class="event__start-time"><span>21:45</span></div>
+                      <div class="event__period"><span>1-ый период</span></div>
+                    </div>
+                    <div class="event__match">
+                      <div class="event__match-left">
+                        <h2 class="event__home-team match-team">
+                          <span>Домашние</span>
+                          <img src="./img/logo.jpg" width="20" height="20" alt="team" />
+                        </h2>
+                        <div class="event__score">
+                          <span>0</span>
+                          <span>-</span>
+                          <span>0</span>
+                        </div>
+                        <h2 class="event__away-team match-team">
+                          <img src="./img/logo.jpg" width="20" height="20" alt="team" />
+                          <span>Гости</span>
+                        </h2>
+                      </div>
+                      <div class="event__match-mob-score mob-score">
+                        <div>0</div>
+                        <div>0</div>
+                      </div>
+                    </div>
+                  </a>
+                  <a class="event__match-item">
+                    <div class="event__match-item-left">
+                      <button class="event__like">
+                        <svg
+                          stroke="currentColor"
+                          fill="currentColor"
+                          stroke-width="0"
+                          viewBox="0 0 16 16"
+                          height="1em"
+                          width="1em"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"
+                          ></path>
+                        </svg>
+                      </button>
+                      <div class="event__start-time"><span>21:45</span></div>
+                      <div class="event__period"><span>1-ый период</span></div>
+                    </div>
+                    <div class="event__match">
+                      <div class="event__match-left">
+                        <h2 class="event__home-team match-team">
+                          <span>Домашние</span>
+                          <img src="./img/logo.jpg" width="20" height="20" alt="team" />
+                        </h2>
+                        <div class="event__score">
+                          <span>0</span>
+                          <span>-</span>
+                          <span>0</span>
+                        </div>
+                        <h2 class="event__away-team match-team">
+                          <img src="./img/logo.jpg" width="20" height="20" alt="team" />
+                          <span>Гости</span>
+                        </h2>
+                      </div>
+                      <div class="event__match-mob-score mob-score">
+                        <div>0</div>
+                        <div>0</div>
+                      </div>
+                    </div>
+                  </a>
+                </div>
+              </li>
+              <li class="events__item event">
+                <div class="event__tour like">
+                  <button class="event__like">
+                    <svg
+                      stroke="currentColor"
+                      fill="currentColor"
+                      stroke-width="0"
+                      viewBox="0 0 16 16"
+                      color="#ffa830"
+                      height="1em"
+                      width="1em"
+                      xmlns="http://www.w3.org/2000/svg"
+                      style="color: rgb(255, 168, 48)"
+                    >
+                      <path
+                        d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
+                      ></path>
+                    </svg>
+                  </button>
+                  <img width="12" height="12" src="./img/logo.jpg" alt="logo" />
+                  <span>Англия: английская премьер-лига</span>
+                </div>
+                <div class="event__match-list">
+                  <a class="event__match-item">
+                    <div class="event__match-item-left">
+                      <button class="event__like">
+                        <svg
+                          stroke="currentColor"
+                          fill="currentColor"
+                          stroke-width="0"
+                          viewBox="0 0 16 16"
+                          height="1em"
+                          width="1em"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"
+                          ></path>
+                        </svg>
+                      </button>
+                      <div class="event__start-time"><span>21:45</span></div>
+                      <div class="event__period"><span>1-ый период</span></div>
+                    </div>
+                    <div class="event__match">
+                      <div class="event__match-left">
+                        <h2 class="event__home-team match-team">
+                          <span>Домашние</span>
+                          <img src="./img/logo.jpg" width="20" height="20" alt="team" />
+                        </h2>
+                        <div class="event__score">
+                          <span>0</span>
+                          <span>-</span>
+                          <span>0</span>
+                        </div>
+                        <h2 class="event__away-team match-team">
+                          <img src="./img/logo.jpg" width="20" height="20" alt="team" />
+                          <span>Гости</span>
+                        </h2>
+                      </div>
+                      <div class="event__match-mob-score mob-score">
+                        <div>0</div>
+                        <div>0</div>
+                      </div>
+                    </div>
+                  </a>
+                  <a class="event__match-item">
+                    <div class="event__match-item-left">
+                      <button class="event__like">
+                        <svg
+                          stroke="currentColor"
+                          fill="currentColor"
+                          stroke-width="0"
+                          viewBox="0 0 16 16"
+                          height="1em"
+                          width="1em"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"
+                          ></path>
+                        </svg>
+                      </button>
+                      <div class="event__start-time"><span>21:45</span></div>
+                      <div class="event__period"><span>1-ый период</span></div>
+                    </div>
+                    <div class="event__match">
+                      <div class="event__match-left">
+                        <h2 class="event__home-team match-team">
+                          <span>Домашние</span>
+                          <img src="./img/logo.jpg" width="20" height="20" alt="team" />
+                        </h2>
+                        <div class="event__score">
+                          <span>0</span>
+                          <span>-</span>
+                          <span>0</span>
+                        </div>
+                        <h2 class="event__away-team match-team">
+                          <img src="./img/logo.jpg" width="20" height="20" alt="team" />
+                          <span>Гости</span>
+                        </h2>
+                      </div>
+                      <div class="event__match-mob-score mob-score">
+                        <div>0</div>
+                        <div>0</div>
+                      </div>
+                    </div>
+                  </a>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div class="events__center-banners center-banners center-banners__bottom">
+            <a class="adv-link"><img src="./img/astra.gif" alt="logo" /></a>
+            <a class="adv-link"><img src="./img/astra.gif" alt="logo" /></a>
+          </div>
+        </div>
+      </div>
+      <div class="events__right-banners side-banners right">
+        <a class="adv-link"><img src="./img/1xbet.gif" alt="logo" /></a>
+        <a class="adv-link"><img src="./img/1xbet.gif" alt="logo" /></a>
+      </div>
+    </main>
+    <footer class="footer">
+      <div class="footer__container container">
+        <p class="footer__description">Честер бет описание</p>
+        <div class="footer__bottom">
+          <ul>
+            <li><a href=".#">Связаться с нами</a></li>
+            <li><a href=".#">Update Lineups</a></li>
+            <li><a href=".#">Business Cooperation</a></li>
+            <li><a href=".#">Условия предоставления услуг</a></li>
+            <li><a href=".#">Политика конфиденциальности</a></li>
+            <li><a href=".#">Free Livescores Widget</a></li>
+          </ul>
+          <p class="footer__copyright">Copyright @ 2023 Chesterbet 18+ Gamble Responsibly</p>
+        </div>
+      </div>
+    </footer>
+    <script src="./js/index.bundle.js"></script>
+  </body>
+</html>
