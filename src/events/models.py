@@ -28,6 +28,7 @@ class Rubrics(models.Model):
     def __str__(self):
         return f'{self.name} - {self.slug}'
     class Meta:
+        indexes = [models.Index(fields=['name'])]
         verbose_name = 'Рубрики'
         verbose_name_plural = 'Рубрики'
 
@@ -144,6 +145,7 @@ class Events(models.Model):
         return f'{self.section} - {self.name} - {status_str} - {self.start_at} - {self.rubrics.name}'
 
     class Meta:
+        indexes = [models.Index(fields=['name'])]
         verbose_name = 'Событие'
         verbose_name_plural = 'События'
 

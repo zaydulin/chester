@@ -27,6 +27,7 @@ ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", ["*"])
 
 INSTALLED_APPS = [
     "daphne",
+    "jazzmin",
     "events.apps.EventsConfig",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -539,3 +540,6 @@ RECAPTCHA_PRIVATE_KEY = "6Lezmb8oAAAAAF3vLlbePB9gJWPNfnybWj0YHjRb"
 RECAPTCHA_DEFAULT_ACTION = "generic"
 RECAPTCHA_SCORE_THRESHOLD = 0.5
 LOGIN_URL = "/login/"
+JAZZMIN_SETTINGS = {
+    "site_brand": "Админ Панель"
+}

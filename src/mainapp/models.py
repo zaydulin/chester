@@ -36,11 +36,8 @@ class GeneralSettings(models.Model):
         "Сообщение при отключение регистрации", max_length=500, blank=True, null=True
     )
     yandex_metrika_link = models.TextField("Ссылка Яндекс Метрика")
-    update_players_in_team = models.BooleanField("Обновить игроков во всех комнадах",default=False)
-    time_interval_on_create_events = models.PositiveIntegerField("Указать временной интервал на создание событий(в секундах)")
-    time_interval_on_update_events = models.PositiveIntegerField("Указать временной интервал на обновление событий(в секундах)")
-    time_interval_on_update_events_statistic= models.PositiveIntegerField(
-        "Указать временной интервал на обновление статистик событий(в секундах)")
+    rapidapi_key_events = models.TextField("FlashScoreRapid")
+    rapidapi_key_stream = models.TextField("SoccerVideosRapid")
 
     def __str__(self):
         return "Общая настройка"
