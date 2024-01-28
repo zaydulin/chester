@@ -216,32 +216,32 @@ class EventsEndView(CustomHtmxMixin, DetailView):
             #     events_page = paginator.page(1)
             # except EmptyPage:
             #     events_page = paginator.page(paginator.num_pages)
-            # grouped_events = {}
-            #
-            # user = self.request.user
-            # for league_name, events_in_league in groupby(events_page, key=lambda event: event.section):
-            #     events_list = list(events_in_league)
-            #     for event in events_list:
-            #         # Check if the event or event.section is in the user's bookmarks
-            #         event_content_type = ContentType.objects.get_for_model(event)
-            #         league_content_type = ContentType.objects.get_for_model(event.section) if event.section else None
-            #         if user.is_authenticated:
-            #             event_bookmarked = Bookmarks.objects.filter(
-            #                 user=user, content_type=event_content_type, object_id=event.id
-            #             ).exists()
-            #             league_bookmarked = (
-            #                 Bookmarks.objects.filter(
-            #                     user=user, content_type=league_content_type, object_id=event.section.id
-            #                 ).exists()
-            #                 if event.section
-            #                 else False
-            #             )
-            #
-            #             event.is_bookmarked = event_bookmarked
-            #             event.section.is_bookmarked = league_bookmarked if event.section else False
-            #
-            #     grouped_events[league_name] = events_list
-            context["events"] = events
+            grouped_events = {}
+
+            user = self.request.user
+            for league_name, events_in_league in groupby(events, key=lambda event: event.section):
+                events_list = list(events_in_league)
+                for event in events_list:
+                    # Check if the event or event.section is in the user's bookmarks
+                    event_content_type = ContentType.objects.get_for_model(event)
+                    league_content_type = ContentType.objects.get_for_model(event.section) if event.section else None
+                    if user.is_authenticated:
+                        event_bookmarked = Bookmarks.objects.filter(
+                            user=user, content_type=event_content_type, object_id=event.id
+                        ).exists()
+                        league_bookmarked = (
+                            Bookmarks.objects.filter(
+                                user=user, content_type=league_content_type, object_id=event.section.id
+                            ).exists()
+                            if event.section
+                            else False
+                        )
+
+                        event.is_bookmarked = event_bookmarked
+                        event.section.is_bookmarked = league_bookmarked if event.section else False
+
+                grouped_events[league_name] = events_list
+            context["events"] = grouped_events
             # context["paginator"] = paginator
 
         except :
