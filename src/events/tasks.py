@@ -5,6 +5,7 @@ from .models import Rubrics, Season, Team, Events, H2H, Country
 from django.db.models import Q
 from events.models import Rubrics, Events, Team, Season, Player, Incidents, Periods, GameStatistic, H2H, TennisPoints, \
     TennisGames, Points, Country, Stages, IncidentParticipants
+from django.utils.text import slugify
 
 HEADER_FOR_FIRST_API = {
     "X-RapidAPI-Key": "3b1726a15fmshc58a145e91a5846p197521jsn5a6af790e789",
@@ -32,191 +33,206 @@ EVENT_STATUSES = {
 }
 
 
-def get_unique_season_slug(base_slug):
-    try:
-        existing_season = Season.objects.get(slug=base_slug)
+def generate_event_slug(home_team, away_team, start_at):
+    # Создаем slug из полей home_team, away_team и start_at
+    slug_text = f'{home_team}+{away_team}+{start_at}'
 
-        slug_suffix = 1
-        while True:
-            new_slug = f"{base_slug}-{slug_suffix}"
-            if not Season.objects.filter(slug=new_slug).exists():
-                break
-            slug_suffix += 1
+    # Заменяем пробелы на тире
+    slug_text = slug_text.replace(' ', '-')
 
-        return new_slug
-    except Season.DoesNotExist:
-        return base_slug
+    # Словарь для замены русских букв на английские
+    translit_dict = {
+        'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'e', 'ё': 'yo',
+        'ж': 'zh', 'з': 'z', 'и': 'i', 'й': 'y', 'к': 'k', 'л': 'l', 'м': 'm',
+        'н': 'n', 'о': 'o', 'п': 'p', 'р': 'r', 'с': 's', 'т': 't', 'у': 'u',
+        'ф': 'f', 'х': 'h', 'ц': 'ts', 'ч': 'ch', 'ш': 'sh', 'щ': 'sch', 'ъ': '',
+        'ы': 'y', 'ь': '', 'э': 'e', 'ю': 'yu', 'я': 'ya'
+    }
+
+    # Преобразуем текст, заменяя русские буквы на английские
+    slug_text = ''.join(translit_dict.get(c.lower(), c) for c in slug_text)
+
+    # Преобразуем текст в slug
+    return f'smotret-online-{slugify(slug_text)}'
 
 
 # done optimization
 @shared_task
 def create_tournament():
     tournaments_list_url = "https://flashlive-sports.p.rapidapi.com/v1/tournaments/list"
+    ids = [1, 2, 3, 4, 6, 7, 12, 13, 15, 21, 25, 36]
+    rubric_id = 1
+    rubric_id_q = str(rubric_id)
+    querystring_tournaments_list = {"sport_id": rubric_id_q, "locale": "ru_RU"}
+    rubrics = Rubrics.objects.get(api_id=rubric_id)
+    response_tournaments_list = requests.get(
+        tournaments_list_url,
+        headers=HEADER_FOR_SECOND_API,
+        params=querystring_tournaments_list
+    )
+    if response_tournaments_list.status_code == 200:
+        tournaments_data = response_tournaments_list.json()
+        for tournament_data in tournaments_data.get("DATA", []):
+            country_name = tournament_data.get('COUNTRY_NAME')
+            if not country_name:
+                country_name = 'Мир'
+            country, created = Country.objects.get_or_create(
+                name=country_name
+            )
+            season_id = tournament_data.get("ACTUAL_TOURNAMENT_SEASON_ID")
+            fields = {
+                "league_name": tournament_data.get("LEAGUE_NAME"),
+                "country": country
+            }
+            if  Season.objects.filter(rubrics=rubrics,season_id=season_id,league_name= tournament_data.get("LEAGUE_NAME"),country= country).exists():
+                season = Season.objects.filter(rubrics=rubrics,season_id=season_id,league_name= tournament_data.get("LEAGUE_NAME"),country= country).first()
+            else:
+                season = Season.objects.create(rubrics=rubrics, season_id=season_id,league_name=tournament_data.get("LEAGUE_NAME"), country=country)
 
-    for rubric_id in [1]:
-        rubric_id_q = str(rubric_id)
-        querystring_tournaments_list = {"sport_id": rubric_id_q, "locale": "ru_RU"}
-        rubrics = Rubrics.objects.get(api_id=rubric_id)
-        response_tournaments_list = requests.get(
-            tournaments_list_url,
-            headers=HEADER_FOR_SECOND_API,
-            params=querystring_tournaments_list
-        )
-        if response_tournaments_list.status_code == 200:
-            tournaments_data = response_tournaments_list.json()
-            for tournament_data in tournaments_data.get("DATA", []):
-                country_name = tournament_data.get('COUNTRY_NAME')
-                country, created = Country.objects.get_or_create(
-                    name=country_name
+            stages = tournament_data.get("STAGES")
+            stages_list = []
+            for stage in stages:
+                stage_id = stage.get("STAGE_ID")
+                stage_name = stage.get("STAGE_NAME")
+                stage_db = Stages(
+                    stage_id=stage_id
                 )
-                season_id = tournament_data.get("ACTUAL_TOURNAMENT_SEASON_ID")
-                fields = {
-                    "league_name": tournament_data.get("LEAGUE_NAME"),
-                    "country": country
-                }
-                season, created = Season.objects.get_or_create(
-                    rubrics=rubrics,
-                    season_id=season_id,
-                    defaults=fields
-                )
-                stages = tournament_data.get("STAGES")
-                stages_list = []
-                for stage in stages:
-                    stage_id = stage.get("STAGE_ID")
-                    stage_name = stage.get("STAGE_NAME")
-                    stage_db = Stages(
-                        stage_id=stage_id
-                    )
-                    if stage_name:
-                        stage_db.stage_name = stage_name
-                    stages_list.append(stage_db)
-                stages = Stages.objects.bulk_create(stages_list)
-                season.stages.add(*stages)
-        else:
-            return {
-                "response": f"Error  - {response_tournaments_list.status_code} - {response_tournaments_list.json()}"}
+                if stage_name:
+                    stage_db.stage_name = stage_name
+                stages_list.append(stage_db)
+            stages = Stages.objects.bulk_create(stages_list)
+            season.stages.add(*stages)
+    else:
+        return {
+            "response": f"Error  - {response_tournaments_list.status_code} - {response_tournaments_list.json()}"}
 
     return {"response": "create_tournament successfully"}
 
 
 def create_events_of_tournament(rubric_id):
     second_url = "https://flashlive-sports.p.rapidapi.com/v1/tournaments/fixtures"
-    seasons = Season.objects.filter(rubrics__api_id=rubric_id)
+    seasons = Season.objects.filter(rubrics__api_id=rubric_id,country__name='Россия')
     for season in seasons:
         stages = season.stages.all()
         for stage in stages:
-            querystring = {"locale": "ru_RU", "tournament_stage_id": str(stage.stage_id), "page": "1"}
-            rubrics = Rubrics.objects.get(
-                # second_api=True,
-                api_id=rubric_id
-            )
-            second_response = requests.get(
-                second_url,
-                headers=HEADER_FOR_SECOND_API,
-                params=querystring
-            )
-            if second_response.status_code == 200:
-                response_data = second_response.json()
-                for event_data in response_data.get("DATA", []):
-                    # Создайте записи для команд (Team)
-                    events = event_data.get("EVENTS")
-                    logo_season = event_data.get("TOURNAMENT_IMAGE")
-                    if logo_season:
-                        correct_logo_season = logo_season.replace('www.', 'static.')
-                    else:
-                        correct_logo_season = ''
-                    country_name = event_data.get("COUNTRY_NAME")
-                    if not country_name:
-                        country_from_db = Country.objects.get_or_create(
-                            name="Мир"
+            page = 1
+
+            while True:
+                querystring = {"locale": "ru_RU", "tournament_stage_id": str(stage.stage_id), "page": str(page)}
+                rubrics = Rubrics.objects.get(
+                    # second_api=True,
+                    api_id=rubric_id
+                )
+                second_response = requests.get(
+                    second_url,
+                    headers=HEADER_FOR_SECOND_API,
+                    params=querystring
+                )
+                if second_response.status_code == 200:
+                    response_data = second_response.json()
+                    for event_data in response_data.get("DATA", []):
+                        # Создайте записи для команд (Team)
+                        events = event_data.get("EVENTS")
+                        logo_season = event_data.get("TOURNAMENT_IMAGE")
+                        if logo_season:
+                            correct_logo_season = logo_season.replace('www.', 'static.')
+                        else:
+                            correct_logo_season = ''
+                        country_name = event_data.get("COUNTRY_NAME")
+                        if not country_name:
+                            country_from_db = Country.objects.get_or_create(
+                                name="Мир"
+                            )
+                        else:
+                            country_from_db, created = Country.objects.get_or_create(
+                                name=event_data.get("COUNTRY_NAME")
+                            )
+                        season, created = Season.objects.get_or_create(
+                            rubrics=rubrics,
+                            season_id=event_data.get("TOURNAMENT_SEASON_ID")
                         )
-                    else:
-                        country_from_db, created = Country.objects.get_or_create(
-                            name=event_data.get("COUNTRY_NAME")
-                        )
-                    season, created = Season.objects.get_or_create(
-                        rubrics=rubrics,
-                        season_id=event_data.get("TOURNAMENT_SEASON_ID")
-                    )
-                    season.logo_league = correct_logo_season
-                    season.season_name = event_data.get("NAME")
-                    season.season_second_api_id = event_data.get("TOURNAMENT_STAGE_ID")
-                    if created:
-                        season.country = country_from_db
+                        season.logo_league = correct_logo_season
+                        season.season_name = event_data.get("NAME")
                         season.season_second_api_id = event_data.get("TOURNAMENT_STAGE_ID")
-                    season.save()
-                    events_list = []
-                    for event in events:
-                        homeimg_base = event.get("HOME_IMAGES")
-                        awayimg_base = event.get("AWAY_IMAGES")
-                        status_id = EVENT_STATUSES[event.get("STAGE_TYPE")]
-                        if homeimg_base is not None and awayimg_base is not None:
-                            logo_home = event.get("HOME_IMAGES")[-1]
-                            if logo_home:
-                                correct_home_logo = logo_home.replace('www.', 'static.')
-                            else:
-                                correct_home_logo = ''
-                            logo_away = event.get("AWAY_IMAGES")[-1]
-                            if logo_away:
-                                correct_away_logo = logo_away.replace('www.', 'static.')
-                            else:
-                                correct_away_logo = ''
-                            fields = {
-                                "name": event.get("HOME_NAME"),
-                                "logo": correct_home_logo,
-                                "rubrics": rubrics
-                            }
-                            home_team, created = Team.objects.get_or_create(
-                                second_api_team_id=event.get("HOME_PARTICIPANT_IDS")[-1],
-                                defaults=fields
-                            )
-                            fields = {
-                                "name": event.get("AWAY_NAME"),
-                                "logo": correct_away_logo,
-                                "rubrics": rubrics
-                            }
-                            away_team, created = Team.objects.get_or_create(
-                                second_api_team_id=event.get("AWAY_PARTICIPANT_IDS")[-1],
-                                defaults=fields
-                            )
-                            if not Events.objects.filter(
-                                    rubrics=rubrics, second_event_api_id=event.get("EVENT_ID")
-                            ).exists():
-                                events_list.append(Events(
-                                    rubrics=rubrics,
-                                    second_event_api_id=event.get("EVENT_ID"),
-                                    start_at=datetime.utcfromtimestamp(event.get("START_TIME")),
-                                    name=event_data.get("NAME_PART_2"),
-                                    description=event_data,
-                                    title=event_data.get("SHORT_NAME"),
-                                    status=status_id,
-                                    home_team=home_team,
-                                    away_team=away_team,
-                                    home_score=event.get("HOME_SCORE_CURRENT"),
-                                    away_score=event.get("AWAY_SCORE_CURRENT"),
-                                    half=event.get("ROUND"),
-                                    section=season,
-                                ))
-                    Events.objects.bulk_create(events_list)
-            elif second_response.status_code == 404:
-                try:
-                    stage.delete()
-                except:
-                    pass
-                try:
-                    season.delete()
-                except:
-                    pass
-            else:
-                #         return HttpResponse(f"Error  - {second_response.status_code} - {second_response.json()}")
-                # return HttpResponse("Data fetched successfully")
-                return {"response": f"Error  - {second_response.status_code} - {second_response.json()}"}
+                        if created:
+                            season.country = country_from_db
+                            season.season_second_api_id = event_data.get("TOURNAMENT_STAGE_ID")
+                        season.save()
+                        events_list = []
+                        for event in events:
+                            homeimg_base = event.get("HOME_IMAGES")
+                            awayimg_base = event.get("AWAY_IMAGES")
+                            status_id = EVENT_STATUSES[event.get("STAGE_TYPE")]
+                            if homeimg_base is not None and awayimg_base is not None:
+                                logo_home = event.get("HOME_IMAGES")[-1]
+                                if logo_home:
+                                    correct_home_logo = logo_home.replace('www.', 'static.')
+                                else:
+                                    correct_home_logo = ''
+                                logo_away = event.get("AWAY_IMAGES")[-1]
+                                if logo_away:
+                                    correct_away_logo = logo_away.replace('www.', 'static.')
+                                else:
+                                    correct_away_logo = ''
+
+                                if Team.objects.filter(second_api_team_id=event.get("HOME_PARTICIPANT_IDS")[-1]).exists():
+                                    home_team = Team.objects.filter(second_api_team_id=event.get("HOME_PARTICIPANT_IDS")[-1]).first()
+                                else:
+                                    home_team = Team.objects.create(
+                                        second_api_team_id=event.get("HOME_PARTICIPANT_IDS")[-1],
+                                        name=event.get("HOME_NAME"),
+                                        logo=correct_home_logo,
+                                        rubrics=rubrics
+                                    )
+
+                                if Team.objects.filter(second_api_team_id=event.get("AWAY_PARTICIPANT_IDS")[-1]).exists():
+                                    away_team = Team.objects.filter(second_api_team_id=event.get("AWAY_PARTICIPANT_IDS")[-1]).first()
+                                else:
+                                    away_team = Team.objects.create(
+                                    second_api_team_id=event.get("AWAY_PARTICIPANT_IDS")[-1],
+                                    name = event.get("AWAY_NAME"),
+                                    logo = correct_away_logo,
+                                    rubrics = rubrics
+                                    )
+                                if not Events.objects.filter(
+                                        rubrics=rubrics, second_event_api_id=event.get("EVENT_ID")
+                                ).exists():
+                                    events_list.append(Events(
+                                        rubrics=rubrics,
+                                        second_event_api_id=event.get("EVENT_ID"),
+                                        start_at=datetime.utcfromtimestamp(event.get("START_TIME")),
+                                        name=event_data.get("NAME_PART_2"),
+                                        description=event_data,
+                                        title=event_data.get("SHORT_NAME"),
+                                        status=status_id,
+                                        home_team=home_team,
+                                        away_team=away_team,
+                                        home_score=event.get("HOME_SCORE_CURRENT"),
+                                        away_score=event.get("AWAY_SCORE_CURRENT"),
+                                        half=event.get("ROUND"),
+                                        section=season,
+                                        slug = generate_event_slug(event.get("HOME_NAME"),event.get("AWAY_NAME") ,datetime.utcfromtimestamp(event.get("START_TIME"))  ),
+                                    ))
+                        Events.objects.bulk_create(events_list)
+                    page += 1
+                elif second_response.status_code == 404:
+                    try:
+                        stage.delete()
+                    except:
+                        pass
+                    break
+                else:
+                    break
     return {"response": "create_events_of_tournament successfully"}
 
 
 @shared_task
 def create_events_of_tournament_id1():
-    return create_events_of_tournament(1)
+    ids = [1, 2, 3, 4, 6, 7, 12, 13, 15, 21, 25, 36]
+    for item in ids:
+        create_events_of_tournament(item)
+    return {"response": "create_events_of_tournament successfully"}
+
 
 
 @shared_task
@@ -394,7 +410,7 @@ def fetch_event_data(rubric_id):
                             event.statistic.add(gamestatistic)
                         event.save()
 
-    return {"response": f"fetch_event_data_for_second successfully{events}"}
+    return {"response": f"fetch_event_data_for_second successfully"}
 
 
 # обновление событий
@@ -559,16 +575,22 @@ def create_additional_info_for_events(rubric_id):
                 formations = data.get("FORMATIONS", [])
                 for formation in formations:
                     team_line = formation.get("FORMATION_LINE")
+                    if formation_name == 'Starting Lineups':
+                        status_team_line = False
+                    elif formation_name == 'Substitutes':
+                        status_team_line = True
+                    else :
+                        status_team_line = False
                     members = formation.get("MEMBERS", [])
                     for player in members:
                         player_id = player.get("PLAYER_ID")
                         if player_id:
                             fields = {
-                                "slug": f'{player["PLAYER_FULL_NAME"]} + {player_id}',
+                                "slug": f'{player_id}',
                                 "name": player["PLAYER_FULL_NAME"],
                                 "position_name": player.get("PLAYER_POSITION"),
                                 "description": player,
-                                "main_player": True,
+                                "main_player": status_team_line,
                                 "number": player.get("PLAYER_NUMBER"),
                                 "photo": f'https://static.flashscore.com/res/image/data/{player.get("LPI")})'
                             }
@@ -599,6 +621,7 @@ def create_additional_info_for_events(rubric_id):
 @shared_task
 def create_additional_info_for_events_id1():
     return create_additional_info_for_events(1)
+
 
 
 @shared_task

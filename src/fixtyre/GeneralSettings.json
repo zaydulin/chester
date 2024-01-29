@@ -1,13 +1,1 @@
-[
-    {"model": "mainapp.generalsettings",
-        "pk": 1,
-        "fields": {"logo": "logo_up2vqXC.jpg",
-        "logo_light": "logo_DmTsf4h.jpg",
-        "favicon": "logo_hgX838T.jpg",
-        "name": "chesterbets",
-        "content": "chesterbets",
-        "copyright_text": "Все права защищены",
-        "registration": 1,
-        "of_register_message": "Сообщение при отключение регистрации:"
-        }}
-]
+[{"model": "mainapp.generalsettings", "pk": 1, "fields": {"logo": "logo.jpg", "logo_light": "logo_jEoHNd3.jpg", "favicon": "logo_58cEh5U.jpg", "name": "Район 1", "headerImage": "", "content": "324", "copyright_text": "Все права защищены", "registration": 1, "of_register_message": "", "yandex_metrika_link": "<link>", "rapidapi_key_events": "<link>", "rapidapi_key_stream": "2"}}]

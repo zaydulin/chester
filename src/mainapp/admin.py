@@ -26,7 +26,18 @@ class ViewsInline(admin.TabularInline):
 class UserAdmin(admin.ModelAdmin):
     inlines = [ViewsInline, BookmarksInline]
 
+
 class GeneralSettingsAdmin(admin.ModelAdmin):
+    fieldsets = [
+        ('Общие настройки',{
+            'fields':['logo','logo_light','favicon','name','headerImage','content','copyright_text','registration','of_register_message']
+        }),
+        ('Интеграция', {
+            'fields': ['rapidapi_key_events','rapidapi_key_stream','yandex_metrika_link']
+        })
+
+    ]
+
     def has_add_permission(self, request):
         # Проверяем, есть ли записи в модели GeneralSettings
         if GeneralSettings.objects.exists():

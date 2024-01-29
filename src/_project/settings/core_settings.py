@@ -27,6 +27,8 @@ ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", ["*"])
 
 INSTALLED_APPS = [
     "daphne",
+    "jazzmin",
+    "debug_toolbar",
     "events.apps.EventsConfig",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -47,6 +49,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -472,8 +475,7 @@ CELERY_BEAT_SCHEDULE = {
     "create_tournament": {
         "task": "events.tasks.create_tournament",
         "schedule": crontab(
-            hour="4",
-            day_of_week="sun"
+            hour="*/1",
         ),
     },
     "get_match_stream_link_football": {
@@ -540,3 +542,10 @@ RECAPTCHA_PRIVATE_KEY = "6Lezmb8oAAAAAF3vLlbePB9gJWPNfnybWj0YHjRb"
 RECAPTCHA_DEFAULT_ACTION = "generic"
 RECAPTCHA_SCORE_THRESHOLD = 0.5
 LOGIN_URL = "/login/"
+JAZZMIN_SETTINGS = {
+    "site_brand": "Админ Панель"
+}
+INTERNAL_IPS = [
+    "127.0.0.1",
+
+]

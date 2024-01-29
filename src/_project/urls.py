@@ -23,6 +23,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('uprava/', admin.site.urls),
     path('ckeditor/', include('ckeditor_uploader.urls')),
+    path("__debug__/", include("debug_toolbar.urls")),
     path('', include('mainapp.urls')),
     path('', include('events.urls')),
     path('api/', include('rapidapi.urls')),

@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&amp;display=swap"
+      rel="stylesheet"
+    />
+    <title>Стартовый шаблон</title>
+    <link rel="stylesheet" href="./css/main.css" />
+    <script defer src="https://code.createjs.com/1.0.0/createjs.min.js"></script>
+  </head>
+  <body>
+    <header class="header">
+      <div
+        id="animation_container"
+        style="background-color: rgba(33, 143, 82, 1); maxwidth: 400px; width: 100%; height: 100px"
+      >
+        <div>
+          <canvas
+            id="canvas"
+            width="1138"
+            height="187"
+            style="
+              position: absolute;
+              display: block;
+              background-color: rgb(33, 143, 82);
+              width: 911px;
+              height: 150px;
+              margin: 0px auto;
+            "
+          ></canvas>
+        </div>
+        <div
+          id="dom_overlay_container"
+          style="
+            pointer-events: none;
+            overflow: hidden;
+            maxwidth: 400px;
+            width: 100%;
+            height: 100px;
+            position: absolute;
+            left: 0px;
+            top: 0px;
+            display: block;
+          "
+        ></div>
+      </div>
+      <div class="header__row container">
+        <img src="./img/logo.jpg" alt="logo" />
+        <div class="header__right">
+          <form class="header__search-container">
+            <input class="header__search" placeholder="Поиск" />
+            <button class="header__search-btn">
+              <svg
+                stroke="currentColor"
+                fill="none"
+                stroke-width="0"
+                viewBox="0 0 24 24"
+                height="1em"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M18.319 14.4326C20.7628 11.2941 20.542 6.75347 17.6569 3.86829 14.5327.744098 9.46734.744098 6.34315 3.86829 3.21895 6.99249 3.21895 12.0578 6.34315 15.182 9.22833 18.0672 13.769 18.2879 16.9075 15.8442 16.921 15.8595 16.9351 15.8745 16.9497 15.8891L21.1924 20.1317C21.5829 20.5223 22.2161 20.5223 22.6066 20.1317 22.9971 19.7412 22.9971 19.1081 22.6066 18.7175L18.364 14.4749C18.3493 14.4603 18.3343 14.4462 18.319 14.4326ZM16.2426 5.28251C18.5858 7.62565 18.5858 11.4246 16.2426 13.7678 13.8995 16.1109 10.1005 16.1109 7.75736 13.7678 5.41421 11.4246 5.41421 7.62565 7.75736 5.28251 10.1005 2.93936 13.8995 2.93936 16.2426 5.28251Z"
+                  fill="currentColor"
+                ></path>
+              </svg>
+            </button>
+          </form>
+          <a href="#" class="header__auth-links">
+            <span>Войти</span>
+            <svg
+              stroke="currentColor"
+              fill="none"
+              stroke-width="0"
+              viewBox="0 0 24 24"
+              height="1em"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M20 5H8V9H6V3H22V21H6V15H8V19H20V5Z" fill="currentColor"></path>
+              <path
+                d="M13.0743 16.9498 11.6601 15.5356 14.1957 13H2V11H14.1956L11.6601 8.46451 13.0743 7.05029 18.024 12 13.0743 16.9498Z"
+                fill="currentColor"
+              ></path>
+            </svg>
+          </a>
+          <a href="#" class="header__auth-links">
+            <span>Регистрация</span>
+            <svg
+              stroke="currentColor"
+              fill="currentColor"
+              stroke-width="0"
+              viewBox="0 0 24 24"
+              height="1em"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path fill="none" d="M0 0h24v24H0z"></path>
+              <path
+                d="M10 4h4v4h-4zM4 16h4v4H4zM4 10h4v4H4zM4 4h4v4H4zM16 4h4v4h-4zM11 17.86V20h2.1l5.98-5.97-2.12-2.12zM14 12.03V10h-4v4h2.03zM20.85 11.56l-1.41-1.41c-.2-.2-.51-.2-.71 0l-1.06 1.06 2.12 2.12 1.06-1.06c.2-.2.2-.51 0-.71z"
+              ></path>
+            </svg>
+          </a>
+          <a class="header__acc-link"><img src="./img/logo.jpg" /></a>
+          <a class="header__auth-links">
+            <span>Выйти</span>
+            <img src="./img/logout.png" width="12" height="12" />
+          </a>
+          <button class="header__burger-btn">
+            <svg
+              stroke="currentColor"
+              fill="none"
+              stroke-width="0"
+              viewBox="0 0 15 15"
+              height="1em"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M1.5 3C1.22386 3 1 3.22386 1 3.5 1 3.77614 1.22386 4 1.5 4H13.5C13.7761 4 14 3.77614 14 3.5 14 3.22386 13.7761 3 13.5 3H1.5ZM1 7.5C1 7.22386 1.22386 7 1.5 7H13.5C13.7761 7 14 7.22386 14 7.5 14 7.77614 13.7761 8 13.5 8H1.5C1.22386 8 1 7.77614 1 7.5ZM1 11.5C1 11.2239 1.22386 11 1.5 11H13.5C13.7761 11 14 11.2239 14 11.5 14 11.7761 13.7761 12 13.5 12H1.5C1.22386 12 1 11.7761 1 11.5Z"
+                fill="currentColor"
+              ></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <nav class="container header__nav">
+        <ul class="header__nav-ul">
+          <li class="header__nav-link active">
+            <a class="header__nav-text" href="/" target="_blank">
+              <img src="./img/football.png" alt="img" />
+              Футбол
+            </a>
+          </li>
+          <li class="header__nav-link">
+            <a class="header__nav-text" href="/hockey" target="_blank">
+              <img src="./img/hockey.png" alt="img" />
+              Хоккей
+            </a>
+          </li>
+          <li class="header__nav-link">
+            <a class="header__nav-text" href="/basketball" target="_blank">
+              <img src="./img/basketball.png" alt="img" />
+              Баскетбол
+            </a>
+          </li>
+          <li class="header__nav-link desktop">
+            <a class="header__nav-text" href="/tennis" target="_blank">
+              <img src="./img/tennis.png" alt="img" />
+              Теннис
+            </a>
+          </li>
+          <li class="header__nav-link desktop">
+            <a class="header__nav-text" href="/volleyball" target="_blank">
+              <img src="./img/volleyball.png" alt="img" />
+              Волейбол
+            </a>
+          </li>
+          <li class="header__nav-link desktop">
+            <a class="header__nav-text" href="/handball" href="#" target="_blank">
+              <img src="./img/handball.png" alt="img" />
+              Гандбол
+            </a>
+          </li>
+          <li id="other-sport-btn" class="header__nav-link desktop" style="position: relative">
+            <span class="header__nav-text">
+              <img src="./img/arrow-down.svg" alt="arrow" />
+              Еще
+            </span>
+            <ul class="header__other-sports">
+              <li>
+                <a href="/cybersport" target="_blank">
+                  <img src="./img/cybersport-white-black.png" alt="img" width="20" height="20" />
+                  Киберспорт
+                </a>
+              </li>
+              <li>
+                <a href="/baseball" target="_blank">
+                  <img src="./img/baseball-white-black.png" alt="img" width="20" height="20" />
+                  Бейсбол
+                </a>
+              </li>
+              <li>
+                <a href="/snooker" target="_blank">
+                  <img src="./img/snooker.png" alt="img" width="20" height="20" />
+                  Снукер
+                </a>
+              </li>
+              <li>
+                <a href="/cricket" target="_blank">
+                  <img src="./img/cricket-white-black.png" alt="img" width="20" height="20" />
+                  Крикет
+                </a>
+              </li>
+              <li>
+                <a href="/table-tennis" target="_blank">
+                  <img src="./img/table-tennis-white-black.png" alt="img" width="20" height="20" />
+                  Настольный теннис
+                </a>
+              </li>
+              <li>
+                <a href="/badminton" target="_blank">
+                  <img src="./img/badminton-white-black.png" alt="img" width="20" height="20" />
+                  Бадминтон
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li id="other-sport-mobile-btn" class="header__nav-link mobile" style="position: relative">
+            <span class="header__nav-text">
+              <img src="./img/arrow-down.svg" alt="arrow" />
+              Другие
+            </span>
+          </li>
+          <li class="header__nav-link">
+            <a class="header__nav-text" href="/favorite">
+              <svg
+                class="header__favorite"
+                stroke="currentColor"
+                fill="currentColor"
+                stroke-width="0"
+                viewBox="0 0 16 16"
+                height="1em"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
+                ></path>
+              </svg>
+              Избранное
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <nav class="header__burger-other-sports mob-list-sports">
+        <ul class="container mob-list-sports__container">
+          <li class="mob-list-sports__item">
+            <a class="mob-list-sports__item-name" href="/tennis" target="_blank">
+              <img src="./img/tennis.png" alt="img" />
+              Теннис
+            </a>
+          </li>
+          <li class="mob-list-sports__item">
+            <a class="mob-list-sports__item-name" href="/volleyball" target="_blank">
+              <img src="./img/volleyball.png" alt="img" />
+              Волейбол
+            </a>
+          </li>
+          <li class="mob-list-sports__item">
+            <a class="mob-list-sports__item-name" href="/handball" target="_blank">
+              <img src="./img/handball.png" alt="img" />
+              Гандбол
+            </a>
+          </li>
+          <li class="mob-list-sports__item">
+            <a class="mob-list-sports__item-name" href="/cybersport" target="_blank">
+              <img src="./img/cybersport.png" alt="img" />
+              Киберспорт
+            </a>
+          </li>
+          <li class="mob-list-sports__item">
+            <a class="mob-list-sports__item-name" href="/baseball" target="_blank">
+              <img src="./img/baseball.png" alt="img" />
+              Бейсбол
+            </a>
+          </li>
+          <li class="mob-list-sports__item">
+            <a class="mob-list-sports__item-name" href="/snooker" target="_blank">
+              <img src="./img/snooker.png" alt="img" />
+              Снукер
+            </a>
+          </li>
+          <li class="mob-list-sports__item">
+            <a class="mob-list-sports__item-name" href="/cricket" target="_blank">
+              <img src="./img/cricket.png" alt="img" />
+              Крикет
+            </a>
+          </li>
+          <li class="mob-list-sports__item">
+            <a class="mob-list-sports__item-name" href="/table-tennis" target="_blank">
+              <img src="./img/table-tennis.png" alt="img" />
+              Настольный теннис
+            </a>
+          </li>
+          <li class="mob-list-sports__item">
+            <a class="mob-list-sports__item-name" href="/badminton" target="_blank">
+              <img src="./img/badminton.png" alt="img" />
+              Бадминтон
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+    <div class="pop-leagues-mob">
+      <div class="pop-leagues-mob__leagues">
+        <div class="pop-leagues-mob__header">
+          <h3>Конкуренция</h3>
+          <button class="pop-leagues-mob__close-btn">
+            <svg
+              stroke="currentColor"
+              fill="currentColor"
+              stroke-width="0"
+              viewBox="0 0 16 16"
+              height="1em"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"
+              ></path>
+            </svg>
+          </button>
+        </div>
+        <p>Лиги</p>
+        <ul>
+          <li><a href="/">Англия: Премьер-лига</a></li>
+          <li><a href="/">Германия: Бундеслига</a></li>
+          <li><a href="/">Европа: Евро</a></li>
+          <li><a href="/">Европа: Лига Европы</a></li>
+          <li><a href="/">Европа: Лига конференций УЕФА</a></li>
+          <li><a href="/">Европа: Лига наций УЕФА</a></li>
+          <li><a href="/">Европа: Лига чемпионов</a></li>
+          <li><a href="/">Испания: Примера</a></li>
+          <li><a href="/">Италия: Серия А</a></li>
+          <li><a href="/">Мир: Чемпионат мира</a></li>
+          <li><a href="/">Франция: Первая лига</a></li>
+        </ul>
+      </div>
+    </div>
+    <main class="event-info sp-container">
+      <div class="side-banners left">
+        <a class="adv-link"><img src="./img/1xbet.gif" alt="logo" /></a>
+      </div>
+      <div>
+        <div class="event-info__score">
+          <div class="event-info__tournament">
+            <button class="event-info__tournament-like">
+              <svg
+                stroke="currentColor"
+                fill="currentColor"
+                stroke-width="0"
+                viewBox="0 0 16 16"
+                height="1em"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"
+                ></path>
+              </svg>
+            </button>
+            <span>Англия: АПЛ</span>
+          </div>
+          <div class="event-info__teams">
+            <div class="event-info__team event-team home">
+              <div class="event-team__team">
+                <h2 class="event-team__name">Дома</h2>
+                <img src="./img/logo.jpg" width="46" height="46" alt="home-name" />
+              </div>
+              <div class="event-team__like-score">
+                <button class="event-team__like">
+                  <svg
+                    stroke="currentColor"
+                    fill="currentColor"
+                    stroke-width="0"
+                    viewBox="0 0 16 16"
+                    height="1em"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"
+                    ></path>
+                  </svg>
+                </button>
+                <span class="event-team__point">0</span>
+              </div>
+            </div>
+            <div class="event-info__team event-team away">
+              <div class="event-team__team away">
+                <h2 class="event-team__name">Гости</h2>
+                <img src="./img/logo.jpg" width="46" height="46" alt="home-name" />
+              </div>
+              <div class="event-team__like-score away">
+                <button class="event-team__like">
+                  <svg
+                    stroke="currentColor"
+                    fill="currentColor"
+                    stroke-width="0"
+                    viewBox="0 0 16 16"
+                    height="1em"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"
+                    ></path>
+                  </svg>
+                </button>
+                <span class="event-team__point">0</span>
+              </div>
+            </div>
+          </div>
+          <div id="desktop" class="event-info__info-toggle">
+            <label>
+              <input value="review" type="radio" name="info-toggle" checked />
+              <span>Обзор</span>
+            </label>
+            <label>
+              <input value="h2h" type="radio" name="info-toggle" />
+              <span>H2H</span>
+            </label>
+          </div>
+          <div id="mobile" class="event-info__info-toggle mobile">
+            <label>
+              <input value="review" type="radio" name="info-toggle-mob" checked />
+              <span>Обзор</span>
+            </label>
+            <label>
+              <input value="chat" type="radio" name="info-toggle-mob" />
+              <span>Чат</span>
+            </label>
+            <label>
+              <input value="h2h" type="radio" name="info-toggle-mob" />
+              <span>H2H</span>
+            </label>
+            <label>
+              <input value="stats" type="radio" name="info-toggle-mob" />
+              <span>Статистика</span>
+            </label>
+          </div>
+        </div>
+        <div class="event__info-h2h h2h none">
+          <div class="h2h__block">
+            <div class="h2h__header">
+              <h3>H2H</h3>
+              <select value="6">
+                <option>6</option>
+                <option>12</option>
+                <option>18</option>
+                <option>24</option>
+              </select>
+            </div>
+            <div class="h2h__checkboxs">
+              <label>
+                <input type="checkbox" />
+                Дома - гомель 2
+                <span></span>
+              </label>
+              <label>
+                <input type="checkbox" />
+                Текущий турнир
+                <span></span>
+              </label>
+            </div>
+            <div class="h2h__last-matches-stats">
+              <div class="h2h__count">
+                <span class="h2h__res-icon win">W</span>
+                <span>X0</span>
+              </div>
+              <div class="h2h__count">
+                <span class="h2h__res-icon draw">
+                  <svg
+                    stroke="currentColor"
+                    fill="currentColor"
+                    stroke-width="0"
+                    viewBox="0 0 640 512"
+                    font-size="16"
+                    height="1em"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M434.7 64h-85.9c-8 0-15.7 3-21.6 8.4l-98.3 90c-.1.1-.2.3-.3.4-16.6 15.6-16.3 40.5-2.1 56 12.7 13.9 39.4 17.6 56.1 2.7.1-.1.3-.1.4-.2l79.9-73.2c6.5-5.9 16.7-5.5 22.6 1 6 6.5 5.5 16.6-1 22.6l-26.1 23.9L504 313.8c2.9 2.4 5.5 5 7.9 7.7V128l-54.6-54.6c-5.9-6-14.1-9.4-22.6-9.4zM544 128.2v223.9c0 17.7 14.3 32 32 32h64V128.2h-96zm48 223.9c-8.8 0-16-7.2-16-16s7.2-16 16-16 16 7.2 16 16-7.2 16-16 16zM0 384h64c17.7 0 32-14.3 32-32V128.2H0V384zm48-63.9c8.8 0 16 7.2 16 16s-7.2 16-16 16-16-7.2-16-16c0-8.9 7.2-16 16-16zm435.9 18.6L334.6 217.5l-30 27.5c-29.7 27.1-75.2 24.5-101.7-4.4-26.9-29.4-24.8-74.9 4.4-101.7L289.1 64h-83.8c-8.5 0-16.6 3.4-22.6 9.4L128 128v223.9h18.3l90.5 81.9c27.4 22.3 67.7 18.1 90-9.3l.2-.2 17.9 15.5c15.9 13 39.4 10.5 52.3-5.4l31.4-38.6 5.4 4.4c13.7 11.1 33.9 9.1 45-4.7l9.5-11.7c11.2-13.8 9.1-33.9-4.6-45.1z"
+                    ></path>
+                  </svg>
+                </span>
+                <span>X0</span>
+              </div>
+              <div class="h2h__count">
+                <span class="h2h__res-icon lose">L</span>
+                <span>X0</span>
+              </div>
+            </div>
+            <div class="h2h__last-matches">
+              <div class="h2h__last-matches-tour">
+                <span class="h2h__last-matches-country">Беларусь</span>
+                <span class="h2h__last-matches-name-tour">Высшая лига - Резерв</span>
+              </div>
+              <a class="h2h__last-match">
+                <div class="h2h__last-match-result">
+                  <span class="h2h__res-icon draw">
+                    <svg
+                      stroke="currentColor"
+                      fill="currentColor"
+                      stroke-width="0"
+                      viewBox="0 0 640 512"
+                      font-size="16"
+                      height="1em"
+                      width="1em"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M434.7 64h-85.9c-8 0-15.7 3-21.6 8.4l-98.3 90c-.1.1-.2.3-.3.4-16.6 15.6-16.3 40.5-2.1 56 12.7 13.9 39.4 17.6 56.1 2.7.1-.1.3-.1.4-.2l79.9-73.2c6.5-5.9 16.7-5.5 22.6 1 6 6.5 5.5 16.6-1 22.6l-26.1 23.9L504 313.8c2.9 2.4 5.5 5 7.9 7.7V128l-54.6-54.6c-5.9-6-14.1-9.4-22.6-9.4zM544 128.2v223.9c0 17.7 14.3 32 32 32h64V128.2h-96zm48 223.9c-8.8 0-16-7.2-16-16s7.2-16 16-16 16 7.2 16 16-7.2 16-16 16zM0 384h64c17.7 0 32-14.3 32-32V128.2H0V384zm48-63.9c8.8 0 16 7.2 16 16s-7.2 16-16 16-16-7.2-16-16c0-8.9 7.2-16 16-16zm435.9 18.6L334.6 217.5l-30 27.5c-29.7 27.1-75.2 24.5-101.7-4.4-26.9-29.4-24.8-74.9 4.4-101.7L289.1 64h-83.8c-8.5 0-16.6 3.4-22.6 9.4L128 128v223.9h18.3l90.5 81.9c27.4 22.3 67.7 18.1 90-9.3l.2-.2 17.9 15.5c15.9 13 39.4 10.5 52.3-5.4l31.4-38.6 5.4 4.4c13.7 11.1 33.9 9.1 45-4.7l9.5-11.7c11.2-13.8 9.1-33.9-4.6-45.1z"
+                      ></path>
+                    </svg>
+                  </span>
+                </div>
+                <div class="h2h__last-match-date">Понедельник, 22 Мая 2023 г.</div>
+                <div class="h2h__last-match-teams">
+                  <div class="h2h__last-match-team">
+                    <img src="./img/logo.jpg" width="20" height="20" />
+                    <span>Дома</span>
+                  </div>
+                  <div class="h2h__last-match-team">
+                    <img src="./img/logo.jpg" width="20" height="20" />
+                    <span>Дома</span>
+                  </div>
+                </div>
+                <div class="h2h__score">
+                  <span>0</span>
+                  <span>0</span>
+                </div>
+              </a>
+            </div>
+          </div>
+          <div class="h2h__block">
+            <div class="h2h__header">
+              <h3>
+                <img src="./img/logo.jpg" width="20" height="20" />
+                Дома
+              </h3>
+              <select value="6">
+                <option>6</option>
+                <option>12</option>
+                <option>18</option>
+                <option>24</option>
+              </select>
+            </div>
+            <div class="h2h__checkboxs">
+              <label>
+                <input type="checkbox" />
+                Дома - гомель 2
+                <span></span>
+              </label>
+              <label>
+                <input type="checkbox" />
+                Текущий турнир
+                <span></span>
+              </label>
+            </div>
+            <div class="h2h__last-matches-stats">
+              <div class="h2h__count">
+                <span class="h2h__res-icon win">W</span>
+                <span>X0</span>
+              </div>
+              <div class="h2h__count">
+                <span class="h2h__res-icon draw">
+                  <svg
+                    stroke="currentColor"
+                    fill="currentColor"
+                    stroke-width="0"
+                    viewBox="0 0 640 512"
+                    font-size="16"
+                    height="1em"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M434.7 64h-85.9c-8 0-15.7 3-21.6 8.4l-98.3 90c-.1.1-.2.3-.3.4-16.6 15.6-16.3 40.5-2.1 56 12.7 13.9 39.4 17.6 56.1 2.7.1-.1.3-.1.4-.2l79.9-73.2c6.5-5.9 16.7-5.5 22.6 1 6 6.5 5.5 16.6-1 22.6l-26.1 23.9L504 313.8c2.9 2.4 5.5 5 7.9 7.7V128l-54.6-54.6c-5.9-6-14.1-9.4-22.6-9.4zM544 128.2v223.9c0 17.7 14.3 32 32 32h64V128.2h-96zm48 223.9c-8.8 0-16-7.2-16-16s7.2-16 16-16 16 7.2 16 16-7.2 16-16 16zM0 384h64c17.7 0 32-14.3 32-32V128.2H0V384zm48-63.9c8.8 0 16 7.2 16 16s-7.2 16-16 16-16-7.2-16-16c0-8.9 7.2-16 16-16zm435.9 18.6L334.6 217.5l-30 27.5c-29.7 27.1-75.2 24.5-101.7-4.4-26.9-29.4-24.8-74.9 4.4-101.7L289.1 64h-83.8c-8.5 0-16.6 3.4-22.6 9.4L128 128v223.9h18.3l90.5 81.9c27.4 22.3 67.7 18.1 90-9.3l.2-.2 17.9 15.5c15.9 13 39.4 10.5 52.3-5.4l31.4-38.6 5.4 4.4c13.7 11.1 33.9 9.1 45-4.7l9.5-11.7c11.2-13.8 9.1-33.9-4.6-45.1z"
+                    ></path>
+                  </svg>
+                </span>
+                <span>X0</span>
+              </div>
+              <div class="h2h__count">
+                <span class="h2h__res-icon lose">L</span>
+                <span>X0</span>
+              </div>
+            </div>
+            <div class="h2h__last-matches">
+              <div class="h2h__last-matches-tour">
+                <span class="h2h__last-matches-country">Беларусь</span>
+                <span class="h2h__last-matches-name-tour">Высшая лига - Резерв</span>
+              </div>
+              <a class="h2h__last-match">
+                <div class="h2h__last-match-result">
+                  <span class="h2h__res-icon draw">
+                    <svg
+                      stroke="currentColor"
+                      fill="currentColor"
+                      stroke-width="0"
+                      viewBox="0 0 640 512"
+                      font-size="16"
+                      height="1em"
+                      width="1em"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M434.7 64h-85.9c-8 0-15.7 3-21.6 8.4l-98.3 90c-.1.1-.2.3-.3.4-16.6 15.6-16.3 40.5-2.1 56 12.7 13.9 39.4 17.6 56.1 2.7.1-.1.3-.1.4-.2l79.9-73.2c6.5-5.9 16.7-5.5 22.6 1 6 6.5 5.5 16.6-1 22.6l-26.1 23.9L504 313.8c2.9 2.4 5.5 5 7.9 7.7V128l-54.6-54.6c-5.9-6-14.1-9.4-22.6-9.4zM544 128.2v223.9c0 17.7 14.3 32 32 32h64V128.2h-96zm48 223.9c-8.8 0-16-7.2-16-16s7.2-16 16-16 16 7.2 16 16-7.2 16-16 16zM0 384h64c17.7 0 32-14.3 32-32V128.2H0V384zm48-63.9c8.8 0 16 7.2 16 16s-7.2 16-16 16-16-7.2-16-16c0-8.9 7.2-16 16-16zm435.9 18.6L334.6 217.5l-30 27.5c-29.7 27.1-75.2 24.5-101.7-4.4-26.9-29.4-24.8-74.9 4.4-101.7L289.1 64h-83.8c-8.5 0-16.6 3.4-22.6 9.4L128 128v223.9h18.3l90.5 81.9c27.4 22.3 67.7 18.1 90-9.3l.2-.2 17.9 15.5c15.9 13 39.4 10.5 52.3-5.4l31.4-38.6 5.4 4.4c13.7 11.1 33.9 9.1 45-4.7l9.5-11.7c11.2-13.8 9.1-33.9-4.6-45.1z"
+                      ></path>
+                    </svg>
+                  </span>
+                </div>
+                <div class="h2h__last-match-date">Понедельник, 22 Мая 2023 г.</div>
+                <div class="h2h__last-match-teams">
+                  <div class="h2h__last-match-team">
+                    <img src="./img/logo.jpg" width="20" height="20" />
+                    <span>Дома</span>
+                  </div>
+                  <div class="h2h__last-match-team">
+                    <img src="./img/logo.jpg" width="20" height="20" />
+                    <span>Дома</span>
+                  </div>
+                </div>
+                <div class="h2h__score">
+                  <span>0</span>
+                  <span>0</span>
+                </div>
+              </a>
+              <a class="h2h__last-match">
+                <div class="h2h__last-match-result"><span class="h2h__res-icon win">L</span></div>
+                <div class="h2h__last-match-date">Понедельник, 22 Мая 2023 г.</div>
+                <div class="h2h__last-match-teams">
+                  <div class="h2h__last-match-team">
+                    <img src="./img/logo.jpg" width="20" height="20" />
+                    <span>Дома</span>
+                  </div>
+                  <div class="h2h__last-match-team">
+                    <img src="./img/logo.jpg" width="20" height="20" />
+                    <span>Дома</span>
+                  </div>
+                </div>
+                <div class="h2h__score">
+                  <span>0</span>
+                  <span>0</span>
+                </div>
+              </a>
+              <a class="h2h__last-match">
+                <div class="h2h__last-match-result"><span class="h2h__res-icon lose">L</span></div>
+                <div class="h2h__last-match-date">Понедельник, 22 Мая 2023 г.</div>
+                <div class="h2h__last-match-teams">
+                  <div class="h2h__last-match-team">
+                    <img src="./img/logo.jpg" width="20" height="20" />
+                    <span>Дома</span>
+                  </div>
+                  <div class="h2h__last-match-team">
+                    <img src="./img/logo.jpg" width="20" height="20" />
+                    <span>Дома</span>
+                  </div>
+                </div>
+                <div class="h2h__score">
+                  <span>0</span>
+                  <span>0</span>
+                </div>
+              </a>
+            </div>
+          </div>
+          <div class="h2h__block">
+            <div class="h2h__header">
+              <h3>
+                <img src="./img/logo.jpg" width="20" height="20" />
+                Гости
+              </h3>
+              <select value="6">
+                <option>6</option>
+                <option>12</option>
+                <option>18</option>
+                <option>24</option>
+              </select>
+            </div>
+            <div class="h2h__checkboxs">
+              <label>
+                <input type="checkbox" />
+                Дома - гомель 2
+                <span></span>
+              </label>
+              <label>
+                <input type="checkbox" />
+                Текущий турнир
+                <span></span>
+              </label>
+            </div>
+            <div class="h2h__last-matches-stats">
+              <div class="h2h__count">
+                <span class="h2h__res-icon win">W</span>
+                <span>X0</span>
+              </div>
+              <div class="h2h__count">
+                <span class="h2h__res-icon draw">
+                  <svg
+                    stroke="currentColor"
+                    fill="currentColor"
+                    stroke-width="0"
+                    viewBox="0 0 640 512"
+                    font-size="16"
+                    height="1em"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M434.7 64h-85.9c-8 0-15.7 3-21.6 8.4l-98.3 90c-.1.1-.2.3-.3.4-16.6 15.6-16.3 40.5-2.1 56 12.7 13.9 39.4 17.6 56.1 2.7.1-.1.3-.1.4-.2l79.9-73.2c6.5-5.9 16.7-5.5 22.6 1 6 6.5 5.5 16.6-1 22.6l-26.1 23.9L504 313.8c2.9 2.4 5.5 5 7.9 7.7V128l-54.6-54.6c-5.9-6-14.1-9.4-22.6-9.4zM544 128.2v223.9c0 17.7 14.3 32 32 32h64V128.2h-96zm48 223.9c-8.8 0-16-7.2-16-16s7.2-16 16-16 16 7.2 16 16-7.2 16-16 16zM0 384h64c17.7 0 32-14.3 32-32V128.2H0V384zm48-63.9c8.8 0 16 7.2 16 16s-7.2 16-16 16-16-7.2-16-16c0-8.9 7.2-16 16-16zm435.9 18.6L334.6 217.5l-30 27.5c-29.7 27.1-75.2 24.5-101.7-4.4-26.9-29.4-24.8-74.9 4.4-101.7L289.1 64h-83.8c-8.5 0-16.6 3.4-22.6 9.4L128 128v223.9h18.3l90.5 81.9c27.4 22.3 67.7 18.1 90-9.3l.2-.2 17.9 15.5c15.9 13 39.4 10.5 52.3-5.4l31.4-38.6 5.4 4.4c13.7 11.1 33.9 9.1 45-4.7l9.5-11.7c11.2-13.8 9.1-33.9-4.6-45.1z"
+                    ></path>
+                  </svg>
+                </span>
+                <span>X0</span>
+              </div>
+              <div class="h2h__count">
+                <span class="h2h__res-icon lose">L</span>
+                <span>X0</span>
+              </div>
+            </div>
+            <div class="h2h__last-matches">
+              <div class="h2h__last-matches-tour">
+                <span class="h2h__last-matches-country">Беларусь</span>
+                <span class="h2h__last-matches-name-tour">Высшая лига - Резерв</span>
+              </div>
+              <a class="h2h__last-match">
+                <div class="h2h__last-match-result">
+                  <span class="h2h__res-icon draw">
+                    <svg
+                      stroke="currentColor"
+                      fill="currentColor"
+                      stroke-width="0"
+                      viewBox="0 0 640 512"
+                      font-size="16"
+                      height="1em"
+                      width="1em"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M434.7 64h-85.9c-8 0-15.7 3-21.6 8.4l-98.3 90c-.1.1-.2.3-.3.4-16.6 15.6-16.3 40.5-2.1 56 12.7 13.9 39.4 17.6 56.1 2.7.1-.1.3-.1.4-.2l79.9-73.2c6.5-5.9 16.7-5.5 22.6 1 6 6.5 5.5 16.6-1 22.6l-26.1 23.9L504 313.8c2.9 2.4 5.5 5 7.9 7.7V128l-54.6-54.6c-5.9-6-14.1-9.4-22.6-9.4zM544 128.2v223.9c0 17.7 14.3 32 32 32h64V128.2h-96zm48 223.9c-8.8 0-16-7.2-16-16s7.2-16 16-16 16 7.2 16 16-7.2 16-16 16zM0 384h64c17.7 0 32-14.3 32-32V128.2H0V384zm48-63.9c8.8 0 16 7.2 16 16s-7.2 16-16 16-16-7.2-16-16c0-8.9 7.2-16 16-16zm435.9 18.6L334.6 217.5l-30 27.5c-29.7 27.1-75.2 24.5-101.7-4.4-26.9-29.4-24.8-74.9 4.4-101.7L289.1 64h-83.8c-8.5 0-16.6 3.4-22.6 9.4L128 128v223.9h18.3l90.5 81.9c27.4 22.3 67.7 18.1 90-9.3l.2-.2 17.9 15.5c15.9 13 39.4 10.5 52.3-5.4l31.4-38.6 5.4 4.4c13.7 11.1 33.9 9.1 45-4.7l9.5-11.7c11.2-13.8 9.1-33.9-4.6-45.1z"
+                      ></path>
+                    </svg>
+                  </span>
+                </div>
+                <div class="h2h__last-match-date">Понедельник, 22 Мая 2023 г.</div>
+                <div class="h2h__last-match-teams">
+                  <div class="h2h__last-match-team">
+                    <img src="./img/logo.jpg" width="20" height="20" />
+                    <span>Дома</span>
+                  </div>
+                  <div class="h2h__last-match-team">
+                    <img src="./img/logo.jpg" width="20" height="20" />
+                    <span>Дома</span>
+                  </div>
+                </div>
+                <div class="h2h__score">
+                  <span>0</span>
+                  <span>0</span>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="event-info__main">
+          <div class="event-info__main-left">
+            <a href="#" class="adv-link"><img src="./img/astra.gif" alt="logo" /></a>
+            <div class="data-period">
+              <div class="data-period__title">
+                <div class="data-period__first-box"></div>
+                <div class="data-period__period-box"><span>1</span></div>
+                <div class="data-period__period-box"><span>2</span></div>
+                <div class="data-period__period-box"><span>3</span></div>
+              </div>
+              <div class="data-period__content">
+                <div class="data-period__first-box">
+                  <img src="./img/logo.jpg" width="20" height="20" />
+                  <span>команда 1</span>
+                </div>
+                <div class="data-period__point-box loser"><span>1</span></div>
+                <div class="data-period__point-box loser"><span>1</span></div>
+                <div class="data-period__point-box loser"><span>1</span></div>
+              </div>
+              <div class="data-period__content">
+                <div class="data-period__first-box">
+                  <img src="./img/logo.jpg" width="20" height="20" />
+                  <span>команда 31231234124123</span>
+                </div>
+                <div class="data-period__point-box"><span>2</span></div>
+                <div class="data-period__point-box"><span>2</span></div>
+                <div class="data-period__point-box"><span>2</span></div>
+              </div>
+            </div>
+            <div class="event-info__img-info img-info">
+              <div class="img-info__score">1-2</div>
+              <img src="./img/bg-score-event.png" alt="bg" class="img-info__background" />
+              <div class="img-info__period">2-ой тайм</div>
+              <div class="img-info__periods-data">
+                (
+                <span>0 - 1,</span>
+                <span>1 - 1</span>
+                )
+              </div>
+            </div>
+            <div class="event-info__football-rev football-rev">
+              <div class="football-rev__header">Обзор</div>
+              <div class="football-rev__teams">
+                <span>
+                  <img src="./img/logo.jpg" width="24" alt="home name" height="24" />
+                  Бока Хуниорс Кали
+                </span>
+                <span>
+                  Атлетико
+                  <img src="./img/logo.jpg" width="24" alt="home name" height="24" />
+                </span>
+              </div>
+              <div class="football-rev__main">
+                <div class="football-rev__start-end-match">
+                  <svg
+                    stroke="currentColor"
+                    fill="currentColor"
+                    stroke-width="0"
+                    viewBox="0 0 512 512"
+                    color="#2e8b56"
+                    font-size="20"
+                    height="1em"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                    style="color: rgb(46, 139, 86)"
+                  >
+                    <path
+                      d="M93.75 81.443c-5.38 0-12.368 2.49-22.358 8.967 3.966 4.682 8.167 9.687 16.47 19.256 5.782 6.663 11.618 13.29 16.026 18.088.038.042.055.055.092.096l30.894-17.932-14.652-14.148c-11.292-9.404-18.644-13.866-25.418-14.293-.345-.022-.696-.034-1.055-.034zm120.08 15.082c-.885-.01-1.767-.006-2.643.01-10.46.193-20.2 2.23-26.742 5.424l-67.262 39.038c2.45.544 4.885 1.196 7.287 2.02 17.275 5.923 33.093 18.223 49.568 34.7l216.44 213.5 80.978-44.433L258.54 111.38c-8.656-7.84-22.49-12.908-36.693-14.394-2.677-.28-5.363-.43-8.018-.46zM58.192 102.74c-17.543 20.723-20.57 37.186-15.326 57.004.692 2.618 3.057 6.357 6.373 10.47 2.195-3.144 4.55-6.304 7.086-9.478 3.99-4.995 8.385-9.183 13.085-12.558l-.106-.2 2.768-1.61c1.354-.862 2.73-1.66 4.13-2.393l11.868-6.89c-4.175-4.618-8.94-10.017-13.803-15.622-5.956-6.864-11.732-13.62-16.074-18.723zm184.093 13.438 58.415 61.67c-46.086-5.037-56.79 13.2-69.027 34.2l-57.334-59.304 67.946-36.566zM103.702 157.23c-.714-.016-1.43-.016-2.15.002-6.976.18-14.207 2.058-22.252 5.885-3.035 2.29-5.99 5.196-8.91 8.852-25.77 32.264-30.45 59.135-25.484 83.477 4.965 24.343 20.536 46.656 37.916 66.455 13.314 15.168 28.86 23.992 48.472 27.93 19.614 3.94 43.438 2.708 71.98-3.475 33.246-7.2 66.01 8.42 95.81 27.665 26.118 16.868 50.676 37.09 70.98 49.95l8.79-18.935-217.52-214.57-.022-.022c-15.524-15.524-29.565-25.905-42.682-30.402-5.02-1.722-9.925-2.695-14.928-2.813zm367.08 210.456-73.45 40.304-10.48 22.567 70.833-38.41 13.096-24.46z"
+                    ></path>
+                  </svg>
+                </div>
+                <div class="football-rev__event">
+                  <div class="football-rev__time">8'</div>
+                  <div class="football-rev__event-description">
+                    <div class="football-rev__textbox">
+                      <div class="football-rev__textbox-flex">
+                        <div class="football-rev__hockey-names">
+                          <div class="football-rev__hockey-name">Голеадор</div>
+                          <div class="football-rev__hockey-assist-names">Ассистент 1 + Ассистент 2 + Ассистент 3</div>
+                        </div>
+                        <div class="football-rev__hockey-score">0-0</div>
+                        <img src="./img/puck.svg" width="20" height="20" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="football-rev__event away">
+                  <div class="football-rev__time">8'</div>
+                  <div class="football-rev__event-description away">
+                    <div class="football-rev__textbox">
+                      <div class="football-rev__textbox-flex">
+                        <div class="football-rev__hockey-names">
+                          <div class="football-rev__hockey-name">Голеадор</div>
+                          <div class="football-rev__hockey-assist-names">Ассистент 1 + Ассистент 2 + Ассистент 3</div>
+                        </div>
+                        <div class="football-rev__hockey-score">0-0</div>
+                        <img src="./img/puck.svg" width="20" height="20" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="football-rev__score"><span>0 - 0</span></div>
+                <div class="football-rev__event">
+                  <div class="football-rev__time">8'</div>
+                  <div class="football-rev__event-description">
+                    <div class="football-rev__textbox">
+                      <div class="football-rev__textbox-flex">
+                        <div class="football-rev__hockey-name">Штрафник</div>
+                        <div class="football-rev__fine">2</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="football-rev__event away">
+                  <div class="football-rev__time">8'</div>
+                  <div class="football-rev__event-description away">
+                    <div class="football-rev__textbox">
+                      <div class="football-rev__textbox-flex">
+                        <div class="football-rev__hockey-names">
+                          <div class="football-rev__hockey-name">Голеадор</div>
+                          <div class="football-rev__hockey-assist-names">Ассистент 1 + Ассистент 2 + Ассистент 3</div>
+                        </div>
+                        <div class="football-rev__hockey-score">0-0</div>
+                        <img src="./img/puck.svg" width="20" height="20" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="football-rev__event away">
+                  <div class="football-rev__time">8'</div>
+                  <div class="football-rev__event-description">
+                    <div class="football-rev__textbox">
+                      <div class="football-rev__textbox-flex">
+                        <div class="football-rev__hockey-name">Штрафник</div>
+                        <div class="football-rev__fine">5</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="football-rev__start-end-match">
+                  <svg
+                    stroke="currentColor"
+                    fill="currentColor"
+                    stroke-width="0"
+                    viewBox="0 0 512 512"
+                    color="#2e8b56"
+                    font-size="20"
+                    height="1em"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                    style="color: rgb(46, 139, 86)"
+                  >
+                    <path
+                      d="M93.75 81.443c-5.38 0-12.368 2.49-22.358 8.967 3.966 4.682 8.167 9.687 16.47 19.256 5.782 6.663 11.618 13.29 16.026 18.088.038.042.055.055.092.096l30.894-17.932-14.652-14.148c-11.292-9.404-18.644-13.866-25.418-14.293-.345-.022-.696-.034-1.055-.034zm120.08 15.082c-.885-.01-1.767-.006-2.643.01-10.46.193-20.2 2.23-26.742 5.424l-67.262 39.038c2.45.544 4.885 1.196 7.287 2.02 17.275 5.923 33.093 18.223 49.568 34.7l216.44 213.5 80.978-44.433L258.54 111.38c-8.656-7.84-22.49-12.908-36.693-14.394-2.677-.28-5.363-.43-8.018-.46zM58.192 102.74c-17.543 20.723-20.57 37.186-15.326 57.004.692 2.618 3.057 6.357 6.373 10.47 2.195-3.144 4.55-6.304 7.086-9.478 3.99-4.995 8.385-9.183 13.085-12.558l-.106-.2 2.768-1.61c1.354-.862 2.73-1.66 4.13-2.393l11.868-6.89c-4.175-4.618-8.94-10.017-13.803-15.622-5.956-6.864-11.732-13.62-16.074-18.723zm184.093 13.438 58.415 61.67c-46.086-5.037-56.79 13.2-69.027 34.2l-57.334-59.304 67.946-36.566zM103.702 157.23c-.714-.016-1.43-.016-2.15.002-6.976.18-14.207 2.058-22.252 5.885-3.035 2.29-5.99 5.196-8.91 8.852-25.77 32.264-30.45 59.135-25.484 83.477 4.965 24.343 20.536 46.656 37.916 66.455 13.314 15.168 28.86 23.992 48.472 27.93 19.614 3.94 43.438 2.708 71.98-3.475 33.246-7.2 66.01 8.42 95.81 27.665 26.118 16.868 50.676 37.09 70.98 49.95l8.79-18.935-217.52-214.57-.022-.022c-15.524-15.524-29.565-25.905-42.682-30.402-5.02-1.722-9.925-2.695-14.928-2.813zm367.08 210.456-73.45 40.304-10.48 22.567 70.833-38.41 13.096-24.46z"
+                    ></path>
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <a class="adv-link"><img src="./img/astra.gif" alt="logo" /></a>
+          </div>
+          <div class="event-info__main-right">
+            <div class="event-info__chat chat">
+              <div class="chat__header">
+                <h4 class="chat__header-name">Чат-рум</h4>
+                <div class="chat__num-members">
+                  0
+                  <svg
+                    stroke="currentColor"
+                    fill="currentColor"
+                    stroke-width="0"
+                    viewBox="0 0 512 512"
+                    height="1em"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M447.8 438.3c-7.2-31.8-48.3-47.3-62.5-52.3-15.6-5.5-37.8-6.8-52.1-10-8.2-1.8-20.1-6.3-24.1-11.1s-1.6-49.3-1.6-49.3 7.4-11.5 11.4-21.7c4-10.1 8.4-37.9 8.4-37.9s8.2 0 11.1-14.4c3.1-15.7 8-21.8 7.4-33.5-.6-11.5-6.9-11.2-6.9-11.2s6.1-16.7 6.8-51.3c.9-41.1-31.3-81.6-89.6-81.6-59.1 0-90.6 40.5-89.7 81.6.8 34.6 6.7 51.3 6.7 51.3s-6.3-.3-6.9 11.2c-.6 11.7 4.3 17.8 7.4 33.5 2.8 14.4 11.1 14.4 11.1 14.4s4.4 27.8 8.4 37.9c4 10.2 11.4 21.7 11.4 21.7s2.4 44.5-1.6 49.3c-4 4.8-15.9 9.3-24.1 11.1-14.3 3.2-36.5 4.5-52.1 10-14.2 5-55.3 20.5-62.5 52.3-1.1 5 2.7 9.7 7.9 9.7H440c5.1 0 8.9-4.7 7.8-9.7z"
+                    ></path>
+                  </svg>
+                </div>
+              </div>
+              <ul class="chat__messages">
+                <li class="chat__message">
+                  <img src="./img/logo.jpg" class="chat__avatar" alt="avatar" width="16" height="16" />
+                  <span class="chat__username">User:</span>
+                  <span class="chat__text">
+                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Atque perspiciatis dolore eum. Delectus
+                    natus quo sapiente officiis necessitatibus. Fugiat numquam sed dolor tempore maiores! Alias nemo
+                    illum animi fugit! Quae?
+                  </span>
+                </li>
+                <li class="chat__message">
+                  <img src="./img/logo.jpg" class="chat__avatar" alt="avatar" width="16" height="16" />
+                  <span class="chat__username">User:</span>
+                  <span class="chat__text">
+                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Atque perspiciatis dolore eum. Delectus
+                    natus quo sapiente officiis necessitatibus. Fugiat numquam sed dolor tempore maiores! Alias nemo
+                    illum animi fugit! Quae?
+                  </span>
+                </li>
+                <li class="chat__message">
+                  <img src="./img/logo.jpg" class="chat__avatar" alt="avatar" width="16" height="16" />
+                  <span class="chat__username">User:</span>
+                  <span class="chat__text">
+                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Atque perspiciatis dolore eum. Delectus
+                    natus quo sapiente officiis necessitatibus. Fugiat numquam sed dolor tempore maiores! Alias nemo
+                    illum animi fugit! Quae?
+                  </span>
+                </li>
+                <li class="chat__message">
+                  <img src="./img/logo.jpg" class="chat__avatar" alt="avatar" width="16" height="16" />
+                  <span class="chat__username">User:</span>
+                  <span class="chat__text">
+                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Atque perspiciatis dolore eum. Delectus
+                    natus quo sapiente officiis necessitatibus. Fugiat numquam sed dolor tempore maiores! Alias nemo
+                    illum animi fugit! Quae?
+                  </span>
+                </li>
+                <li class="chat__message">
+                  <img src="./img/logo.jpg" class="chat__avatar" alt="avatar" width="16" height="16" />
+                  <span class="chat__username">User:</span>
+                  <span class="chat__text">
+                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Atque perspiciatis dolore eum. Delectus
+                    natus quo sapiente officiis necessitatibus. Fugiat numquam sed dolor tempore maiores! Alias nemo
+                    illum animi fugit! Quae?
+                  </span>
+                </li>
+                <li class="chat__message">
+                  <img src="./img/logo.jpg" class="chat__avatar" alt="avatar" width="16" height="16" />
+                  <span class="chat__username">User:</span>
+                  <span class="chat__text">
+                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Atque perspiciatis dolore eum. Delectus
+                    natus quo sapiente officiis necessitatibus. Fugiat numquam sed dolor tempore maiores! Alias nemo
+                    illum animi fugit! Quae?
+                  </span>
+                </li>
+                <li class="chat__message">
+                  <img src="./img/logo.jpg" class="chat__avatar" alt="avatar" width="16" height="16" />
+                  <span class="chat__username">User:</span>
+                  <span class="chat__text">
+                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Atque perspiciatis dolore eum. Delectus
+                    natus quo sapiente officiis necessitatibus. Fugiat numquam sed dolor tempore maiores! Alias nemo
+                    illum animi fugit! Quae?
+                  </span>
+                </li>
+                <li class="chat__message">
+                  <img src="./img/logo.jpg" class="chat__avatar" alt="avatar" width="16" height="16" />
+                  <span class="chat__username">User:</span>
+                  <span class="chat__text">
+                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Atque perspiciatis dolore eum. Delectus
+                    natus quo sapiente officiis necessitatibus. Fugiat numquam sed dolor tempore maiores! Alias nemo
+                    illum animi fugit! Quae?
+                  </span>
+                </li>
+              </ul>
+              <div class="chat__form">
+                <textarea class="chat__text" placeholder="Поделитесь своим мнением"></textarea>
+                <div class="chat__footer">
+                  <button class="chat__emoji">
+                    <svg
+                      stroke="currentColor"
+                      fill="currentColor"
+                      stroke-width="0"
+                      viewBox="0 0 16 16"
+                      height="1em"
+                      width="1em"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
+                      <path
+                        d="M4.285 9.567a.5.5 0 0 1 .683.183A3.498 3.498 0 0 0 8 11.5a3.498 3.498 0 0 0 3.032-1.75.5.5 0 1 1 .866.5A4.498 4.498 0 0 1 8 12.5a4.498 4.498 0 0 1-3.898-2.25.5.5 0 0 1 .183-.683zM7 6.5C7 7.328 6.552 8 6 8s-1-.672-1-1.5S5.448 5 6 5s1 .672 1 1.5zm4 0c0 .828-.448 1.5-1 1.5s-1-.672-1-1.5S9.448 5 10 5s1 .672 1 1.5z"
+                      ></path>
+                    </svg>
+                  </button>
+                  <div class="chat__send">
+                    0/200
+                    <button class="chat__send-btn">
+                      <svg
+                        stroke="currentColor"
+                        fill="currentColor"
+                        stroke-width="0"
+                        viewBox="0 0 24 24"
+                        height="1em"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path fill="none" d="M0 0h24v24H0z"></path>
+                        <path d="M2.01 21 23 12 2.01 3 2 10l15 2-15 2z"></path>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="event-info__stats stats">
+              <h5 class="stats__header">Статистика</h5>
+              <div class="stats__togglers">
+                <label>
+                  <input value="1" type="radio" name="stats-toggle" checked />
+                  <span>1-ый тайм</span>
+                </label>
+                <label>
+                  <input value="2" type="radio" name="stats-toggle" />
+                  <span>2-ой тайм</span>
+                </label>
+                <label>
+                  <input value="3" type="radio" name="stats-toggle" />
+                  <span>3-ий тайм</span>
+                </label>
+              </div>
+              <div class="stats__teams">
+                <div class="stats__team">
+                  <img src="./img/logo.jpg" width="24" height="24" alt="team" />
+                  <span>Бавария</span>
+                </div>
+                <div class="stats__team away">
+                  <img src="./img/logo.jpg" width="24" height="24" alt="team" />
+                  <span>Милан</span>
+                </div>
+              </div>
+              <ul data-value="1" class="stats__list">
+                <li class="stats__item">
+                  <div class="stats__point">321</div>
+                  <div class="stats__name">Имя статы 1</div>
+                  <div class="stats__point away">321</div>
+                </li>
+                <li class="stats__item">
+                  <div class="stats__point">321</div>
+                  <div class="stats__name">Имя статы</div>
+                  <div class="stats__point away">321</div>
+                </li>
+                <li class="stats__item">
+                  <div class="stats__point">321</div>
+                  <div class="stats__name">Имя статы</div>
+                  <div class="stats__point away">321</div>
+                </li>
+                <li class="stats__item">
+                  <div class="stats__point">321</div>
+                  <div class="stats__name">Имя статы</div>
+                  <div class="stats__point away">321</div>
+                </li>
+                <li class="stats__item">
+                  <div class="stats__point">321</div>
+                  <div class="stats__name">Имя статы</div>
+                  <div class="stats__point away">321</div>
+                </li>
+              </ul>
+              <ul data-value="2" class="stats__list">
+                <li class="stats__item">
+                  <div class="stats__point">321</div>
+                  <div class="stats__name">Имя статы 2</div>
+                  <div class="stats__point away">321</div>
+                </li>
+                <li class="stats__item">
+                  <div class="stats__point">321</div>
+                  <div class="stats__name">Имя статы</div>
+                  <div class="stats__point away">321</div>
+                </li>
+                <li class="stats__item">
+                  <div class="stats__point">321</div>
+                  <div class="stats__name">Имя статы</div>
+                  <div class="stats__point away">321</div>
+                </li>
+                <li class="stats__item">
+                  <div class="stats__point">321</div>
+                  <div class="stats__name">Имя статы</div>
+                  <div class="stats__point away">321</div>
+                </li>
+                <li class="stats__item">
+                  <div class="stats__point">321</div>
+                  <div class="stats__name">Имя статы</div>
+                  <div class="stats__point away">321</div>
+                </li>
+              </ul>
+              <ul data-value="3" class="stats__list">
+                <li class="stats__item">
+                  <div class="stats__point">321</div>
+                  <div class="stats__name">Имя статы 3</div>
+                  <div class="stats__point away">321</div>
+                </li>
+                <li class="stats__item">
+                  <div class="stats__point">321</div>
+                  <div class="stats__name">Имя статы</div>
+                  <div class="stats__point away">321</div>
+                </li>
+                <li class="stats__item">
+                  <div class="stats__point">321</div>
+                  <div class="stats__name">Имя статы</div>
+                  <div class="stats__point away">321</div>
+                </li>
+                <li class="stats__item">
+                  <div class="stats__point">321</div>
+                  <div class="stats__name">Имя статы</div>
+                  <div class="stats__point away">321</div>
+                </li>
+                <li class="stats__item">
+                  <div class="stats__point">321</div>
+                  <div class="stats__name">Имя статы</div>
+                  <div class="stats__point away">321</div>
+                </li>
+              </ul>
+            </div>
+            <a class="adv-link"><img src="./img/1xbet.gif" alt="logo" /></a>
+          </div>
+        </div>
+      </div>
+      <div class="side-banners right">
+        <a class="adv-link"><img src="./img/1xbet.gif" alt="logo" /></a>
+        <a class="adv-link"><img src="./img/1xbet.gif" alt="logo" /></a>
+      </div>
+    </main>
+    <footer class="footer">
+      <div class="footer__container container">
+        <p class="footer__description">Честер бет описание</p>
+        <div class="footer__bottom">
+          <ul>
+            <li><a href=".#">Связаться с нами</a></li>
+            <li><a href=".#">Update Lineups</a></li>
+            <li><a href=".#">Business Cooperation</a></li>
+            <li><a href=".#">Условия предоставления услуг</a></li>
+            <li><a href=".#">Политика конфиденциальности</a></li>
+            <li><a href=".#">Free Livescores Widget</a></li>
+          </ul>
+          <p class="footer__copyright">Copyright @ 2023 Chesterbet 18+ Gamble Responsibly</p>
+        </div>
+      </div>
+    </footer>
+    <script src="./js/index.bundle.js"></script>
+  </body>
+</html>

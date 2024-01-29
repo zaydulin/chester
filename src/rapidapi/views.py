@@ -13,6 +13,7 @@ from django.utils import timezone
 from django.db.models import Q
 from django.db import transaction
 import time
+
 from datetime import datetime
 from django.db.models import Count
 
@@ -1073,17 +1074,25 @@ def get_h2h_second(request):
 
 
 def clear_db(request):
-    duplicates = Events.objects.values('second_event_api_id').annotate(count=Count('second_event_api_id')).filter(
-        count__gt=1)
+    duplicate_teams = Season.objects.values('season_id').annotate(count=Count('id')).filter(count__gt=1)
 
-    # Оставляем только одну запись для каждого participant_id (удаляем дубликаты)
-    for duplicate in duplicates:
-        duplicate_records = Events.objects.filter(second_event_api_id=duplicate['second_event_api_id'])
-        # Оставляем первую запись и удаляем остальные
-        for record in duplicate_records[1:]:
-            record.delete()
+    # Переменная для хранения количества удаленных объектов
+    total_deleted_teams = 0
 
-    return HttpResponse(f'ок')
+    # Перебираем дубликаты и удаляем лишние объекты
+    for duplicate_team in duplicate_teams:
+        team_objects = Season.objects.filter(season_id=duplicate_team['season_id'])
+
+        # Оставляем один объект с наименьшим идентификатором (можно изменить логику выбора)
+        team_to_keep = team_objects.order_by('id').first()
+
+        # Получаем количество удаленных объектов и удаляем их
+        deleted_teams_count, _ = team_objects.exclude(id=team_to_keep.id).delete()
+
+        # Обновляем общее количество удаленных объектов
+        total_deleted_teams += deleted_teams_count
+
+    return HttpResponse(f'ок - {total_deleted_teams}')
 
 def create_tournament(request):
     tournaments_list_url = "https://flashlive-sports.p.rapidapi.com/v1/tournaments/list"

@@ -27,6 +27,10 @@ makemigrations:
 	docker-compose -f $(docker_file) exec cb-app python manage.py makemigrations
 migrate:
 	docker-compose -f $(docker_file) exec cb-app python manage.py migrate
+piplist:
+	docker-compose -f $(docker_file) exec cb-app pip list
+collectstatic:
+	docker-compose -f $(docker_file) exec cb-app python manage.py collectstatic
 test:
 	docker-compose -f $(docker_file) exec cb-app python manage.py test
 celery:
@@ -35,3 +39,5 @@ celery-delete:
 	docker-compose -f $(docker_file) exec cb-celery celery -A _project purge
 celery-on:
 	docker-compose -f $(docker_file) exec cb-celery celery -A _project worker -l info -c 13
+celery-first:
+	docker-compose -f $(docker_file) exec cb-celery celery -A _project call events.tasks.create_tournament

@@ -1745,36 +1745,41 @@ updateCurrentTimeAttribute();
                 </div>
                 <ul class="football-squads__body">
                     {% for player in home_team_players_main %}
-                    <li class="football-squads__body-item">
-                        <a
-                                href="{% url 'player_detail' player.slug %}"
-                                hx-get="{% url 'player_detail' player.slug %}"
-                                hx-target="#main-content"
-                                hx-history-elt="#main-content"
-                                hx-push-url="true"
-                                hx-indicator="#content-loader"
-                                hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''">
-                            <div class="football-squads__num">{% if player.number %}{{player.number}}{% else %}Н/И{% endif %}</div>
-                            <div class="football-squads__name">
-                                <img src="{{ player.photo }}" width="20" height="20" />
-                                <span>{{ player.name }}</span>
-                            </div>
-                            <div class="football-squads__pos">{% if  player.position_name %}{{ player.position_name }}{% else %}Н/И{%endif%}</div>
-                            <div class="football-squads__rate">{% if player.reiting %}{{ player.reiting }}{% else %}Н/И{%endif%}</div>
-                        </a>
-                    </li>
-                    {% endfor %}
-                    <li class="football-squads__sub-div">Замена</li>
-                    {% for player in home_team_players_not_main %}
-                    <li class="football-squads__body-item">
-                        <a href="{% url 'player_detail' player.slug %}"
+                     <a href="{% url 'player_detail' player.slug %}"
                            hx-get="{% url 'player_detail' player.slug %}"
                            hx-target="#main-content"
                            hx-history-elt="#main-content"
                            hx-push-url="true"
                            hx-indicator="#content-loader"
                            hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''"
+                        style="color:black"
                         >
+                    <li class="football-squads__body-item">
+
+                            <div class="football-squads__num">{% if player.number %}{{player.number}}{% else %}Н/И{% endif %}</div>
+                            <div class="football-squads__name">
+
+                                <span>{{ player.name }}</span>
+                            </div>
+                            <div class="football-squads__pos">{% if  player.position_name %}{{ player.position_name }}{% else %}Н/И{%endif%}</div>
+                            <div class="football-squads__rate">{% if player.reiting %}{{ player.reiting }}{% else %}Н/И{%endif%}</div>
+
+                    </li>
+                         </a>
+                    {% endfor %}
+                    <li class="football-squads__sub-div">Замена</li>
+                    {% for player in home_team_players_not_main %}
+                    <a href="{% url 'player_detail' player.slug %}"
+                           hx-get="{% url 'player_detail' player.slug %}"
+                           hx-target="#main-content"
+                           hx-history-elt="#main-content"
+                           hx-push-url="true"
+                           hx-indicator="#content-loader"
+                           hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''"
+                       style="color:black"
+                        >
+                            <li class="football-squads__body-item">
+
                             <div class="football-squads__num">{% if player.number %}{{player.number}}{% else %}Н/И{% endif %}</div>
                             <div class="football-squads__name">
                                 <img src="{{ player.photo }}" width="20" height="20" />
@@ -1782,8 +1787,9 @@ updateCurrentTimeAttribute();
                             </div>
                             <div class="football-squads__pos">{% if  player.position_name %}{{ player.position_name }}{% else %}Н/И{%endif%}</div>
                             <div class="football-squads__rate">{% if player.reiting %}{{ player.reiting }}{% else %}Н/И{%endif%}</div>
-                        </a>
+
                     </li>
+                         </a>
                     {% endfor %}
                 </ul>
             </div>
@@ -1796,45 +1802,52 @@ updateCurrentTimeAttribute();
                 </div>
                 <ul class="football-squads__body">
                     {% for player in away_team_players_main %}
-                    <li class="football-squads__body-item">
-                        <a
-                                href="{% url 'player_detail' player.slug %}"
-                                hx-get="{% url 'player_detail' player.slug %}"
-                                hx-target="#main-content"
-                                hx-history-elt="#main-content"
-                                hx-push-url="true"
-                                hx-indicator="#content-loader"
-                                hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''">
-                            <div class="football-squads__num">{% if player.number %}{{player.number}}{% else %}Н/И{%endif%}</div>
-                            <div class="football-squads__name">
-                                <img src="{{ player.photo }}" width="20" height="20" />
-                                <span>{{ player.name }}</span>
-                            </div>
-                            <div class="football-squads__pos">{% if  player.position_name %}{{ player.position_name }}{% else %}Н/И{%endif%}</div>
-                            <div class="football-squads__rate">{% if player.reiting %}{{ player.reiting }}{% else %}Н/И{%endif%}</div>
-                        </a>
-                    </li>
-                    {% endfor %}
-
-                    <li class="football-squads__sub-div">Замена</li>
-                    {% for player in away_team_players_not_main %}
-                    <li class="football-squads__body-item">
-                        <a href="{% url 'player_detail' player.slug %}"
+                      <a href="{% url 'player_detail' player.slug %}"
                            hx-get="{% url 'player_detail' player.slug %}"
                            hx-target="#main-content"
                            hx-history-elt="#main-content"
                            hx-push-url="true"
                            hx-indicator="#content-loader"
-                           hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''">
+                           hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''"
+                         style="color:black"
+                        >
+                    <li class="football-squads__body-item">
+
                             <div class="football-squads__num">{% if player.number %}{{player.number}}{% else %}Н/И{%endif%}</div>
                             <div class="football-squads__name">
-                                <img src="{{ player.photo }}" width="20" height="20" />
+
                                 <span>{{ player.name }}</span>
                             </div>
                             <div class="football-squads__pos">{% if  player.position_name %}{{ player.position_name }}{% else %}Н/И{%endif%}</div>
                             <div class="football-squads__rate">{% if player.reiting %}{{ player.reiting }}{% else %}Н/И{%endif%}</div>
-                        </a>
+
                     </li>
+                          </a>
+                    {% endfor %}
+
+                    <li class="football-squads__sub-div">Замена</li>
+                    {% for player in away_team_players_not_main %}
+                    <a href="{% url 'player_detail' player.slug %}"
+                           hx-get="{% url 'player_detail' player.slug %}"
+                           hx-target="#main-content"
+                           hx-history-elt="#main-content"
+                           hx-push-url="true"
+                           hx-indicator="#content-loader"
+                           hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''"
+                       style="color:black"
+                        >
+                    <li class="football-squads__body-item">
+
+                            <div class="football-squads__num">{% if player.number %}{{player.number}}{% else %}Н/И{%endif%}</div>
+                            <div class="football-squads__name">
+
+                                <span>{{ player.name }}</span>
+                            </div>
+                            <div class="football-squads__pos">{% if  player.position_name %}{{ player.position_name }}{% else %}Н/И{%endif%}</div>
+                            <div class="football-squads__rate">{% if player.reiting %}{{ player.reiting }}{% else %}Н/И{%endif%}</div>
+
+                    </li>
+                        </a>
                     {% endfor %}
                 </ul>
             </div>
