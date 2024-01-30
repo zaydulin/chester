@@ -60,10 +60,9 @@ def generate_event_slug(home_team, away_team, start_at):
 @shared_task
 def create_tournament():
     tournaments_list_url = "https://flashlive-sports.p.rapidapi.com/v1/tournaments/list"
-    ids = [1, 2, 3, 4, 6, 7, 12, 13, 15, 21, 25, 36]
     rubric_id = 1
     rubric_id_q = str(rubric_id)
-    querystring_tournaments_list = {"sport_id": rubric_id_q, "locale": "ru_RU"}
+    querystring_tournaments_list = {"sport_id": rubric_id_q, "locale": "en_EN"}
     rubrics = Rubrics.objects.get(api_id=rubric_id)
     response_tournaments_list = requests.get(
         tournaments_list_url,
