@@ -16,12 +16,8 @@ from django.contrib.contenttypes.models import ContentType
 
 class HomeView(CustomHtmxMixin, TemplateView):
     """Категории"""
-
     model = Rubrics
     template_name = "event-list.html"
-    context_object_name = "rubrics"
-    slug_field = "slug"
-    paginate_by = 2
 
     def get_object(self, queryset=None):
         # Получаем объект категории по id
@@ -35,9 +31,8 @@ class HomeView(CustomHtmxMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        rubric = context["object"]
-        rubric.events.set(rubric.events.all())
-
+        rubric = Rubrics.objects.get(slug = kwargs.get('slug'))
+        context["rubrics"] = rubric
         sidebar_baners = Baners.objects.filter(type=1)
         context["sidebar_baners"] = sidebar_baners
 
@@ -85,20 +80,15 @@ class HomeView(CustomHtmxMixin, TemplateView):
         return context
 
 
-class EventsNow(CustomHtmxMixin, DetailView):
+class EventsNow(CustomHtmxMixin, TemplateView):
     """Категории"""
-
     model = Rubrics
     template_name = "event-list.html"
-    context_object_name = "rubrics"
-    slug_field = "slug"
-    paginate_by = 2
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        rubric = context["object"]
-        rubric.events.set(rubric.events.all())
-
+        rubric = Rubrics.objects.get(slug=kwargs.get('slug'))
+        context["rubrics"] = rubric
         sidebar_baners = Baners.objects.filter(type=1)
         context["sidebar_baners"] = sidebar_baners
 
