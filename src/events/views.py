@@ -264,7 +264,6 @@ class EventsUpcomingView(CustomHtmxMixin, TemplateView):
 
         rubric = Rubrics.objects.get(slug=rubric_slug)
         context['rubrics'] = rubric
-        rubric.events.set(rubric.events.all())
 
         sidebar_baners = Baners.objects.filter(type=1)
         context["sidebar_baners"] = sidebar_baners
