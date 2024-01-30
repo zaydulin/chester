@@ -15,7 +15,7 @@ from django.contrib.contenttypes.models import ContentType
 
 def update_countries_from_file(request):
     filename = 'country.txt'
-    with open(filename, 'r') as file:
+    with open(filename, 'r' ,  encoding='utf-8') as file:
         for line in file:
             # Разбиваем строку на название страны и иконку
             parts = line.strip().split('\t')
