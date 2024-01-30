@@ -14,7 +14,7 @@ from django.http import Http404
 from django.contrib.contenttypes.models import ContentType
 
 
-class HomeView(CustomHtmxMixin, DetailView):
+class HomeView(CustomHtmxMixin, TemplateView):
     """Категории"""
 
     model = Rubrics
@@ -252,17 +252,15 @@ class EventsEndView(CustomHtmxMixin, TemplateView):
         return context
 
 
-class EventsUpcomingView(CustomHtmxMixin, ListView):
+class EventsUpcomingView(CustomHtmxMixin, TemplateView):
     """Категории"""
-    paginate_by = 10
     model = Rubrics
     template_name = "event-list.html"
-    slug_field = "slug"
+
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         rubric_slug = self.kwargs['slug']
-
 
         rubric = Rubrics.objects.get(slug=rubric_slug)
         context['rubrics'] = rubric
