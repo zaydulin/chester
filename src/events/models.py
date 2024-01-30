@@ -257,7 +257,6 @@ class Season(models.Model):
     season_id = models.CharField("ACTUAL_TOURNAMENT_SEASON_ID", max_length=500,null=True)
     season_second_api_id = models.CharField("API ID 2", max_length=500, null=True)
     logo_league = models.TextField("Изображения", blank=True, null=True,)
-    description = models.TextField("Описание", null=True)
     popular = models.BooleanField(default=False)
     country = models.ForeignKey("Country", on_delete=models.CASCADE, blank=True, null=True)
     stages = models.ManyToManyField("Stages", verbose_name="Стадии")
