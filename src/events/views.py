@@ -5,14 +5,28 @@ from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.generic import ListView, DetailView, TemplateView
-from .models import Events, Rubrics, Season, Team, Player
+from .models import Events, Rubrics, Season, Team, Player , Country
 from mainapp.models import Baners, Messages, Bookmarks
 from mainapp.views import CustomHtmxMixin
 from .forms import MessageForm, EventSearchForm
-from django.http import JsonResponse, HttpResponseRedirect
+from django.http import JsonResponse, HttpResponseRedirect , HttpResponse
 from django.http import Http404
 from django.contrib.contenttypes.models import ContentType
 
+def update_countries_from_file(request):
+    with open('chester/country_icon.txt', 'r', encoding='utf-8') as file:
+        for line in file:
+            # Разбиваем строку на название страны и иконку
+            parts = line.strip().split('\t')
+            if len(parts) == 2:
+                country_name, icon = parts
+                # Пытаемся найти страну по названию
+                country = Country.objects.filter(name=country_name).first()
+                if country:
+                    # Обновляем значение иконки
+                    country.image = icon
+                    country.save()
+    return HttpResponse('ok')
 
 class HomeView(CustomHtmxMixin, TemplateView):
     """Категории"""

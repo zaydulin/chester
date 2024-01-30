@@ -1,0 +1,258 @@
+Андорра	flag-icon flag-icon-ad
+Объединенные Арабские Эмираты	flag-icon flag-icon-ae
+Афганистан	flag-icon flag-icon-af
+Антигуа и Барбуда	flag-icon flag-icon-ag
+Ангилья	flag-icon flag-icon-ai
+Албания	flag-icon flag-icon-al
+Армения	flag-icon flag-icon-am
+Ангола	flag-icon flag-icon-ao
+Антарктика	flag-icon flag-icon-aq
+Аргентина	flag-icon flag-icon-ar
+Американское Самоа	flag-icon flag-icon-as
+Австрия	flag-icon flag-icon-at
+Австралия	flag-icon flag-icon-au
+Аруба	flag-icon flag-icon-aw
+Аландские острова	flag-icon flag-icon-ax
+Азербайджан	flag-icon flag-icon-az
+Босния и Герцеговина	flag-icon flag-icon-ba
+Барбадос	flag-icon flag-icon-bb
+Бангладеш	flag-icon flag-icon-bd
+Бельгия	flag-icon flag-icon-be
+Буркина-Фасо	flag-icon flag-icon-bf
+Болгария	flag-icon flag-icon-bg
+Бахрейн	flag-icon flag-icon-bh
+Бурунди	flag-icon flag-icon-bi
+Бенин	flag-icon flag-icon-bj
+Сен-Бартелеми	flag-icon flag-icon-bl
+Бермуды	flag-icon flag-icon-bm
+Бруней	flag-icon flag-icon-bn
+Боливия	flag-icon flag-icon-bo
+Бонэйр, Синт-Эстатиус и Саба	flag-icon flag-icon-bq
+Бразилия	flag-icon flag-icon-br
+Багамы	flag-icon flag-icon-bs
+Бутан	flag-icon flag-icon-bt
+Остров Буве	flag-icon flag-icon-bv
+Ботсвана	flag-icon flag-icon-bw
+Беларусь	flag-icon flag-icon-by
+Белиз	flag-icon flag-icon-bz
+Канада	flag-icon flag-icon-ca
+Кокосовые (Килинг) острова	flag-icon flag-icon-cc
+Демократическая Республика Конго	flag-icon flag-icon-cd
+Центрально-Африканская Республика	flag-icon flag-icon-cf
+Конго	flag-icon flag-icon-cg
+Швейцария	flag-icon flag-icon-ch
+Кот-д'Ивуар	flag-icon flag-icon-ci
+Острова Кука	flag-icon flag-icon-ck
+Чили	flag-icon flag-icon-cl
+Камерун	flag-icon flag-icon-cm
+Китай	flag-icon flag-icon-cn
+Колумбия	flag-icon flag-icon-co
+Коста-Рика	flag-icon flag-icon-cr
+Куба	flag-icon flag-icon-cu
+Кабо-Верде	flag-icon flag-icon-cv
+Кюрасао	flag-icon flag-icon-cw
+Остров Рождества	flag-icon flag-icon-cx
+Кипр	flag-icon flag-icon-cy
+Чехия	flag-icon flag-icon-cz
+Германия	flag-icon flag-icon-de
+Джибути	flag-icon flag-icon-dj
+Дания	flag-icon flag-icon-dk
+Доминика	flag-icon flag-icon-dm
+Доминиканская Республика	flag-icon flag-icon-do
+Алжир	flag-icon flag-icon-dz
+Эквадор	flag-icon flag-icon-ec
+Эстония	flag-icon flag-icon-ee
+Египет	flag-icon flag-icon-eg
+Западная Сахара	flag-icon flag-icon-eh
+Эритрея	flag-icon flag-icon-er
+Испания	flag-icon flag-icon-es
+Эфиопия	flag-icon flag-icon-et
+Финляндия	flag-icon flag-icon-fi
+Фиджи	flag-icon flag-icon-fj
+Фолклендские острова	flag-icon flag-icon-fk
+Микронезия	flag-icon flag-icon-fm
+Фарерские острова	flag-icon flag-icon-fo
+Франция	flag-icon flag-icon-fr
+Габон	flag-icon flag-icon-ga
+Великобритания	flag-icon flag-icon-gb
+Гренада	flag-icon flag-icon-gd
+Грузия	flag-icon flag-icon-ge
+Французская Гвиана	flag-icon flag-icon-gf
+Гернси	flag-icon flag-icon-gg
+Гана	flag-icon flag-icon-gh
+Гибралтар	flag-icon flag-icon-gi
+Гренландия	flag-icon flag-icon-gl
+Гамбия	flag-icon flag-icon-gm
+Гвинея	flag-icon flag-icon-gn
+Гваделупа	flag-icon flag-icon-gp
+Экваториальная Гвинея	flag-icon flag-icon-gq
+Греция	flag-icon flag-icon-gr
+Южная Георгия и Южные Сандвичевы острова	flag-icon flag-icon-gs
+Гватемала	flag-icon flag-icon-gt
+Гуам	flag-icon flag-icon-gu
+Гвинея-Бисау	flag-icon flag-icon-gw
+Гайана	flag-icon flag-icon-gy
+Гонконг	flag-icon flag-icon-hk
+Остров Херд и острова Макдональд	flag-icon flag-icon-hm
+Гондурас	flag-icon flag-icon-hn
+Хорватия	flag-icon flag-icon-hr
+Гаити	flag-icon flag-icon-ht
+Венгрия	flag-icon flag-icon-hu
+Индонезия	flag-icon flag-icon-id
+Ирландия	flag-icon flag-icon-ie
+Израиль	flag-icon flag-icon-il
+Остров Мэн	flag-icon flag-icon-im
+Индия	flag-icon flag-icon-in
+Британская территория в Индийском океане	flag-icon flag-icon-io
+Ирак	flag-icon flag-icon-iq
+Иран	flag-icon flag-icon-ir
+Исландия	flag-icon flag-icon-is
+Италия	flag-icon flag-icon-it
+Джерси	flag-icon flag-icon-je
+Ямайка	flag-icon flag-icon-jm
+Иордания	flag-icon flag-icon-jo
+Япония	flag-icon flag-icon-jp
+Кения	flag-icon flag-icon-ke
+Киргизия	flag-icon flag-icon-kg
+Камбоджа	flag-icon flag-icon-kh
+Кирибати	flag-icon flag-icon-ki
+Коморы	flag-icon flag-icon-km
+Сент-Китс и Невис	flag-icon flag-icon-kn
+Северная Корея	flag-icon flag-icon-kp
+Южная Корея	flag-icon flag-icon-kr
+Кувейт	flag-icon flag-icon-kw
+Острова Кайман	flag-icon flag-icon-ky
+Казахстан	flag-icon flag-icon-kz
+Лаос	flag-icon flag-icon-la
+Ливан	flag-icon flag-icon-lb
+Сент-Люсия	flag-icon flag-icon-lc
+Лихтенштейн	flag-icon flag-icon-li
+Шри-Ланка	flag-icon flag-icon-lk
+Либерия	flag-icon flag-icon-lr
+Лесото	flag-icon flag-icon-ls
+Литва	flag-icon flag-icon-lt
+Люксембург	flag-icon flag-icon-lu
+Латвия	flag-icon flag-icon-lv
+Ливия	flag-icon flag-icon-ly
+Марокко	flag-icon flag-icon-ma
+Монако	flag-icon flag-icon-mc
+Молдова 	flag-icon flag-icon-md
+Черногория 	flag-icon flag-icon-me
+Сен-Мартен	flag-icon flag-icon-mf
+Мадагаскар	flag-icon flag-icon-mg
+Маршалловы острова	flag-icon flag-icon-mh
+Северная Македония	flag-icon flag-icon-mk
+Мали	flag-icon flag-icon-ml
+Мьянма	flag-icon flag-icon-mm
+Монголия	flag-icon flag-icon-mn
+Макао	flag-icon flag-icon-mo
+Северные Марианские острова	flag-icon flag-icon-mp
+flag-icon flag-icon-mq	<li><i class=
+Мавритания	flag-icon flag-icon-mr
+Монтсеррат	flag-icon flag-icon-ms
+Мальта	flag-icon flag-icon-mt
+Маврикий	flag-icon flag-icon-mu
+Мальдивы	flag-icon flag-icon-mv
+Малави	flag-icon flag-icon-mw
+Мексика	flag-icon flag-icon-mx
+Малайзия	flag-icon flag-icon-my
+Мозамбик	flag-icon flag-icon-mz
+Намибия	flag-icon flag-icon-na
+Новая Каледония	flag-icon flag-icon-nc
+Нигер	flag-icon flag-icon-ne
+Норфолк	flag-icon flag-icon-nf
+Нигерия	flag-icon flag-icon-ng
+Никарагуа	flag-icon flag-icon-ni
+Нидерланды	flag-icon flag-icon-nl
+Норвегия	flag-icon flag-icon-no
+Непал	flag-icon flag-icon-np
+Науру	flag-icon flag-icon-nr
+Ниуэ	flag-icon flag-icon-nu
+Новая Зеландия	flag-icon flag-icon-nz
+Оман	flag-icon flag-icon-om
+Панама	flag-icon flag-icon-pa
+Перу	flag-icon flag-icon-pe
+Французская Полинезия	flag-icon flag-icon-pf
+Папуа — Новая Гвинея	flag-icon flag-icon-pg
+Филиппины	flag-icon flag-icon-ph
+Пакистан	flag-icon flag-icon-pk
+Польша	flag-icon flag-icon-pl
+Сен-Пьер и Микелон	flag-icon flag-icon-pm
+Питкэрн	flag-icon flag-icon-pn
+Пуэрто-Рико	flag-icon flag-icon-pr
+Палестина	flag-icon flag-icon-ps
+Португалия	flag-icon flag-icon-pt
+Палау	flag-icon flag-icon-pw
+Парагвай	flag-icon flag-icon-py
+Катар	flag-icon flag-icon-qa
+Реюньон	flag-icon flag-icon-re
+Румыния	flag-icon flag-icon-ro
+Сербия	flag-icon flag-icon-rs
+Россия	flag-icon flag-icon-ru
+Руанда	flag-icon flag-icon-rw
+Саудовская Аравия	flag-icon flag-icon-sa
+Соломоновы Острова	flag-icon flag-icon-sb
+Сейшельские Острова	flag-icon flag-icon-sc
+Судан	flag-icon flag-icon-sd
+Швеция	flag-icon flag-icon-se
+Сингапур	flag-icon flag-icon-sg
+Остров Святой Елены	flag-icon flag-icon-sh
+flag-icon flag-icon-si	<li><i class=
+Шпицберген и Ян-Майен	flag-icon flag-icon-sj
+Словакия	flag-icon flag-icon-sk
+Словения	flag-icon flag-icon-sl
+Сан-Марино	flag-icon flag-icon-sm
+Сенегал	flag-icon flag-icon-sn
+Сомали	flag-icon flag-icon-so
+Суринам	flag-icon flag-icon-sr
+Южный Судан	flag-icon flag-icon-ss
+Сан-Томе и Принсипи	flag-icon flag-icon-st
+Сальвадор	flag-icon flag-icon-sv
+Синт-Мартен	flag-icon flag-icon-sx
+Сирия	flag-icon flag-icon-sy
+Свазиленд	flag-icon flag-icon-sz
+Тёркс и Кайкос	flag-icon flag-icon-tc
+Чад	flag-icon flag-icon-td
+Французские Южные и Антарктические Территории	flag-icon flag-icon-tf
+Того	flag-icon flag-icon-tg
+Таиланд	flag-icon flag-icon-th
+Таджикистан 	flag-icon flag-icon-tj
+Токелау	flag-icon flag-icon-tk
+Восточный Тимор	flag-icon flag-icon-tl
+Туркменистан/li>	flag-icon flag-icon-tm
+Тунис	flag-icon flag-icon-tn
+Тонга	flag-icon flag-icon-to
+Турция	flag-icon flag-icon-tr
+Тринидад и Тобаго	flag-icon flag-icon-tt
+Тувалу	flag-icon flag-icon-tv
+Тайвань	flag-icon flag-icon-tw
+Танзания	flag-icon flag-icon-tz
+Украина	flag-icon flag-icon-ua
+Уганда	flag-icon flag-icon-ug
+Внешние малые острова США	flag-icon flag-icon-um
+Соединенные Штаты Америки	flag-icon flag-icon-us
+Уругвай	flag-icon flag-icon-uy
+Узбекистан	flag-icon flag-icon-uz
+Ватикан	flag-icon flag-icon-va
+Сент-Винсент и Гренадины	flag-icon flag-icon-vc
+Венесуэла	flag-icon flag-icon-ve
+Британские Виргинские острова	flag-icon flag-icon-vg
+Американские Виргинские острова	flag-icon flag-icon-vi
+Вьетнам	flag-icon flag-icon-vn
+Вануату	flag-icon flag-icon-vu
+Уоллис и Футуна	flag-icon flag-icon-wf
+Самоа	flag-icon flag-icon-ws
+Йемен	flag-icon flag-icon-ye
+Майотта	flag-icon flag-icon-yt
+Южно-Африканская Республика	flag-icon flag-icon-za
+Замбия	flag-icon flag-icon-zm
+Зимбабве	flag-icon flag-icon-zw
+Каталония (Испания)	flag-icon flag-icon-es-ca
+Галисия (Испания)	flag-icon flag-icon-es-ga
+Европейский союз	flag-icon flag-icon-eu
+Англия (Великобритания)	flag-icon flag-icon-gb-eng
+Северная Ирландия (Великобритания)	flag-icon flag-icon-gb-nir
+Шотландия (Великобритания)	flag-icon flag-icon-gb-sct
+Уэльс (Великобритания)	flag-icon flag-icon-gb-wls
+Объединенные Нации	flag-icon flag-icon-un
+Косово	flag-icon flag-icon-xk
