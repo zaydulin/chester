@@ -27,6 +27,8 @@ def update_countries_from_file(request):
                     # Обновляем значение иконки
                     country.image = icon
                     country.save()
+                else :
+                    return HttpResponse(f'error - {country_name} not found')
     return HttpResponse('ok')
 
 class HomeView(CustomHtmxMixin, TemplateView):
