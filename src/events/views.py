@@ -180,7 +180,7 @@ class EventsEndView(CustomHtmxMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         rubric = Rubrics.objects.get(slug = kwargs.get('slug'))
-
+        context["rubrics"] = rubric
         sidebar_baners = Baners.objects.filter(type=1)
         context["sidebar_baners"] = sidebar_baners
 
