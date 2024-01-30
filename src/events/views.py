@@ -14,7 +14,7 @@ from django.http import Http404
 from django.contrib.contenttypes.models import ContentType
 
 def update_countries_from_file(request):
-    file_path = '/var/www/chester/country.txt'
+    file_path = '/var/www/chester/celery.log'
     with open(file_path,'a') as file:
         for line in file:
             # Разбиваем строку на название страны и иконку
