@@ -202,7 +202,6 @@ def create_events_of_tournament(rubric_id):
                                         second_event_api_id=event.get("EVENT_ID"),
                                         start_at=datetime.utcfromtimestamp(event.get("START_TIME")),
                                         name=event_data.get("NAME_PART_2"),
-                                        description=event_data,
                                         title=event_data.get("SHORT_NAME"),
                                         status=status_id,
                                         home_team=home_team,
@@ -589,7 +588,6 @@ def create_additional_info_for_events(rubric_id):
                                 "slug": f'{player_id}',
                                 "name": player["PLAYER_FULL_NAME"],
                                 "position_name": player.get("PLAYER_POSITION"),
-                                "description": player,
                                 "main_player": status_team_line,
                                 "number": player.get("PLAYER_NUMBER"),
                                 "photo": f'https://static.flashscore.com/res/image/data/{player.get("LPI")})'

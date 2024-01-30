@@ -174,7 +174,6 @@ class EventsNow(CustomHtmxMixin, DetailView):
 
 class EventsEndView(CustomHtmxMixin, DetailView):
     """Категории"""
-
     model = Rubrics
     template_name = "event-list.html"
     slug_field = "slug"

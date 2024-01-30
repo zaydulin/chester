@@ -26,7 +26,6 @@ urlpatterns = [
     path("__debug__/", include("debug_toolbar.urls")),
     path('', include('mainapp.urls')),
     path('', include('events.urls')),
-    path('api/', include('rapidapi.urls')),
     path('captcha/', include('captcha.urls')),
 ]
 if settings.DEBUG:

@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     "django_celery_results",
     # app (Приложения)
     "mainapp.apps.MainappConfig",
-    "rapidapi.apps.RapidapiConfig",
 ]
 
 MIDDLEWARE = [
