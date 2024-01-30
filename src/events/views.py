@@ -476,10 +476,10 @@ class SearchView(CustomHtmxMixin, TemplateView):
         rubric = Rubrics.objects.get(slug=kwargs["slug"])
         if form.is_valid():
             search_description = form.cleaned_data.get("search_description")
-            events = Events.objects.filter(description__icontains=search_description, rubrics=rubric)
-            teams = Team.objects.filter(description__icontains=search_description, rubrics=rubric)
-            players = Player.objects.filter(description__icontains=search_description, team__rubrics=rubric)
-            leagues = Season.objects.filter(description__icontains=search_description, rubrics=rubric)
+            events = Events.objects.filter(name__icontains=search_description, rubrics=rubric)
+            teams = Team.objects.filter(name__icontains=search_description, rubrics=rubric)
+            players = Player.objects.filter(name__icontains=search_description, team__rubrics=rubric)
+            leagues = Season.objects.filter(league_name__icontains=search_description, rubrics=rubric)
         else:
             events = Events.objects.all()[:5]
             teams = Team.objects.all()[:5]
