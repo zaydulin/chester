@@ -1,7 +1,7 @@
 from itertools import groupby
 
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.db.models import Q
+from django.db.models import Q, Count
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.generic import ListView, DetailView, TemplateView
@@ -13,22 +13,16 @@ from django.http import JsonResponse, HttpResponseRedirect , HttpResponse
 from django.http import Http404
 from django.contrib.contenttypes.models import ContentType
 
-def update_countries_from_file(request):
-    filename = 'country.txt'
-    with open(filename,'r', encoding='utf-8' ) as file:
-        for line in file:
-            # Разбиваем строку на название страны и иконку
-            parts = line.strip().split('\t')
-            if len(parts) == 2:
-                country_name, icon = parts
-                # Пытаемся найти страну по названию
-                country = Country.objects.filter(name=country_name).first()
-                if country:
-                    # Обновляем значение иконки
-                    country.image = icon
-                    country.save()
-                else :
-                    pass
+def clear_db(request):
+    duplicates = Season.objects.values('season_id').annotate(count=Count('id')).filter(count__gt=1)
+
+    for duplicate in duplicates:
+        season_id = duplicate['season_id']
+        season_to_keep = Season.objects.filter(season_id=season_id).first()
+
+        # Оставляем только одну запись, удаляя все остальные дубликаты
+        Season.objects.filter(season_id=season_id).exclude(id=season_to_keep.id).delete()
+
     return HttpResponse('ok')
 
 class HomeView(CustomHtmxMixin, TemplateView):

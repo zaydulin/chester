@@ -12,6 +12,6 @@ urlpatterns = [
     path('league/<slug:slug>/', views.SeasonView.as_view(), name='season_detail'),
     path('team/<slug:slug>/', views.TeamView.as_view(), name='team_detail'),
     path('player/<slug:slug>/', views.PlayerView.as_view(), name='player_detail'),
-    path('db/update_countries_from_file/', views.update_countries_from_file, name='update_countries_from_file'),
+    path('db/clear_db/', views.clear_db, name='clear_db'),
 
 ]
