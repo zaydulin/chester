@@ -148,16 +148,17 @@ def create_events_of_tournament(rubric_id):
                                     country_from_db =  Country.objects.filter(name_en=event_data.get("COUNTRY_NAME")).first()
                                 else:
                                     country_from_db = Country.objects.create(name=event_data.get("COUNTRY_NAME"),name_en=event_data.get("COUNTRY_NAME"))
-                            season, created = Season.objects.get_or_create(
-                                rubrics=rubrics,
-                                season_id=event_data.get("TOURNAMENT_SEASON_ID")
-                            )
+                            if Season.objects.filter(rubrics=rubrics,season_id=event_data.get("TOURNAMENT_SEASON_ID")).exists():
+                                season = Season.objects.filter(rubrics=rubrics,season_id=event_data.get("TOURNAMENT_SEASON_ID")).first()
+                            else:
+                                season = Season.objects.create(rubrics=rubrics,season_id=event_data.get("TOURNAMENT_SEASON_ID"))
+                                season.country = country_from_db
+                                season.season_second_api_id = event_data.get("TOURNAMENT_STAGE_ID")
+
                             season.logo_league = correct_logo_season
                             season.season_name = event_data.get("NAME")
                             season.season_second_api_id = event_data.get("TOURNAMENT_STAGE_ID")
-                            if created:
-                                season.country = country_from_db
-                                season.season_second_api_id = event_data.get("TOURNAMENT_STAGE_ID")
+
                             season.save()
                             events_list = []
                             for event in events:
