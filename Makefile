@@ -42,4 +42,4 @@ celery-on:
 celery-first:
 	docker-compose -f $(docker_file) exec cb-celery celery -A _project call events.tasks.create_tournament
 createcountryjson:
-	docker-compose -f $(docker_file) exec cb-app python manage.py dumpdata events.country > fixtyre/country.json
+	docker-compose -f $(docker_file) exec cb-app python manage.py dumpdata events.country > country.json
