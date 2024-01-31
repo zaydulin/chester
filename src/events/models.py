@@ -293,6 +293,7 @@ class Stages(models.Model):
         verbose_name_plural = 'Стадии'
 class Country(models.Model):
     name = models.CharField(max_length=150)
+    name_en = models.CharField(max_length=150)
     image = models.CharField(verbose_name='Флаг в формате flag-icon flag-icon-<название>',max_length=150)
 
     def __str__(self):
