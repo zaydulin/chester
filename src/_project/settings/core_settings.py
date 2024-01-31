@@ -278,258 +278,258 @@ CELERYD_LOG_LEVEL = "DEBUG"
 CELERYD_LOG_FORMAT = "[%(asctime)s: %(levelname)s/%(processName)s] %(message)s"
 CELERYD_LOG_FILE = "/var/www/chester/celery.log"
 
-# CELERY_BEAT_SCHEDULE = {
-#     # пн
-#     "create_events_of_tournament_id1": {
-#         "task": "events.tasks.create_events_of_tournament_id1",
-#         "schedule": crontab(
-#             hour="*/4",
-#         ),
-#     },
-#     "create_events_of_tournament_id2": {
-#         "task": "events.tasks.create_events_of_tournament_id2",
-#         "schedule": crontab(
-#             hour="4",
-#             minute="20",
-#             day_of_week="mon"
-#         ),
-#     },
-#     # вт
-#     "create_events_of_tournament_id3": {
-#         "task": "events.tasks.create_events_of_tournament_id3",
-#         "schedule": crontab(
-#             hour="4",
-#             day_of_week="tue"
-#         ),
-#     },
-#     "create_events_of_tournament_id4": {
-#         "task": "events.tasks.create_events_of_tournament_id4",
-#         "schedule": crontab(
-#             hour="4",
-#             minute="20",
-#             day_of_week="tue"
-#         ),
-#     },
-#     # ср
-#     "create_events_of_tournament_id6": {
-#         "task": "events.tasks.create_events_of_tournament_id6",
-#         "schedule": crontab(
-#             hour="4",
-#             day_of_week="wed"
-#         ),
-#     },
-#     "create_events_of_tournament_id7": {
-#         "task": "events.tasks.create_events_of_tournament_id7",
-#         "schedule": crontab(
-#             hour="4",
-#             minute="20",
-#             day_of_week="wed"
-#         ),
-#     },
-#     # чт
-#     "create_events_of_tournament_id12": {
-#         "task": "events.tasks.create_events_of_tournament_id12",
-#         "schedule": crontab(
-#             hour="4",
-#             day_of_week="thu"
-#         ),
-#     },
-#     "create_events_of_tournament_id13": {
-#         "task": "events.tasks.create_events_of_tournament_id13",
-#         "schedule": crontab(
-#             hour="4",
-#             minute="20",
-#             day_of_week="thu"
-#         ),
-#     },
-#     # пт
-#     "create_events_of_tournament_id15": {
-#         "task": "events.tasks.create_events_of_tournament_id15",
-#         "schedule": crontab(
-#             hour="4",
-#             day_of_week="fri"
-#         ),
-#     },
-#     "create_events_of_tournament_id21": {
-#         "task": "events.tasks.create_events_of_tournament_id21",
-#         "schedule": crontab(
-#             hour="4",
-#             minute="20",
-#             day_of_week="fri"
-#         ),
-#     },
-#     # сб
-#     "create_events_of_tournament_id25": {
-#         "task": "events.tasks.create_events_of_tournament_id25",
-#         "schedule": crontab(
-#             hour="4",
-#             day_of_week="sat"
-#         ),
-#     },
-#     "create_events_of_tournament_id36": {
-#         "task": "events.tasks.create_events_of_tournament_id36",
-#         "schedule": crontab(
-#             hour="4",
-#             minute="20",
-#             day_of_week="sat"
-#         ),
-#     },
-#     "create_additional_info_for_events_1": {
-#         "task": "events.tasks.create_additional_info_for_events_id1",
-#         "schedule": crontab(
-#             hour="4",
-#             minute="40",
-#             day_of_week="mon-sun"
-#         ),
-#     },
-#     "create_additional_info_for_events_2": {
-#         "task": "events.tasks.create_additional_info_for_events_id2",
-#         "schedule": crontab(
-#             hour="4",
-#             minute="50",
-#             day_of_week="mon-sun"
-#         ),
-#     },
-#     "create_additional_info_for_events_3": {
-#         "task": "events.tasks.create_additional_info_for_events_id3",
-#         "schedule": crontab(
-#             hour="5",
-#             day_of_week="mon-sun"
-#         ),
-#     },
-#     "create_additional_info_for_events_4": {
-#         "task": "events.tasks.create_additional_info_for_events_id4",
-#         "schedule": crontab(
-#             hour="5",
-#             minute="10",
-#             day_of_week="mon-sun"
-#         ),
-#     },
-#     "create_additional_info_for_events_6": {
-#         "task": "events.tasks.create_additional_info_for_events_id6",
-#         "schedule": crontab(
-#             hour="5",
-#             minute="20",
-#             day_of_week="mon-sun"
-#         ),
-#     },
-#     "create_additional_info_for_events_7": {
-#         "task": "events.tasks.create_additional_info_for_events_id7",
-#         "schedule": crontab(
-#             hour="5",
-#             minute="30",
-#             day_of_week="mon-sun"
-#         ),
-#     },
-#     "create_additional_info_for_events_12": {
-#         "task": "events.tasks.create_additional_info_for_events_id12",
-#         "schedule": crontab(
-#             hour="5",
-#             minute="40",
-#             day_of_week="mon-sun"
-#         ),
-#     },
-#     "create_additional_info_for_events_13": {
-#         "task": "events.tasks.create_additional_info_for_events_id13",
-#         "schedule": crontab(
-#             hour="5",
-#             minute="50",
-#             day_of_week="mon-sun"
-#         ),
-#     },
-#     "create_additional_info_for_events_15": {
-#         "task": "events.tasks.create_additional_info_for_events_id15",
-#         "schedule": crontab(
-#             hour="6",
-#             day_of_week="mon-sun"
-#         ),
-#     },
-#     "create_additional_info_for_events_21": {
-#         "task": "events.tasks.create_additional_info_for_events_id21",
-#         "schedule": crontab(
-#             hour="6",
-#             minute="10",
-#             day_of_week="mon-sun"
-#         ),
-#     },
-#     "create_additional_info_for_events_25": {
-#         "task": "events.tasks.create_additional_info_for_events_id25",
-#         "schedule": crontab(
-#             hour="6",
-#             minute="20",
-#             day_of_week="mon-sun"
-#         ),
-#     },
-#     "create_additional_info_for_events_36": {
-#         "task": "events.tasks.create_additional_info_for_events_id36",
-#         "schedule": crontab(
-#             hour="6",
-#             minute="30",
-#             day_of_week="mon-sun"
-#         ),
-#     },
-#
-#     # вск
-#     "create_tournament": {
-#         "task": "events.tasks.create_tournament",
-#         "schedule": crontab(
-#             hour="3",
-#             day_of_week="sun"
-#         ),
-#     },
-#     # "get_match_stream_link_football": {
-#     #     "task": "events.tasks.get_match_stream_link",
-#     #     "schedule": crontab(minute="*"),
-#     # },
-#     # "fetch_event_data_id1": {
-#     #     "task": "events.tasks.fetch_event_data_id1",
-#     #     "schedule": crontab(minute="*/2"),
-#     # },
-#     # "fetch_event_data_id2": {
-#     #     "task": "events.tasks.fetch_event_data_id2",
-#     #     "schedule": crontab(minute="*/2"),
-#     # },
-#     # "fetch_event_data_id3": {
-#     #     "task": "events.tasks.fetch_event_data_id3",
-#     #     "schedule": crontab(minute="*/2"),
-#     # },
-#     # "fetch_event_data_id4": {
-#     #     "task": "events.tasks.fetch_event_data_id4",
-#     #     "schedule": crontab(minute="*/2"),
-#     # },
-#     # "fetch_event_data_id6": {
-#     #     "task": "events.tasks.fetch_event_data_id6",
-#     #     "schedule": crontab(minute="*/2"),
-#     # },
-#     # "fetch_event_data_id7": {
-#     #     "task": "events.tasks.fetch_event_data_id7",
-#     #     "schedule": crontab(minute="*/2"),
-#     # },
-#     # "fetch_event_data_id12": {
-#     #     "task": "events.tasks.fetch_event_data_id12",
-#     #     "schedule": crontab(minute="*/2"),
-#     # },
-#     # "fetch_event_data_id13": {
-#     #     "task": "events.tasks.fetch_event_data_id13",
-#     #     "schedule": crontab(minute="*/2"),
-#     # },
-#     # "fetch_event_data_id15": {
-#     #     "task": "events.tasks.fetch_event_data_id15",
-#     #     "schedule": crontab(minute="*/2"),
-#     # },
-#     # "fetch_event_data_id21": {
-#     #     "task": "events.tasks.fetch_event_data_id21",
-#     #     "schedule": crontab(minute="*/2"),
-#     # },
-#     # "fetch_event_data_id25": {
-#     #     "task": "events.tasks.fetch_event_data_id25",
-#     #     "schedule": crontab(minute="*/2"),
-#     # },
-#     # "fetch_event_data_i36": {
-#     #     "task": "events.tasks.fetch_event_data_id36",
-#     #     "schedule": crontab(minute="*/2"),
-#     # },
-# }
+CELERY_BEAT_SCHEDULE = {
+    # пн
+    "create_events_of_tournament_id1": {
+        "task": "events.tasks.create_events_of_tournament_id1",
+        "schedule": crontab(
+            hour="*/4",
+        ),
+    },
+    "create_events_of_tournament_id2": {
+        "task": "events.tasks.create_events_of_tournament_id2",
+        "schedule": crontab(
+            hour="4",
+            minute="20",
+            day_of_week="mon"
+        ),
+    },
+    # вт
+    "create_events_of_tournament_id3": {
+        "task": "events.tasks.create_events_of_tournament_id3",
+        "schedule": crontab(
+            hour="4",
+            day_of_week="tue"
+        ),
+    },
+    "create_events_of_tournament_id4": {
+        "task": "events.tasks.create_events_of_tournament_id4",
+        "schedule": crontab(
+            hour="4",
+            minute="20",
+            day_of_week="tue"
+        ),
+    },
+    # ср
+    "create_events_of_tournament_id6": {
+        "task": "events.tasks.create_events_of_tournament_id6",
+        "schedule": crontab(
+            hour="4",
+            day_of_week="wed"
+        ),
+    },
+    "create_events_of_tournament_id7": {
+        "task": "events.tasks.create_events_of_tournament_id7",
+        "schedule": crontab(
+            hour="4",
+            minute="20",
+            day_of_week="wed"
+        ),
+    },
+    # чт
+    "create_events_of_tournament_id12": {
+        "task": "events.tasks.create_events_of_tournament_id12",
+        "schedule": crontab(
+            hour="4",
+            day_of_week="thu"
+        ),
+    },
+    "create_events_of_tournament_id13": {
+        "task": "events.tasks.create_events_of_tournament_id13",
+        "schedule": crontab(
+            hour="4",
+            minute="20",
+            day_of_week="thu"
+        ),
+    },
+    # пт
+    "create_events_of_tournament_id15": {
+        "task": "events.tasks.create_events_of_tournament_id15",
+        "schedule": crontab(
+            hour="4",
+            day_of_week="fri"
+        ),
+    },
+    "create_events_of_tournament_id21": {
+        "task": "events.tasks.create_events_of_tournament_id21",
+        "schedule": crontab(
+            hour="4",
+            minute="20",
+            day_of_week="fri"
+        ),
+    },
+    # сб
+    "create_events_of_tournament_id25": {
+        "task": "events.tasks.create_events_of_tournament_id25",
+        "schedule": crontab(
+            hour="4",
+            day_of_week="sat"
+        ),
+    },
+    "create_events_of_tournament_id36": {
+        "task": "events.tasks.create_events_of_tournament_id36",
+        "schedule": crontab(
+            hour="4",
+            minute="20",
+            day_of_week="sat"
+        ),
+    },
+    "create_additional_info_for_events_1": {
+        "task": "events.tasks.create_additional_info_for_events_id1",
+        "schedule": crontab(
+            hour="4",
+            minute="40",
+            day_of_week="mon-sun"
+        ),
+    },
+    "create_additional_info_for_events_2": {
+        "task": "events.tasks.create_additional_info_for_events_id2",
+        "schedule": crontab(
+            hour="4",
+            minute="50",
+            day_of_week="mon-sun"
+        ),
+    },
+    "create_additional_info_for_events_3": {
+        "task": "events.tasks.create_additional_info_for_events_id3",
+        "schedule": crontab(
+            hour="5",
+            day_of_week="mon-sun"
+        ),
+    },
+    "create_additional_info_for_events_4": {
+        "task": "events.tasks.create_additional_info_for_events_id4",
+        "schedule": crontab(
+            hour="5",
+            minute="10",
+            day_of_week="mon-sun"
+        ),
+    },
+    "create_additional_info_for_events_6": {
+        "task": "events.tasks.create_additional_info_for_events_id6",
+        "schedule": crontab(
+            hour="5",
+            minute="20",
+            day_of_week="mon-sun"
+        ),
+    },
+    "create_additional_info_for_events_7": {
+        "task": "events.tasks.create_additional_info_for_events_id7",
+        "schedule": crontab(
+            hour="5",
+            minute="30",
+            day_of_week="mon-sun"
+        ),
+    },
+    "create_additional_info_for_events_12": {
+        "task": "events.tasks.create_additional_info_for_events_id12",
+        "schedule": crontab(
+            hour="5",
+            minute="40",
+            day_of_week="mon-sun"
+        ),
+    },
+    "create_additional_info_for_events_13": {
+        "task": "events.tasks.create_additional_info_for_events_id13",
+        "schedule": crontab(
+            hour="5",
+            minute="50",
+            day_of_week="mon-sun"
+        ),
+    },
+    "create_additional_info_for_events_15": {
+        "task": "events.tasks.create_additional_info_for_events_id15",
+        "schedule": crontab(
+            hour="6",
+            day_of_week="mon-sun"
+        ),
+    },
+    "create_additional_info_for_events_21": {
+        "task": "events.tasks.create_additional_info_for_events_id21",
+        "schedule": crontab(
+            hour="6",
+            minute="10",
+            day_of_week="mon-sun"
+        ),
+    },
+    "create_additional_info_for_events_25": {
+        "task": "events.tasks.create_additional_info_for_events_id25",
+        "schedule": crontab(
+            hour="6",
+            minute="20",
+            day_of_week="mon-sun"
+        ),
+    },
+    "create_additional_info_for_events_36": {
+        "task": "events.tasks.create_additional_info_for_events_id36",
+        "schedule": crontab(
+            hour="6",
+            minute="30",
+            day_of_week="mon-sun"
+        ),
+    },
+
+    # вск
+    "create_tournament": {
+        "task": "events.tasks.create_tournament",
+        "schedule": crontab(
+            hour="3",
+            day_of_week="sun"
+        ),
+    },
+    "get_match_stream_link_football": {
+        "task": "events.tasks.get_match_stream_link",
+        "schedule": crontab(minute="*"),
+    },
+    "fetch_event_data_id1": {
+        "task": "events.tasks.fetch_event_data_id1",
+        "schedule": crontab(minute="*/2"),
+    },
+    "fetch_event_data_id2": {
+        "task": "events.tasks.fetch_event_data_id2",
+        "schedule": crontab(minute="*/2"),
+    },
+    "fetch_event_data_id3": {
+        "task": "events.tasks.fetch_event_data_id3",
+        "schedule": crontab(minute="*/2"),
+    },
+    "fetch_event_data_id4": {
+        "task": "events.tasks.fetch_event_data_id4",
+        "schedule": crontab(minute="*/2"),
+    },
+    "fetch_event_data_id6": {
+        "task": "events.tasks.fetch_event_data_id6",
+        "schedule": crontab(minute="*/2"),
+    },
+    "fetch_event_data_id7": {
+        "task": "events.tasks.fetch_event_data_id7",
+        "schedule": crontab(minute="*/2"),
+    },
+    "fetch_event_data_id12": {
+        "task": "events.tasks.fetch_event_data_id12",
+        "schedule": crontab(minute="*/2"),
+    },
+    "fetch_event_data_id13": {
+        "task": "events.tasks.fetch_event_data_id13",
+        "schedule": crontab(minute="*/2"),
+    },
+    "fetch_event_data_id15": {
+        "task": "events.tasks.fetch_event_data_id15",
+        "schedule": crontab(minute="*/2"),
+    },
+    "fetch_event_data_id21": {
+        "task": "events.tasks.fetch_event_data_id21",
+        "schedule": crontab(minute="*/2"),
+    },
+    "fetch_event_data_id25": {
+        "task": "events.tasks.fetch_event_data_id25",
+        "schedule": crontab(minute="*/2"),
+    },
+    "fetch_event_data_i36": {
+        "task": "events.tasks.fetch_event_data_id36",
+        "schedule": crontab(minute="*/2"),
+    },
+}
 CELERY_RESULT_BACKEND = "django-db"
 
 # CSRF SETTINGS
