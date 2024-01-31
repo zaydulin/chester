@@ -12,7 +12,13 @@ class IncidentsAdmin(admin.ModelAdmin):
     search_fields = ['incident_api_id']
 
 class SeasonAdmin(admin.ModelAdmin):
-    search_fields = ['slug', 'name']
+    fieldsets = [
+        ('Общие настройки', {
+            'fields': ['league_name']
+        })
+
+    ]
+    search_fields = ['slug', 'league_name']
     list_filter = ['rubrics','country']
 
 class CountryAdmin(admin.ModelAdmin):
