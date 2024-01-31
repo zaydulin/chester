@@ -13,9 +13,15 @@ from mainapp.models import GeneralSettings
 
 general_settings = GeneralSettings.objects.first()
 
-HEADER_FOR_SECOND_API = {general_settings.rapidapi_key_events}
+HEADER_FOR_SECOND_API =  {
+    'X-RapidAPI-Key': str(general_settings.rapidapi_key_events),
+    "X-RapidAPI-Host": "flashlive-sports.p.rapidapi.com"
+    }
 
-HEADER_FOR_LIVE_STREAM = {general_settings.rapidapi_key_stream}
+HEADER_FOR_LIVE_STREAM = {
+    'X-RapidAPI-Key': str(general_settings.rapidapi_key_stream),
+    "X-RapidAPI-Host": "free-football-soccer-videos.p.rapidapi.com"
+    }
 
 EVENT_STATUSES = {
     'LIVE': 1,
