@@ -14,16 +14,11 @@ from django.http import Http404
 from django.contrib.contenttypes.models import ContentType
 
 def clear_db(request):
-    duplicates = Season.objects.values('season_id').annotate(count=Count('id')).filter(count__gt=1)
-    for duplicate in duplicates:
-
-        season_id = duplicate['season_id']
-        season_to_keep = Season.objects.filter(season_id=season_id).first()
-
-        # Оставляем только одну запись, удаляя все остальные дубликаты
-        Season.objects.filter(season_id=season_id).exclude(id=season_to_keep.id).delete()
-
-    return HttpResponse(f'ok -- count{duplicates.count()}')
+    list = []
+    season = Season.objects.filter(country__name='Россия')
+    for stage in season.stages:
+        list.append(stage.stage_id)
+    return HttpResponse(f'ok -- stages - {list}')
 
 class HomeView(CustomHtmxMixin, TemplateView):
     """Категории"""
