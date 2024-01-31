@@ -56,7 +56,6 @@ def generate_event_slug(home_team, away_team, start_at):
 # done optimization
 @shared_task
 def create_tournament():
-    translator = Translator()
     tournaments_list_url = "https://flashlive-sports.p.rapidapi.com/v1/tournaments/list"
     ids = [1, 2, 3, 4, 6, 7, 12, 13, 15, 21, 25, 36]
     for locale in ["ru_RU", "en_INT"]:
@@ -75,10 +74,19 @@ def create_tournament():
                     country_name = tournament_data.get('COUNTRY_NAME','' )
                     if not country_name:
                         country_name = 'Мир'
-                    translated_country_name = translator.translate(country_name, dest='ru').text
+                    if country_name == 'Russia':
+                        country_name = 'Россия'
+                    if country_name == 'Belarus':
+                        country_name = 'Беларусь'
+                    if country_name == 'Ukraine':
+                        country_name = 'Украина'
+                    if country_name == 'Tajikistan':
+                        country_name = 'Таджикистан'
+                    if country_name == 'Armenia':
+                        country_name = 'Армения'
 
                     country, created = Country.objects.get_or_create(
-                        name=translated_country_name
+                        name=country_name
                     )
                     season_id = tournament_data.get("ACTUAL_TOURNAMENT_SEASON_ID")
 
