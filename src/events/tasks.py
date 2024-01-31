@@ -109,13 +109,12 @@ def create_tournament():
 
 def create_events_of_tournament(rubric_id):
     second_url = "https://flashlive-sports.p.rapidapi.com/v1/tournaments/fixtures"
-    seasons = Season.objects.filter(rubrics__api_id=rubric_id,country__name='Россия')
+    seasons = Season.objects.filter(rubrics__api_id=rubric_id)
     for locale in ["en_INT","ru_RU" ]:
         for season in seasons:
             stages = season.stages.all()
             for stage in stages:
                 page = 1
-
                 while True:
                     querystring = {"locale": locale, "tournament_stage_id": str(stage.stage_id), "page": str(page)}
                     rubrics = Rubrics.objects.get(
@@ -224,6 +223,11 @@ def create_events_of_tournament(rubric_id):
                         break
                     else:
                         break
+
+                try:
+                    stage.delete()
+                except:
+                    pass
     return {"response": "create_events_of_tournament successfully"}
 
 
