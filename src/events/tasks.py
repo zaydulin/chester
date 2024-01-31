@@ -64,7 +64,7 @@ def generate_event_slug(home_team, away_team, start_at):
 def create_tournament():
     tournaments_list_url = "https://flashlive-sports.p.rapidapi.com/v1/tournaments/list"
     ids = [1, 2, 3, 4, 6, 7, 12, 13, 15, 21, 25, 36]
-    for locale in ["ru_RU", "en_EN"]:
+    for locale in ["ru_RU", "en_INT"]:
         for rubric_id in ids:
             rubric_id_q = str(rubric_id)
             querystring_tournaments_list = {"sport_id": rubric_id_q, "locale": locale }
