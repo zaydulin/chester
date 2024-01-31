@@ -14,7 +14,7 @@ class IncidentsAdmin(admin.ModelAdmin):
 class SeasonAdmin(admin.ModelAdmin):
     fieldsets = [
         ('Общие настройки', {
-            'fields': ['league_name']
+            'fields': ['league_name','stages', 'country']
         })
 
     ]
