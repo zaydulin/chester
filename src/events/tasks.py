@@ -8,26 +8,14 @@ from events.models import Rubrics, Events, Team, Season, Player, Incidents, Peri
 from django.utils.text import slugify
 from googletrans import Translator
 
-translator = Translator()
+from mainapp.models import GeneralSettings
 
-HEADER_FOR_FIRST_API = {
-    "X-RapidAPI-Key": "3b1726a15fmshc58a145e91a5846p197521jsn5a6af790e789",
-    "X-RapidAPI-Host": "sportscore1.p.rapidapi.com"
-}
 
-HEADER_FOR_SECOND_API = {
-    "X-RapidAPI-Key": "11047ab519mshed06c5cc71509fep168f75jsn077ef01d5d10",
-    "X-RapidAPI-Host": "flashlive-sports.p.rapidapi.com"
-}
-HEADER_FOR_SECOND_API_GOU = {
-    "X-RapidAPI-Key": "11047ab519mshed06c5cc71509fep168f75jsn077ef01d5d10",
-    "X-RapidAPI-Host": "flashlive-sports.p.rapidapi.com"
-}
+general_settings = GeneralSettings.objects.first()
 
-HEADER_FOR_LIVE_STREAM = {
-    "X-RapidAPI-Key": "11047ab519mshed06c5cc71509fep168f75jsn077ef01d5d10",
-    "X-RapidAPI-Host": "free-football-soccer-videos1.p.rapidapi.com"
-}
+HEADER_FOR_SECOND_API = general_settings.rapidapi_key_events
+
+HEADER_FOR_LIVE_STREAM = general_settings.rapidapi_key_stream
 
 EVENT_STATUSES = {
     'LIVE': 1,
@@ -62,6 +50,7 @@ def generate_event_slug(home_team, away_team, start_at):
 # done optimization
 @shared_task
 def create_tournament():
+    translator = Translator()
     tournaments_list_url = "https://flashlive-sports.p.rapidapi.com/v1/tournaments/list"
     ids = [1, 2, 3, 4, 6, 7, 12, 13, 15, 21, 25, 36]
     for locale in ["ru_RU", "en_INT"]:
@@ -77,7 +66,7 @@ def create_tournament():
             if response_tournaments_list.status_code == 200:
                 tournaments_data = response_tournaments_list.json()
                 for tournament_data in tournaments_data.get("DATA", []):
-                    country_name = tournament_data.get('COUNTRY_NAME')
+                    country_name = tournament_data.get('COUNTRY_NAME','' )
                     if not country_name:
                         country_name = 'Мир'
                     translated_country_name = translator.translate(country_name, dest='ru').text
