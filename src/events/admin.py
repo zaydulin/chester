@@ -16,7 +16,7 @@ class SeasonAdmin(admin.ModelAdmin):
     list_filter = ['rubrics','country']
 
 class CountryAdmin(admin.ModelAdmin):
-    list_display = ['name','image']
+    list_display = ['name','name_en','image']
 
 
 admin.site.register(Events, EventsAdmin)
