@@ -15,9 +15,10 @@ from django.contrib.contenttypes.models import ContentType
 
 def clear_db(request):
     list = []
-    season = Season.objects.filter(country__name='Россия')
-    for stage in season.stages:
-        list.append(stage.stage_id)
+    seasons = Season.objects.filter(country__name='Россия')
+    for season in seasons:
+        for stage in season.stages:
+            list.append(stage.stage_id)
     return HttpResponse(f'ok -- stages - {list}')
 
 class HomeView(CustomHtmxMixin, TemplateView):
