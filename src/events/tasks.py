@@ -143,9 +143,12 @@ def create_events_of_tournament(rubric_id):
                                     name="Мир"
                                 )
                             else:
-                                country_from_db, created = Country.objects.get_or_create(
-                                    name=event_data.get("COUNTRY_NAME")
-                                )
+                                if Country.objects.filter(name=event_data.get("COUNTRY_NAME")).exists():
+                                    country_from_db = Country.objects.filter(name=event_data.get("COUNTRY_NAME")).first()
+                                elif Country.objects.filter(name_en=event_data.get("COUNTRY_NAME")).exists():
+                                    country_from_db =  Country.objects.filter(name_en=event_data.get("COUNTRY_NAME")).first()
+                                else:
+                                    country_from_db = Country.objects.create(name=event_data.get("COUNTRY_NAME"),name_en=event_data.get("COUNTRY_NAME"))
                             season, created = Season.objects.get_or_create(
                                 rubrics=rubrics,
                                 season_id=event_data.get("TOURNAMENT_SEASON_ID")
