@@ -262,7 +262,7 @@ class Season(models.Model):
     stages = models.ManyToManyField("Stages", verbose_name="Стадии")
 
     def __str__(self):
-        return f'{self.league_name}-{self.season_name}-{self.rubrics.name}'
+        return f'{self.league_name}'
 
     def save(self, *args, **kwargs):
         loop_num = 0
