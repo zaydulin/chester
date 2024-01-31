@@ -74,10 +74,12 @@ def create_tournament():
                     country_name = tournament_data.get('COUNTRY_NAME','' )
                     if not country_name:
                         country_name = 'Мир'
-
-                    country, created = Country.objects.get_or_create(
-                        Q(name=country_name) | Q(name_en=country_name)
-                    )
+                    if Country.objects.filter(name=country_name).exists():
+                        country = Country.objects.filter(name=country_name).first()
+                    elif Country.objects.filter(name_en=country_name).exists():
+                        country = Country.objects.filter(name_en=country_name).first()
+                    else:
+                        country = Country.objects.create(name=country_name , name_en=country_name)
                     season_id = tournament_data.get("ACTUAL_TOURNAMENT_SEASON_ID")
 
                     if  Season.objects.filter(rubrics=rubrics,season_id=season_id,league_name= tournament_data.get("LEAGUE_NAME"),country= country).exists():
