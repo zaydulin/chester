@@ -74,19 +74,9 @@ def create_tournament():
                     country_name = tournament_data.get('COUNTRY_NAME','' )
                     if not country_name:
                         country_name = 'Мир'
-                    if country_name == 'Russia':
-                        country_name = 'Россия'
-                    if country_name == 'Belarus':
-                        country_name = 'Беларусь'
-                    if country_name == 'Ukraine':
-                        country_name = 'Украина'
-                    if country_name == 'Tajikistan':
-                        country_name = 'Таджикистан'
-                    if country_name == 'Armenia':
-                        country_name = 'Армения'
 
                     country, created = Country.objects.get_or_create(
-                        name=country_name
+                        Q(name=country_name) | Q(name_en=country_name)
                     )
                     season_id = tournament_data.get("ACTUAL_TOURNAMENT_SEASON_ID")
 
