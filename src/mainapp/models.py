@@ -36,8 +36,11 @@ class GeneralSettings(models.Model):
         "Сообщение при отключение регистрации", max_length=500, blank=True, null=True
     )
     yandex_metrika_link = models.TextField("Ссылка Яндекс Метрика")
-    rapidapi_key_events = models.TextField("FlashScoreRapid")
-    rapidapi_key_stream = models.TextField("SoccerVideosRapid")
+    rapidapi_key_events = models.TextField("FlashScoreRapid", help_text='<a href="https://rapidapi.com/tipsters/api/flashlive-sports" target="_blank">Cсылка</a>',
+                                           blank=True, null=True)
+    rapidapi_key_stream = models.TextField("SoccerVideosRapid",
+                                           help_text='<a href="https://rapidapi.com/scorebat/api/free-football-soccer-videos/" target="_blank">Cсылка</a>',
+                                           blank=True, null=True)
 
     def __str__(self):
         return "Общая настройка"

@@ -1,0 +1,18 @@
+#jazzy-actions .form-group {
+    display: inline-block;
+    margin-bottom: 1rem;
+}
+.object-tools {
+    padding: 0;
+    display: inline-block;
+}
+#jazzy-actions {
+    display: flex;
+    align-items: center; /* Выравнивание по центру по вертикали */
+    justify-content: space-between; /* Распределение пространства между элементами */
+}
+
+#jazzy-actions .form-group {
+    flex: 0 0 auto; /* Не увеличивать элементы по ширине */
+    margin-right: 10px; /* Промежуток между элементами */
+}

@@ -29,13 +29,17 @@ class UserAdmin(admin.ModelAdmin):
 
 class GeneralSettingsAdmin(admin.ModelAdmin):
     fieldsets = [
-        ('Общие настройки',{
-            'fields':['logo','logo_light','favicon','name','headerImage','content','copyright_text','registration','of_register_message']
+        ('Общие настройки', {
+            'fields': ['logo', 'logo_light', 'favicon', 'name', 'headerImage', 'content', 'copyright_text', 'registration', 'of_register_message', 'yandex_metrika_link']
         }),
-        ('Интеграция', {
-            'fields': ['rapidapi_key_events','rapidapi_key_stream','yandex_metrika_link']
-        })
+        ('Интеграция интеграция матчей', {
+            'fields': ['rapidapi_key_events'],
 
+        }),
+        ('Интеграция стримов', {
+            'fields': ['rapidapi_key_stream'],
+
+        })
     ]
 
     def has_add_permission(self, request):
@@ -61,6 +65,12 @@ class GeneralSettingsAdmin(admin.ModelAdmin):
             # Если записей нет, перенаправляем на страницу создания новой записи
             url = reverse('admin:mainapp_generalsettings_add')
         return HttpResponseRedirect(url)
+
+    class Media:
+        js = ('admin/js/custom_admin.js',)
+        css = {
+            'all': ('admin/css/custom_admin.css',)
+        }
 
 class PagesAdminForm(forms.ModelForm):
     description = forms.CharField(label="Описание", widget=CKEditorUploadingWidget())
