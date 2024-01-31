@@ -6,6 +6,9 @@ from django.db.models import Q
 from events.models import Rubrics, Events, Team, Season, Player, Incidents, Periods, GameStatistic, H2H, TennisPoints, \
     TennisGames, Points, Country, Stages, IncidentParticipants
 from django.utils.text import slugify
+from googletrans import Translator
+
+translator = Translator()
 
 HEADER_FOR_FIRST_API = {
     "X-RapidAPI-Key": "3b1726a15fmshc58a145e91a5846p197521jsn5a6af790e789",
@@ -77,14 +80,13 @@ def create_tournament():
                     country_name = tournament_data.get('COUNTRY_NAME')
                     if not country_name:
                         country_name = 'Мир'
+                    translated_country_name = translator.translate(country_name, dest='ru').text
+
                     country, created = Country.objects.get_or_create(
-                        name=country_name
+                        name=translated_country_name
                     )
                     season_id = tournament_data.get("ACTUAL_TOURNAMENT_SEASON_ID")
-                    fields = {
-                        "league_name": tournament_data.get("LEAGUE_NAME"),
-                        "country": country
-                    }
+
                     if  Season.objects.filter(rubrics=rubrics,season_id=season_id,league_name= tournament_data.get("LEAGUE_NAME"),country= country).exists():
                         season = Season.objects.filter(rubrics=rubrics,season_id=season_id,league_name= tournament_data.get("LEAGUE_NAME"),country= country).first()
                     else:
