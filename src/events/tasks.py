@@ -13,9 +13,9 @@ from mainapp.models import GeneralSettings
 
 general_settings = GeneralSettings.objects.first()
 
-HEADER_FOR_SECOND_API = general_settings.rapidapi_key_events
+HEADER_FOR_SECOND_API = {general_settings.rapidapi_key_events}
 
-HEADER_FOR_LIVE_STREAM = general_settings.rapidapi_key_stream
+HEADER_FOR_LIVE_STREAM = {general_settings.rapidapi_key_stream}
 
 EVENT_STATUSES = {
     'LIVE': 1,
