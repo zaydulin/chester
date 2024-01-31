@@ -17,7 +17,7 @@ def clear_db(request):
     list = []
     seasons = Season.objects.filter(country__name='Россия')
     for season in seasons:
-        for stage in season.stages:
+        for stage in season.stages.all():
             list.append(stage.stage_id)
     return HttpResponse(f'ok -- stages - {list}')
 
