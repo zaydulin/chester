@@ -117,8 +117,10 @@ def get_country_seasons_popular(request):
         seasons = Season.objects.filter(country__isnull=False,rubrics__api_id=rubric_id).order_by("country")
     except:
         seasons = Season.objects.filter(country__isnull=False,rubrics__api_id=1).order_by("country")
+    sorted_seasons = sorted(seasons, key=lambda season: season.country.sort_by)
+
     grouped_seasons = {}
-    for country, season_group in groupby(seasons, key=lambda season: season.country.order('sort_by')):
+    for country, season_group in groupby(sorted_seasons, key=lambda season: season.country):
         grouped_seasons[country] = list(season_group)
 
     return grouped_seasons
