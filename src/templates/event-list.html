@@ -92,7 +92,7 @@
 <!--                Снизу обычные-->
                 {% get_country_seasons request as grouped_seasons %}
                 {% for country, seasons in grouped_seasons.items %}
-                    {% if seasons|length > 0 %}
+                        {{seasons}}
                         {% if country.sort_by != ''%}
 
                             {% if forloop.counter >= 25 %}
@@ -127,7 +127,7 @@
                             </div>
 
                         {% endif %}
-                    {% endif %}
+
                 {% endfor %}
                 <button id="show-more-button">Показать еще</button>
                 <script>
