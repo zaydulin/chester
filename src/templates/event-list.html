@@ -107,8 +107,7 @@
                                 </div>
                                     <ul>
                                         {% for season in seasons %}
-                                        {% if not season.season_name %}
-                                        {% else %}
+
                                         <li data-season="{{ season.season_name }}">
                                             <a
                                                     href="{% url 'season_detail' season.slug %}"
@@ -121,7 +120,7 @@
                                             </a
                                             >
                                         </li>
-                                        {% endif %}
+
                                         {% endfor %}
                                     </ul>
                             </div>
