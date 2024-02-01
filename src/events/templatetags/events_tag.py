@@ -75,9 +75,9 @@ def get_country_seasons(request):
             rubric_id = 21
         else:
             rubric_id = 1
-        seasons = Season.objects.filter(country__isnull=False,rubrics__api_id=rubric_id).order_by("country")
+        seasons = Season.objects.filter(country__isnull=False,season_name__isnull=False,rubrics__api_id=rubric_id).order_by("country")
     except:
-        seasons = Season.objects.filter(country__isnull=False,rubrics__api_id=1).order_by("country")
+        seasons = Season.objects.filter(country__isnull=False,season_name__isnull=False,rubrics__api_id=1).order_by("country")
     grouped_seasons = {}
     for country, season_group in groupby(seasons, key=lambda season: season.country):
         grouped_seasons[country] = list(season_group)
