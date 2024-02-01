@@ -1085,7 +1085,7 @@
               font-size:100px;
               color: red;
             }</style>
-                                        <script>
+                            <script>
                     function formatTime(seconds) {
     var minutes = Math.floor(seconds / 60);
     var remainingSeconds = seconds % 60;
@@ -1423,8 +1423,8 @@ updateCurrentTimeAttribute();
                 </span>
                     </div>
                     <div class="football-rev__main" >
-                        <div id="incidents-footbal"
-                        {% for incident in event.incidents.all %}
+                        <div id="incidents-footbal">
+                            {% for incident in event.incidents.all %}
                             {% if incident.incident_participants.exists or incident.time|length > 4 %}
                             <div class="football-rev__event {% if incident.incident_team == 2 %} away{% else %} {% endif %}" id="incident_num_{{forloop.counter}}">
                                 <div class="football-rev__time">{{ incident.time }}</div>
@@ -1517,8 +1517,6 @@ updateCurrentTimeAttribute();
                                             {% elif part.incident_type == 'ASSISTANCE'%}
                                             <span class="football-rev__name">{{part.participant_name}}</span>
                                                  <img class="football-rev__img-event" src="{% static 'docs/img/assist.png' %}"width="10" height="12" />
-                                            {% else %}
-                                            <span class="football-rev__name">{{part.incident_type}} {{part.participant_name}} {{part.incident_name}} {{part.participant_id}}</span>
                                             {% endif %}
                                         </div>
                                     </div>
@@ -1528,8 +1526,8 @@ updateCurrentTimeAttribute();
                             </div>
                             {% endif %}
                             {% endfor %}
-                        <div class="football-rev__score" id="score"><span>{{event.home_score}} - {{event.away_score}}</span></div>
-                        ></div>
+                            <div class="football-rev__score" id="score"><span>{{event.home_score}} - {{event.away_score}}</span></div>
+                        </div>
                     </div>
 
                 </div>
@@ -1687,16 +1685,16 @@ updateCurrentTimeAttribute();
                 </div>
                 <ul class="football-squads__body">
                     {% for player in home_team_players_main %}
-                     <a href="{% url 'player_detail' player.slug %}"
-                           hx-get="{% url 'player_detail' player.slug %}"
-                           hx-target="#main-content"
-                           hx-history-elt="#main-content"
-                           hx-push-url="true"
-                           hx-indicator="#content-loader"
-                           hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''"
-                        style="color:black"
-                        >
-                    <li class="football-squads__body-item">
+                    <a href="{% url 'player_detail' player.slug %}"
+                       hx-get="{% url 'player_detail' player.slug %}"
+                       hx-target="#main-content"
+                       hx-history-elt="#main-content"
+                       hx-push-url="true"
+                       hx-indicator="#content-loader"
+                       hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''"
+                       style="color:black"
+                    >
+                        <li class="football-squads__body-item">
 
                             <div class="football-squads__num">{% if player.number %}{{player.number}}{% else %}Н/И{% endif %}</div>
                             <div class="football-squads__name">
@@ -1706,21 +1704,21 @@ updateCurrentTimeAttribute();
                             <div class="football-squads__pos">{% if  player.position_name %}{{ player.position_name }}{% else %}Н/И{%endif%}</div>
                             <div class="football-squads__rate">{% if player.reiting %}{{ player.reiting }}{% else %}Н/И{%endif%}</div>
 
-                    </li>
-                         </a>
+                        </li>
+                    </a>
                     {% endfor %}
                     <li class="football-squads__sub-div">Замена</li>
                     {% for player in home_team_players_not_main %}
                     <a href="{% url 'player_detail' player.slug %}"
-                           hx-get="{% url 'player_detail' player.slug %}"
-                           hx-target="#main-content"
-                           hx-history-elt="#main-content"
-                           hx-push-url="true"
-                           hx-indicator="#content-loader"
-                           hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''"
+                       hx-get="{% url 'player_detail' player.slug %}"
+                       hx-target="#main-content"
+                       hx-history-elt="#main-content"
+                       hx-push-url="true"
+                       hx-indicator="#content-loader"
+                       hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''"
                        style="color:black"
-                        >
-                            <li class="football-squads__body-item">
+                    >
+                        <li class="football-squads__body-item">
 
                             <div class="football-squads__num">{% if player.number %}{{player.number}}{% else %}Н/И{% endif %}</div>
                             <div class="football-squads__name">
@@ -1730,8 +1728,8 @@ updateCurrentTimeAttribute();
                             <div class="football-squads__pos">{% if  player.position_name %}{{ player.position_name }}{% else %}Н/И{%endif%}</div>
                             <div class="football-squads__rate">{% if player.reiting %}{{ player.reiting }}{% else %}Н/И{%endif%}</div>
 
-                    </li>
-                         </a>
+                        </li>
+                    </a>
                     {% endfor %}
                 </ul>
             </div>
@@ -1744,16 +1742,16 @@ updateCurrentTimeAttribute();
                 </div>
                 <ul class="football-squads__body">
                     {% for player in away_team_players_main %}
-                      <a href="{% url 'player_detail' player.slug %}"
-                           hx-get="{% url 'player_detail' player.slug %}"
-                           hx-target="#main-content"
-                           hx-history-elt="#main-content"
-                           hx-push-url="true"
-                           hx-indicator="#content-loader"
-                           hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''"
-                         style="color:black"
-                        >
-                    <li class="football-squads__body-item">
+                    <a href="{% url 'player_detail' player.slug %}"
+                       hx-get="{% url 'player_detail' player.slug %}"
+                       hx-target="#main-content"
+                       hx-history-elt="#main-content"
+                       hx-push-url="true"
+                       hx-indicator="#content-loader"
+                       hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''"
+                       style="color:black"
+                    >
+                        <li class="football-squads__body-item">
 
                             <div class="football-squads__num">{% if player.number %}{{player.number}}{% else %}Н/И{%endif%}</div>
                             <div class="football-squads__name">
@@ -1763,22 +1761,22 @@ updateCurrentTimeAttribute();
                             <div class="football-squads__pos">{% if  player.position_name %}{{ player.position_name }}{% else %}Н/И{%endif%}</div>
                             <div class="football-squads__rate">{% if player.reiting %}{{ player.reiting }}{% else %}Н/И{%endif%}</div>
 
-                    </li>
-                          </a>
+                        </li>
+                    </a>
                     {% endfor %}
 
                     <li class="football-squads__sub-div">Замена</li>
                     {% for player in away_team_players_not_main %}
                     <a href="{% url 'player_detail' player.slug %}"
-                           hx-get="{% url 'player_detail' player.slug %}"
-                           hx-target="#main-content"
-                           hx-history-elt="#main-content"
-                           hx-push-url="true"
-                           hx-indicator="#content-loader"
-                           hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''"
+                       hx-get="{% url 'player_detail' player.slug %}"
+                       hx-target="#main-content"
+                       hx-history-elt="#main-content"
+                       hx-push-url="true"
+                       hx-indicator="#content-loader"
+                       hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''"
                        style="color:black"
-                        >
-                    <li class="football-squads__body-item">
+                    >
+                        <li class="football-squads__body-item">
 
                             <div class="football-squads__num">{% if player.number %}{{player.number}}{% else %}Н/И{%endif%}</div>
                             <div class="football-squads__name">
@@ -1788,8 +1786,8 @@ updateCurrentTimeAttribute();
                             <div class="football-squads__pos">{% if  player.position_name %}{{ player.position_name }}{% else %}Н/И{%endif%}</div>
                             <div class="football-squads__rate">{% if player.reiting %}{{ player.reiting }}{% else %}Н/И{%endif%}</div>
 
-                    </li>
-                        </a>
+                        </li>
+                    </a>
                     {% endfor %}
                 </ul>
             </div>
