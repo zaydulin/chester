@@ -295,7 +295,7 @@ class Country(models.Model):
     name = models.CharField(max_length=150)
     name_en = models.CharField(max_length=150)
     image = models.CharField(verbose_name='Флаг в формате flag-icon flag-icon-<название>',max_length=150)
-    sort_by = models.PositiveIntegerField('Позиция в списке')
+    sort_by = models.PositiveIntegerField('Позиция в списке', blank=True, null=True)
     def __str__(self):
         return f'{self.name}'
 
