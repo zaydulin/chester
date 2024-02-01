@@ -59,38 +59,72 @@
 
             </div>
             <div  id="country-list">
-                {% get_country_seasons request as grouped_seasons %}
-                {% for country, seasons in grouped_seasons.items %}
-                {% if forloop.counter >= 25 %}
-                <div class="country__div__main none">
-                {% else %}
-                         <div class="country__div__main">
-                {% endif %}
+                {% get_country_seasons_popular request as grouped_seasons_popular %}
+                 {% for country, seasons in grouped_seasons_popular.items %}
+                <div class="country__div__main">
+
                     <div class="country__div" data-country="{{ country }}"  style="cursor:pointer;">
 
 
-                        <h2 style="font-weight: 500;"><i class="{{country.image}}"></i>&nbsp;{{ country }} </h2>
-                    </div>
-                        <ul>
-                            {% for season in seasons %}
-                            {% if not season.season_name %}
-                            {% else %}
-                            <li data-season="{{ season.season_name }}">
-                                <a
-                                        href="{% url 'season_detail' season.slug %}"
-                                        hx-get="{% url 'season_detail' season.slug %}"
-                                        hx-target="#main-content" hx-history-elt="#main-content"
-                                        hx-push-url="true"
-                                        hx-indicator="#content-loader"
-                                        hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''"
-                                ><img src="{{season.logo_league}}" width="20" height="20" alt="team">&nbsp;{{ season.season_name }}
-                                </a
-                                >
-                            </li>
-                            {% endif %}
-                            {% endfor %}
-                        </ul>
-                </div>
+                                <h2 style="font-weight: 500;"><i class="{{country.image}}"></i>&nbsp;{{ country }} </h2>
+                            </div>
+                                <ul>
+                                    {% for season in seasons %}
+                                    {% if not season.season_name %}
+                                    {% else %}
+                                    <li data-season="{{ season.season_name }}">
+                                        <a
+                                                href="{% url 'season_detail' season.slug %}"
+                                                hx-get="{% url 'season_detail' season.slug %}"
+                                                hx-target="#main-content" hx-history-elt="#main-content"
+                                                hx-push-url="true"
+                                                hx-indicator="#content-loader"
+                                                hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''"
+                                        ><img src="{{season.logo_league}}" width="20" height="20" alt="team">&nbsp;{{ season.season_name }}
+                                        </a
+                                        >
+                                    </li>
+                                    {% endif %}
+                                    {% endfor %}
+                                </ul>
+                        </div>
+                {% endfor %}
+
+                {% get_country_seasons request as grouped_seasons %}
+                {% for country, seasons in grouped_seasons.items %}
+                    {% if country.sort_by == ''%}
+                        {% if forloop.counter >= 25 %}
+                        <div class="country__div__main none">
+                        {% else %}
+                                 <div class="country__div__main">
+                        {% endif %}
+                            <div class="country__div" data-country="{{ country }}"  style="cursor:pointer;">
+
+
+                                <h2 style="font-weight: 500;"><i class="{{country.image}}"></i>&nbsp;{{ country }} </h2>
+                            </div>
+                                <ul>
+                                    {% for season in seasons %}
+                                    {% if not season.season_name %}
+                                    {% else %}
+                                    <li data-season="{{ season.season_name }}">
+                                        <a
+                                                href="{% url 'season_detail' season.slug %}"
+                                                hx-get="{% url 'season_detail' season.slug %}"
+                                                hx-target="#main-content" hx-history-elt="#main-content"
+                                                hx-push-url="true"
+                                                hx-indicator="#content-loader"
+                                                hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''"
+                                        ><img src="{{season.logo_league}}" width="20" height="20" alt="team">&nbsp;{{ season.season_name }}
+                                        </a
+                                        >
+                                    </li>
+                                    {% endif %}
+                                    {% endfor %}
+                                </ul>
+                        </div>
+
+                    {% endif %}
                 {% endfor %}
                 <button id="show-more-button">Показать еще</button>
                 <script>
