@@ -92,7 +92,7 @@
 <!--                Снизу обычные-->
                 {% get_country_seasons request as grouped_seasons %}
                 {% for country, seasons in grouped_seasons.items %}
-                        {{seasons}}
+
                         {% if country.sort_by != ''%}
 
                             {% if forloop.counter >= 25 %}
@@ -107,7 +107,7 @@
                                 </div>
                                     <ul>
                                         {% for season in seasons %}
-                                        {% if not season.season_name %}
+                                        {% if not season.league_name %}
                                         {% else %}
                                         <li data-season="{{ season.season_name }}">
                                             <a
