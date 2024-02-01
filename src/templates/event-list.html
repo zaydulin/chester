@@ -92,7 +92,7 @@
 <!--                Снизу обычные-->
                 {% get_country_seasons request as grouped_seasons %}
                 {% for country, seasons in grouped_seasons.items %}
-                    {% if seasons %}
+                    {% if seasons|length > 0 %}
                         {% if country.sort_by != ''%}
 
                             {% if forloop.counter >= 25 %}
