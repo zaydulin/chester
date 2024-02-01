@@ -1238,7 +1238,7 @@ updateCurrentTimeAttribute();
                                             {% elif part.incident_type == 'SUBSTITUTION_IN' %}
                                             <span class="football-rev__name">{{part.participant_name}}</span>
                                             {%  elif part.incident_type == 'SUBSTITUTION_OUT' %}
-                                            <span class="football-rev__name">{{part.participant_name}}
+                                            <span class="football-rev__name">{{part.participant_name}}</span>
                                             <div class="football-rev__footer-item">
                                                   <span>
                                                     <svg
@@ -1276,7 +1276,7 @@ updateCurrentTimeAttribute();
                                                   </span>
                                                 </div>
                                             {%  elif part.incident_type == 'OWN_GOAL' %}
-                                            <span class="football-rev__name">{{part.participant_name}}
+                                            <span class="football-rev__name">{{part.participant_name}}</span>
                                             <div class="football-rev__footer-item">
                                                  <img class="football-rev__img-event" src="{% static 'docs/img/penalty.png' %}"width="10" height="12" />
                                             </div>
@@ -1472,7 +1472,7 @@ updateCurrentTimeAttribute();
                                             {% elif part.incident_type == 'SUBSTITUTION_IN' %}
                                             <span class="football-rev__name">{{part.participant_name}}</span>
                                             {%  elif part.incident_type == 'SUBSTITUTION_OUT' %}
-                                            <span class="football-rev__name">{{part.participant_name}}
+                                            <span class="football-rev__name">{{part.participant_name}}</span>
                                             <div class="football-rev__footer-item">
                                                   <span>
                                                     <svg
@@ -1510,13 +1510,13 @@ updateCurrentTimeAttribute();
                                                   </span>
                                                 </div>
                                             {%  elif part.incident_type == 'OWN_GOAL' %}
-                                            <span class="football-rev__name">{{part.participant_name}}
+                                            <span class="football-rev__name">{{part.participant_name}}</span>
                                             <div class="football-rev__footer-item">
                                                  <img class="football-rev__img-event" src="{% static 'docs/img/penalty.png' %}"width="10" height="12" />
                                             </div>
                                             {% elif part.incident_type == 'ASSISTANCE'%}
                                             <span class="football-rev__name">{{part.participant_name}}</span>
-                                                 <img class="football-rev__img-event" src="{% static 'docs/img/assist.png' %}"width="10" height="12" />
+                                            <img class="football-rev__img-event" src="{% static 'docs/img/assist.png' %}"width="10" height="12" />
                                             {% endif %}
                                         </div>
                                     </div>
