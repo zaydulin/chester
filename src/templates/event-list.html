@@ -93,7 +93,7 @@
                 {% get_country_seasons request as grouped_seasons %}
                 {% for country, seasons in grouped_seasons.items %}
 
-                        sort_by= {{country.sort_by}}
+                        {% if country.sort_by == 'None' %}
 
                             {% if forloop.counter >= 25 %}
                             <div class="country__div__main none">
@@ -125,7 +125,7 @@
                                     </ul>
                             </div>
 
-
+                        {% endif %}
 
                 {% endfor %}
                 <button id="show-more-button">Показать еще</button>
