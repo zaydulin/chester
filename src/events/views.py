@@ -14,12 +14,11 @@ from django.http import Http404
 from django.contrib.contenttypes.models import ContentType
 
 def clear_db(request):
-    list = []
-    seasons = Season.objects.filter(country__name='Россия')
-    for season in seasons:
-        for stage in season.stages.all():
-            list.append(stage.stage_id)
-    return HttpResponse(f'ok -- stages - {list}')
+    events = Events.objects.filter((Q(start_at__startswith='2024-01-25')))
+    for event in events:
+        event.status = 2
+        event.save()
+    return HttpResponse(f'ok ')
 
 class HomeView(CustomHtmxMixin, TemplateView):
     """Категории"""
