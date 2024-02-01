@@ -234,8 +234,7 @@ def create_events_of_tournament(rubric_id):
 
 @shared_task
 def create_events_of_tournament_id1():
-    create_events_of_tournament(1)
-    return {"response": "create_events_of_tournament successfully"}
+    return create_events_of_tournament(1)
 
 
 
@@ -301,7 +300,7 @@ def fetch_event_data(rubric_id):
     incidents_events = Events.objects.filter(status=1, rubrics=rubric)
     gamestatistic_events = Events.objects.filter(status=1, rubrics=rubric)
     today = datetime.now().date()
-    tomorrow = today - timedelta(days=7)
+    tomorrow = today - timedelta(days=1)
 
     today_str = today.strftime('%Y-%m-%d')
     tomorrow_str = tomorrow.strftime('%Y-%m-%d')
