@@ -109,7 +109,7 @@
                                         {% for season in seasons %}
                                         {% if not season.league_name %}
                                         {% else %}
-                                        <li data-season="{{ season.season_name }}">
+                                        <li data-season="{{ season.league_name }}">
                                             <a
                                                     href="{% url 'season_detail' season.slug %}"
                                                     hx-get="{% url 'season_detail' season.slug %}"
