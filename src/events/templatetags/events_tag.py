@@ -114,7 +114,7 @@ def get_country_seasons_popular(request):
             rubric_id = 21
         else:
             rubric_id = 1
-        seasons = Season.objects.filter(country__isnull=False,sort_by__isnull = False,rubrics__api_id=rubric_id).order_by("country")
+        seasons = Season.objects.filter(country__isnull=False,country__sort_by__isnull = False,rubrics__api_id=rubric_id).order_by("country")
     except:
         seasons = Season.objects.filter(country__isnull=False,sort_by__isnull = False,rubrics__api_id=1).order_by("country")
     sorted_seasons = sorted(seasons, key=lambda season: season.country.sort_by if season.country and season.country.sort_by is not None else float('inf'))
