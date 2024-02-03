@@ -43,3 +43,5 @@ celery-first:
 	docker-compose -f $(docker_file) exec cb-celery celery -A _project call events.tasks.create_tournament
 updatecountry:
 	docker-compose -f $(docker_file) exec cb-app python manage.py loaddata new_countries.json
+daphne:
+	docker-compose -f $(docker_file) exec cb-app daphne -u /tmp/daphne.sock _project.asgi:application
