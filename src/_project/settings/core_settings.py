@@ -265,9 +265,11 @@ CHANNEL_LAYERS = {
         "CONFIG": {
             "hosts": [("cb-redis", 6379)],
             "capacity": 1024 * 1024,
+            "expiry": 60 * 10,
         },
     }
 }
+
 
 # Celery settings
 CELERY_BROKER_URL = f"redis://{env.str('DJANGO_REDIS_HOST', 'localhost')}:6379/2"
