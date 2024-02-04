@@ -478,6 +478,28 @@ class EventsView(CustomHtmxMixin,TemplateView):
         return JsonResponse(data)
 
 
+
+
+class GetElementDataView(View):
+    def get(self, request, event_id, element):
+        event = Events.objects.get(id=event_id)
+        data = {}
+        if element == 'home_score':
+            data['value'] = event.home_score
+            template_name = 'partials/home_score.html'
+        elif element == 'away_score':
+            data['value'] = event.away_score
+            template_name = 'partials/away_score.html'
+        elif element == 'start_at':
+            data['value'] = event.start_at
+            template_name = 'partials/start_at.html'
+        # Аналогично добавьте ветви для других элементов
+        else:
+            return JsonResponse({'error': 'Invalid element'})
+
+        return render(request, template_name, data)
+
+
 class SearchView(CustomHtmxMixin, TemplateView):
     template_name = "search.html"
 

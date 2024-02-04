@@ -16,4 +16,11 @@ urlpatterns = [
     path('db/clear_db/', views.clear_db, name='clear_db'),
     path('get_chat_data/<slug:event_slug>/', get_chat_data, name='get_chat_data'),
     path('post_message/<slug:event_slug>/', views.PostMessageView.as_view(), name='post_message'),
+    path('get_element_data/<int:event_id>/<str:element>/', views.GetElementDataView.as_view(), name='get_element_data'),
+
+
+
+
 ]
+
+

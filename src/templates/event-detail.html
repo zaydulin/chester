@@ -41,7 +41,17 @@
                                 <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"></path>
                             </svg>
                         </a>
-                        <span class="event-team__point" id="score-home-head">{% if not event.home_score %} 0 {% else %}{{ event.home_score }}{% endif %}</span>
+                        <!--Htmx home_score--->
+                        <div id="periods" hx-get="{% url 'get_element_data' event_id=event.id element='home_score' %}" hx-trigger="every 5s" hx-swap="score-home-head">
+                            <span class="event-team__point" id="score-home-head">
+                                {% if not event.home_score %} 0 {% else %}{{ event.home_score }}{% endif %}
+                            </span>
+                        </div>
+
+
+
+
+
                     </div>
                 </div>
                 <div class="event-info__team event-team away">
@@ -1219,21 +1229,21 @@
     });
 </script>
 <script>
-// Предположим, что у вас есть новое сообщение и вы хотите прокрутить вниз
-function scrollToBottom() {
-  var chat = document.getElementById('chat');
-  chat.scrollTop = chat.scrollHeight;
-}
+    // Предположим, что у вас есть новое сообщение и вы хотите прокрутить вниз
+    function scrollToBottom() {
+        var chat = document.getElementById('chat');
+        chat.scrollTop = chat.scrollHeight;
+    }
 
-// Вызывайте функцию прокрутки вниз при загрузке страницы
-window.onload = function () {
-  scrollToBottom();
-};
+    // Вызывайте функцию прокрутки вниз при загрузке страницы
+    window.onload = function () {
+        scrollToBottom();
+    };
 
-// Вызывайте функцию прокрутки вниз каждые 5 секунд
-setInterval(function () {
-  scrollToBottom();
-}, 10);
+    // Вызывайте функцию прокрутки вниз каждые 5 секунд
+    setInterval(function () {
+        scrollToBottom();
+    }, 10);
 
 
 
@@ -1247,8 +1257,8 @@ setInterval(function () {
 
 <style>
     .chat__messages {
-   overflow-y: scroll;
-}
+        overflow-y: scroll;
+    }
 
 
     div.football-rev__textbox div.football-rev__textbox{
