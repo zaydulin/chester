@@ -2063,7 +2063,7 @@ updateCurrentTimeAttribute();
 
 </script>
 <script>
-    const chatSocket = new WebSocket(
+    const chatSocket = new ReconnectingWebSocket(
     'wss://' +
     window.location.host +
     '/ws/events/' +
