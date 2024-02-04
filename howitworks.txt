@@ -15,3 +15,8 @@ create_events_of_tournament_id4 ...)
 
 task fetch_event_data_for_second
 обновляет счет матча и его статус (онлайн предстоящие завершенные)
+
+
+
+####
+прокрутку
