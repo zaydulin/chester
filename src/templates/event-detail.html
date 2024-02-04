@@ -1,6 +1,7 @@
 {% load static %}
 {% load events_tag %}
 {% get_settings "DEBUG" as debug %}
+<script src="https://cdn.jsdelivr.net/npm/reconnecting-websocket@4.4.0/dist/reconnecting-websocket.min.js"></script>
 
 
 {% block content %}
@@ -2064,7 +2065,7 @@ updateCurrentTimeAttribute();
 </script>
 <script>
     const chatSocket = new ReconnectingWebSocket(
-    'wss://' +
+    'ws://' +
     window.location.host +
     '/ws/events/' +
     "{{ event.slug }}" +
