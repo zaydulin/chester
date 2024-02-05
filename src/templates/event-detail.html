@@ -1034,7 +1034,9 @@
                         </div>
                     </div>
 
-                    <ul class="chat_messages"  id="chatMessages" hx-trigger="every 5s" hx-get="{% url 'get_chat_data' event_slug=event.slug %}" hx-swap="#chat">
+                    <ul class="chat_messages" id="chatMessages" hx-trigger="every 5s" hx-get="{% url 'get_chat_data' event_slug=event.slug %}" hx-swap="#chat">
+
+
                         <ul class="chat__messages" id="chat" >
                             {% for message in messages %}
                             {% if message.stopwords %}
@@ -1224,28 +1226,12 @@
     });
 </script>
 <script>
-    // Предположим, что у вас есть новое сообщение и вы хотите прокрутить вниз
-    function scrollToBottom() {
-        var chat = document.getElementById('chat');
-        chat.scrollTop = chat.scrollHeight;
-    }
-
-    // Вызывайте функцию прокрутки вниз при загрузке страницы
-    window.onload = function () {
-        scrollToBottom();
-    };
-
-    // Вызывайте функцию прокрутки вниз каждые 5 секунд
-    setInterval(function () {
-        scrollToBottom();
-    }, 10);
-
-
 
 
 
 
 </script>
+
 
 {% endblock content %}
 
