@@ -337,7 +337,7 @@ class EventsUpcomingView(CustomHtmxMixin, TemplateView):
 class PostMessageView(View):
     def post(self, request, *args, **kwargs):
         event_slug = kwargs["event_slug"]
-        event = get_object_or_404(Events, slug=event_slug)
+        event = Events.objects.filter(slug=event_slug).first()
 
         if request.user.is_authenticated:
             user = request.user
@@ -362,7 +362,7 @@ class PostMessageView(View):
 
 @require_GET
 def get_chat_data(request, event_slug):
-    event = get_object_or_404(Events, slug=event_slug)
+    event = Events.objects.filter(Events, slug=event_slug).first()
     messages = Messages.objects.filter(event=event).order_by('-id')[:50]
 
     html_content = render_to_string("partials/chat_messages.html", {"messages": messages}).strip()
