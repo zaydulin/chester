@@ -486,9 +486,27 @@ class GetElementDataView(View):
         data = {}
         if element == 'home_score':
             data['value'] = event.home_score
+            data['idspan'] = 'score-home-head'
             template_name = 'partials/home_score.html'
         elif element == 'away_score':
             data['value'] = event.away_score
+            data['idspan'] = 'score-away-head'
+            template_name = 'partials/away_score.html'
+        elif element == 'home_score_mid':
+            data['value'] = event.home_score
+            data['idspan'] = 'score-home-mid'
+            template_name = 'partials/home_score.html'
+        elif element == 'away_score_mid':
+            data['value'] = event.away_score
+            data['idspan'] = 'score-away-mid'
+            template_name = 'partials/away_score.html'
+        elif element == 'home_score_bttm':
+            data['value'] = event.home_score
+            data['idspan'] = 'score-home-bttm'
+            template_name = 'partials/home_score.html'
+        elif element == 'away_score_bttm':
+            data['value'] = event.away_score
+            data['idspan'] = 'score-away-bttm'
             template_name = 'partials/away_score.html'
         elif element == 'start_at':
             data['value'] = event.start_at
