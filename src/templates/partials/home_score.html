@@ -1,3 +1,5 @@
-<span class="event-team__point" id="score-home-head">
-    {% if not event.home_score %} 0 {% else %}{{ event.home_score }}{% endif %}
-</span>
+<span class="event-team__point" id="score-home-head">{% if value %}
+    {{ value }}
+{% else %}
+    0
+{% endif %}</span>
