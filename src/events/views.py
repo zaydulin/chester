@@ -1,5 +1,5 @@
 from itertools import groupby
-
+from django.views import View
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q, Count
 from django.shortcuts import render, redirect
@@ -12,6 +12,9 @@ from .forms import MessageForm, EventSearchForm
 from django.http import JsonResponse, HttpResponseRedirect , HttpResponse
 from django.http import Http404
 from django.contrib.contenttypes.models import ContentType
+from django.shortcuts import get_object_or_404
+from django.views.decorators.http import require_GET
+from django.template.loader import render_to_string
 
 def clear_db(request):
     events = Events.objects.filter((Q(start_at__startswith='2024-01-25')))
@@ -331,6 +334,43 @@ class EventsUpcomingView(CustomHtmxMixin, TemplateView):
         return context
 
 
+class PostMessageView(View):
+    def post(self, request, *args, **kwargs):
+        event_slug = kwargs["event_slug"]
+        event = get_object_or_404(Events, slug=event_slug)
+
+        if request.user.is_authenticated:
+            user = request.user
+        else:
+            user = None
+
+        message_form = MessageForm(request.POST)
+
+        if message_form.is_valid():
+            message_text = message_form.cleaned_data["message"]
+            message = Messages(user=user, message=message_text, event=event)
+            message.save()
+
+            messages = Messages.objects.filter(event=event)
+            html_content = render_to_string("partials/chat_messages_form.html", {"messages": messages}).strip()
+
+            # Возвращает JSON с HTML-кодом чата и информацией об успешном сохранении сообщения
+            return JsonResponse({"success": True, "html": html_content, "message": "Сообщение успешно отправлено"})
+
+        # Возвращает JSON с информацией об ошибке валидации формы
+        return JsonResponse({"success": False, "errors": message_form.errors})
+
+@require_GET
+def get_chat_data(request, event_slug):
+    event = get_object_or_404(Events, slug=event_slug)
+    messages = Messages.objects.filter(event=event).order_by('-id')[:50]
+
+    html_content = render_to_string("partials/chat_messages.html", {"messages": messages}).strip()
+
+    return HttpResponse(html_content)
+
+
+
 class EventsView(CustomHtmxMixin,TemplateView):
     model = Events
     template_name = "event-detail.html"
@@ -342,45 +382,46 @@ class EventsView(CustomHtmxMixin,TemplateView):
         event = Events.objects.filter(slug=event_slug).first()
         home_team = event.home_team
         away_team = event.away_team
-
         no_comands = event.rubrics.sortable not in [
             1,
         ]
         context["no_comands"] = no_comands
-
         football = event.rubrics.sortable in [
             1,
         ]
         context["football"] = football
-
         hockey = event.rubrics.sortable in [
             2,
         ]
         context["hockey"] = hockey
-
         tennis = event.rubrics.sortable in [
             3,
         ]
         context["tennis"] = tennis
+        messages = Messages.objects.filter(event=event).order_by('-id')
+        page = self.request.GET.get('page', 1)
+        paginator = Paginator(messages, 50)
+        try:
+            messages_page = paginator.page(page)
+        except PageNotAnInteger:
+            messages_page = paginator.page(1)
+        except EmptyPage:
+            messages_page = paginator.page(paginator.num_pages)
 
-        messages = Messages.objects.filter(event=event)
         message_form = MessageForm()
         unique_users_count = Messages.objects.filter(event=event).values("user").distinct().count()
-
         if home_team:
             home_team_players_main = home_team.players.filter(main_player=False)
             home_team_players_not_main = home_team.players.filter(main_player=True)
         else:
             home_team_players_main = []
             home_team_players_not_main = []
-
         if away_team:
             away_team_players_main = away_team.players.filter(main_player=False)
             away_team_players_not_main = away_team.players.filter(main_player=True)
         else:
             away_team_players_main = []
             away_team_players_not_main = []
-
         if self.request.user.is_authenticated:
             user = self.request.user
             season_bookmark = Bookmarks.objects.filter(
@@ -398,6 +439,7 @@ class EventsView(CustomHtmxMixin,TemplateView):
         context["title"] = f' {home_team.name} - {away_team.name}: смотреть онлайн {event.start_at} , прямая трансляция  бесплатно | Chesterbets'
         context["meta_content"] = f'{home_team.name} - {away_team.name} , ({event.rubrics.name}) , {event.start_at}. Онлайн видео трансляция, новости, статистика, ставки, прямой эфир.'
         context["event"] = event
+        context["messages_page"] = messages_page
         context["messages"] = messages
         context["message_form"] = message_form
         context["unique_users_count"] = unique_users_count
@@ -412,34 +454,50 @@ class EventsView(CustomHtmxMixin,TemplateView):
     def post(self, request, *args, **kwargs):
         event_slug = kwargs["slug"]
         event = Events.objects.get(slug=event_slug)
-
-        # Проверяем, является ли пользователь аутентифицированным
         if request.user.is_authenticated:
             user = request.user
         else:
             user = None
-
         message_form = MessageForm(request.POST)
-
         if message_form.is_valid():
             message_text = message_form.cleaned_data["message"]
-
-            # Создаем новое сообщение и связываем его с событием и пользователем (если есть)
             message = Messages(user=user, message=message_text, event=event)
             message.save()
-
+        messages = Messages.objects.filter(event=event).order_by('-id')[:50]
+        context["messages_page"] = messages
         return redirect("events_detail", slug=event_slug)
 
     def get_data(self, **kwargs):
-        # Получите данные для обновления, как вам нужно
         event_slug = kwargs["slug"]
         event = Events.objects.get(slug=event_slug)
         data = {
             "home_score": event.home_score,
             "away_score": event.home_score,
-        }  # Замените на фактические данные
+        }
 
         return JsonResponse(data)
+
+
+
+
+class GetElementDataView(View):
+    def get(self, request, event_id, element):
+        event = Events.objects.get(id=event_id)
+        data = {}
+        if element == 'home_score':
+            data['value'] = event.home_score
+            template_name = 'partials/home_score.html'
+        elif element == 'away_score':
+            data['value'] = event.away_score
+            template_name = 'partials/away_score.html'
+        elif element == 'start_at':
+            data['value'] = event.start_at
+            template_name = 'partials/start_at.html'
+        # Аналогично добавьте ветви для других элементов
+        else:
+            return JsonResponse({'error': 'Invalid element'})
+
+        return render(request, template_name, data)
 
 
 class SearchView(CustomHtmxMixin, TemplateView):

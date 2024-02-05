@@ -20,7 +20,7 @@ SECRET_KEY = env.str("DJANGO_SECRET_KEY", "s6&pl7!-8d97nvje@mqz^4+%p=v)8bxaew)3-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool("DJANGO_DEBUG", True)
 
-# ALLOWED_HOSTS = ['chestersbets.works-all.ru']
+# ALLOWED_HOSTS = ['chesterbets.com']
 ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", ["*"])
 
 # Application definition
@@ -256,8 +256,8 @@ RANDOM_URL_LENGTH = 32
 RANDOM_URL_MAX_TRIES = 4
 
 # Websocket settings
-# CSRF_TRUSTED_ORIGINS = "https://chestersbets.works-all.ru"
-CSRF_TRUSTED_ORIGINS = ("https://chestersbets.works-all.ru",)
+# CSRF_TRUSTED_ORIGINS = "https://chesterbets.com"
+CSRF_TRUSTED_ORIGINS = ("https://chesterbets.com",)
 
 CHANNEL_LAYERS = {
     "default": {
@@ -265,9 +265,11 @@ CHANNEL_LAYERS = {
         "CONFIG": {
             "hosts": [("cb-redis", 6379)],
             "capacity": 1024 * 1024,
+            "expiry": 60 * 10,
         },
     }
 }
+
 
 # Celery settings
 CELERY_BROKER_URL = f"redis://{env.str('DJANGO_REDIS_HOST', 'localhost')}:6379/2"

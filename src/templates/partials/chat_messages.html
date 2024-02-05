@@ -1,0 +1,19 @@
+<ul class="chat__messages" id="chat" >
+{% for message in messages %}
+    {% if message.stopwords %}
+        {% if message.user == request.user %}
+            <li class="chat__message">
+                <img src="{{ message.user.avatar.url }}" class="chat__avatar" alt="avatar" width="16" height="16" />
+                <span class="chat__username">{{ message.user.username }}:</span>
+                <span class="chat__text" style="color:red;">{{ message.stopwords }}</span>
+            </li>
+        {% endif %}
+    {% else %}
+        <li class="chat__message">
+            <img src="{{ message.user.avatar.url }}" class="chat__avatar" alt="avatar" width="16" height="16" />
+            <span class="chat__username">{{ message.user.username }}:</span>
+            <span class="chat__text">{{ message.message }}</span>
+        </li>
+    {% endif %}
+{% endfor %}
+</ul>
