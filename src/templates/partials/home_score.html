@@ -1,4 +1,4 @@
-<span class="event-team__point" {% if value != 'score-home-head'  %}style="font-size: 60px;"{% endif %} id="score-home-head">{% if value %}
+<span class="event-team__point" {% if idspan != 'score-home-head'  %}style="font-size: 60px;"{% endif %} id="{{idspan}}">{% if value %}
     {{ value }}
 {% else %}
     0
