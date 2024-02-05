@@ -797,7 +797,8 @@
                         </label>
                     </div>
                     <div class="event-info__img-info img-info">
-                        <div class="img-info__score" style="color: white;text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">
+                        <div class="img-info__score" style="display: flex ;justify-content: center;
+    align-items: center;color: white;text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">
                              <div hx-get="{% url 'get_element_data' event_id=event.id element='home_score_mid' %}" hx-trigger="every 5s" hx-swap="score-home-mid">
                                 <span class="event-team__point" id="score-home-mid">
                                     {% if not event.home_score %} 0 {% else %}{{ event.home_score }}{% endif %}
