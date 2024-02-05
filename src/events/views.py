@@ -482,7 +482,7 @@ class EventsView(CustomHtmxMixin,TemplateView):
 
 class GetElementDataView(View):
     def get(self, request, event_id, element):
-        event = Events.objects.get(id=event_id)
+        event = Events.objects.filter(id=event_id).first()
         data = {}
         if element == 'home_score':
             data['value'] = event.home_score
