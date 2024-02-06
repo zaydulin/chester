@@ -1260,30 +1260,7 @@
 
 
 <script>
-// Работа таймера
-function formatTime(seconds) {
-    var minutes = Math.floor(seconds / 60);
-    var remainingSeconds = seconds % 60;
-    return minutes + ':' + (remainingSeconds < 10 ? '0' : '') + remainingSeconds;
-}
-function updateTimer() {
-    var currentTime = document.getElementById('life-time').getAttribute('current-time');
-    var startTime = document.getElementById('life-time').getAttribute('data-start-time');
-    var periodeAdd = parseInt(document.getElementById('life-time').getAttribute('data-periode-add')) || 0;
-    var currentTimestamp = new Date('1970-01-01T' + currentTime + 'Z').getTime();
-    var startTimestamp = new Date('1970-01-01T' + startTime + 'Z').getTime();
-    var elapsedTime = Math.floor((currentTimestamp - startTimestamp) / 1000) + periodeAdd;
-    var periodeTimeElements = document.querySelectorAll('[id="life-time"][data-periode-time]');
-    var pauseTimeElements = document.querySelectorAll('[id="life-time"][data-pause-time]');
-    periodeTimeElements.forEach(function(element) {
-        elapsedTime += parseInt(element.getAttribute('data-periode-time'));
-    });
-    pauseTimeElements.forEach(function(element) {
-        elapsedTime += parseInt(element.getAttribute('data-pause-time'));
-    });
-    document.getElementById('life-time').innerText = formatTime(elapsedTime);
-}
-setInterval(updateTimer, 1000);
+
 </script>
 
 
