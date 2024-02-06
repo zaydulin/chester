@@ -1073,7 +1073,7 @@
                         </div>
                     </div>
 
-                    <ul class="chat_messages" id="chatMessages" hx-trigger="every 5s" hx-get="{% url 'get_chat_data' event_slug=event.slug %}" hx-swap="#chat">
+                    <ul class="chat_messages" id="chatMessages" hx-trigger="every 3s" hx-get="{% url 'get_chat_data' event_slug=event.slug %}" hx-swap="#chat">
 
 
                         <ul class="chat__messages" id="chat" >
@@ -1567,6 +1567,13 @@
     // setInterval(updateTimer, 1000);
 </script>
 <script>
+    document.getElementById('submitBtn').addEventListener('click', function() {
+        setTimeout(function() {
+            document.getElementById('chat-text').value = '';
+        }, 1000);
+    });
+</script>
+<script>
     function updateCurrentTimeAttribute() {
         var serverTime = new Date();
         var gmtTime = new Date(serverTime.valueOf() + serverTime.getTimezoneOffset() * 60000 + 4 * 60 * 60 * 1000); // Коррекция на часовой пояс
@@ -1601,5 +1608,28 @@
         });
     });
 </script>
+<script>
+    const textarea = document.getElementById('chat-text');
+     const charCount = document.getElementById('charCount');
 
+     textarea.addEventListener('input', function () {
+         const currentLength = textarea.value.length;
+         const maxLength = parseInt(textarea.getAttribute('maxlength'));
+         charCount.textContent = currentLength + '/' + maxLength;
+     });
+     // Найти поле textarea и кнопку для emoji
+     const messageInput = document.getElementById('message');
+     const emojiButton = document.getElementById('emojiButton');
+
+     // Инициализировать emoji-picker
+     const picker = new EmojiPicker();
+
+     // Прикрепить emoji-picker к полю textarea
+     picker.listenOn(messageInput);
+
+     // Обработчик для кнопки emoji
+     emojiButton.addEventListener('click', () => {
+         picker.pickerVisible ? picker.hidePicker() : picker.showPicker(messageInput);
+     });
+</script>
 
