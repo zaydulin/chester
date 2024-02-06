@@ -58,9 +58,6 @@ for (var i = 1; i <= periodCount; i++) {
     startTime = pauseTimeEnd;
 }
 
-// Вывести измененный HTML
-console.log(element.outerHTML);
-
 
 // Получаем элемент с id="life-time"
 var lifeTimeElement = document.getElementById("life-time");
