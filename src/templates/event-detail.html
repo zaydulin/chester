@@ -1608,5 +1608,28 @@
         });
     });
 </script>
+<script>
+    const textarea = document.getElementById('chat-text');
+     const charCount = document.getElementById('charCount');
 
+     textarea.addEventListener('input', function () {
+         const currentLength = textarea.value.length;
+         const maxLength = parseInt(textarea.getAttribute('maxlength'));
+         charCount.textContent = currentLength + '/' + maxLength;
+     });
+     // Найти поле textarea и кнопку для emoji
+     const messageInput = document.getElementById('message');
+     const emojiButton = document.getElementById('emojiButton');
+
+     // Инициализировать emoji-picker
+     const picker = new EmojiPicker();
+
+     // Прикрепить emoji-picker к полю textarea
+     picker.listenOn(messageInput);
+
+     // Обработчик для кнопки emoji
+     emojiButton.addEventListener('click', () => {
+         picker.pickerVisible ? picker.hidePicker() : picker.showPicker(messageInput);
+     });
+</script>
 
