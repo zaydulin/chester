@@ -1073,7 +1073,7 @@
                         </div>
                     </div>
 
-                    <ul class="chat_messages" id="chatMessages" hx-trigger="every 5s" hx-get="{% url 'get_chat_data' event_slug=event.slug %}" hx-swap="#chat">
+                    <ul class="chat_messages" id="chatMessages" hx-trigger="every 3s" hx-get="{% url 'get_chat_data' event_slug=event.slug %}" hx-swap="#chat">
 
 
                         <ul class="chat__messages" id="chat" >
@@ -1565,6 +1565,13 @@
     // }
     //
     // setInterval(updateTimer, 1000);
+</script>
+<script>
+    document.getElementById('submitBtn').addEventListener('click', function() {
+        setTimeout(function() {
+            document.getElementById('chat-text').value = '';
+        }, 2000);
+    });
 </script>
 <script>
     function updateCurrentTimeAttribute() {
