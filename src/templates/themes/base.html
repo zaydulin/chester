@@ -23,13 +23,34 @@
     <script defer src="{% static 'docs/js/script.js' %}"></script>
     <script defer src="{% static 'docs/js/index.bundle.js' %}"></script>
 
+    <script>
+        // JavaScript-код, который можно выполнить, если JS включен
+        function checkJS() {
+            document.getElementById('jsStatus').innerHTML = '';
+        }
+    </script>
+        <style>
+        /* Initially hide the message with JavaScript is enabled */
+        .hidden {
+            display: none;
+        }
+    </style>
 
     {% block extra_css %}{% endblock extra_css %}
 
     <title>{% get_current_name %} | {{ title }} {% block title %}{% endblock title %}</title>
 </head>
 <body>
+       <noscript>
+        <p>У вас отключено использование JavaScript.</p>
+    </noscript>
 
+    <p id="jsStatus">Проверка статуса JavaScript...</p>
+
+    <script>
+        // Вызываем функцию checkJS, если JavaScript включен
+        checkJS();
+    </script>
 {% include 'themes/header.html' %}
 <progress id="content-loader" class="htmx-indicator" max="100" style="width: 100%;"></progress>
 
