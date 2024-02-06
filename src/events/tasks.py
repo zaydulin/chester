@@ -196,9 +196,7 @@ def create_events_of_tournament(rubric_id):
                                         logo = correct_away_logo,
                                         rubrics = rubrics
                                         )
-                                    if not Events.objects.filter(
-                                            rubrics=rubrics, second_event_api_id=event.get("EVENT_ID")
-                                    ).exists():
+                                    if not Events.objects.filter(rubrics=rubrics, second_event_api_id=event.get("EVENT_ID")).exists():
                                         events_list.append(Events(
                                             rubrics=rubrics,
                                             second_event_api_id=event.get("EVENT_ID"),
