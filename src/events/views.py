@@ -17,10 +17,12 @@ from django.views.decorators.http import require_GET
 from django.template.loader import render_to_string
 
 def clear_db(request):
-    events = Events.objects.filter((Q(start_at__startswith='2024-01-25')))
-    for event in events:
-        event.status = 2
-        event.save()
+    duplicate_ids = Events.objects.values('second_event_api_id').annotate(count=Count('second_event_api_id')).filter(
+        count__gt=1)
+
+    # Удаляем объекты, у которых значение second_event_api_id повторяется
+    for duplicate_id in duplicate_ids:
+        Events.objects.filter(second_event_api_id=duplicate_id['second_event_api_id']).delete()
     return HttpResponse(f'ok ')
 
 class HomeView(CustomHtmxMixin, TemplateView):
