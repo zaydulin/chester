@@ -54,8 +54,8 @@
             </div>
             <div class="search__header">
                 <div class="search-toggle">
-                    <a href="{% url 'searchsec' search_slug %}"
-                       hx-get="{% url 'searchsec'  search_slug %}"
+                    <a href="{% url 'searchsec' search_slug %}?search_description={{search_description}}"
+                       hx-get="{% url 'searchsec'  search_slug %}?search_description={{search_description}}"
                        hx-target="#main-content"
                        hx-push-url="true"
                        hx-indicator="#content-loader"
@@ -67,8 +67,8 @@
 
 
                     </a>
-                    <a href="{% url 'searchsec' search_slug %}?teams=1"
-                       hx-get="{% url 'searchsec'  search_slug %}?teams=1"
+                    <a href="{% url 'searchsec' search_slug %}?teams=1&search_description={{search_description}}"
+                       hx-get="{% url 'searchsec'  search_slug %}?teams=1&search_description={{search_description}}"
                        hx-target="#main-content"
                        hx-push-url="true"
                        hx-indicator="#content-loader"
@@ -96,8 +96,8 @@
 
 
                     </a>
-                    <a  href="{% url 'searchsec' search_slug %}?leagues=1"
-                        hx-get="{% url 'searchsec'  search_slug %}?leagues=1"
+                    <a  href="{% url 'searchsec' search_slug %}?leagues=1&search_description={{search_description}}"
+                        hx-get="{% url 'searchsec'  search_slug %}?leagues=1&search_description={{search_description}}"
                         hx-target="#main-content"
                         hx-push-url="true"
                         hx-indicator="#content-loader"
@@ -123,8 +123,8 @@
                 </span>
 
                     </a>
-                    <a href="{% url 'searchsec' search_slug%}?players=1"
-                       hx-get="{% url 'searchsec'  search_slug %}?players=1"
+                    <a href="{% url 'searchsec' search_slug%}?players=1&search_description={{search_description}}"
+                       hx-get="{% url 'searchsec'  search_slug %}?players=1&search_description={{search_description}}"
                        hx-target="#main-content"
                        hx-push-url="true"
                        hx-indicator="#content-loader"

@@ -12,5 +12,7 @@ class EventSearchForm(forms.Form):
     search_description = forms.CharField(
         max_length=100,  # Максимальная длина поискового запроса
         required=False,  # Поле не обязательно для заполнения
+        widget=forms.TextInput( attrs={'placeholder': '     Поиск','style':'font-weight: 700;color: white;'})
+
     )
 

@@ -116,7 +116,7 @@ class Events(models.Model):
             # Разделение года, месяца и дня
             year, month, day = date.split('-')
             # Объединение месяца и дня
-            formatted_date = f"{month}-{day}"
+            formatted_date = f"{day}-{month}"
 
             # Получение времени
             formatted_time = time[:5]  # Берем только часы и минуты

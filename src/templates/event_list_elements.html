@@ -190,7 +190,7 @@
                                         <div class="event__match">
                                             <div class="event__match-left">
                                                 <h2 class="event__home-team match-team">
-                                                    <span>{{event.home_team.name}}</span>
+                                                    <span>{{event.home_team.name|truncatechars:25}}</span>
                                                     <img src="{{event.home_team.logo}}" width="20" height="20" alt="team">
                                                 </h2>
                                                 <div class="event__score">
@@ -207,7 +207,7 @@
                                                 </div>
                                                 <h2 class="event__away-team match-team">
                                                     <img src="{{event.away_team.logo}}" width="20" height="20" alt="team">
-                                                    <span>{{event.away_team.name}}</span>
+                                                    <span>{{event.away_team.name|truncatechars:25}}</span>
                                                 </h2>
                                             </div>
                                             <div class="event__match-mob-score mob-score">

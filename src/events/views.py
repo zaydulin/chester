@@ -529,10 +529,14 @@ class SearchView(CustomHtmxMixin, TemplateView):
         teams_get = request.GET.get("teams")
         league_get = request.GET.get("leagues")
         players_get = request.GET.get("players")
+        search_description = request.GET.get("search_description")
+
         if "slug" not in kwargs:
             redirect_url = reverse("searchsec", kwargs={"slug": rubric.slug})
+            if search_description:
+                redirect_url += f"?search_description={search_description}"
             return HttpResponseRedirect(redirect_url)
-        return super().get(request, teams=teams_get, leagues=league_get, players=players_get, *args, **kwargs)
+        return super().get(request, teams=teams_get, leagues=league_get, players=players_get,*args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -540,9 +544,13 @@ class SearchView(CustomHtmxMixin, TemplateView):
         teams_get = self.request.GET.get("teams")
         league_get = self.request.GET.get("leagues")
         players_get = self.request.GET.get("players")
+        search_description = self.request.GET.get("search_description")
         rubric = Rubrics.objects.get(slug=kwargs["slug"])
+        print('teams_get-----------', teams_get)
+        print('league_get-----------', league_get)
+        print('players_get-----------', players_get)
+
         if form.is_valid():
-            search_description = form.cleaned_data.get("search_description")
             events = Events.objects.filter(name__icontains=search_description, rubrics=rubric)
             teams = Team.objects.filter(name__icontains=search_description, rubrics=rubric)
             players = Player.objects.filter(name__icontains=search_description, team__rubrics=rubric)
@@ -615,6 +623,7 @@ class SearchView(CustomHtmxMixin, TemplateView):
         context["rubrics"] = Rubrics.objects.all()
         context["rubriccontext"] = rubric.slug
         context["search_slug"] = kwargs.get("slug")
+        context["search_description"] = search_description
 
         return context
 
