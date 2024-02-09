@@ -1,6 +1,6 @@
 from django import forms
 from .models import User
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, PasswordResetForm, SetPasswordForm
 from django.forms import ClearableFileInput
 from captcha.fields import CaptchaField
 
@@ -25,3 +25,26 @@ class RegistrationForm(UserCreationForm):
         model = User  # Укажите модель пользователя, обычно 'User'
         fields = ('username','captcha', 'email', 'password1', 'password2', 'gender', 'birthday')  # Поля, которые будут отображаться в форме
 
+class UserForgotPasswordForm(PasswordResetForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control',
+                'autocomplete': 'off'
+            })
+class UserSetNewPasswordForm(SetPasswordForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control',
+                'autocomplete': 'off'
+            })
+class SetEmailForm(forms.Form):
+    email = forms.EmailField(
+        label='Email',
+        max_length=254,
+        widget=forms.EmailInput(attrs={'class': 'your-email-input-class'}),
+        required=True
+    )

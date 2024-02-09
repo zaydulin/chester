@@ -1,19 +1,31 @@
-
+from django.contrib.auth.tokens import default_token_generator
+from django.contrib.messages.views import SuccessMessageMixin
+from django.core.mail import send_mail
 from django.shortcuts import render, redirect, get_object_or_404
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.views.generic import ListView, DetailView, TemplateView, UpdateView
 from events.models import Events, Season, Team, Player, Rubrics
 from .models import Pages, User, GeneralSettings, Baners, Bookmarks
 from django.contrib.auth import authenticate, login, logout
 from django.views import View
-from .forms import LoginForm, UserProfileForm, RegistrationForm
+from .forms import LoginForm, UserProfileForm, RegistrationForm, UserForgotPasswordForm, UserSetNewPasswordForm, \
+    SetEmailForm
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.contrib import messages
 import time
-from django.http import HttpResponseRedirect, HttpResponseBadRequest, JsonResponse, HttpResponse
-from django.urls import reverse
+from django.http import HttpResponseRedirect, HttpResponseBadRequest, JsonResponse, HttpResponse, Http404
+from django.urls import reverse, reverse_lazy
 from django.contrib.contenttypes.models import ContentType
 from datetime import datetime, timedelta
+from django.contrib.auth.views import PasswordResetView, PasswordResetConfirmView
+
+try:
+    import _project.settings.core_settings as core_settings
+except ImportError:
+    import _project.settings.local_settings as core_settings
+
 
 class CustomHtmxMixin:
     def dispatch(self, request, *args, **kwargs):
@@ -106,7 +118,8 @@ class EditProfileView(CustomHtmxMixin, TemplateView):
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
         form = UserProfileForm(instance=request.user)
-        context = self.get_context_data(form=form, title='Личные данные')
+        emailform = SetEmailForm()  # Создаем экземпляр формы SetEmailForm
+        context = self.get_context_data(form=form, emailform=emailform, title='Личные данные')
         return self.render_to_response(context)
 
     @method_decorator(login_required)
@@ -122,6 +135,13 @@ class EditProfileView(CustomHtmxMixin, TemplateView):
         kwargs['title'] = 'Профиль'
         return super().get_context_data(**kwargs)
 
+class EmailExistsView(TemplateView):
+    template_name = 'profiles/email_is_exists.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Данный адрес уже занят.'
+        return context
 
 class PageDetailView(CustomHtmxMixin, DetailView):
     """Страницф"""
@@ -151,6 +171,7 @@ class LoginView(View):
     def post(self, request):
         form = LoginForm(request.POST)
         if form.is_valid():
+            print('yes')
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
             user = authenticate(request, username=username, password=password)
@@ -160,7 +181,13 @@ class LoginView(View):
                     return redirect('login')
                 login(request, user)
                 return redirect('edit_profile')
-        return render(request, self.template_name, {'form': form,'message':''})
+            else:
+                messages.error(request, "Пользователь не найден")
+                return redirect('login')
+        else:
+            print('yes')
+            messages.error(request, "Неверные данные формы")
+        return render(request, self.template_name, {'form': form})
 
 class RegistrationView(View):
     template_name = 'register.html'
@@ -185,8 +212,141 @@ class RegistrationView(View):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect('edit_profile')
+            token = default_token_generator.make_token(self.request.user)
+            uid = urlsafe_base64_encode(force_bytes(self.request.user.pk))
+            activation_url = reverse_lazy('confirm_email', kwargs={'uidb64': uid, 'token': token})
+            send_mail(
+                'Подтвердите свой электронный адрес',
+                f'Пожалуйста, перейдите по следующей ссылке, чтобы подтвердить свой адрес электронной почты: https://chesterbets.com{activation_url}',
+                core_settings.EMAIL_HOST_USER,
+                [self.request.user.email],
+                fail_silently=False,
+            )
+            return redirect('confirm_sent')
         return render(request, self.template_name, {'form': form})
+
+class UserConfirmChangeEmailView(View):
+    def get(self, request, uidb64, token, email):
+        if self.request.user.is_authenticated:
+            try:
+                uid = urlsafe_base64_decode(uidb64)
+                user = User.objects.get(pk=uid)
+            except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+                user = None
+
+            if user is not None and default_token_generator.check_token(user, token):
+                user.email = email
+                user.save()
+                return redirect('email_confirmed')
+            else:
+                return redirect('email_confirmation_failed')
+        else:
+            return redirect('login')
+class EmailConfirmationSentView(TemplateView):
+    template_name = 'profiles/email_verification_sent.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'На вашу почту была отправлена ссылка с подтверждением. Подтвердите почту, иначе регистарция не будет завершена'
+        return context
+
+class ChangeEmail(View):
+    @method_decorator(login_required)
+    def post(self, request, *args, **kwargs):
+        user = self.request.user
+        emailform = SetEmailForm(request.POST or None)
+        if emailform.is_valid():
+            email = emailform.cleaned_data["email"]
+            if User.objects.filter(email=email):
+                return redirect('email_is_exist')
+            else:
+                token = default_token_generator.make_token(self.request.user)
+                uid = urlsafe_base64_encode(force_bytes(self.request.user.pk))
+                activation_url = reverse_lazy('confirm_change_email', kwargs={'uidb64': uid, 'token': token, 'email': email})
+                send_mail(
+                    'Подтвердите свой электронный адрес',
+                    f'Пожалуйста, перейдите по следующей ссылке, чтобы подтвердить свой адрес электронной почты: https://chesterbets.com{activation_url}',
+                    core_settings.EMAIL_HOST_USER,
+                    [email],
+                    fail_silently=False,
+                )
+                return redirect('confirm_sent')
+
+class UserConfirmEmailView(View):
+    def get(self, request, uidb64, token):
+        try:
+            uid = urlsafe_base64_decode(uidb64)
+            user = User.objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = None
+
+        if user is not None and default_token_generator.check_token(user, token):
+            user.is_active = True
+            user.save()
+            return redirect('email_confirmed')
+        else:
+            return redirect('email_confirmation_failed')
+
+
+class EmailConfirmedView(TemplateView):
+    template_name = 'profiles/email_confirmed.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Ваш электронный адрес активирован'
+        return context
+
+
+class EmailConfirmationFailedView(TemplateView):
+    template_name = 'profiles/email_confirm_failed.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Ваш электронный адрес не активирован'
+        return context
+
+class PasswordResetSentView(TemplateView):
+    template_name = 'profiles/password_reset_sent.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'На вашу почту выслана инструкция по восстановлению пароля.'
+        return context
+class UserForgotPasswordView(SuccessMessageMixin, PasswordResetView):
+    form_class = UserForgotPasswordForm
+    template_name = 'profiles/user_password_reset.html'
+    success_url = reverse_lazy('reset_sent')
+    subject_template_name = 'profiles/password_subject_reset_mail.txt'
+    email_template_name = 'profiles/password_reset_mail.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated == True:
+            raise Http404()
+        return super().dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        user_email = form.cleaned_data['email']
+        try:
+            user = User.objects.get(email=user_email)
+        except User.DoesNotExist:
+            messages.error(self.request, 'Пользователь с указанным адресом электронной почты не существует.')
+            return super().form_invalid(form)
+        if user.is_active == False:
+            messages.error(self.request, 'Вы не подтвердили свой email, восстановление пароля невозможно.')
+            return super().form_invalid(form)
+
+        return super().form_valid(form)
+
+class UserPasswordResetConfirmView(SuccessMessageMixin, PasswordResetConfirmView):
+    form_class = UserSetNewPasswordForm
+    template_name = 'profiles/user_password_set_new.html'
+    success_url = reverse_lazy('home')
+    success_message = 'Пароль успешно изменен. Можете авторизоваться на сайте.'
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated == True:
+            raise Http404()
+        return super().dispatch(request, *args, **kwargs)
 
 class FavoriteView(CustomHtmxMixin, TemplateView):
     template_name = 'favorite.html'
