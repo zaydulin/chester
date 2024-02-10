@@ -11,8 +11,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 env = Env()
 env.read_env()
 
-general_settings = GeneralSettings.objects.first()
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
@@ -553,15 +551,10 @@ INTERNAL_IPS = [
     "127.0.0.1",
 
 ]
-#EMAIL_HOST = 'smtp.beget.com'
-#EMAIL_PORT = '465'
-#EMAIL_USE_TSL = False
-#EMAIL_USE_SSL = True
-
-EMAIL_HOST = general_settings.email_host
-EMAIL_PORT = general_settings.email_port
-EMAIL_HOST_USER = general_settings.email_host_user
-EMAIL_HOST_PASSWORD = general_settings.email_host_password
+EMAIL_HOST = 'smtp.beget.com'
+EMAIL_PORT = '465'
+EMAIL_USE_TSL = False
+EMAIL_USE_SSL = True
 
 EMAIL_HOST_USER = 'info@eyesofhistory.ru'
 EMAIL_HOST_PASSWORD = 'OE%&K8s0'
