@@ -1,3 +1,5 @@
+import os
+
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
@@ -41,10 +43,43 @@ class GeneralSettings(models.Model):
     rapidapi_key_stream = models.TextField("SoccerVideosRapid",
                                            help_text='<a href="https://rapidapi.com/scorebat/api/free-football-soccer-videos/" target="_blank">Cсылка</a>',
                                            blank=True, null=True)
-
+    email_host = models.TextField("Email Site HOST")
+    email_port = models.TextField("Email Site PORT")
+    email_host_user = models.TextField("Email Site User")
+    email_host_password = models.TextField("Email Site Password")
     def __str__(self):
         return "Общая настройка"
 
+    def save(self, *args, **kwargs):
+        # Сначала сохраняем модель
+        super().save(*args, **kwargs)
+
+        # Путь к файлу, куда будем сохранять данные
+        file_path = os.path.join(settings.BASE_DIR, '_project/general_settings.txt')
+
+        # Сохраняем данные в текстовый файл
+        with open(file_path, 'w') as f:
+            f.write(f"EMAIL_HOST = '{self.email_host}'\n")
+            f.write(f"EMAIL_PORT = '{self.email_port}'\n")
+            f.write(f"EMAIL_HOST_USER = '{self.email_host_user}'\n")
+            f.write(f"EMAIL_HOST_PASSWORD = '{self.email_host_password}'\n")
+
+        # Обновляем соответствующие строки в settings.py
+        with open(os.path.join(settings.BASE_DIR, '_project/settings/core_settings.py'), 'r') as settings_file:
+            settings_lines = settings_file.readlines()
+        with open(os.path.join(settings.BASE_DIR, '_project/settings/core_settings.py'), 'w') as settings_file:
+            for line in settings_lines:
+                if line.startswith('EMAIL_HOST_USER'):
+                    settings_file.write(f"EMAIL_HOST_USER = '{self.email_host_user}'\n")
+                elif line.startswith('EMAIL_HOST_PASSWORD'):
+                    settings_file.write(f"EMAIL_HOST_PASSWORD = '{self.email_host_password}'\n")
+                elif line.startswith('EMAIL_HOST'):
+                    settings_file.write(f"EMAIL_HOST = '{self.email_host}'\n")
+                elif line.startswith('EMAIL_PORT'):
+                    settings_file.write(f"EMAIL_PORT = '{self.email_port}'\n")
+
+                else:
+                    settings_file.write(line)
     class Meta:
         verbose_name = "Общая настройка"
         verbose_name_plural = "Общие настройки"

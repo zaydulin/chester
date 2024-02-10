@@ -39,6 +39,10 @@ class GeneralSettingsAdmin(admin.ModelAdmin):
         ('Интеграция стримов', {
             'fields': ['rapidapi_key_stream'],
 
+        }),
+        ('Электронная почта сайта', {
+            'fields': ['email_host','email_port','email_host_user','email_host_password' ],
+
         })
     ]
 
