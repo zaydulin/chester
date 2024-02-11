@@ -551,11 +551,17 @@ INTERNAL_IPS = [
     "127.0.0.1",
 
 ]
-EMAIL_HOST = 'smtp.beget.com'
-EMAIL_PORT = '465'
-EMAIL_USE_TSL = False
-EMAIL_USE_SSL = True
+# EMAIL_HOST = 'smtp.beget.com'
+# EMAIL_PORT = '465'
+# EMAIL_USE_TSL = False
+# EMAIL_USE_SSL = True
+#
+# EMAIL_HOST_USER = 'info@eyesofhistory.ru'
+# EMAIL_HOST_PASSWORD = 'OE%&K8s0'
+# DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+SMTP_FILE_PATH = os.path.join(BASE_DIR, 'smtp.py')
 
-EMAIL_HOST_USER = 'info@eyesofhistory.ru'
-EMAIL_HOST_PASSWORD = 'OE%&K8s0'
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+try:
+    from .smtp import *
+except ImportError:
+    pass
