@@ -44,9 +44,13 @@ class GeneralSettings(models.Model):
                                            help_text='<a href="https://rapidapi.com/scorebat/api/free-football-soccer-videos/" target="_blank">Cсылка</a>',
                                            blank=True, null=True)
     email_host = models.TextField("Email Site HOST")
+    default_from_email = models.TextField("Email Site HOST")
     email_port = models.TextField("Email Site PORT")
     email_host_user = models.TextField("Email Site User")
     email_host_password = models.TextField("Email Site Password")
+    email_use_tls = models.BooleanField("Use TLS", default=False)
+    email_use_ssl = models.BooleanField("Use SSL", default=False)
+
     def __str__(self):
         return "Общая настройка"
 
