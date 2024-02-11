@@ -29,6 +29,9 @@ USER        ${USER}
 
 
 
+# Вывод содержимого директории перед копированием
+RUN ls -R /app/chesterbets/_project/settings/
+
 # Создаем подкаталог перед копированием
 RUN mkdir -p /app/chesterbets/_project/settings/
 
@@ -37,6 +40,9 @@ RUN chown -R app /app/chesterbets/_project/settings/
 
 # Копируем файл smtp.py
 COPY smtp.py /app/chesterbets/_project/settings/
+
+# Вывод содержимого директории после копирования
+RUN ls -R /app/chesterbets/_project/settings/
 
 # Устанавливаем права доступа к файлу
 RUN chown app /app/chesterbets/_project/settings/smtp.py
