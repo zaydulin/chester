@@ -46,4 +46,4 @@ updatecountry:
 daphne:
 	docker-compose -f $(docker_file) exec cb-app daphne -u /tmp/daphne.sock _project.asgi:application
 chmod:
-	docker-compose -f $(docker_file) exec cb-app chmod -R 755 /app/chesterbets/_project/settings/smtp.py
+	docker-compose -f $(docker_file) exec cb-app chmod -R 755 /app/chesterbets/_project/settings/
