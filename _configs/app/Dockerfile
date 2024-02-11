@@ -28,9 +28,11 @@ COPY        ./src/* ${PROJECTPATH}
 
 # Установка разрешений на smtp.py
 # Установка разрешений на smtp.py
-COPY         ./_project/settings/smtp.py ${PROJECTPATH}/_project/settings/
-RUN         chown ${USER} ${PROJECTPATH}/_project/settings/smtp.py \
-            && chmod 600 ${PROJECTPATH}/_project/settings/smtp.py
+# Создаем подкаталог перед копированием
+RUN mkdir -p ${PROJECTPATH}/_project/settings/
+COPY ./_project/settings/smtp.py ${PROJECTPATH}/_project/settings/
+RUN chown ${USER} ${PROJECTPATH}/_project/settings/smtp.py \
+    && chmod 600 ${PROJECTPATH}/_project/settings/smtp.py
 
 RUN         chown -R ${USER} ${PROJECTPATH}
 USER        ${USER}
