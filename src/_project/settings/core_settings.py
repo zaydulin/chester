@@ -85,7 +85,7 @@ WSGI_APPLICATION = "_project.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-#
+# #
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
@@ -559,9 +559,11 @@ INTERNAL_IPS = [
 # EMAIL_HOST_USER = 'info@eyesofhistory.ru'
 # EMAIL_HOST_PASSWORD = 'OE%&K8s0'
 # DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-SMTP_FILE_PATH = os.path.join(MEDIA_ROOT, 'smtp.py')
+SMTP_FILE_PATH = Path(MEDIA_ROOT) / 'smtp.py'
+
 
 try:
-    from .smtp import *
-except ImportError:
+    with open(SMTP_FILE_PATH, 'r') as smtp_file:
+        exec(smtp_file.read())  # Выполнить содержимое файла
+except FileNotFoundError:
     pass
