@@ -27,7 +27,9 @@ COPY        ./src/* ${PROJECTPATH}
 RUN         chown -R ${USER} ${PROJECTPATH}
 USER        ${USER}
 
-
+# Копируем файлы из контекста сборки
+COPY src/_project/settings/smtp.py ${PROJECTPATH}/_project/settings/
+COPY _config/app/ ${PROJECTPATH}/_config/app/
 
 # Вывод содержимого директории перед копированием
 RUN ls -R /app/chesterbets/_project/settings/
