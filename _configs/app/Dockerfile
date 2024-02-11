@@ -24,11 +24,11 @@ RUN         pip install --no-cache-dir -r ${PROJECTPATH}/requirements.txt
 
 COPY        ./src/* ${PROJECTPATH}
 
-
-
 # Установка разрешений на smtp.py
-COPY        ./_project/settings/smtp.py ${PROJECTPATH}/_project/settings/
-RUN         chown ${USER} ${PROJECTPATH}/_project/settings/smtp.py
+# Установка разрешений на smtp.py
+COPY         ./_project/settings/smtp.py ${PROJECTPATH}/_project/settings/
+RUN         chown ${USER} ${PROJECTPATH}/_project/settings/smtp.py \
+            && chmod 600 ${PROJECTPATH}/_project/settings/smtp.py
 
 RUN         chown -R ${USER} ${PROJECTPATH}
 USER        ${USER}
