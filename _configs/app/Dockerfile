@@ -27,26 +27,6 @@ COPY        ./src/* ${PROJECTPATH}
 RUN         chown -R ${USER} ${PROJECTPATH}
 USER        ${USER}
 
-# Копируем файлы из контекста сборки
-COPY src/_project/settings/smtp.py ${PROJECTPATH}/src/_project/settings/
-COPY _config/app/ ${PROJECTPATH}/_config/app/
 
-# Вывод содержимого директории перед копированием
-RUN ls -R /app/chesterbets/_project/settings/
 
-# Создаем подкаталог перед копированием
-RUN mkdir -p /app/chesterbets/_project/settings/
 
-# Устанавливаем права доступа к директории
-RUN chown -R app /app/chesterbets/_project/settings/
-
-# Копируем файл smtp.py
-COPY smtp.py /app/chesterbets/_project/settings/
-
-# Вывод содержимого директории после копирования
-RUN ls -R /app/chesterbets/_project/settings/
-
-# Устанавливаем права доступа к файлу
-RUN chown app /app/chesterbets/_project/settings/smtp.py
-
-USER app
