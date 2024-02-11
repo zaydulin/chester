@@ -47,3 +47,4 @@ daphne:
 	docker-compose -f $(docker_file) exec cb-app daphne -u /tmp/daphne.sock _project.asgi:application
 chmod:
     docker-compose -f $(docker_file) exec cb-app chown -R user:user /app/chesterbets/_project/settings/
+
