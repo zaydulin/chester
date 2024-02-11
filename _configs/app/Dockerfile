@@ -29,4 +29,16 @@ USER        ${USER}
 
 
 
+# Создаем подкаталог перед копированием
+RUN mkdir -p /app/chesterbets/_project/settings/
 
+# Устанавливаем права доступа к директории и файлу
+RUN chown -R app /app/chesterbets/_project/settings/
+RUN chmod -R 755 /app/chesterbets/_project/settings/
+
+# Копируем файл smtp.py
+COPY smtp.py /app/chesterbets/_project/settings/
+
+# Устанавливаем права доступа к файлу
+RUN chown app /app/chesterbets/_project/settings/smtp.py
+RUN chmod 644 /app/chesterbets/_project/settings/smtp.py

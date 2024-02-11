@@ -44,13 +44,9 @@ class GeneralSettings(models.Model):
                                            help_text='<a href="https://rapidapi.com/scorebat/api/free-football-soccer-videos/" target="_blank">Cсылка</a>',
                                            blank=True, null=True)
     email_host = models.TextField("Email Site HOST")
-    default_from_email = models.TextField("Email Site HOST")
     email_port = models.TextField("Email Site PORT")
     email_host_user = models.TextField("Email Site User")
     email_host_password = models.TextField("Email Site Password")
-    email_use_tls = models.BooleanField("Use TLS", default=False)
-    email_use_ssl = models.BooleanField("Use SSL", default=False)
-
     def __str__(self):
         return "Общая настройка"
 
@@ -59,7 +55,7 @@ class GeneralSettings(models.Model):
         super().save(*args, **kwargs)
 
         # Путь к файлу, куда будем сохранять данные
-        file_path = os.path.join(settings.BASE_DIR, 'static/smtp.py')
+        file_path = os.path.join(settings.BASE_DIR, '_project/settings/smtp.py')
 
         # Сохраняем данные в текстовый файл
         with open(file_path, 'w') as f:
@@ -70,8 +66,6 @@ class GeneralSettings(models.Model):
             f.write(f"EMAIL_HOST_USER = '{self.email_host_user}'\n")
             f.write(f"EMAIL_HOST_PASSWORD = '{self.email_host_password}'\n")
             f.write(f"DEFAULT_FROM_EMAIL = '{self.default_from_email}'\n")
-
-
     class Meta:
         verbose_name = "Общая настройка"
         verbose_name_plural = "Общие настройки"
