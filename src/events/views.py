@@ -1,32 +1,40 @@
 from itertools import groupby
-from django.views import View
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.db.models import Q, Count
-from django.shortcuts import render, redirect
-from django.urls import reverse
-from django.views.generic import ListView, DetailView, TemplateView
-from .models import Events, Rubrics, Season, Team, Player , Country
-from mainapp.models import Baners, Messages, Bookmarks
-from mainapp.views import CustomHtmxMixin
-from .forms import MessageForm, EventSearchForm
-from django.http import JsonResponse, HttpResponseRedirect , HttpResponse
-from django.http import Http404
+
 from django.contrib.contenttypes.models import ContentType
-from django.shortcuts import get_object_or_404
-from django.views.decorators.http import require_GET
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from django.db.models import Count, Q
+from django.http import (Http404, HttpResponse, HttpResponseRedirect,
+                         JsonResponse)
+from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
+from django.urls import reverse
+from django.views import View
+from django.views.decorators.http import require_GET
+from django.views.generic import TemplateView
+
+from mainapp.models import Baners, Bookmarks, Messages
+from mainapp.views import CustomHtmxMixin
+
+from .forms import EventSearchForm, MessageForm
+from .models import Events, Player, Rubrics, Season, Team
+
 
 def clear_db(request):
-    duplicate_ids = Events.objects.values('second_event_api_id').annotate(count=Count('second_event_api_id')).filter(
-        count__gt=1)
+    duplicate_ids = (
+        Events.objects.values("second_event_api_id").annotate(count=Count("second_event_api_id")).filter(count__gt=1)
+    )
 
     # Удаляем объекты, у которых значение second_event_api_id повторяется
     for duplicate_id in duplicate_ids:
-        Events.objects.filter(second_event_api_id=duplicate_id['second_event_api_id']).delete()
-    return HttpResponse(f'ok ')
+        Events.objects.filter(second_event_api_id=duplicate_id["second_event_api_id"]).delete()
+    return HttpResponse(f"ok ")
+
 
 class HomeView(CustomHtmxMixin, TemplateView):
-    """Категории"""
+    """
+    Категории
+    """
+
     model = Rubrics
     template_name = "event-list.html"
 
@@ -34,33 +42,29 @@ class HomeView(CustomHtmxMixin, TemplateView):
         # Получаем объект категории по id
         if queryset is None:
             queryset = self.get_queryset()
+
         try:
             obj = queryset.first()
         except Rubrics.DoesNotExist:
             raise Http404("Категория не найдена")
+
         return obj
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        rubric = Rubrics.objects.first()
-        context["rubrics"] = rubric
-        sidebar_baners = Baners.objects.filter(type=1)
-        context["sidebar_baners"] = sidebar_baners
+        rubrics = Rubrics.objects.first()
+        context["rubrics"] = rubrics
+        context["sidebar_baners"] = Baners.objects.filter(type=1)
+        context["gorizont_baners_top"] = Baners.objects.filter(type=2)
+        context["gorizont_baners_footer"] = Baners.objects.filter(type=3)
+        context["sidebar_baners_right"] = Baners.objects.filter(type=4)
+        context["sidebar_baners_left"] = Baners.objects.filter(type=5)
 
-        gorizont_baners_top = Baners.objects.filter(type=2)
-        context["gorizont_baners_top"] = gorizont_baners_top
-
-        gorizont_baners_footer = Baners.objects.filter(type=3)
-        context["gorizont_baners_footer"] = gorizont_baners_footer
-
-        sidebar_baners_right = Baners.objects.filter(type=4)
-        context["sidebar_baners_right"] = sidebar_baners_right
-
-        sidebar_baners_left = Baners.objects.filter(type=5)
-        context["sidebar_baners_left"] = sidebar_baners_left
         try:
-            events = Events.objects.filter(status=1, rubrics=rubric).order_by("section__league_name", "-start_at")
+            events = Events.objects.filter(status=1, rubrics=rubrics).order_by("section__league_name", "-start_at")
+
             events_count = events.count()
+
             # Pagination
             if events_count < 20:
                 paginator = Paginator(events, events_count)
@@ -81,11 +85,11 @@ class HomeView(CustomHtmxMixin, TemplateView):
                 grouped_events[league_name] = list(events_in_league)
             context["events"] = grouped_events
             context["paginator"] = paginator
-        except :
+        except:
             events_page = None
-        context['title'] = f'{rubric.name} | Прямой эфир'
-        context['meta_content'] = f'{rubric.name} | Прямой эфир'
 
+        context["title"] = f"{rubrics.name} | Прямой эфир"
+        context["meta_content"] = f"{rubrics.name} | Прямой эфир"
         context["page_obj"] = events_page  # Pass the paginated events to the template
 
         return context
@@ -93,12 +97,13 @@ class HomeView(CustomHtmxMixin, TemplateView):
 
 class EventsNow(CustomHtmxMixin, TemplateView):
     """Категории"""
+
     model = Rubrics
     template_name = "event-list.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        rubric = Rubrics.objects.get(slug=kwargs.get('slug'))
+        rubric = Rubrics.objects.get(slug=kwargs.get("slug"))
         context["rubrics"] = rubric
         sidebar_baners = Baners.objects.filter(type=1)
         context["sidebar_baners"] = sidebar_baners
@@ -122,7 +127,7 @@ class EventsNow(CustomHtmxMixin, TemplateView):
             # Pagination
             if events_count < 20:
                 paginator = Paginator(events, events_count)
-            else :
+            else:
                 paginator = Paginator(events, 20)
             page = self.request.GET.get("page")
             try:
@@ -161,12 +166,11 @@ class EventsNow(CustomHtmxMixin, TemplateView):
                 grouped_events[league_name] = events_list
             context["events"] = grouped_events
             context["paginator"] = paginator
-        except :
+        except:
             events_page = None
 
-        context['title'] = f'{rubric.name} | Прямой эфир'
-        context['meta_content'] = f'{rubric.name} | Прямой эфир'
-
+        context["title"] = f"{rubric.name} | Прямой эфир"
+        context["meta_content"] = f"{rubric.name} | Прямой эфир"
 
         context["page_obj"] = events_page  # Pass the paginated events to the template
 
@@ -175,12 +179,13 @@ class EventsNow(CustomHtmxMixin, TemplateView):
 
 class EventsEndView(CustomHtmxMixin, TemplateView):
     """Категории"""
+
     model = Rubrics
     template_name = "event-list.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        rubric = Rubrics.objects.get(slug = kwargs.get('slug'))
+        rubric = Rubrics.objects.get(slug=kwargs.get("slug"))
         context["rubrics"] = rubric
         sidebar_baners = Baners.objects.filter(type=1)
         context["sidebar_baners"] = sidebar_baners
@@ -241,30 +246,29 @@ class EventsEndView(CustomHtmxMixin, TemplateView):
             context["events"] = grouped_events
             context["paginator"] = paginator
 
-        except :
+        except:
             events_page = None
-        context['title'] = f'{rubric.name} | Завершенные'
-        context['meta_content'] = f'{rubric.name} | Завершенные'
-
+        context["title"] = f"{rubric.name} | Завершенные"
+        context["meta_content"] = f"{rubric.name} | Завершенные"
 
         context["page_obj"] = events_page
-          # Pass the paginated events to the template
+        # Pass the paginated events to the template
 
         return context
 
 
 class EventsUpcomingView(CustomHtmxMixin, TemplateView):
     """Категории"""
+
     model = Rubrics
     template_name = "event-list.html"
 
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        rubric_slug = self.kwargs['slug']
+        rubric_slug = self.kwargs["slug"]
 
         rubric = Rubrics.objects.get(slug=rubric_slug)
-        context['rubrics'] = rubric
+        context["rubrics"] = rubric
 
         sidebar_baners = Baners.objects.filter(type=1)
         context["sidebar_baners"] = sidebar_baners
@@ -326,10 +330,10 @@ class EventsUpcomingView(CustomHtmxMixin, TemplateView):
                 grouped_events[league_name] = events_list
             context["events"] = grouped_events
             context["paginator"] = paginator
-        except :
+        except:
             events_page = None
-        context['title'] = f'{rubric.name} | Предстоящие'
-        context['meta_content'] = f'{rubric.name} | Предстоящие'
+        context["title"] = f"{rubric.name} | Предстоящие"
+        context["meta_content"] = f"{rubric.name} | Предстоящие"
 
         context["page_obj"] = events_page  # Pass the paginated events to the template
 
@@ -362,18 +366,18 @@ class PostMessageView(View):
         # Возвращает JSON с информацией об ошибке валидации формы
         return JsonResponse({"success": False, "errors": message_form.errors})
 
+
 @require_GET
 def get_chat_data(request, event_slug):
     event = Events.objects.filter(slug=event_slug).first()
-    messages = Messages.objects.filter(event=event).order_by('-id')[:50]
+    messages = Messages.objects.filter(event=event).order_by("-id")[:50]
 
     html_content = render_to_string("partials/chat_messages.html", {"messages": messages}).strip()
 
     return HttpResponse(html_content)
 
 
-
-class EventsView(CustomHtmxMixin,TemplateView):
+class EventsView(CustomHtmxMixin, TemplateView):
     model = Events
     template_name = "event-detail.html"
     slug_field = "slug"
@@ -400,8 +404,8 @@ class EventsView(CustomHtmxMixin,TemplateView):
             3,
         ]
         context["tennis"] = tennis
-        messages = Messages.objects.filter(event=event).order_by('-id')
-        page = self.request.GET.get('page', 1)
+        messages = Messages.objects.filter(event=event).order_by("-id")
+        page = self.request.GET.get("page", 1)
         paginator = Paginator(messages, 50)
         try:
             messages_page = paginator.page(page)
@@ -438,8 +442,12 @@ class EventsView(CustomHtmxMixin,TemplateView):
             ).first()
             context["is_home_team_bookmarked"] = home_team_bookmark is not None
             context["is_away_team_bookmarked"] = away_team_bookmark is not None
-        context["title"] = f' {home_team.name} - {away_team.name}: смотреть онлайн {event.start_at} , прямая трансляция  бесплатно | Chesterbets'
-        context["meta_content"] = f'{home_team.name} - {away_team.name} , ({event.rubrics.name}) , {event.start_at}. Онлайн видео трансляция, новости, статистика, ставки, прямой эфир.'
+        context[
+            "title"
+        ] = f" {home_team.name} - {away_team.name}: смотреть онлайн {event.start_at} , прямая трансляция  бесплатно | Chesterbets"
+        context[
+            "meta_content"
+        ] = f"{home_team.name} - {away_team.name} , ({event.rubrics.name}) , {event.start_at}. Онлайн видео трансляция, новости, статистика, ставки, прямой эфир."
         context["event"] = event
         context["messages_page"] = messages_page
         context["messages"] = messages
@@ -465,8 +473,8 @@ class EventsView(CustomHtmxMixin,TemplateView):
             message_text = message_form.cleaned_data["message"]
             message = Messages(user=user, message=message_text, event=event)
             message.save()
-        messages = Messages.objects.filter(event=event).order_by('-id')[:50]
-        context["messages_page"] = messages
+
+        context["messages_page"] = Messages.objects.filter(event=event).order_by("-id")[:50]
         return redirect("events_detail", slug=event_slug)
 
     def get_data(self, **kwargs):
@@ -480,42 +488,40 @@ class EventsView(CustomHtmxMixin,TemplateView):
         return JsonResponse(data)
 
 
-
-
 class GetElementDataView(View):
     def get(self, request, event_id, element):
         event = Events.objects.filter(id=event_id).first()
         data = {}
-        if element == 'home_score':
-            data['value'] = event.home_score
-            data['idspan'] = 'score-home-head'
-            template_name = 'partials/home_score.html'
-        elif element == 'away_score':
-            data['value'] = event.away_score
-            data['idspan'] = 'score-away-head'
-            template_name = 'partials/away_score.html'
-        elif element == 'home_score_mid':
-            data['value'] = event.home_score
-            data['idspan'] = 'score-home-mid'
-            template_name = 'partials/home_score.html'
-        elif element == 'away_score_mid':
-            data['value'] = event.away_score
-            data['idspan'] = 'score-away-mid'
-            template_name = 'partials/away_score.html'
-        elif element == 'home_score_bttm':
-            data['value'] = event.home_score
-            data['idspan'] = 'score-home-bttm'
-            template_name = 'partials/home_score.html'
-        elif element == 'away_score_bttm':
-            data['value'] = event.away_score
-            data['idspan'] = 'score-away-bttm'
-            template_name = 'partials/away_score.html'
-        elif element == 'start_at':
-            data['value'] = event.start_at
-            template_name = 'partials/start_at.html'
+        if element == "home_score":
+            data["value"] = event.home_score
+            data["idspan"] = "score-home-head"
+            template_name = "partials/home_score.html"
+        elif element == "away_score":
+            data["value"] = event.away_score
+            data["idspan"] = "score-away-head"
+            template_name = "partials/away_score.html"
+        elif element == "home_score_mid":
+            data["value"] = event.home_score
+            data["idspan"] = "score-home-mid"
+            template_name = "partials/home_score.html"
+        elif element == "away_score_mid":
+            data["value"] = event.away_score
+            data["idspan"] = "score-away-mid"
+            template_name = "partials/away_score.html"
+        elif element == "home_score_bttm":
+            data["value"] = event.home_score
+            data["idspan"] = "score-home-bttm"
+            template_name = "partials/home_score.html"
+        elif element == "away_score_bttm":
+            data["value"] = event.away_score
+            data["idspan"] = "score-away-bttm"
+            template_name = "partials/away_score.html"
+        elif element == "start_at":
+            data["value"] = event.start_at
+            template_name = "partials/start_at.html"
         # Аналогично добавьте ветви для других элементов
         else:
-            return JsonResponse({'error': 'Invalid element'})
+            return JsonResponse({"error": "Invalid element"})
 
         return render(request, template_name, data)
 
@@ -536,7 +542,7 @@ class SearchView(CustomHtmxMixin, TemplateView):
             if search_description:
                 redirect_url += f"?search_description={search_description}"
             return HttpResponseRedirect(redirect_url)
-        return super().get(request, teams=teams_get, leagues=league_get, players=players_get,*args, **kwargs)
+        return super().get(request, teams=teams_get, leagues=league_get, players=players_get, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -546,9 +552,9 @@ class SearchView(CustomHtmxMixin, TemplateView):
         players_get = self.request.GET.get("players")
         search_description = self.request.GET.get("search_description")
         rubric = Rubrics.objects.get(slug=kwargs["slug"])
-        print('teams_get-----------', teams_get)
-        print('league_get-----------', league_get)
-        print('players_get-----------', players_get)
+        print("teams_get-----------", teams_get)
+        print("league_get-----------", league_get)
+        print("players_get-----------", players_get)
 
         if form.is_valid():
             events = Events.objects.filter(name__icontains=search_description, rubrics=rubric)
@@ -638,14 +644,12 @@ class SeasonView(CustomHtmxMixin, TemplateView):
         event_slug = kwargs["slug"]
         season = Season.objects.get(slug=event_slug)
         events = Events.objects.filter(section=season)
-        sidebar_baners = Baners.objects.filter(type=1)
-        context["sidebar_baners"] = sidebar_baners
 
-        sidebar_baners_right = Baners.objects.filter(type=4)
-        context["sidebar_baners_right"] = sidebar_baners_right
+        context["sidebar_baners"] = Baners.objects.filter(type=1)
 
-        sidebar_baners_left = Baners.objects.filter(type=5)
-        context["sidebar_baners_left"] = sidebar_baners_left
+        context["sidebar_baners_right"] = Baners.objects.filter(type=4)
+
+        context["sidebar_baners_left"] = Baners.objects.filter(type=5)
         # Pagination
         paginator = Paginator(events, 20)  # 20 events per page
         page = self.request.GET.get("page")
@@ -818,11 +822,14 @@ class PlayerView(CustomHtmxMixin, TemplateView):
 
         return context
 
+
 def get_next_elements(request):
-    offset = int(request.GET['offset'])
-    rubrics= int(request.GET['rubrics'])
-    status= int(request.GET['status'])
+    offset = int(request.GET["offset"])
+    rubrics = int(request.GET["rubrics"])
+    status = int(request.GET["status"])
     rubrics = Rubrics.objects.get(id=rubrics)
-    events = Events.objects.filter(rubrics = rubrics,status=status).order_by("section__league_name", "-start_at")[offset:offset+20]
-    context={ 'events':events , 'offset': offset+10}
-    return render(request,'event_list_elements.html',context)
+    events = Events.objects.filter(rubrics=rubrics, status=status).order_by("section__league_name", "-start_at")[
+        offset : offset + 20
+    ]
+    context = {"events": events, "offset": offset + 10}
+    return render(request, "event_list_elements.html", context)

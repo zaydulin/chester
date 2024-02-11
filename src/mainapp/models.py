@@ -1,17 +1,19 @@
 import os
+from datetime import date
 
+from dadata import Dadata
+from django.conf import settings
+from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
-from django.urls import reverse
-from django.conf import settings
-from django.contrib.auth.models import AbstractUser, Group, Permission
-from dadata import Dadata
-from django.dispatch import receiver
 from django.db.models.signals import post_save
-from datetime import date
+from django.dispatch import receiver
+from django.urls import reverse
+
 from events.models import Events
 
+# TODO: Переписать ВСЁ!!!!
 
 ###############################################
 ###     #####    #####   ####  ###        #####
@@ -38,11 +40,18 @@ class GeneralSettings(models.Model):
         "Сообщение при отключение регистрации", max_length=500, blank=True, null=True
     )
     yandex_metrika_link = models.TextField("Ссылка Яндекс Метрика")
-    rapidapi_key_events = models.TextField("FlashScoreRapid", help_text='<a href="https://rapidapi.com/tipsters/api/flashlive-sports" target="_blank">Cсылка</a>',
-                                           blank=True, null=True)
-    rapidapi_key_stream = models.TextField("SoccerVideosRapid",
-                                           help_text='<a href="https://rapidapi.com/scorebat/api/free-football-soccer-videos/" target="_blank">Cсылка</a>',
-                                           blank=True, null=True)
+    rapidapi_key_events = models.TextField(
+        "FlashScoreRapid",
+        help_text='<a href="https://rapidapi.com/tipsters/api/flashlive-sports" target="_blank">Cсылка</a>',
+        blank=True,
+        null=True,
+    )
+    rapidapi_key_stream = models.TextField(
+        "SoccerVideosRapid",
+        help_text='<a href="https://rapidapi.com/scorebat/api/free-football-soccer-videos/" target="_blank">Cсылка</a>',
+        blank=True,
+        null=True,
+    )
     email_host = models.TextField("Email Site HOST")
     default_from_email = models.TextField("Email Site HOST")
     email_port = models.TextField("Email Site PORT")
@@ -59,10 +68,10 @@ class GeneralSettings(models.Model):
         super().save(*args, **kwargs)
 
         # Путь к файлу, куда будем сохранять данные
-        file_path = os.path.join(settings.BASE_DIR, 'media/smtp.py')
+        file_path = os.path.join(settings.BASE_DIR, "media/smtp.py")
 
         # Сохраняем данные в текстовый файл
-        with open(file_path, 'w') as f:
+        with open(file_path, "w") as f:
             f.write(f"EMAIL_HOST = '{self.email_host}'\n")
             f.write(f"EMAIL_PORT = '{self.email_port}'\n")
             f.write(f"EMAIL_USE_TLS = {self.email_use_tls}\n")
@@ -70,6 +79,7 @@ class GeneralSettings(models.Model):
             f.write(f"EMAIL_HOST_USER = '{self.email_host_user}'\n")
             f.write(f"EMAIL_HOST_PASSWORD = '{self.email_host_password}'\n")
             f.write(f"DEFAULT_FROM_EMAIL = '{self.default_from_email}'\n")
+
     class Meta:
         verbose_name = "Общая настройка"
         verbose_name_plural = "Общие настройки"
@@ -82,13 +92,12 @@ class Pages(models.Model):
     description = models.TextField("Описание", null=True)
     title = models.CharField("Заголовок", max_length=500, null=True)
     content = models.TextField("Мета-описание", max_length=500, null=True)
-    slug = models.SlugField("Ссылка на сайте", max_length=160,blank=True, null=True)
-    other_link = models.TextField("Ссылка на другой источник", blank=True,null=True)
-    picture = models.ImageField("Изображениe", upload_to='pages/img', blank=True, null=True)
+    slug = models.SlugField("Ссылка на сайте", max_length=160, blank=True, null=True)
+    other_link = models.TextField("Ссылка на другой источник", blank=True, null=True)
+    picture = models.ImageField("Изображениe", upload_to="pages/img", blank=True, null=True)
 
     def get_absolute_url(self):
         return reverse("pages", kwargs={"slug": self.slug})
-
 
     class Meta:
         verbose_name = "Страница"
@@ -129,11 +138,10 @@ class Banerspopap(models.Model):
 
 
 class Stopwords(models.Model):
-    id = models.AutoField(primary_key=True)
-    name = models.CharField("Стоп слова", max_length=120)
+    name = models.CharField("Стоп слова", max_length=120, db_index=True, unique=True)
 
     def __str__(self):
-        return self.name
+        return f"{self.name}"
 
     class Meta:
         verbose_name = "Стоп слово"
@@ -212,6 +220,7 @@ class User(AbstractUser):
     date_of_registration = models.DateField(auto_now_add=True, verbose_name="дата регистрации")
 
     def save(self, *args, **kwargs):
+        # TODO: перепиши формирование ДР
         if self.birthday:
             today = date.today()
             age = (
@@ -234,7 +243,7 @@ class Messages(models.Model):
     event = models.ForeignKey(Events, on_delete=models.CASCADE)  # Связь с событием
 
     def __str__(self):
-        return f"Message by {self.user.username} on {self.event.name}"
+        return f"Message by {self.user} on {self.event.name}"
 
     def save(self, *args, **kwargs):
         # Split the message into words
@@ -260,10 +269,12 @@ class Messages(models.Model):
         verbose_name = "Сообщение"
         verbose_name_plural = "Сообщения"
 
+
 @receiver(post_save, sender=Messages)
 def delete_emprty_message(sender, instance, **kwargs):
-    if instance.message == '':
+    if instance.message == "":
         instance.delete()
+
 
 class Bookmarks(models.Model):
     user = models.ForeignKey(User, verbose_name="Пользователь", on_delete=models.CASCADE)

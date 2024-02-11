@@ -2,8 +2,9 @@ from itertools import groupby
 
 from django import template
 from django.conf import settings
-from events.models import Rubrics, PopularSeasons, Season
+
 from events.forms import EventSearchForm
+from events.models import PopularSeasons, Rubrics, Season
 
 register = template.Library()
 
@@ -49,81 +50,96 @@ def get_popular_seasons():
 def get_country_seasons(request):
     try:
         url = request.path
-        if url.startswith("football/") :
+        if url.startswith("football/"):
             rubric_id = 1
         elif url.startswith("volleyball/"):
             rubric_id = 12
         elif url.startswith("hockey/"):
             rubric_id = 4
-        elif url.startswith("basketball/") :
+        elif url.startswith("basketball/"):
             rubric_id = 3
-        elif url.startswith("tennis/") :
+        elif url.startswith("tennis/"):
             rubric_id = 2
-        elif url.startswith("handball/") :
+        elif url.startswith("handball/"):
             rubric_id = 7
-        elif url.startswith("cybersport/") :
+        elif url.startswith("cybersport/"):
             rubric_id = 36
-        elif url.startswith("baseball/") :
+        elif url.startswith("baseball/"):
             rubric_id = 6
-        elif url.startswith("cricket/") :
+        elif url.startswith("cricket/"):
             rubric_id = 13
-        elif url.startswith("snooker/") :
+        elif url.startswith("snooker/"):
             rubric_id = 15
-        elif url.startswith("table-tennis/") :
+        elif url.startswith("table-tennis/"):
             rubric_id = 25
         elif url.startswith("badminton/"):
             rubric_id = 21
         else:
             rubric_id = 1
-        seasons = Season.objects.filter(country__isnull=False,season_name__isnull=False,rubrics__api_id=rubric_id).order_by("country")
+        seasons = Season.objects.filter(
+            country__isnull=False, season_name__isnull=False, rubrics__api_id=rubric_id
+        ).order_by("country")
     except:
-        seasons = Season.objects.filter(country__isnull=False,season_name__isnull=False,rubrics__api_id=1).order_by("country")
+        seasons = Season.objects.filter(country__isnull=False, season_name__isnull=False, rubrics__api_id=1).order_by(
+            "country"
+        )
     grouped_seasons = {}
     for country, season_group in groupby(seasons, key=lambda season: season.country):
         grouped_seasons[country] = list(season_group)
 
     return grouped_seasons
 
+
 @register.simple_tag()
 def get_country_seasons_popular(request):
     try:
         url = request.path
-        if url.startswith("football/") :
+        if url.startswith("football/"):
             rubric_id = 1
         elif url.startswith("volleyball/"):
             rubric_id = 12
         elif url.startswith("hockey/"):
             rubric_id = 4
-        elif url.startswith("basketball/") :
+        elif url.startswith("basketball/"):
             rubric_id = 3
-        elif url.startswith("tennis/") :
+        elif url.startswith("tennis/"):
             rubric_id = 2
-        elif url.startswith("handball/") :
+        elif url.startswith("handball/"):
             rubric_id = 7
-        elif url.startswith("cybersport/") :
+        elif url.startswith("cybersport/"):
             rubric_id = 36
-        elif url.startswith("baseball/") :
+        elif url.startswith("baseball/"):
             rubric_id = 6
-        elif url.startswith("cricket/") :
+        elif url.startswith("cricket/"):
             rubric_id = 13
-        elif url.startswith("snooker/") :
+        elif url.startswith("snooker/"):
             rubric_id = 15
-        elif url.startswith("table-tennis/") :
+        elif url.startswith("table-tennis/"):
             rubric_id = 25
         elif url.startswith("badminton/"):
             rubric_id = 21
         else:
             rubric_id = 1
-        seasons = Season.objects.filter(country__isnull=False,country__sort_by__isnull = False,rubrics__api_id=rubric_id).order_by("country")
+        seasons = Season.objects.filter(
+            country__isnull=False, country__sort_by__isnull=False, rubrics__api_id=rubric_id
+        ).order_by("country")
     except:
-        seasons = Season.objects.filter(country__isnull=False,sort_by__isnull = False,rubrics__api_id=1).order_by("country")
-    sorted_seasons = sorted(seasons, key=lambda season: season.country.sort_by if season.country and season.country.sort_by is not None else float('inf'))
+        seasons = Season.objects.filter(country__isnull=False, sort_by__isnull=False, rubrics__api_id=1).order_by(
+            "country"
+        )
+    sorted_seasons = sorted(
+        seasons,
+        key=lambda season: season.country.sort_by
+        if season.country and season.country.sort_by is not None
+        else float("inf"),
+    )
 
     grouped_seasons_popular = {}
     for country, season_group in groupby(sorted_seasons, key=lambda season: season.country):
         grouped_seasons_popular[country] = list(season_group)
 
     return grouped_seasons_popular
+
 
 @register.simple_tag()
 def get_context(request):
@@ -132,11 +148,24 @@ def get_context(request):
         return "upcoming"
     elif url.endswith("end/"):
         return "end"
-    elif url.endswith("football/") or url.endswith("volleyball/") or url.endswith("hockey/") or url.endswith("basketball/") or url.endswith("tennis/") or url.endswith("handball/") or url.endswith("cybersport/") or url.endswith("baseball/") or url.endswith("cricket/") or url.endswith("snooker/") or url.endswith("table-tennis/") or url.endswith("table-tennis/") or url.endswith("badminton/") :
+    elif (
+        url.endswith("football/")
+        or url.endswith("volleyball/")
+        or url.endswith("hockey/")
+        or url.endswith("basketball/")
+        or url.endswith("tennis/")
+        or url.endswith("handball/")
+        or url.endswith("cybersport/")
+        or url.endswith("baseball/")
+        or url.endswith("cricket/")
+        or url.endswith("snooker/")
+        or url.endswith("table-tennis/")
+        or url.endswith("table-tennis/")
+        or url.endswith("badminton/")
+    ):
         return "now"
     else:
         return None
-
 
 
 @register.simple_tag

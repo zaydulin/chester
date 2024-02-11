@@ -1,7 +1,8 @@
 from django.contrib import messages
 from django.contrib.auth import logout
-from django.urls import reverse
 from django.shortcuts import redirect
+from django.urls import reverse
+
 
 class BlockedUserMiddleware:
     def __init__(self, get_response):
@@ -17,7 +18,7 @@ class BlockedUserMiddleware:
             messages.error(request, "Ваш аккаунт заблокирован.")
 
             # Redirect the user to a suitable page (e.g., home)
-            return redirect(reverse('home'))
+            return redirect(reverse("home"))
 
         response = self.get_response(request)
         return response

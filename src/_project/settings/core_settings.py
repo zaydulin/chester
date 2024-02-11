@@ -1,9 +1,9 @@
 import os
-from datetime import timedelta
-from celery.schedules import crontab
-from environs import Env
 from pathlib import Path
 from string import ascii_lowercase, ascii_uppercase, digits
+
+from celery.schedules import crontab
+from environs import Env
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -284,201 +284,109 @@ CELERY_BEAT_SCHEDULE = {
     # пн
     "create_events_of_tournament_id1": {
         "task": "events.tasks.create_events_of_tournament_id1",
-        "schedule": crontab(
-            hour="4",
-            day_of_week="mon"
-        ),
+        "schedule": crontab(hour="4", day_of_week="mon"),
     },
     "create_events_of_tournament_id2": {
         "task": "events.tasks.create_events_of_tournament_id2",
-        "schedule": crontab(
-            hour="4",
-            minute="20",
-            day_of_week="mon"
-        ),
+        "schedule": crontab(hour="4", minute="20", day_of_week="mon"),
     },
     # вт
     "create_events_of_tournament_id3": {
         "task": "events.tasks.create_events_of_tournament_id3",
-        "schedule": crontab(
-            hour="4",
-            day_of_week="tue"
-        ),
+        "schedule": crontab(hour="4", day_of_week="tue"),
     },
     "create_events_of_tournament_id4": {
         "task": "events.tasks.create_events_of_tournament_id4",
-        "schedule": crontab(
-            hour="4",
-            minute="20",
-            day_of_week="tue"
-        ),
+        "schedule": crontab(hour="4", minute="20", day_of_week="tue"),
     },
     # ср
     "create_events_of_tournament_id6": {
         "task": "events.tasks.create_events_of_tournament_id6",
-        "schedule": crontab(
-            hour="4",
-            day_of_week="wed"
-        ),
+        "schedule": crontab(hour="4", day_of_week="wed"),
     },
     "create_events_of_tournament_id7": {
         "task": "events.tasks.create_events_of_tournament_id7",
-        "schedule": crontab(
-            hour="4",
-            minute="20",
-            day_of_week="wed"
-        ),
+        "schedule": crontab(hour="4", minute="20", day_of_week="wed"),
     },
     # чт
     "create_events_of_tournament_id12": {
         "task": "events.tasks.create_events_of_tournament_id12",
-        "schedule": crontab(
-            hour="4",
-            day_of_week="thu"
-        ),
+        "schedule": crontab(hour="4", day_of_week="thu"),
     },
     "create_events_of_tournament_id13": {
         "task": "events.tasks.create_events_of_tournament_id13",
-        "schedule": crontab(
-            hour="4",
-            minute="20",
-            day_of_week="thu"
-        ),
+        "schedule": crontab(hour="4", minute="20", day_of_week="thu"),
     },
     # пт
     "create_events_of_tournament_id15": {
         "task": "events.tasks.create_events_of_tournament_id15",
-        "schedule": crontab(
-            hour="4",
-            day_of_week="fri"
-        ),
+        "schedule": crontab(hour="4", day_of_week="fri"),
     },
     "create_events_of_tournament_id21": {
         "task": "events.tasks.create_events_of_tournament_id21",
-        "schedule": crontab(
-            hour="4",
-            minute="20",
-            day_of_week="fri"
-        ),
+        "schedule": crontab(hour="4", minute="20", day_of_week="fri"),
     },
     # сб
     "create_events_of_tournament_id25": {
         "task": "events.tasks.create_events_of_tournament_id25",
-        "schedule": crontab(
-            hour="4",
-            day_of_week="sat"
-        ),
+        "schedule": crontab(hour="4", day_of_week="sat"),
     },
     "create_events_of_tournament_id36": {
         "task": "events.tasks.create_events_of_tournament_id36",
-        "schedule": crontab(
-            hour="4",
-            minute="20",
-            day_of_week="sat"
-        ),
+        "schedule": crontab(hour="4", minute="20", day_of_week="sat"),
     },
     "create_additional_info_for_events_1": {
         "task": "events.tasks.create_additional_info_for_events_id1",
-        "schedule": crontab(
-            hour="4",
-            minute="40",
-            day_of_week="mon-sun"
-        ),
+        "schedule": crontab(hour="4", minute="40", day_of_week="mon-sun"),
     },
     "create_additional_info_for_events_2": {
         "task": "events.tasks.create_additional_info_for_events_id2",
-        "schedule": crontab(
-            hour="4",
-            minute="50",
-            day_of_week="mon-sun"
-        ),
+        "schedule": crontab(hour="4", minute="50", day_of_week="mon-sun"),
     },
     "create_additional_info_for_events_3": {
         "task": "events.tasks.create_additional_info_for_events_id3",
-        "schedule": crontab(
-            hour="5",
-            day_of_week="mon-sun"
-        ),
+        "schedule": crontab(hour="5", day_of_week="mon-sun"),
     },
     "create_additional_info_for_events_4": {
         "task": "events.tasks.create_additional_info_for_events_id4",
-        "schedule": crontab(
-            hour="5",
-            minute="10",
-            day_of_week="mon-sun"
-        ),
+        "schedule": crontab(hour="5", minute="10", day_of_week="mon-sun"),
     },
     "create_additional_info_for_events_6": {
         "task": "events.tasks.create_additional_info_for_events_id6",
-        "schedule": crontab(
-            hour="5",
-            minute="20",
-            day_of_week="mon-sun"
-        ),
+        "schedule": crontab(hour="5", minute="20", day_of_week="mon-sun"),
     },
     "create_additional_info_for_events_7": {
         "task": "events.tasks.create_additional_info_for_events_id7",
-        "schedule": crontab(
-            hour="5",
-            minute="30",
-            day_of_week="mon-sun"
-        ),
+        "schedule": crontab(hour="5", minute="30", day_of_week="mon-sun"),
     },
     "create_additional_info_for_events_12": {
         "task": "events.tasks.create_additional_info_for_events_id12",
-        "schedule": crontab(
-            hour="5",
-            minute="40",
-            day_of_week="mon-sun"
-        ),
+        "schedule": crontab(hour="5", minute="40", day_of_week="mon-sun"),
     },
     "create_additional_info_for_events_13": {
         "task": "events.tasks.create_additional_info_for_events_id13",
-        "schedule": crontab(
-            hour="5",
-            minute="50",
-            day_of_week="mon-sun"
-        ),
+        "schedule": crontab(hour="5", minute="50", day_of_week="mon-sun"),
     },
     "create_additional_info_for_events_15": {
         "task": "events.tasks.create_additional_info_for_events_id15",
-        "schedule": crontab(
-            hour="6",
-            day_of_week="mon-sun"
-        ),
+        "schedule": crontab(hour="6", day_of_week="mon-sun"),
     },
     "create_additional_info_for_events_21": {
         "task": "events.tasks.create_additional_info_for_events_id21",
-        "schedule": crontab(
-            hour="6",
-            minute="10",
-            day_of_week="mon-sun"
-        ),
+        "schedule": crontab(hour="6", minute="10", day_of_week="mon-sun"),
     },
     "create_additional_info_for_events_25": {
         "task": "events.tasks.create_additional_info_for_events_id25",
-        "schedule": crontab(
-            hour="6",
-            minute="20",
-            day_of_week="mon-sun"
-        ),
+        "schedule": crontab(hour="6", minute="20", day_of_week="mon-sun"),
     },
     "create_additional_info_for_events_36": {
         "task": "events.tasks.create_additional_info_for_events_id36",
-        "schedule": crontab(
-            hour="6",
-            minute="30",
-            day_of_week="mon-sun"
-        ),
+        "schedule": crontab(hour="6", minute="30", day_of_week="mon-sun"),
     },
-
     # вск
     "create_tournament": {
         "task": "events.tasks.create_tournament",
-        "schedule": crontab(
-            hour="3",
-            day_of_week="sun"
-        ),
+        "schedule": crontab(hour="3", day_of_week="sun"),
     },
     "get_match_stream_link_football": {
         "task": "events.tasks.get_match_stream_link",
@@ -544,12 +452,9 @@ RECAPTCHA_PRIVATE_KEY = "6Lezmb8oAAAAAF3vLlbePB9gJWPNfnybWj0YHjRb"
 RECAPTCHA_DEFAULT_ACTION = "generic"
 RECAPTCHA_SCORE_THRESHOLD = 0.5
 LOGIN_URL = "/login/"
-JAZZMIN_SETTINGS = {
-    "site_brand": "Админ Панель"
-}
+JAZZMIN_SETTINGS = {"site_brand": "Админ Панель"}
 INTERNAL_IPS = [
     "127.0.0.1",
-
 ]
 # EMAIL_HOST = 'smtp.beget.com'
 # EMAIL_PORT = '465'
@@ -559,11 +464,11 @@ INTERNAL_IPS = [
 # EMAIL_HOST_USER = 'info@eyesofhistory.ru'
 # EMAIL_HOST_PASSWORD = 'OE%&K8s0'
 # DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-SMTP_FILE_PATH = Path(MEDIA_ROOT) / 'smtp.py'
+SMTP_FILE_PATH = Path(MEDIA_ROOT) / "smtp.py"
 
 
 try:
-    with open(SMTP_FILE_PATH, 'r') as smtp_file:
+    with open(SMTP_FILE_PATH, "r") as smtp_file:
         exec(smtp_file.read())  # Выполнить содержимое файла
 except FileNotFoundError:
     pass

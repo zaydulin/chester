@@ -1,18 +1,20 @@
 from django import template
-from mainapp.models import Views
 from ipware import get_client_ip  # Import any necessary modules
 from user_agents import parse  # Import the parse function from user_agents
 
+from mainapp.models import Views
+
 register = template.Library()
+
 
 @register.simple_tag(takes_context=True)
 def record_view(context):
-    request = context['request']
+    request = context["request"]
     ip_address, _ = get_client_ip(request)
     url = request.path
 
     # Parse the user agent string from the request headers
-    user_agent = request.META.get('HTTP_USER_AGENT')
+    user_agent = request.META.get("HTTP_USER_AGENT")
     parsed_user_agent = parse(user_agent)
 
     # Extract browser and operating system information
@@ -27,8 +29,8 @@ def record_view(context):
         ip_address=ip_address,
         browser=browser,
         operationsistem=operationsistem,
-        region='',  # You can fill this in based on your requirements
-        url=url
+        region="",  # You can fill this in based on your requirements
+        url=url,
     )
 
-    return ''
+    return ""
