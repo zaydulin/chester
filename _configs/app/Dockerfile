@@ -1,37 +1,32 @@
-FROM python:3.10-slim
+FROM        python:3.10-slim
 
-ARG NO_CACHE_ARG
+ENV         LANG C.UTF-8
+ENV         PROJECTPATH=/app/chesterbets
+ENV         USER app
 
-ENV LANG C.UTF-8
-ENV PROJECTPATH /app/chesterbets
-ENV USER app
+RUN         set -x && apt-get -qq update \
+            && apt-get install -y --no-install-recommends \
+            libpq-dev python3-dev \
+            && apt-get purge -y --auto-remove \
+            && rm -rf /var/lib/apt/lists/*
 
-RUN set -x && apt-get -qq update \
-    && apt-get install -y --no-install-recommends \
-    libpq-dev python3-dev \
-    && apt-get purge -y --auto-remove \
-    && rm -rf /var/lib/apt/lists/*
+WORKDIR     ${PROJECTPATH}
 
-WORKDIR ${PROJECTPATH}
+RUN         useradd -m -d /home/${USER} ${USER} \
+            && chown -R ${USER} /home/${USER} \
+            && chown -R ${USER} /app
 
-RUN useradd -m -d /home/${USER} ${USER} \
-    && chown -R ${USER} /home/${USER} \
-    && chown -R ${USER} /app
+ADD         https://github.com/ufoscout/docker-compose-wait/releases/download/2.9.0/wait ${PROJECTPATH}/wait
+RUN         chmod +x ${PROJECTPATH}/wait
 
-ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.9.0/wait ${PROJECTPATH}/wait
-RUN chmod +x ${PROJECTPATH}/wait
+COPY        requirements.txt ${PROJECTPATH}
+RUN         pip install --no-cache-dir -r ${PROJECTPATH}/requirements.txt
 
-COPY requirements.txt ${PROJECTPATH}
-RUN pip install --no-cache-dir -r ${PROJECTPATH}/requirements.txt
+COPY        ./src/* ${PROJECTPATH}
 
-COPY ./src/* ${PROJECTPATH}
+RUN         chown -R ${USER} ${PROJECTPATH}
+USER        ${USER}
 
-# Создаем подкаталог перед копированием
-RUN mkdir -p ${PROJECTPATH}/_project/settings/
-COPY ./smtp.py ${PROJECTPATH}/_project/settings/
-RUN chown ${USER} ${PROJECTPATH}/smtp.py \
-    && chmod 600 ${PROJECTPATH}/smtp.py
 
-RUN chown -R ${USER} ${PROJECTPATH}
 
-USER ${USER}
+
