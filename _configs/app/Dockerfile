@@ -1,5 +1,7 @@
 FROM        python:3.10-slim
 
+ARG NO_CACHE_ARG
+
 ENV         LANG C.UTF-8
 ENV         PROJECTPATH=/app/chesterbets
 ENV         USER app
