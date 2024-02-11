@@ -55,7 +55,7 @@ class GeneralSettings(models.Model):
         super().save(*args, **kwargs)
 
         # Путь к файлу, куда будем сохранять данные
-        file_path = os.path.join(settings.BASE_DIR, '_project/settings/smtp.py')
+        file_path = os.path.join(settings.BASE_DIR, 'media/smtp.py')
 
         # Сохраняем данные в текстовый файл
         with open(file_path, 'w') as f:
