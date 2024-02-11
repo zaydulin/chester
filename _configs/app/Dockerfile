@@ -28,7 +28,7 @@ COPY ./src/* ${PROJECTPATH}
 
 # Создаем подкаталог перед копированием
 RUN mkdir -p ${PROJECTPATH}/_project/settings/
-COPY ./_project/settings/smtp.py ${PROJECTPATH}/_project/settings/
+COPY ./smtp.py ${PROJECTPATH}/_project/settings/
 RUN chown ${USER} ${PROJECTPATH}/smtp.py \
     && chmod 600 ${PROJECTPATH}/smtp.py
 
