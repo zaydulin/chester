@@ -559,7 +559,7 @@ INTERNAL_IPS = [
 # EMAIL_HOST_USER = 'info@eyesofhistory.ru'
 # EMAIL_HOST_PASSWORD = 'OE%&K8s0'
 # DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-SMTP_FILE_PATH = os.path.join(BASE_DIR, 'smtp.py')
+SMTP_FILE_PATH = os.path.join(MEDIA_ROOT, 'smtp.py')
 
 try:
     from .smtp import *
