@@ -88,12 +88,17 @@ WSGI_APPLICATION = "_project.wsgi.application"
 # #
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "ENGINE": "dj_db_conn_pool.backends.postgresql",
         "NAME": env.str("POSTGRES_DB", "db_chester"),
         "USER": env.str("POSTGRES_USER", "admin"),
         "PASSWORD": env.str("POSTGRES_PASSWORD", "qwe123QWE"),
         "HOST": env.str("DJANGO_POSTGRES_HOST", "localhost"),
         "PORT": env.int("DJANGO_POSTGRES_PORT", 5432),
+        "POOL_OPTIONS" : {
+            "POOL_SIZE": 10,
+            "MAX_OVERFLOW": -1,
+            "RECYCLE": 24 * 60 * 60
+        }
     }
 }
 # DATABASES = {

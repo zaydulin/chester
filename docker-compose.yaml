@@ -49,7 +49,41 @@ services:
       context: .
       dockerfile: _configs/app/Dockerfile
     container_name: cb-celery
-    command: celery --app _project worker --beat -l info
+    command: celery --app _project worker -l info
+    env_file:
+      - .env
+    environment:
+      WAIT-HOSTS: cb-db, cb-redis
+    volumes:
+      - ./src:/app/chesterbets
+    restart: always
+    depends_on:
+      - cb-db
+      - cb-redis
+
+  cb-celery2:
+    build:
+      context: .
+      dockerfile: _configs/app/Dockerfile
+    container_name: cb-celery
+    command: celery --app _project worker -l info
+    env_file:
+      - .env
+    environment:
+      WAIT-HOSTS: cb-db, cb-redis
+    volumes:
+      - ./src:/app/chesterbets
+    restart: always
+    depends_on:
+      - cb-db
+      - cb-redis
+
+  cb-celery3:
+    build:
+      context: .
+      dockerfile: _configs/app/Dockerfile
+    container_name: cb-celery
+    command: celery --app _project worker -l info
     env_file:
       - .env
     environment:

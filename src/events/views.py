@@ -663,14 +663,15 @@ class SeasonView(CustomHtmxMixin, TemplateView):
 
         for league_name, events_in_league in groupby(events_page, key=lambda event: event.section):
             events_list = list(events_in_league)
-            for event in events_list:
-                event_content_type = ContentType.objects.get_for_model(event)
+            if user.is_authenticated:
+                for event in events_list:
+                    event_content_type = ContentType.objects.get_for_model(event)
 
-                event_bookmarked = Bookmarks.objects.filter(
-                    user=user, content_type=event_content_type, object_id=event.id
-                ).exists()
+                    event_bookmarked = Bookmarks.objects.filter(
+                        user=user, content_type=event_content_type, object_id=event.id
+                    ).exists()
 
-                event.is_bookmarked = event_bookmarked
+                    event.is_bookmarked = event_bookmarked
 
             grouped_events[league_name] = events_list
 
