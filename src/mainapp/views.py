@@ -20,6 +20,7 @@ from django.urls import reverse, reverse_lazy
 from django.contrib.contenttypes.models import ContentType
 from datetime import datetime, timedelta
 from django.contrib.auth.views import PasswordResetView, PasswordResetConfirmView
+from django.conf import settings
 
 try:
     import _project.settings.core_settings as core_settings
@@ -76,7 +77,7 @@ def toggle_bookmark(request, bookmark_type, item_id):
         Bookmarks.objects.create(user=user, content_type=content_type, object_id=item_id)
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-    
+
 def toggle_bookmark_post(request):
     user = request.user
     if not user.is_authenticated:
@@ -266,7 +267,7 @@ class ChangeEmail(View):
                 send_mail(
                     'Подтвердите свой электронный адрес',
                     f'Пожалуйста, перейдите по следующей ссылке, чтобы подтвердить свой адрес электронной почты: https://chesterbets.com{activation_url}',
-                    core_settings.EMAIL_HOST_USER,
+                    settings.EMAIL_HOST_USER,  # Access EMAIL_HOST_USER from settings
                     [email],
                     fail_silently=False,
                 )

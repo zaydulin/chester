@@ -85,7 +85,7 @@ WSGI_APPLICATION = "_project.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-#
+# #
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
@@ -551,11 +551,19 @@ INTERNAL_IPS = [
     "127.0.0.1",
 
 ]
-EMAIL_HOST = 'smtp.beget.com'
-EMAIL_PORT = '465'
-EMAIL_USE_TSL = False
-EMAIL_USE_SSL = True
+# EMAIL_HOST = 'smtp.beget.com'
+# EMAIL_PORT = '465'
+# EMAIL_USE_TSL = False
+# EMAIL_USE_SSL = True
+#
+# EMAIL_HOST_USER = 'info@eyesofhistory.ru'
+# EMAIL_HOST_PASSWORD = 'OE%&K8s0'
+# DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+SMTP_FILE_PATH = Path(MEDIA_ROOT) / 'smtp.py'
 
-EMAIL_HOST_USER = 'info@eyesofhistory.ru'
-EMAIL_HOST_PASSWORD = 'OE%&K8s0'
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+try:
+    with open(SMTP_FILE_PATH, 'r') as smtp_file:
+        exec(smtp_file.read())  # Выполнить содержимое файла
+except FileNotFoundError:
+    pass

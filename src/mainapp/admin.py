@@ -41,7 +41,8 @@ class GeneralSettingsAdmin(admin.ModelAdmin):
 
         }),
         ('Электронная почта сайта', {
-            'fields': ['email_host','email_port','email_host_user','email_host_password' ],
+            'fields': ['email_host', 'email_port', 'email_host_user', 'email_host_password', 'email_use_tls',
+                       'email_use_ssl', 'default_from_email'],
 
         })
     ]

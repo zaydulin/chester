@@ -1,4 +1,0 @@
-EMAIL_HOST = 'smtp.beget.com'
-EMAIL_PORT = '465'
-EMAIL_HOST_USER = 'info@eyesofhistory.ru'
-EMAIL_HOST_PASSWORD = 'OE%&K8s0'
