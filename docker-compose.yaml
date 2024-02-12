@@ -65,7 +65,7 @@ services:
     build:
       context: .
       dockerfile: _configs/app/Dockerfile
-    container_name: cb-celery
+    container_name: cb-celery2
     command: celery --app _project worker -l info
     env_file:
       - .env
@@ -82,7 +82,7 @@ services:
     build:
       context: .
       dockerfile: _configs/app/Dockerfile
-    container_name: cb-celery
+    container_name: cb-celery3
     command: celery --app _project worker -l info
     env_file:
       - .env
