@@ -294,9 +294,8 @@ def create_events_of_tournament_id36():
 def fetch_event_data(rubric_id):
     incidents_url = "https://flashlive-sports.p.rapidapi.com/v1/events/summary-incidents"
     statistics_url = "https://flashlive-sports.p.rapidapi.com/v1/events/statistics"
-    rubric = Rubrics.objects.get(api_id=rubric_id)
-    incidents_events = Events.objects.filter(status=1, rubrics=rubric)
-    gamestatistic_events = Events.objects.filter(status=1, rubrics=rubric)
+    incidents_events = Events.objects.filter(status=1, rubrics__api_id=rubric_id)
+    gamestatistic_events = Events.objects.filter(status=1, rubrics__api_id=rubric_id)
     today = datetime.now().date()
     tomorrow = today - timedelta(days=1)
 
@@ -306,7 +305,7 @@ def fetch_event_data(rubric_id):
     events = Events.objects.filter(
         ~Q(status=2),
         (Q(start_at__startswith=today_str) | Q(start_at__startswith=tomorrow_str)),
-        rubrics=rubric,
+        rubrics__api_id=rubric_id,
     )
     url = "https://flashlive-sports.p.rapidapi.com/v1/events/data"
     for event in events:
