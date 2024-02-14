@@ -327,7 +327,7 @@ def fetch_event_data(rubric_id):
                 if retries < MAX_RETRIES:
                     if retries == MAX_RETRIES:
                         return {"response": f"Error fetch - {response.status_code} - {response.json()}"}
-                    time.sleep(1)
+                    time.sleep(5)
                     continue
                 else:
                     return {"response": f"Error fetch - {response.status_code} - {response.json()}"}
