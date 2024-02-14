@@ -473,7 +473,7 @@ def get_events_tommorow(sport_id):
                 if Season.objects.filter(season_id=tournament_id).exists():
                     season = Season.objects.filter(season_id=tournament_id).first()
                 else:
-                    season = Season.objects.create(rubrics=rubrics, season_id=tournament_id, eague_name=league_name, country=country , logo_league = normal_ti)
+                    season = Season.objects.create(rubrics=rubrics, season_id=tournament_id, league_name=league_name, country=country , logo_league = normal_ti)
 
                 events_list = []
                 for event in events:
