@@ -14,7 +14,7 @@ stop:
 	docker-compose -f $(docker_file) stop $(c)
 restart:
 	sudo docker-compose -f $(docker_file) stop $(c)
-	sudo docker-compose -f $(docker_file) up -d $(c)
+	sudo docker-compose -f $(docker_file) up -d --remove-orphans $(c)
 destroy:
 	docker-compose -f $(docker_file) down -v $(c)
 log:
