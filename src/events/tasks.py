@@ -109,7 +109,10 @@ def create_tournament():
 
 def create_events_of_tournament(rubric_id):
     second_url = "https://flashlive-sports.p.rapidapi.com/v1/tournaments/fixtures"
-    seasons = Season.objects.filter(rubrics_api_id=rubric_id)
+    rubrics = Rubrics.objects.get(
+        api_id=rubric_id
+    )
+    seasons = Season.objects.filter(rubrics=rubrics)
     for locale in ["en_INT","ru_RU" ]:
         for season in seasons:
             stages = season.stages.all()
@@ -117,10 +120,7 @@ def create_events_of_tournament(rubric_id):
                 page = 1
                 while True:
                     querystring = {"locale": locale, "tournament_stage_id": str(stage.stage_id), "page": str(page)}
-                    rubrics = Rubrics.objects.get(
-                        # second_api=True,
-                        api_id=rubric_id
-                    )
+
                     second_response = requests.get(
                         second_url,
                         headers=HEADER_FOR_SECOND_API,
@@ -294,8 +294,11 @@ def create_events_of_tournament_id36():
 def fetch_event_data(rubric_id):
     incidents_url = "https://flashlive-sports.p.rapidapi.com/v1/events/summary-incidents"
     statistics_url = "https://flashlive-sports.p.rapidapi.com/v1/events/statistics"
-    incidents_events = Events.objects.filter(status=1, rubrics_api_id=rubric_id)
-    gamestatistic_events = Events.objects.filter(status=1, rubrics_api_id=rubric_id)
+    rubrics = Rubrics.objects.get(
+        api_id=rubric_id
+    )
+    incidents_events = Events.objects.filter(status=1, rubrics=rubrics)
+    gamestatistic_events = Events.objects.filter(status=1, rubrics=rubrics)
     today = datetime.now().date()
     tomorrow = today - timedelta(days=1)
 
@@ -305,7 +308,7 @@ def fetch_event_data(rubric_id):
     events = Events.objects.filter(
         ~Q(status=2),
         (Q(start_at__startswith=today_str) | Q(start_at__startswith=tomorrow_str)),
-        rubrics_api_id=rubric_id,
+        rubrics=rubrics,
     )
     url = "https://flashlive-sports.p.rapidapi.com/v1/events/data"
     for event in events:
@@ -360,7 +363,7 @@ def fetch_event_data(rubric_id):
                     for item in data_items:
                         incident, created = event.incidents.get_or_create(
                             incident_api_id=item.get('INCIDENT_ID'),
-                            rubrics_api_id=rubric_id,
+                            rubrics=rubrics,
                             defaults={
                                 "incident_team": item.get('INCIDENT_TEAM'),
                                 "time": item.get('INCIDENT_TIME', '0')
@@ -447,6 +450,9 @@ def get_events_tommorow(sport_id):
     url = "https://flashlive-sports.p.rapidapi.com/v1/events/list"
     querystring = {"indent_days": "0", "timezone": "-4", "locale": "ru_RU", "sport_id": str(sport_id)}
     retries = 0
+    rubrics = Rubrics.objects.get(
+        api_id=sport_id
+    )
     while retries < MAX_RETRIES:
         response = requests.get(url, headers=HEADER_FOR_SECOND_API, params=querystring)
         if response.status_code == 200:
@@ -465,7 +471,7 @@ def get_events_tommorow(sport_id):
                 if Season.objects.filter(season_id=tournament_id).exists():
                     season = Season.objects.filter(season_id=tournament_id).first()
                 else:
-                    season = Season.objects.create(rubrics_api_id=sport_id, season_id=tournament_id, eague_name=league_name, country=country , logo_league = normal_ti)
+                    season = Season.objects.create(rubrics=rubrics, season_id=tournament_id, eague_name=league_name, country=country , logo_league = normal_ti)
 
                 events_list = []
                 for event in events:
@@ -492,7 +498,7 @@ def get_events_tommorow(sport_id):
                                 second_api_team_id=event.get("HOME_PARTICIPANT_IDS")[-1],
                                 name=event.get("HOME_NAME"),
                                 logo=correct_home_logo,
-                                rubrics_api_id=sport_id,
+                                rubrics=rubrics,
                             )
 
                         if Team.objects.filter(second_api_team_id=event.get("AWAY_PARTICIPANT_IDS")[-1]).exists():
@@ -503,12 +509,12 @@ def get_events_tommorow(sport_id):
                                 second_api_team_id=event.get("AWAY_PARTICIPANT_IDS")[-1],
                                 name=event.get("AWAY_NAME"),
                                 logo=correct_away_logo,
-                                rubrics_api_id=sport_id,
+                                rubrics=rubrics,
                             )
-                        if not Events.objects.filter(rubrics_api_id=sport_id,
+                        if not Events.objects.filter(rubrics=rubrics,
                                                      second_event_api_id=event.get("EVENT_ID")).exists():
                             events_list.append(Events(
-                                rubrics_api_id=sport_id,
+                                rubrics=rubrics,
                                 second_event_api_id=event.get("EVENT_ID"),
                                 start_at=datetime.utcfromtimestamp(event.get("START_TIME")),
                                 name=league_name,
@@ -657,7 +663,7 @@ def get_match_stream_link():
             date_only = date.split("T")[0]
             embed = item.get("embed")
             name = item.get("competition").get("name")
-            event = Events.objects.filter(rubrics_api_id=rubric_id, home_team__name=side1, away_team__name=side2,
+            event = Events.objects.filter(rubrics__api_id=rubric_id, home_team__name=side1, away_team__name=side2,
                                           start_at__startswith=date_only).first()
             try:
                 event.match_stream_link = embed
@@ -727,7 +733,7 @@ def create_additional_info_for_events(rubric_id):
                         event.save()
             event.h2h_status = True
             event.save()
-    events = Events.objects.filter(rubrics_api_id=rubric_id)
+    events = Events.objects.filter(rubrics=rubric)
     for event in events:
         response = requests.get(
             url="https://flashlive-sports.p.rapidapi.com/v1/events/lineups",
