@@ -461,8 +461,10 @@ def get_events_tommorow(sport_id):
                 league_name = league.get("NAME","")
                 country_name =league.get("COUNTRY_NAME","Мир")
                 tournament_image =league.get("TOURNAMENT_IMAGE","")
+                if tournament_image:
+                    normal_ti = tournament_image.replace('www.', 'static.')
                 tournament_id =league.get("TOURNAMENT_SEASON_ID","")
-                normal_ti = tournament_image.replace('www.', 'static.')
+
                 events = league.get("EVENTS")
                 if Country.objects.filter(name=country_name).exists():
                     country =Country.objects.filter(name=country_name).first()
