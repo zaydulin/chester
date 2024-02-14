@@ -291,8 +291,7 @@ CELERY_BEAT_SCHEDULE = {
     "get_events_tommorow_id1": {
         "task": "events.tasks.get_events_tommorow_id1",
         "schedule": crontab(
-            hour="1",
-            minute="20",
+            hour="*/1",
         ),
     },
     "get_events_tommorow_id2": {
