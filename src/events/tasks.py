@@ -58,11 +58,16 @@ def generate_event_slug(home_team, away_team, start_at):
 def clear_dublicate_events():
     duplicate_ids = Events.objects.values('second_event_api_id').annotate(count=Count('second_event_api_id')).filter(
         count__gt=1)
-    count = 0
-    # Удаляем объекты, у которых значение second_event_api_id повторяется
+
+    # Оставляем один объект с каждым значением second_event_api_id
     for duplicate_id in duplicate_ids:
-        Events.objects.filter(second_event_api_id=duplicate_id['second_event_api_id']).delete()
-        count +=1
+        # Получаем первый объект с заданным second_event_api_id
+        keep_event = Events.objects.filter(second_event_api_id=duplicate_id['second_event_api_id']).first()
+        # Получаем все объекты, кроме первого
+        delete_events = Events.objects.filter(second_event_api_id=duplicate_id['second_event_api_id']).exclude(
+            id=keep_event.id)
+        # Удаляем все объекты, кроме первого
+        delete_events.delete()
     return {"response": f"Одинаковые события удалены - кол-во = {count} "}
 
 

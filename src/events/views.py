@@ -20,10 +20,16 @@ def clear_db(request):
     duplicate_ids = Events.objects.values('second_event_api_id').annotate(count=Count('second_event_api_id')).filter(
         count__gt=1)
 
-    # Удаляем объекты, у которых значение second_event_api_id повторяется
+    # Оставляем один объект с каждым значением second_event_api_id
     for duplicate_id in duplicate_ids:
-        Events.objects.filter(second_event_api_id=duplicate_id['second_event_api_id']).delete()
-    return HttpResponse(f'ok ')
+        # Получаем первый объект с заданным second_event_api_id
+        keep_event = Events.objects.filter(second_event_api_id=duplicate_id['second_event_api_id']).first()
+        # Получаем все объекты, кроме первого
+        delete_events = Events.objects.filter(second_event_api_id=duplicate_id['second_event_api_id']).exclude(id=keep_event.id)
+        # Удаляем все объекты, кроме первого
+        delete_events.delete()
+
+    return HttpResponse('ok')
 
 class HomeView(CustomHtmxMixin, TemplateView):
     """Категории"""
