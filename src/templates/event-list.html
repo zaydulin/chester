@@ -175,7 +175,7 @@
                                     hx-push-url="true"
                                     hx-indicator="#content-loader"
                                     hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''"
-                                    class="events__toggle {% if contexturl  == 'now' %}active{% endif %}"
+                                    class="events__toggle {% if contexturl  == 'now' or  contexturl  == None %}active{% endif %}"
                             >Прямой эфир</a
                             >
 
