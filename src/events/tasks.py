@@ -330,7 +330,7 @@ def fetch_event_data(rubric_id):
     )
     url = "https://flashlive-sports.p.rapidapi.com/v1/events/data"
     for event in events:
-        time.sleep(0.2)
+        time.sleep(0.5)
         querystring = {"locale": "en_INT", "event_id": event.second_event_api_id}
         response = requests.get(url, headers=HEADER_FOR_SECOND_API, params=querystring)
         if response.status_code == 200:
@@ -343,7 +343,7 @@ def fetch_event_data(rubric_id):
             return {"response": f"Error fetch - {response.status_code} - {response.json()}"}
     # incidents
     for event in incidents_events:
-        time.sleep(0.2)
+        time.sleep(0.5)
         incidents_response = requests.get(
             incidents_url,
             headers=HEADER_FOR_SECOND_API,
@@ -399,7 +399,7 @@ def fetch_event_data(rubric_id):
             return {"response": f"Error incidents - {incidents_response.status_code} - {incidents_response.json()}"}
     # gamestatistic
     for event in gamestatistic_events:
-        time.sleep(0.2)
+        time.sleep(0.5)
         gamestatistic_response = requests.get(
             statistics_url,
             headers=HEADER_FOR_SECOND_API,
