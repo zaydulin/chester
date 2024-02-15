@@ -1,3 +1,4 @@
+{% csrf_token %}
 {% for league_name, events_in_league in events.items %}
                     {% if forloop.last %}
                         {% if page_obj.number == paginator.num_pages %}
@@ -73,7 +74,7 @@
                                         event.preventDefault();
 
                                         var event_id = "{{ league_name.id }}";
-                                        const csrftoken = {% csrf_token %};
+                                        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
                                         if ("{{ user.is_authenticated }}" === "True") {
                                             var isAlreadyActive = $(this).hasClass("active");
@@ -246,7 +247,7 @@
                                                     event.preventDefault();
 
                                                     var event_id = "{{ event.id }}";
-                                                    const csrftoken = {% csrf_token %};
+                                                    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
                                                     if ("{{ user.is_authenticated }}" === "True") {
                                                         var isAlreadyActive = $(this).hasClass("active");
