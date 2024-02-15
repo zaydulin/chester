@@ -19,7 +19,7 @@ from django.template.loader import render_to_string
 def clear_db(request):
     duplicate_ids = Events.objects.values('second_event_api_id').annotate(count=Count('second_event_api_id')).filter(
         count__gt=1)
-
+    count=0
     # Оставляем один объект с каждым значением second_event_api_id
     for duplicate_id in duplicate_ids:
         # Получаем первый объект с заданным second_event_api_id
@@ -28,8 +28,8 @@ def clear_db(request):
         delete_events = Events.objects.filter(second_event_api_id=duplicate_id['second_event_api_id']).exclude(id=keep_event.id)
         # Удаляем все объекты, кроме первого
         delete_events.delete()
-
-    return HttpResponse('ok')
+        count+= 1
+    return HttpResponse(f'ok - count{count }')
 
 class HomeView(CustomHtmxMixin, TemplateView):
     """Категории"""
