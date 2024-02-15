@@ -540,6 +540,7 @@ def get_events_tommorow(sport_id):
                                                              datetime.utcfromtimestamp(event.get("START_TIME"))),
                                 ))
                     Events.objects.bulk_create(events_list)
+                break
             elif response.status_code == 429:
                 retries += 1
                 if retries < MAX_RETRIES:
