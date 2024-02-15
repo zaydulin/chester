@@ -355,18 +355,15 @@ def fetch_event_data(rubric_id):
                     "home_score": data.get('RESULT_HOME', 0),
                     "away_score": data.get('RESULT_AWAY', 0)
                 }
-                period, created = Periods.objects.get_or_create(
-                    period_number=data.get('STAGE_NAME', 0),
-                    event_api_id=event.second_event_api_id,
-                    defaults=fields
-                )
-                if not created:
-                    for field, value in fields.items():
-                        if getattr(period, field) != value:
-                            setattr(period, field, value)
-                period.save()
-                event.save()
+                if Periods.objects.filter(period_number=data.get('STAGE_NAME', 0),event_api_id=event.second_event_api_id,home_score=data.get('RESULT_HOME', 0),away_score =  data.get('RESULT_AWAY', 0)).exists():
+                    period = Periods.objects.filter(period_number=data.get('STAGE_NAME', 0),event_api_id=event.second_event_api_id,home_score=data.get('RESULT_HOME', 0),away_score =  data.get('RESULT_AWAY', 0)).first()
+                else:
+                    period = Periods.objects.create(period_number=data.get('STAGE_NAME', 0),
+                                                    event_api_id=event.second_event_api_id,
+                                                    home_score=data.get('RESULT_HOME', 0),
+                                                    away_score=data.get('RESULT_AWAY', 0))
                 event.periods.add(period)
+                event.save()
                 data_items = data.get("ITEMS", [])
                 for item in data_items:
                     incident, created = event.incidents.get_or_create(
@@ -394,7 +391,7 @@ def fetch_event_data(rubric_id):
                     event.save()
 
         else:
-            return {"response": f"Error fetch - {incidents_response.status_code} - {incidents_response.json()}"}
+            return {"response": f"Error incidents - {incidents_response.status_code} - {incidents_response.json()}"}
     # gamestatistic
     for event in gamestatistic_events:
         gamestatistic_response = requests.get(
