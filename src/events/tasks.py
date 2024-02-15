@@ -371,7 +371,7 @@ def fetch_event_data(rubric_id):
                         incident = event.incidents.get(incident_api_id=incident_id, rubrics=rubric)
                     else:
                         incident = Incidents.objects.create(
-                            rubrics=rubric,
+                            rubrics=rubrics,
                             incident_api_id=incident_id,
                             incident_team=incident_team,
                             time=incident_time
@@ -394,7 +394,7 @@ def fetch_event_data(rubric_id):
     for event in gamestatistic_events:
         time.sleep(1)
         gamestatistic_querystring = {"locale": "ru_RU", "event_id": event.second_event_api_id}
-        gamestatistic_response = requests.get(url, headers=HEADER_FOR_SECOND_API, params=gamestatistic_querystring)
+        gamestatistic_response = requests.get(statistics_url, headers=HEADER_FOR_SECOND_API, params=gamestatistic_querystring)
         if gamestatistic_response.status_code == 200:
             gamestatistic_response_data = gamestatistic_response.json().get("DATA", [])
             for data in gamestatistic_response_data:
