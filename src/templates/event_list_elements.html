@@ -73,7 +73,7 @@
                                         event.preventDefault();
 
                                         var event_id = "{{ league_name.id }}";
-                                        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+                                        const csrftoken = {% csrf_token %};
 
                                         if ("{{ user.is_authenticated }}" === "True") {
                                             var isAlreadyActive = $(this).hasClass("active");
