@@ -355,13 +355,16 @@ def fetch_event_data(rubric_id):
                     "home_score": data.get('RESULT_HOME', 0),
                     "away_score": data.get('RESULT_AWAY', 0)
                 }
-                if Periods.objects.filter(period_number=data.get('STAGE_NAME', 0),event_api_id=event.second_event_api_id,home_score=data.get('RESULT_HOME', 0),away_score =  data.get('RESULT_AWAY', 0)).exists():
-                    period = Periods.objects.filter(period_number=data.get('STAGE_NAME', 0),event_api_id=event.second_event_api_id,home_score=data.get('RESULT_HOME', 0),away_score =  data.get('RESULT_AWAY', 0)).first()
-                else:
-                    period = Periods.objects.create(period_number=data.get('STAGE_NAME', 0),
-                                                    event_api_id=event.second_event_api_id,
-                                                    home_score=data.get('RESULT_HOME', 0),
-                                                    away_score=data.get('RESULT_AWAY', 0))
+                period, created = Periods.objects.get_or_create(
+                    period_number=data.get('STAGE_NAME', 0),
+                    event_api_id=event.second_event_api_id,
+                    defaults=fields
+                )
+                if not created:
+                    for field, value in fields.items():
+                        if getattr(period, field) != value:
+                            setattr(period, field, value)
+                period.save()
                 event.periods.add(period)
                 event.save()
                 data_items = data.get("ITEMS", [])
