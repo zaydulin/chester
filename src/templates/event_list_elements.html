@@ -132,7 +132,9 @@
                                             hx-push-url="true"
                                             hx-indicator="#content-loader"
                                             hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''">
+                                        {% if league_name.logo_league %}
                                         <img width="25" height="25" src="{{ league_name.logo_league }}" alt="logo" />
+                                        {%endif%}
                                         <span>{{ league_name }}</span>
                                     </a>
                                 </div>
