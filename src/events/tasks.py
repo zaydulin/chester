@@ -353,16 +353,16 @@ def fetch_event_data(rubric_id):
                 stage_name = data.get('STAGE_NAME')
                 if event.periods.filter(period_number=stage_name, event_api_id=event.second_event_api_id).exists():
                     period = event.periods.get(period_number=stage_name)
-                    period.home_score = data.get('RESULT_HOME')
-                    period.away_score = data.get('RESULT_AWAY')
+                    period.home_score = data.get('RESULT_HOME',0)
+                    period.away_score = data.get('RESULT_AWAY',0)
                     period.save()
                 else:
                     period = Periods.objects.create(event_api_id=event.second_event_api_id,
-                                                    home_score=data.get('RESULT_HOME'),
-                                                    away_score=data.get('RESULT_AWAY'), period_number=stage_name)
+                                                    home_score=data.get('RESULT_HOME',0),
+                                                    away_score=data.get('RESULT_AWAY',0), period_number=stage_name)
                     event.periods.add(period)
                     event.save()
-                data_items = data.get("ITEMS")
+                data_items = data.get("ITEMS",[])
                 for item in data_items:
                     incident_id = item.get('INCIDENT_ID')
                     incident_team = item.get('INCIDENT_TEAM')
@@ -376,7 +376,7 @@ def fetch_event_data(rubric_id):
                             incident_team=incident_team,
                             time=incident_time
                         )
-                    incident_participants = item.get('INCIDENT_PARTICIPANTS')
+                    incident_participants = item.get('INCIDENT_PARTICIPANTS',[])
                     for participant in incident_participants:
                         incident_type = participant.get("INCIDENT_TYPE")
                         participant_name = participant.get("PARTICIPANT_NAME")
@@ -399,9 +399,9 @@ def fetch_event_data(rubric_id):
             gamestatistic_response_data = gamestatistic_response.json().get("DATA", [])
             for data in gamestatistic_response_data:
                 stage_name = data.get("STAGE_NAME")
-                groups = data.get("GROUPS")
+                groups = data.get("GROUPS",[])
                 for group in groups:
-                    items = group.get("ITEMS")
+                    items = group.get("ITEMS",[])
                     for item in items:
                         incident_name = item.get("INCIDENT_NAME")
                         value_home = item.get("VALUE_HOME")
