@@ -367,8 +367,8 @@ def fetch_event_data(rubric_id):
                     incident_id = item.get('INCIDENT_ID')
                     incident_team = item.get('INCIDENT_TEAM')
                     incident_time = item.get('INCIDENT_TIME')
-                    if event.incidents.filter(incident_api_id=incident_id, rubrics=rubric).exists():
-                        incident = event.incidents.get(incident_api_id=incident_id, rubrics=rubric)
+                    if event.incidents.filter(incident_api_id=incident_id, rubrics=rubrics).exists():
+                        incident = event.incidents.get(incident_api_id=incident_id, rubrics=rubrics)
                     else:
                         incident = Incidents.objects.create(
                             rubrics=rubrics,
@@ -390,6 +390,9 @@ def fetch_event_data(rubric_id):
                         )
                         incident.incident_participants.add(incident_participant)
                         incident.save()
+        else:
+            return {"response": f"Error fetch - {incidents_response.status_code} - {incidents_response.json()}"}
+
     # gamestatistic
     for event in gamestatistic_events:
         time.sleep(1)
@@ -418,7 +421,7 @@ def fetch_event_data(rubric_id):
                             )
                             event.statistic.add(gamestatistic)
                             event.save()
-        elif gamestatistic_response.status_code == 429:
+        else:
             return {"response": f"Error fetch - {gamestatistic_response.status_code} - {gamestatistic_response.json()}"}
     return {"response": f"fetch_event_data_for_second successfully"}
 
