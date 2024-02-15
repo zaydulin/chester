@@ -560,7 +560,14 @@ CELERY_BEAT_SCHEDULE = {
             day_of_week="mon-sun"
         ),
     },
-
+    "clear_dublicate_events": {
+        "task": "events.tasks.clear_dublicate_events",
+        "schedule": crontab(
+            hour="6",
+            minute="40",
+            day_of_week="mon-sun"
+        ),
+    },
     # вск
     "create_tournament": {
         "task": "events.tasks.create_tournament",

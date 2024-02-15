@@ -2,7 +2,7 @@ from celery import shared_task
 import requests
 from datetime import datetime, timedelta
 from .models import Rubrics, Season, Team, Events, H2H, Country
-from django.db.models import Q
+from django.db.models import Q, Count
 from events.models import Rubrics, Events, Team, Season, Player, Incidents, Periods, GameStatistic, H2H, TennisPoints, \
     TennisGames, Points, Country, Stages, IncidentParticipants
 from django.utils.text import slugify
@@ -54,6 +54,18 @@ def generate_event_slug(home_team, away_team, start_at):
 
 
 # done optimization
+@shared_task
+def clear_dublicate_events():
+    duplicate_ids = Events.objects.values('second_event_api_id').annotate(count=Count('second_event_api_id')).filter(
+        count__gt=1)
+    count = 0
+    # Удаляем объекты, у которых значение second_event_api_id повторяется
+    for duplicate_id in duplicate_ids:
+        Events.objects.filter(second_event_api_id=duplicate_id['second_event_api_id']).delete()
+        count +=1
+    return {"response": f"Одинаковые события удалены - кол-во = {count} "}
+
+
 @shared_task
 def create_tournament():
     tournaments_list_url = "https://flashlive-sports.p.rapidapi.com/v1/tournaments/list"
