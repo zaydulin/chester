@@ -66,12 +66,12 @@
                         </button>
                     </form>
 
-                    <span>{% if season.season_name == 'None' %}{{ season.league_name }}{%else%}{{ season.season_name }}{%endif%}</span>
+                    <span>{% if not season.season_name %}{{ season.league_name }}{%else%}{{ season.season_name }}{%endif%}</span>
                 </div>
                 <div class="event-info__teams">
                     <div class="event-info__team event-team home">
                         <div class="event-team__team">
-                            <h2 class="event-team__name">{% if season.season_name == 'None' %}{{ season.league_name }}{%else%}{{ season.season_name }}{%endif%}</h2>
+                            <h2 class="event-team__name">{% if not season.season_name %}{{ season.league_name }}{%else%}{{ season.season_name }}{%endif%}</h2>
                             {% if season.logo_league %}
                             <img src="{{ season.logo_league }}" width="46" height="46" alt="{{ season.logo_league }}" />
                             {% endif %}
@@ -167,7 +167,7 @@
                                 </a>
                             </div>
                             {% for event in events_in_league %}
-                            {% if event.status != 1 and event.status != 3 %}
+                            {% if event.status == 2 %}
                             <div class="event__match-list">
                                 <a href="{% url 'events_detail' event.slug %}"
                                    hx-get="{% url 'events_detail' event.slug  %}"
@@ -350,7 +350,7 @@
                                 </a>
                             </div>
                             {% for event in events_in_league %}
-                            {% if event.status != 2 and event.status != 4 %}
+                            {% if event.status == 3 %}
                             <div class="event__match-list">
                                 <a
                                         href="{% url 'events_detail' event.slug %}"
