@@ -167,7 +167,7 @@
                                 </a>
                             </div>
                             {% for event in events_in_league %}
-                            {% if event.status == 2 %}
+                            {% if event.status == 1 or event.status == 3  %}
                             <div class="event__match-list">
                                 <a href="{% url 'events_detail' event.slug %}"
                                    hx-get="{% url 'events_detail' event.slug  %}"
@@ -350,7 +350,7 @@
                                 </a>
                             </div>
                             {% for event in events_in_league %}
-                            {% if event.status == 3 %}
+                            {% if event.status == 2 %}
                             <div class="event__match-list">
                                 <a
                                         href="{% url 'events_detail' event.slug %}"
