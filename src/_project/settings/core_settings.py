@@ -94,11 +94,6 @@ DATABASES = {
         "PASSWORD": env.str("POSTGRES_PASSWORD", "qwe123QWE"),
         "HOST": env.str("DJANGO_POSTGRES_HOST", "localhost"),
         "PORT": env.int("DJANGO_POSTGRES_PORT", 5432),
-        "POOL_OPTIONS" : {
-            "POOL_SIZE": 10,
-            "MAX_OVERFLOW": -1,
-            "RECYCLE": 24 * 60 * 60
-        }
     }
 }
 # DATABASES = {
