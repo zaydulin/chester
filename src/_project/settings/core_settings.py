@@ -292,6 +292,7 @@ CELERY_BEAT_SCHEDULE = {
         "schedule": crontab(
             hour="1",
             minute="30",
+            day_of_week="mon-sun"
         ),
     },
     "get_events_tommorow_id2": {
@@ -299,6 +300,7 @@ CELERY_BEAT_SCHEDULE = {
         "schedule": crontab(
             hour="1",
             minute="30",
+            day_of_week="mon-sun"
         ),
     },
     "get_events_tommorow_id3": {
@@ -313,12 +315,14 @@ CELERY_BEAT_SCHEDULE = {
         "schedule": crontab(
             hour="1",
             minute="50",
+            day_of_week="mon-sun"
         ),
     },
     "get_events_tommorow_id6": {
         "task": "events.tasks.get_events_tommorow_id6",
         "schedule": crontab(
             hour="2",
+            day_of_week="mon-sun"
         ),
     },
     "get_events_tommorow_id7": {
@@ -326,6 +330,7 @@ CELERY_BEAT_SCHEDULE = {
         "schedule": crontab(
             hour="2",
             minute="10",
+            day_of_week="mon-sun"
         ),
     },
     "get_events_tommorow_id12": {
@@ -333,6 +338,7 @@ CELERY_BEAT_SCHEDULE = {
         "schedule": crontab(
             hour="2",
             minute="20",
+            day_of_week="mon-sun"
         ),
     },
     "get_events_tommorow_id13": {
@@ -340,6 +346,7 @@ CELERY_BEAT_SCHEDULE = {
         "schedule": crontab(
             hour="2",
             minute="30",
+            day_of_week="mon-sun"
         ),
     },
     "get_events_tommorow_id15": {
@@ -347,6 +354,7 @@ CELERY_BEAT_SCHEDULE = {
         "schedule": crontab(
             hour="2",
             minute="40",
+            day_of_week="mon-sun"
         ),
     },
     "get_events_tommorow_id21": {
@@ -354,12 +362,14 @@ CELERY_BEAT_SCHEDULE = {
         "schedule": crontab(
             hour="2",
             minute="50",
+            day_of_week="mon-sun"
         ),
     },
     "get_events_tommorow_id25": {
         "task": "events.tasks.get_events_tommorow_id25",
         "schedule": crontab(
             hour="3",
+            day_of_week="mon-sun"
         ),
     },
     "get_events_tommorow_id36": {
@@ -367,6 +377,7 @@ CELERY_BEAT_SCHEDULE = {
         "schedule": crontab(
             hour="3",
             minute="10",
+            day_of_week="mon-sun"
         ),
     },
     #3:10 - ?
