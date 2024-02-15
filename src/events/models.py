@@ -203,7 +203,7 @@ class Periods(models.Model):
     event_api_id =models.CharField("ID API", max_length=150)
     home_score = models.IntegerField("Очки дома",default=0)
     away_score = models.IntegerField("Очки гостей",default=0)
-    period_number = models.CharField("Номер периода" , max_length=150)
+    period_number = models.CharField("Номер периода" , max_length=150,blank=True,null=True)
 
     def __str__(self):
         return f'{self.event_api_id} - Dom - {self.home_score} - Guests - {self.away_score} - Period - {self.period_number}'
