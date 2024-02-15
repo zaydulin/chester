@@ -22,7 +22,6 @@
         <div>
             <div class="event-info__score">
                 <div class="event-info__tournament">
-
                     <form method="post"
                           action="{% url 'toggle_bookmark' 'season' season.id %}"
                           hx-get="{% url 'toggle_bookmark' 'season' season.id  %}"
@@ -67,15 +66,15 @@
                         </button>
                     </form>
 
-
-
-                    <span>{{ season.season_name }}</span>
+                    <span>{% if season.season_name == 'None' %}{{ season.league_name }}{%else%}{{ season.season_name }}{%endif%}</span>
                 </div>
                 <div class="event-info__teams">
                     <div class="event-info__team event-team home">
                         <div class="event-team__team">
-                            <h2 class="event-team__name">{{ season.season_name  }}</h2>
+                            <h2 class="event-team__name">{% if season.season_name == 'None' %}{{ season.league_name }}{%else%}{{ season.season_name }}{%endif%}</h2>
+                            {% if season.logo_league %}
                             <img src="{{ season.logo_league }}" width="46" height="46" alt="{{ season.logo_league }}" />
+                            {% endif %}
                         </div>
 
                     </div>
@@ -102,7 +101,7 @@
                     </label>
                 </div>
             </div>
-            <div class="event__info-h2h h2h none">
+            <div class="event-info__main none">
                 <div class="event-info__main-left">
                     {% for baner in gorizont_baners_top %}
                     <a href="{{ baner.slug }}" class="adv-link"><img src="{{ baner.baner.url }}" alt="logo" /></a>
@@ -161,7 +160,9 @@
                                    hx-push-url="true"
                                    hx-indicator="#content-loader"
                                    hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''">
+                                    {% if league_name.logo_league %}
                                     <img width="25" height="25" src="{{ league_name.logo_league }}" alt="logo" />
+                                    {%endif %}
                                     <span>{{ league_name }}</span>
                                 </a>
                             </div>
@@ -342,7 +343,9 @@
                                    hx-push-url="true"
                                    hx-indicator="#content-loader"
                                    hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''">
+                                    {% if league_name.logo_league %}
                                     <img width="25" height="25" src="{{ league_name.logo_league }}" alt="logo" />
+                                    {%endif %}
                                     <span>{{ league_name }}</span>
                                 </a>
                             </div>
