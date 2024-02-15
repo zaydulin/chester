@@ -135,7 +135,7 @@
                                         {% if league_name.logo_league %}
                                         <img width="25" height="25" src="{{ league_name.logo_league }}" alt="logo" />
                                         {%endif%}
-                                        <span>{{ league_name }}</span>
+                                        <span  {% if not league_name.logo_league %}   style=" margin-left: 55px;"{%endif%} >{{ league_name }}</span>
                                     </a>
                                 </div>
                                 <div class="event__match-list">
