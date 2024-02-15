@@ -330,7 +330,6 @@ def fetch_event_data(rubric_id):
     )
     url = "https://flashlive-sports.p.rapidapi.com/v1/events/data"
     for event in events:
-        time.sleep(1)
         querystring = {"locale": "en_INT", "event_id": event.second_event_api_id}
         response = requests.get(url, headers=HEADER_FOR_SECOND_API, params=querystring)
         if response.status_code == 200:
@@ -343,72 +342,86 @@ def fetch_event_data(rubric_id):
             return {"response": f"Error fetch - {response.status_code} - {response.json()}"}
     # incidents
     for event in incidents_events:
-        time.sleep(1)
-        incidents_querystring = {"locale": "ru_RU", "event_id": event.second_event_api_id}
-        incidents_response = requests.get(incidents_url, headers=HEADER_FOR_SECOND_API,
-                                          params=incidents_querystring)
+        incidents_response = requests.get(
+            incidents_url,
+            headers=HEADER_FOR_SECOND_API,
+            params={"locale": "ru_RU", "event_id": event.second_event_api_id}
+        )
+
         if incidents_response.status_code == 200:
             incidents_response_data = incidents_response.json().get("DATA", [])
             for data in incidents_response_data:
-                stage_name = data.get('STAGE_NAME')
-                if event.periods.filter(period_number=stage_name, event_api_id=event.second_event_api_id).exists():
-                    period = event.periods.get(period_number=stage_name)
-                    period.home_score = data.get('RESULT_HOME',0)
-                    period.away_score = data.get('RESULT_AWAY',0)
-                    period.save()
-                else:
-                    period = Periods.objects.create(event_api_id=event.second_event_api_id,
-                                                    home_score=data.get('RESULT_HOME',0),
-                                                    away_score=data.get('RESULT_AWAY',0), period_number=stage_name)
-                    event.periods.add(period)
-                    event.save()
-                data_items = data.get("ITEMS",[])
+                fields = {
+                    "home_score": data.get('RESULT_HOME', 0),
+                    "away_score": data.get('RESULT_AWAY', 0)
+                }
+                period, created = Periods.objects.get_or_create(
+                    period_number=data.get('STAGE_NAME', 0),
+                    event_api_id=event.second_event_api_id,
+                    defaults=fields
+                )
+                if not created:
+                    for field, value in fields.items():
+                        if getattr(period, field) != value:
+                            setattr(period, field, value)
+                period.save()
+                event.periods.add(period)
+                event.save()
+                data_items = data.get("ITEMS", [])
                 for item in data_items:
-                    incident_id = item.get('INCIDENT_ID')
-                    incident_team = item.get('INCIDENT_TEAM')
-                    incident_time = item.get('INCIDENT_TIME')
-                    if event.incidents.filter(incident_api_id=incident_id, rubrics=rubrics).exists():
-                        incident = event.incidents.get(incident_api_id=incident_id, rubrics=rubrics)
-                    else:
-                        incident = Incidents.objects.create(
-                            rubrics=rubrics,
-                            incident_api_id=incident_id,
-                            incident_team=incident_team,
-                            time=incident_time
+                    incident, created = event.incidents.get_or_create(
+                        incident_api_id=item.get('INCIDENT_ID'),
+                        rubrics=rubrics,
+                        defaults={
+                            "incident_team": item.get('INCIDENT_TEAM'),
+                            "time": item.get('INCIDENT_TIME', '0')
+                        }
+                    )
+                    incident_participants_objs = []
+                    for participant in item.get('INCIDENT_PARTICIPANTS', []):
+                        incident_participant, created = IncidentParticipants.objects.get_or_create(
+                            participant_id=participant.get("PARTICIPANT_ID"),
+                            defaults={
+                                "incident_type": participant.get("INCIDENT_TYPE"),
+                                "participant_name": participant.get("PARTICIPANT_NAME"),
+                                "incident_name": participant.get("PARTICIPANT_NAME"),
+                            }
                         )
-                    incident_participants = item.get('INCIDENT_PARTICIPANTS',[])
-                    for participant in incident_participants:
-                        incident_type = participant.get("INCIDENT_TYPE")
-                        participant_name = participant.get("PARTICIPANT_NAME")
-                        participant_id = participant.get("PARTICIPANT_ID")
-                        incident_name = participant.get("PARTICIPANT_NAME")
-                        incident_participant = IncidentParticipants.objects.create(
-                            incident_type=incident_type,
-                            participant_name=participant_name,
-                            incident_name=incident_name,
-                            participant_id=participant_id
-                        )
-                        incident.incident_participants.add(incident_participant)
-                        incident.save()
-        else:
-            return {"response": f"Error fetch - {incidents_response.status_code} - {incidents_response.json()}"}
+                        incident_participants_objs.append(incident_participant)
+                    incident.incident_participants.add(*incident_participants_objs)
+                    incident.save()
+                    event.incidents.add(incident)
+                    event.save()
 
+        else:
+            return {"response": f"Error incidents - {incidents_response.status_code} - {incidents_response.json()}"}
     # gamestatistic
     for event in gamestatistic_events:
-        time.sleep(1)
-        gamestatistic_querystring = {"locale": "ru_RU", "event_id": event.second_event_api_id}
-        gamestatistic_response = requests.get(statistics_url, headers=HEADER_FOR_SECOND_API, params=gamestatistic_querystring)
+        gamestatistic_response = requests.get(
+            statistics_url,
+            headers=HEADER_FOR_SECOND_API,
+            params={
+                "locale": "ru_RU",
+                "event_id": event.second_event_api_id}
+        )
         if gamestatistic_response.status_code == 200:
             gamestatistic_response_data = gamestatistic_response.json().get("DATA", [])
             for data in gamestatistic_response_data:
-                stage_name = data.get("STAGE_NAME")
-                groups = data.get("GROUPS",[])
+                stage_name = data.get("STAGE_NAME", 0)
+                groups = data.get("GROUPS")
                 for group in groups:
-                    items = group.get("ITEMS",[])
+                    items = group.get("ITEMS", [])
                     for item in items:
                         incident_name = item.get("INCIDENT_NAME")
                         value_home = item.get("VALUE_HOME")
                         value_away = item.get("VALUE_AWAY")
+                        if event.statistic.filter(name=incident_name).exists():
+                            gamestatistic = event.statistic.filter(name=incident_name).first()
+                            gamestatistic.period = stage_name
+                            gamestatistic.home = value_home
+                            gamestatistic.away = value_away
+                            gamestatistic.save()
+
                         if event.statistic.filter(period=stage_name, name=incident_name, home=value_home,
                                                   away=value_away).exists():
                             pass
@@ -420,8 +433,8 @@ def fetch_event_data(rubric_id):
                                 away=value_away
                             )
                             event.statistic.add(gamestatistic)
-                            event.save()
-        else:
+                        event.save()
+        else :
             return {"response": f"Error fetch - {gamestatistic_response.status_code} - {gamestatistic_response.json()}"}
     return {"response": f"fetch_event_data_for_second successfully"}
 
