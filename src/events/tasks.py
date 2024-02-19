@@ -12,7 +12,7 @@ from mainapp.models import GeneralSettings
 
 
 general_settings = GeneralSettings.objects.first()
-MAX_RETRIES = 10
+MAX_RETRIES = 2
 HEADER_FOR_SECOND_API =  {
     'X-RapidAPI-Key': str(general_settings.rapidapi_key_events),
     "X-RapidAPI-Host": "flashlive-sports.p.rapidapi.com"
