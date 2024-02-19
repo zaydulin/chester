@@ -586,6 +586,10 @@ CELERY_BEAT_SCHEDULE = {
         "task": "events.tasks.get_match_stream_link",
         "schedule": crontab(minute="*/20"),
     },
+    "update_events_id1": {
+        "task": "events.tasks.update_events_id1",
+        "schedule": crontab(minute="*/1"),
+    },
     "fetch_event_data_id1": {
         "task": "events.tasks.fetch_event_data_id1",
         "schedule": crontab(minute="*/2"),

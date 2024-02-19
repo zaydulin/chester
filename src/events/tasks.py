@@ -317,39 +317,38 @@ def fetch_event_data(rubric_id):
     )
     incidents_events = Events.objects.filter(status=1, rubrics=rubrics)
     gamestatistic_events = Events.objects.filter(status=1, rubrics=rubrics)
-    today = datetime.now().date()
-    tomorrow = today - timedelta(days=1)
 
-    today_str = today.strftime('%Y-%m-%d')
-    tomorrow_str = tomorrow.strftime('%Y-%m-%d')
-
-    events = Events.objects.filter(
-        ~Q(status=2),
-        (Q(start_at__startswith=today_str) | Q(start_at__startswith=tomorrow_str)),
-        rubrics=rubrics,
-    )
-    url = "https://flashlive-sports.p.rapidapi.com/v1/events/data"
-    for event in events:
-        retries = 0
-        while retries < MAX_RETRIES:
-            querystring = {"locale": "en_INT", "event_id": event.second_event_api_id}
-            response = requests.get(url, headers=HEADER_FOR_SECOND_API, params=querystring)
-            if response.status_code == 200:
-                response_data = response.json().get("DATA").get("EVENT")
-                event.home_score = response_data.get("HOME_SCORE_CURRENT")
-                event.away_score = response_data.get("AWAY_SCORE_CURRENT")
-                event.status = EVENT_STATUSES[response_data.get("STAGE_TYPE")]
-                event.save()
-                break
-            elif response.status_code == 429:
-                retries += 1
-                if retries < MAX_RETRIES:
-                    if retries == MAX_RETRIES:
-                        pass
-                    time.sleep(1)
-                    continue
-                else:
-                    pass
+    # today = datetime.now().date()
+    # tomorrow = today - timedelta(days=1)
+    # today_str = today.strftime('%Y-%m-%d')
+    # tomorrow_str = tomorrow.strftime('%Y-%m-%d')
+    # events = Events.objects.filter(
+    #     ~Q(status=2),
+    #     (Q(start_at__startswith=today_str) | Q(start_at__startswith=tomorrow_str)),
+    #     rubrics=rubrics,
+    # )
+    # url = "https://flashlive-sports.p.rapidapi.com/v1/events/data"
+    # for event in events:
+    #     retries = 0
+    #     while retries < MAX_RETRIES:
+    #         querystring = {"locale": "en_INT", "event_id": event.second_event_api_id}
+    #         response = requests.get(url, headers=HEADER_FOR_SECOND_API, params=querystring)
+    #         if response.status_code == 200:
+    #             response_data = response.json().get("DATA").get("EVENT")
+    #             event.home_score = response_data.get("HOME_SCORE_CURRENT")
+    #             event.away_score = response_data.get("AWAY_SCORE_CURRENT")
+    #             event.status = EVENT_STATUSES[response_data.get("STAGE_TYPE")]
+    #             event.save()
+    #             break
+    #         elif response.status_code == 429:
+    #             retries += 1
+    #             if retries < MAX_RETRIES:
+    #                 if retries == MAX_RETRIES:
+    #                     pass
+    #                 time.sleep(1)
+    #                 continue
+    #             else:
+    #                 pass
     # incidents
     for event in incidents_events:
         retries = 0
@@ -409,7 +408,7 @@ def fetch_event_data(rubric_id):
                 if retries < MAX_RETRIES:
                     if retries == MAX_RETRIES:
                         pass
-                    time.sleep(1)
+                    time.sleep(2)
                     continue
                 else:
                     pass
@@ -460,7 +459,7 @@ def fetch_event_data(rubric_id):
                 if retries < MAX_RETRIES:
                     if retries == MAX_RETRIES:
                         pass
-                    time.sleep(1)
+                    time.sleep(3)
                     continue
                 else:
                     pass
@@ -561,6 +560,41 @@ def get_events_tommorow(sport_id):
                 return {"response": f"Error fetch - {response.status_code} - {response.json()}"}
 
     return {"response": f"get_events_tommorow ok"}
+
+
+def update_events(sport_id):
+    url = "https://flashlive-sports.p.rapidapi.com/v1/events/live-update"
+    querystring = {"locale": "en_INT", "sport_id": str(sport_id)}
+    retries = 0
+    while retries < MAX_RETRIES:
+        response = requests.get(url, headers=HEADER_FOR_SECOND_API, params=querystring)
+        if response.status_code == 200:
+            response_data = response.json().get("DATA", [])
+            event_ids = [item.get('EVENT_ID', "") for item in response_data]
+            events = Events.objects.filter(second_event_api_id__in=event_ids)
+            for event, item in zip(events, response_data):
+                event.home_score = item.get("HOME_SCORE_CURRENT")
+                event.away_score = item.get("AWAY_SCORE_CURRENT")
+                start_at = datetime.utcfromtimestamp(item.get("STAGE_START_TIME"))
+                if start_at:
+                    event.start_at = start_at
+                event.half = item.get("STAGE")
+                event.status = EVENT_STATUSES.get(item.get("MERGE_STAGE_TYPE"))
+            Events.objects.bulk_update(events, ['home_score', 'away_score', 'start_at', 'half', 'status'])
+            break
+        elif response.status_code == 429:
+            retries += 1
+            if retries < MAX_RETRIES:
+                time.sleep(1)
+            else:
+                break
+        else:
+            break
+    return {"response": f"update_events successfully"}
+
+@shared_task
+def update_events_id1():
+    return update_events(1)
 
 @shared_task
 def get_events_tommorow_id1():
