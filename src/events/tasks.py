@@ -311,12 +311,12 @@ def create_events_of_tournament_id36():
 
 def fetch_event_data(rubric_id):
     incidents_url = "https://flashlive-sports.p.rapidapi.com/v1/events/summary-incidents"
-    statistics_url = "https://flashlive-sports.p.rapidapi.com/v1/events/statistics"
+
     rubrics = Rubrics.objects.get(
         api_id=rubric_id
     )
     incidents_events = Events.objects.filter(status=1, rubrics=rubrics)
-    gamestatistic_events = Events.objects.filter(status=1, rubrics=rubrics)
+
 
     today = datetime.now().date()
     tomorrow = today - timedelta(days=1)
@@ -412,6 +412,14 @@ def fetch_event_data(rubric_id):
                     continue
                 else:
                     pass
+
+    return {"response": f"fetch_event_data_for_second successfully"}
+def get_statistic_event(rubric_id):
+    rubrics = Rubrics.objects.get(
+        api_id=rubric_id
+    )
+    statistics_url = "https://flashlive-sports.p.rapidapi.com/v1/events/statistics"
+    gamestatistic_events = Events.objects.filter(status=1, rubrics=rubrics)
     # gamestatistic
     for event in gamestatistic_events:
         retries = 0
@@ -463,7 +471,44 @@ def fetch_event_data(rubric_id):
                     continue
                 else:
                     pass
-    return {"response": f"fetch_event_data_for_second successfully"}
+
+    return {"response": f"get_statistic_event successfully"}
+@shared_task
+def get_statistic_event_id1():
+    return get_statistic_event(1)
+@shared_task
+def get_statistic_event_id2():
+    return get_statistic_event(2)
+@shared_task
+def get_statistic_event_id3():
+    return get_statistic_event(3)
+@shared_task
+def get_statistic_event_id4():
+    return get_statistic_event(4)
+@shared_task
+def get_statistic_event_id6():
+    return get_statistic_event(6)
+@shared_task
+def get_statistic_event_id7():
+    return get_statistic_event(7)
+@shared_task
+def get_statistic_event_id12():
+    return get_statistic_event(12)
+@shared_task
+def get_statistic_event_id13():
+    return get_statistic_event(13)
+@shared_task
+def get_statistic_event_id15():
+    return get_statistic_event(15)
+@shared_task
+def get_statistic_event_id21():
+    return get_statistic_event(21)
+@shared_task
+def get_statistic_event_id25():
+    return get_statistic_event(25)
+@shared_task
+def get_statistic_event_id36():
+    return get_statistic_event(36)
 
 #события на затрва (нужны тк таска отправляет запрос но не получает некоторые матчи ,проблема апи)
 def get_events_tommorow(sport_id):
