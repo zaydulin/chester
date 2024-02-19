@@ -54,22 +54,22 @@ def generate_event_slug(home_team, away_team, start_at):
 
 
 # done optimization
-@shared_task
-def clear_dublicate_events():
-    duplicate_ids = Events.objects.values('second_event_api_id').annotate(count=Count('second_event_api_id')).filter(
-        count__gt=1)
-    count = 0
-    # Оставляем один объект с каждым значением second_event_api_id
-    for duplicate_id in duplicate_ids:
-        # Получаем первый объект с заданным second_event_api_id
-        keep_event = Events.objects.filter(second_event_api_id=duplicate_id['second_event_api_id']).first()
-        # Получаем все объекты, кроме первого
-        delete_events = Events.objects.filter(second_event_api_id=duplicate_id['second_event_api_id']).exclude(
-            id=keep_event.id)
-        # Удаляем все объекты, кроме первого
-        delete_events.delete()
-        count +=1
-    return {"response": f"Одинаковые события удалены - кол-во = {count} "}
+# @shared_task
+# def clear_dublicate_events():
+#     duplicate_ids = Events.objects.values('second_event_api_id').annotate(count=Count('second_event_api_id')).filter(
+#         count__gt=1)
+#     count = 0
+#     # Оставляем один объект с каждым значением second_event_api_id
+#     for duplicate_id in duplicate_ids:
+#         # Получаем первый объект с заданным second_event_api_id
+#         keep_event = Events.objects.filter(second_event_api_id=duplicate_id['second_event_api_id']).first()
+#         # Получаем все объекты, кроме первого
+#         delete_events = Events.objects.filter(second_event_api_id=duplicate_id['second_event_api_id']).exclude(
+#             id=keep_event.id)
+#         # Удаляем все объекты, кроме первого
+#         delete_events.delete()
+#         count +=1
+#     return {"response": f"Одинаковые события удалены - кол-во = {count} "}
 
 
 @shared_task
