@@ -318,37 +318,37 @@ def fetch_event_data(rubric_id):
     incidents_events = Events.objects.filter(status=1, rubrics=rubrics)
 
 
-    today = datetime.now().date()
-    tomorrow = today - timedelta(days=1)
-    today_str = today.strftime('%Y-%m-%d')
-    tomorrow_str = tomorrow.strftime('%Y-%m-%d')
-    events = Events.objects.filter(
-        ~Q(status=2),
-        (Q(start_at__startswith=today_str) | Q(start_at__startswith=tomorrow_str)),
-        rubrics=rubrics,
-    )
-    url = "https://flashlive-sports.p.rapidapi.com/v1/events/data"
-    for event in events:
-        retries = 0
-        while retries < MAX_RETRIES:
-            querystring = {"locale": "en_INT", "event_id": event.second_event_api_id}
-            response = requests.get(url, headers=HEADER_FOR_SECOND_API, params=querystring)
-            if response.status_code == 200:
-                response_data = response.json().get("DATA").get("EVENT")
-                event.home_score = response_data.get("HOME_SCORE_CURRENT")
-                event.away_score = response_data.get("AWAY_SCORE_CURRENT")
-                event.status = EVENT_STATUSES[response_data.get("STAGE_TYPE")]
-                event.save()
-                break
-            elif response.status_code == 429:
-                retries += 1
-                if retries < MAX_RETRIES:
-                    if retries == MAX_RETRIES:
-                        pass
-                    time.sleep(1)
-                    continue
-                else:
-                    pass
+    # today = datetime.now().date()
+    # tomorrow = today - timedelta(days=1)
+    # today_str = today.strftime('%Y-%m-%d')
+    # tomorrow_str = tomorrow.strftime('%Y-%m-%d')
+    # events = Events.objects.filter(
+    #     ~Q(status=2),
+    #     (Q(start_at__startswith=today_str) | Q(start_at__startswith=tomorrow_str)),
+    #     rubrics=rubrics,
+    # )
+    # url = "https://flashlive-sports.p.rapidapi.com/v1/events/data"
+    # for event in events:
+    #     retries = 0
+    #     while retries < MAX_RETRIES:
+    #         querystring = {"locale": "en_INT", "event_id": event.second_event_api_id}
+    #         response = requests.get(url, headers=HEADER_FOR_SECOND_API, params=querystring)
+    #         if response.status_code == 200:
+    #             response_data = response.json().get("DATA").get("EVENT")
+    #             event.home_score = response_data.get("HOME_SCORE_CURRENT")
+    #             event.away_score = response_data.get("AWAY_SCORE_CURRENT")
+    #             event.status = EVENT_STATUSES[response_data.get("STAGE_TYPE")]
+    #             event.save()
+    #             break
+    #         elif response.status_code == 429:
+    #             retries += 1
+    #             if retries < MAX_RETRIES:
+    #                 if retries == MAX_RETRIES:
+    #                     pass
+    #                 time.sleep(1)
+    #                 continue
+    #             else:
+    #                 pass
     # incidents
     for event in incidents_events:
         retries = 0
@@ -511,10 +511,8 @@ def get_statistic_event_id36():
     return get_statistic_event(36)
 
 #события на затрва (нужны тк таска отправляет запрос но не получает некоторые матчи ,проблема апи)
-def get_events_tommorow(sport_id):
+def update_event_data(sport_id):
     url = "https://flashlive-sports.p.rapidapi.com/v1/events/live-list"
-
-
     retries = 0
     rubrics = Rubrics.objects.get(
         api_id=sport_id
@@ -616,56 +614,56 @@ def get_events_tommorow(sport_id):
             else:
                 return {"response": f"Error fetch - {response.status_code} - {response.json()}"}
 
-    return {"response": f"get_events_tommorow ok"}
+    return {"response": f"update_event_data ok"}
 
 
 @shared_task
-def get_events_tommorow_id1():
-    return get_events_tommorow(1)
+def update_event_data_id1():
+    return update_event_data(1)
 
 @shared_task
-def get_events_tommorow_id2():
-    return get_events_tommorow(2)
+def update_event_data_id2():
+    return update_event_data(2)
 
 @shared_task
-def get_events_tommorow_id3():
-    return get_events_tommorow(3)
+def update_event_data_id3():
+    return update_event_data(3)
 
 @shared_task
-def get_events_tommorow_id4():
-    return get_events_tommorow(4)
+def update_event_data_id4():
+    return update_event_data(4)
 
 @shared_task
-def get_events_tommorow_id6():
-    return get_events_tommorow(6)
+def update_event_data_id6():
+    return update_event_data(6)
 
 @shared_task
-def get_events_tommorow_id7():
-    return get_events_tommorow(7)
+def update_event_data_id7():
+    return update_event_data(7)
 
 @shared_task
-def get_events_tommorow_id12():
-    return get_events_tommorow(12)
+def update_event_data_id12():
+    return update_event_data(12)
 
 @shared_task
-def get_events_tommorow_id13():
-    return get_events_tommorow(13)
+def update_event_data_id13():
+    return update_event_data(13)
 
 @shared_task
-def get_events_tommorow_id15():
-    return get_events_tommorow(15)
+def update_event_data_id15():
+    return update_event_data(15)
 
 @shared_task
-def get_events_tommorow_id21():
-    return get_events_tommorow(21)
+def update_event_data_id21():
+    return update_event_data(21)
 
 @shared_task
-def get_events_tommorow_id25():
-    return get_events_tommorow(25)
+def update_event_data_id25():
+    return update_event_data(25)
 
 @shared_task
-def get_events_tommorow_id36():
-    return get_events_tommorow(36)
+def update_event_data_id36():
+    return update_event_data(36)
 
 # обновление событий
 @shared_task

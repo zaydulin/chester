@@ -281,101 +281,6 @@ CELERYD_LOG_FORMAT = "[%(asctime)s: %(levelname)s/%(processName)s] %(message)s"
 CELERYD_LOG_FILE = "/var/www/chester/celery.log"
 
 CELERY_BEAT_SCHEDULE = {
-    #1:30-3:10
-    "get_events_tommorow_id1": {
-        "task": "events.tasks.get_events_tommorow_id1",
-        "schedule": crontab(
-            hour="1",
-            minute="30",
-            day_of_week="mon-sun"
-        ),
-    },
-    "get_events_tommorow_id2": {
-        "task": "events.tasks.get_events_tommorow_id2",
-        "schedule": crontab(
-            hour="1",
-            minute="30",
-            day_of_week="mon-sun"
-        ),
-    },
-    "get_events_tommorow_id3": {
-        "task": "events.tasks.get_events_tommorow_id3",
-        "schedule": crontab(
-            hour="1",
-            minute="40",
-        ),
-    },
-    "get_events_tommorow_id4": {
-        "task": "events.tasks.get_events_tommorow_id4",
-        "schedule": crontab(
-            hour="1",
-            minute="50",
-            day_of_week="mon-sun"
-        ),
-    },
-    "get_events_tommorow_id6": {
-        "task": "events.tasks.get_events_tommorow_id6",
-        "schedule": crontab(
-            hour="2",
-            day_of_week="mon-sun"
-        ),
-    },
-    "get_events_tommorow_id7": {
-        "task": "events.tasks.get_events_tommorow_id7",
-        "schedule": crontab(
-            hour="2",
-            minute="10",
-            day_of_week="mon-sun"
-        ),
-    },
-    "get_events_tommorow_id12": {
-        "task": "events.tasks.get_events_tommorow_id12",
-        "schedule": crontab(
-            hour="2",
-            minute="20",
-            day_of_week="mon-sun"
-        ),
-    },
-    "get_events_tommorow_id13": {
-        "task": "events.tasks.get_events_tommorow_id13",
-        "schedule": crontab(
-            hour="2",
-            minute="30",
-            day_of_week="mon-sun"
-        ),
-    },
-    "get_events_tommorow_id15": {
-        "task": "events.tasks.get_events_tommorow_id15",
-        "schedule": crontab(
-            hour="2",
-            minute="40",
-            day_of_week="mon-sun"
-        ),
-    },
-    "get_events_tommorow_id21": {
-        "task": "events.tasks.get_events_tommorow_id21",
-        "schedule": crontab(
-            hour="2",
-            minute="50",
-            day_of_week="mon-sun"
-        ),
-    },
-    "get_events_tommorow_id25": {
-        "task": "events.tasks.get_events_tommorow_id25",
-        "schedule": crontab(
-            hour="3",
-            day_of_week="mon-sun"
-        ),
-    },
-    "get_events_tommorow_id36": {
-        "task": "events.tasks.get_events_tommorow_id36",
-        "schedule": crontab(
-            hour="3",
-            minute="10",
-            day_of_week="mon-sun"
-        ),
-    },
-    #3:10 - ?
     # пн
     "create_events_of_tournament_id1": {
         "task": "events.tasks.create_events_of_tournament_id1",
@@ -586,29 +491,79 @@ CELERY_BEAT_SCHEDULE = {
         "task": "events.tasks.get_match_stream_link",
         "schedule": crontab(minute="*/20"),
     },
+    #обновление событий
+    "update_event_data_id1": {
+        "task": "events.tasks.update_event_data_id1",
+        "schedule": crontab(minute="*/1"),
+    },
+    "update_event_data_id2": {
+        "task": "events.tasks.update_event_data_id2",
+        "schedule": crontab(minute="*/1"),
+    },
+    "update_event_data_id3": {
+        "task": "events.tasks.update_event_data_id3",
+        "schedule": crontab(minute="*/1"),
+    },
+    "update_event_data_id4": {
+        "task": "events.tasks.update_event_data_id4",
+        "schedule": crontab(minute="*/1"),
+    },
+    "update_event_data_id6": {
+        "task": "events.tasks.update_event_data_id6",
+        "schedule": crontab(minute="*/1"),
+    },
+    "update_event_data_id7": {
+        "task": "events.tasks.update_event_data_id7",
+        "schedule": crontab(minute="*/1"),
+    },
+    "update_event_data_id12": {
+        "task": "events.tasks.update_event_data_id12",
+        "schedule": crontab(minute="*/1"),
+    },
+    "update_event_data_id13": {
+        "task": "events.tasks.update_event_data_id13",
+        "schedule": crontab(minute="*/1"),
+    },
+    "update_event_data_id15": {
+        "task": "events.tasks.update_event_data_id15",
+        "schedule": crontab(minute="*/1"),
+    },
+    "update_event_data_id21": {
+        "task": "events.tasks.update_event_data_id21",
+        "schedule": crontab(minute="*/1"),
+    },
+    "update_event_data_id25": {
+        "task": "events.tasks.update_event_data_id25",
+        "schedule": crontab(minute="*/1"),
+    },
+    "update_event_data_id36": {
+        "task": "events.tasks.update_event_data_id36",
+        "schedule": crontab(minute="*/1"),
+    },
+    #создание инцидентов
     "fetch_event_data_id1": {
         "task": "events.tasks.fetch_event_data_id1",
-        "schedule": crontab(minute="*/2"),
+        "schedule": crontab(minute="*/5"),
     },
     "fetch_event_data_id2": {
         "task": "events.tasks.fetch_event_data_id2",
-        "schedule": crontab(minute="*/2"),
+        "schedule": crontab(minute="*/5"),
     },
     "fetch_event_data_id3": {
         "task": "events.tasks.fetch_event_data_id3",
-        "schedule": crontab(minute="*/2"),
+        "schedule": crontab(minute="*/5"),
     },
     "fetch_event_data_id4": {
         "task": "events.tasks.fetch_event_data_id4",
-        "schedule": crontab(minute="*/2"),
+        "schedule": crontab(minute="*/5"),
     },
     "fetch_event_data_id6": {
         "task": "events.tasks.fetch_event_data_id6",
-        "schedule": crontab(minute="*/2"),
+        "schedule": crontab(minute="*/5"),
     },
     "fetch_event_data_id7": {
         "task": "events.tasks.fetch_event_data_id7",
-        "schedule": crontab(minute="*/2"),
+        "schedule": crontab(minute="*/5"),
     },
     "fetch_event_data_id12": {
         "task": "events.tasks.fetch_event_data_id12",
