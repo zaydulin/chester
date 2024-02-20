@@ -389,15 +389,18 @@ def fetch_event_data(rubric_id):
                         )
                         incident_participants_objs = []
                         for participant in item.get('INCIDENT_PARTICIPANTS', []):
-                            incident_participant, created = IncidentParticipants.objects.get_or_create(
-                                participant_id=participant.get("PARTICIPANT_ID"),
-                                defaults={
-                                    "incident_type": participant.get("INCIDENT_TYPE"),
-                                    "participant_name": participant.get("PARTICIPANT_NAME"),
-                                    "incident_name": participant.get("PARTICIPANT_NAME"),
-                                }
-                            )
-                            incident_participants_objs.append(incident_participant)
+                            try:
+                                incident_participant, created = IncidentParticipants.objects.get_or_create(
+                                    participant_id=participant.get("PARTICIPANT_ID"),
+                                    defaults={
+                                        "incident_type": participant.get("INCIDENT_TYPE"),
+                                        "participant_name": participant.get("PARTICIPANT_NAME"),
+                                        "incident_name": participant.get("PARTICIPANT_NAME"),
+                                    }
+                                )
+                                incident_participants_objs.append(incident_participant)
+                            except:
+                                pass
                         incident.incident_participants.add(*incident_participants_objs)
                         incident.save()
                         event.incidents.add(incident)
