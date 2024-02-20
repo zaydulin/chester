@@ -512,7 +512,7 @@ def get_statistic_event_id36():
 
 #события на затрва (нужны тк таска отправляет запрос но не получает некоторые матчи ,проблема апи)
 def get_events_tommorow(sport_id):
-    url = "https://flashlive-sports.p.rapidapi.com/v1/events/list"
+    url = "https://flashlive-sports.p.rapidapi.com/v1/events/live-list"
 
 
     retries = 0
@@ -544,6 +544,7 @@ def get_events_tommorow(sport_id):
                         season = Season.objects.create(rubrics=rubrics, season_id=tournament_id, league_name=league_name, country=country , logo_league = normal_ti)
 
                     events_list = []
+                    events_list_update = []
                     for event in events:
                         homeimg_base = event.get("HOME_IMAGES")
                         awayimg_base = event.get("AWAY_IMAGES")
@@ -581,8 +582,9 @@ def get_events_tommorow(sport_id):
                                     logo=correct_away_logo,
                                     rubrics=rubrics,
                                 )
-                            if not Events.objects.filter(rubrics=rubrics,
-                                                         second_event_api_id=event.get("EVENT_ID")).exists():
+                            existing_event = Events.objects.filter(rubrics=rubrics,second_event_api_id=event.get("EVENT_ID")).first()
+
+                            if existing_event is None:
                                 events_list.append(Events(
                                     rubrics=rubrics,
                                     second_event_api_id=event.get("EVENT_ID"),
@@ -599,8 +601,18 @@ def get_events_tommorow(sport_id):
                                     slug=generate_event_slug(event.get("HOME_NAME"), event.get("AWAY_NAME"),
                                                              datetime.utcfromtimestamp(event.get("START_TIME"))),
                                 ))
-                    Events.objects.bulk_create(events_list)
+                            else:
+                                existing_event.home_score = event.get("HOME_SCORE_CURRENT")
+                                existing_event.away_score = event.get("AWAY_SCORE_CURRENT")
+                                existing_event.status = status_id
+                                existing_event.start_at = datetime.utcfromtimestamp(event.get("START_TIME")),
+                                existing_event.half = event.get("ROUND")
+                                events_list_update.append(existing_event)
 
+                    Events.objects.bulk_create(events_list)
+                    Events.objects.bulk_update(events_list_update, fields=[
+                        'home_score', 'away_score', 'status', 'start_at', 'half'
+                    ])
             else:
                 return {"response": f"Error fetch - {response.status_code} - {response.json()}"}
 
