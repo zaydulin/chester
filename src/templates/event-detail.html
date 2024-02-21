@@ -801,7 +801,7 @@
                         <img src="{{ event.rubrics.cover.url }}" alt="bg" class="img-info__background" />
                         <div class="img-info__video-bg none" >
 
-                            <iframe width="100%" height="100%" src="https://www.youtube.com/embed/8D0Fpml1eTw" title="Онлайн трансляция | {{home_team.name}} против {{away_team.name}}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                            <iframe width="100%" height="100%" src="https://www.youtube.com/embed/{{event.match_stream_link}}" title="Онлайн трансляция | {{home_team.name}} против {{away_team.name}}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
                         </div>
                         <div class="img-info__match-info" >
@@ -841,6 +841,7 @@
                             </div>
                         </div>
                     </div>
+
                     <!---Футбол--->
                 </div>
                 {% if football %}
