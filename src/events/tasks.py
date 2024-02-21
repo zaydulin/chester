@@ -317,38 +317,6 @@ def fetch_event_data(rubric_id):
     )
     incidents_events = Events.objects.filter(status=1, rubrics=rubrics)
 
-
-    # today = datetime.now().date()
-    # tomorrow = today - timedelta(days=1)
-    # today_str = today.strftime('%Y-%m-%d')
-    # tomorrow_str = tomorrow.strftime('%Y-%m-%d')
-    # events = Events.objects.filter(
-    #     ~Q(status=2),
-    #     (Q(start_at__startswith=today_str) | Q(start_at__startswith=tomorrow_str)),
-    #     rubrics=rubrics,
-    # )
-    # url = "https://flashlive-sports.p.rapidapi.com/v1/events/data"
-    # for event in events:
-    #     retries = 0
-    #     while retries < MAX_RETRIES:
-    #         querystring = {"locale": "en_INT", "event_id": event.second_event_api_id}
-    #         response = requests.get(url, headers=HEADER_FOR_SECOND_API, params=querystring)
-    #         if response.status_code == 200:
-    #             response_data = response.json().get("DATA").get("EVENT")
-    #             event.home_score = response_data.get("HOME_SCORE_CURRENT")
-    #             event.away_score = response_data.get("AWAY_SCORE_CURRENT")
-    #             event.status = EVENT_STATUSES[response_data.get("STAGE_TYPE")]
-    #             event.save()
-    #             break
-    #         elif response.status_code == 429:
-    #             retries += 1
-    #             if retries < MAX_RETRIES:
-    #                 if retries == MAX_RETRIES:
-    #                     pass
-    #                 time.sleep(1)
-    #                 continue
-    #             else:
-    #                 pass
     # incidents
     for event in incidents_events:
         retries = 0
@@ -516,11 +484,11 @@ def get_statistic_event_id36():
 #события на затрва (нужны тк таска отправляет запрос но не получает некоторые матчи ,проблема апи)
 def update_event_data(sport_id):
     url = "https://flashlive-sports.p.rapidapi.com/v1/events/list"
-    retries = 0
     rubrics = Rubrics.objects.get(
         api_id=sport_id
     )
     for locale in ["en_INT", "ru_RU"]:
+        retries = 0
         querystring = {"indent_days": "0", "timezone": "-4", "locale": locale, "sport_id": str(sport_id)}
         while retries < MAX_RETRIES:
             response = requests.get(url, headers=HEADER_FOR_SECOND_API, params=querystring)
@@ -614,6 +582,7 @@ def update_event_data(sport_id):
                     Events.objects.bulk_update(events_list_update, fields=[
                         'home_score', 'away_score', 'status','start_at','half'
                     ])
+                break
             elif response.status_code == 429:
                 retries += 1
                 if retries < MAX_RETRIES:
@@ -739,25 +708,37 @@ def fetch_event_data_id36():
 
 
 @shared_task
-def get_match_stream_link():
-    url = "https://free-football-soccer-videos1.p.rapidapi.com/v1/"
-    response = requests.get(url, headers=HEADER_FOR_LIVE_STREAM)
-    rubric_id = 1
-    if response.status_code == 200:
-        data = response.json()
-        for item in data:
-            side1 = item.get("side1").get("name")
-            side2 = item.get("side2").get("name")
-            date = item.get("date")
-            date_only = date.split("T")[0]
-            embed = item.get("embed")
-            name = item.get("competition").get("name")
-            event = Events.objects.filter(rubrics__api_id=rubric_id, home_team__name=side1, away_team__name=side2,
-                                          start_at__startswith=date_only).first()
-            try:
-                event.match_stream_link = embed
-                event.save()
-            except:
+def get_match_stream_link(rubric_id):
+    rubrics = Rubrics.objects.get(
+        api_id=rubric_id
+    )
+
+    url = "https://flashlive-sports.p.rapidapi.com/v1/events/highlights"
+    events = Events.objects.filter(status=1, rubrics=rubrics)
+    for event in events:
+        retries = 0
+        while retries < MAX_RETRIES:
+            querystring = {"event_id": str(event.second_event_api_id), "locale": "en_INT"}
+            response = requests.get(url, headers=HEADER_FOR_SECOND_API, params=querystring)
+            if response.status_code == 200:
+                response_data = response.json().get("DATA",[])
+                first_element = response_data[0] if response_data else None
+                if first_element:
+                    video_link = first_element.get("PROPERTY_LINK")
+                    video_id = video_link.split("=")[-1]
+                    event.match_stream_link = video_id
+                    event.save()
+                break
+            elif response.status_code == 429:
+                retries += 1
+                if retries < MAX_RETRIES:
+                    if retries == MAX_RETRIES:
+                        pass
+                    time.sleep(1)
+                    continue
+                else:
+                    pass
+            else:
                 pass
     return {"response": "get_match_stream_link successfully"}
 
