@@ -240,7 +240,6 @@ def create_events_of_tournament(rubric_id):
                         break
                     else:
                         break
-
                 try:
                     stage.delete()
                 except:

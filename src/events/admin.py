@@ -3,7 +3,7 @@ from .models import *
 
 
 class EventsAdmin(admin.ModelAdmin):
-    search_fields = ['slug', 'name']
+    search_fields = ['slug', 'name','second_event_api_id']
     list_display = ['rubrics','second_event_api_id',  'start_at', 'slug', 'get_status_display', 'home_team', 'away_team',
                     'section', 'match_stream_link']
     list_filter = ['rubrics','section__country']
