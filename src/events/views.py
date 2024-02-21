@@ -33,8 +33,7 @@ def clear_db(request):
     return HttpResponse(f'ok - count{count }')
 
 def update_events_status(request):
-    targeted_date = datetime(2024, 2, 20)
-    events_to_update = Events.objects.filter(start_at__startswith='2024-02-20')
+    events_to_update = Events.objects.filter(status=1)
     count = 0
     for event in events_to_update:
         event.status = 2
