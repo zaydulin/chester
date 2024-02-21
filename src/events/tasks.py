@@ -515,7 +515,7 @@ def get_statistic_event_id36():
 
 #события на затрва (нужны тк таска отправляет запрос но не получает некоторые матчи ,проблема апи)
 def update_event_data(sport_id):
-    url = "https://flashlive-sports.p.rapidapi.com/v1/events/live-list"
+    url = "https://flashlive-sports.p.rapidapi.com/v1/events/list"
     retries = 0
     rubrics = Rubrics.objects.get(
         api_id=sport_id

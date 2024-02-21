@@ -1,3 +1,4 @@
+from datetime import datetime
 from itertools import groupby
 from django.views import View
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
@@ -30,6 +31,16 @@ def clear_db(request):
         delete_events.delete()
         count+= 1
     return HttpResponse(f'ok - count{count }')
+
+def update_events_status(request):
+    targeted_date = datetime(2024, 2, 20)
+    events_to_update = Events.objects.filter(start_at__startswith=targeted_date)
+    count = 0
+    for event in events_to_update:
+        event.status = 2
+        event.save()
+        count += 1
+    return HttpResponse(f'ok - count{count}')
 
 class HomeView(CustomHtmxMixin, TemplateView):
     """Категории"""
