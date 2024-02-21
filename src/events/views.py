@@ -34,7 +34,7 @@ def clear_db(request):
 
 def update_events_status(request):
     targeted_date = datetime(2024, 2, 20)
-    events_to_update = Events.objects.filter(start_at__startswith=targeted_date)
+    events_to_update = Events.objects.filter(start_at__startswith='2024-02-20')
     count = 0
     for event in events_to_update:
         event.status = 2
