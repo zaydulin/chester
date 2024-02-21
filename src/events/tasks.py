@@ -12,7 +12,7 @@ from mainapp.models import GeneralSettings
 
 
 general_settings = GeneralSettings.objects.first()
-MAX_RETRIES = 2
+MAX_RETRIES = 5
 HEADER_FOR_SECOND_API =  {
     'X-RapidAPI-Key': str(general_settings.rapidapi_key_events),
     "X-RapidAPI-Host": "flashlive-sports.p.rapidapi.com"
@@ -614,8 +614,17 @@ def update_event_data(sport_id):
                     Events.objects.bulk_update(events_list_update, fields=[
                         'home_score', 'away_score', 'status','start_at','half'
                     ])
+            elif response.status_code == 429:
+                retries += 1
+                if retries < MAX_RETRIES:
+                    if retries == MAX_RETRIES:
+                        pass
+                    time.sleep(1)
+                    continue
+                else:
+                    pass
             else:
-                return {"response": f"Error fetch - {response.status_code} - {response.json()}"}
+                pass
 
     return {"response": f"update_event_data ok"}
 
