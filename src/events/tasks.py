@@ -606,12 +606,13 @@ def update_event_data(sport_id):
                                 existing_event.home_score = event.get("HOME_SCORE_CURRENT")
                                 existing_event.away_score = event.get("AWAY_SCORE_CURRENT")
                                 existing_event.status = status_id
+                                existing_event.start_at = datetime.utcfromtimestamp(event.get("START_TIME"))
                                 existing_event.half = event.get("ROUND")
                                 events_list_update.append(existing_event)
 
                     Events.objects.bulk_create(events_list)
                     Events.objects.bulk_update(events_list_update, fields=[
-                        'home_score', 'away_score', 'status','half'
+                        'home_score', 'away_score', 'status','start_at','half'
                     ])
             else:
                 return {"response": f"Error fetch - {response.status_code} - {response.json()}"}
