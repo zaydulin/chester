@@ -140,6 +140,24 @@ class Events(models.Model):
             return f"{formatted_time}"
         return None
 
+    def get_start_date_for_timer(self):
+        if self.start_at_for_timer:
+            date, time = self.start_at_for_timer.split(' ')
+            hour, minute, second = time.split(':')
+            formatted_hour = str(int(hour) - 1).zfill(2)
+
+            formatted_time = f"{formatted_hour}:{minute}"
+
+            return f"{formatted_time}"
+        elif self.start_at:
+            date, time = self.start_at_for_timer.split(' ')
+            hour, minute, second = time.split(':')
+            formatted_hour = str(int(hour) - 1).zfill(2)
+
+            formatted_time = f"{formatted_hour}:{minute}"
+
+            return f"{formatted_time}"
+        return None
 
     def __str__(self):
         status_str = next((status[1] for status in self.STATUS if status[0] == self.status), "Unknown")
