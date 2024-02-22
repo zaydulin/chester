@@ -143,12 +143,12 @@ class Events(models.Model):
     def get_start_date_for_timer(self):
         if self.start_at_for_timer:
             date, time = self.start_at_for_timer.split(' ')
-            year, month, day = date.split('-')
-            formatted_time = time[:5]
+            hour, minute, second = time.split(':')
+            formatted_hour = str(int(hour) - 1).zfill(2)
+            formatted_time = f"{formatted_hour}:{minute}"
             return f"{formatted_time}"
         elif self.start_at:
             date, time = self.start_at.split(' ')
-            year, month, day = date.split('-')
             formatted_time = time[:5]
             return f"{formatted_time}"
         return None
