@@ -1,129 +1,116 @@
-//Создает нужное количество data-periode-time
-var lifeTimeElement = document.getElementById("life-time");
-var startTime = lifeTimeElement.getAttribute("data-start-time");
-var periodeTime1 = parseInt(lifeTimeElement.getAttribute("data-periode-time-1"), 10);
-var pauseTime1 = parseInt(lifeTimeElement.getAttribute("data-pause-time-1"), 10);
-var periodeCount = parseInt(lifeTimeElement.getAttribute("data-periode-count"), 10);
+// Получаем элемент div
+    var lifeTimeDiv = document.getElementById('life-time');
+    // Получаем значения из атрибутов
+    var periodeCount = parseInt(lifeTimeDiv.getAttribute('data-periode-count'));
+    var periodeAdd = parseInt(lifeTimeDiv.getAttribute('data-periode-add'));
+    var periodeTime1 = lifeTimeDiv.getAttribute('data-pause-time-1');
+    var periodeTime2 = lifeTimeDiv.getAttribute('data-periode-time-1');
+    // Создаем новые значения и добавляем их к элементу
 for (var i = 2; i <= periodeCount; i++) {
-    lifeTimeElement.setAttribute("data-periode-time-" + i, periodeTime1);
-    lifeTimeElement.setAttribute("data-pause-time-" + i, pauseTime1);
+    // Парсим предыдущее значение времени
+    var previousPeriodeTime = lifeTimeDiv.getAttribute('data-pause-time-' + (i - 1)).split(':').map(Number); 
+    // Парсим текущее значение времени
+    var currentPeriodeTime = periodeTime1.split(':').map(Number);
+    // Прибавляем текущее значение к предыдущему значению
+    previousPeriodeTime[0] += currentPeriodeTime[0];
+    previousPeriodeTime[1] += currentPeriodeTime[1];
+    // Форматируем время
+    var formattedTime = previousPeriodeTime.map(function (value) {
+        return value < 10 ? '0' + value : value;
+    }).join(':');
+    // Создаем новый атрибут и добавляем его к элементу
+    lifeTimeDiv.setAttribute('data-pause-time-' + i, formattedTime); // Change here
 }
-var imgInfo = document.getElementById('life-time');
-var startTime = imgInfo.getAttribute('data-start-time');
-var periodCount = parseInt(imgInfo.getAttribute('data-periode-count'));
-var startDate = new Date('1970-01-01 ' + startTime);
-var pauseStartTime = [];
-var pauseEndTime = [];
-for (var i = 1; i <= periodCount; i++) {
-    var periodTime = parseInt(imgInfo.getAttribute('data-periode-time-' + i));
-    var pauseTime = parseInt(imgInfo.getAttribute('data-pause-time-' + i));
-    var startPause = new Date(startDate.getTime() + periodTime * 1000);
-    var endPause = new Date(startPause.getTime() + pauseTime * 1000);
-    var startPauseStr = startPause.toTimeString().split(' ')[0];
-    var endPauseStr = endPause.toTimeString().split(' ')[0];
-    pauseStartTime.push(startPauseStr);
-    pauseEndTime.push(endPauseStr);
-    startDate = new Date(endPause.getTime() + 1000);
+ // Создаем новые значения и добавляем их к элементу
+    for (var i = 2; i <= periodeCount; i++) {
+        // Парсим предыдущее значение времени
+        var previousPeriodeTime = lifeTimeDiv.getAttribute('data-periode-time-' + (i - 1)).split(':').map(Number);
+        // Парсим текущее значение времени
+        var currentPeriodeTime = periodeTime2.split(':').map(Number);
+        // Прибавляем текущее значение к предыдущему значению
+        previousPeriodeTime[0] += currentPeriodeTime[0];
+        previousPeriodeTime[1] += currentPeriodeTime[1];
+        // Форматируем время
+        var formattedTime = previousPeriodeTime.map(function (value) {
+            return value < 10 ? '0' + value : value;
+        }).join(':');
+        // Создаем новый атрибут и добавляем его к элементу
+        lifeTimeDiv.setAttribute('data-periode-time-' + i, formattedTime);
+    }
+    // Выводим обновленный HTML
+    console.log(lifeTimeDiv.outerHTML);
+// Получаем элемент с id "life-time"
+var imgInfoPeriod = document.getElementById("life-time");
+// Получаем значения атрибутов
+var periodeCount = parseInt(imgInfoPeriod.getAttribute("data-periode-count"));
+var pauseTime = parseInt(imgInfoPeriod.getAttribute("data-pause-time-1"));
+var periodeTime = parseInt(imgInfoPeriod.getAttribute("data-periode-time-1"));
+var startTime = imgInfoPeriod.getAttribute("data-start-time");
+// Удаляем существующие атрибуты data-pause-time-start и data-pause-time-end
+imgInfoPeriod.removeAttribute("data-pause-time-start");
+imgInfoPeriod.removeAttribute("data-pause-time-end");
+// Создаем новые атрибуты data-pause-time-start и data-pause-time-end и добавляем их в элемент
+for (var i = 1; i <= periodeCount; i++) {
+    var pauseTimeEnd = addTimes(startTime, i * (pauseTime + periodeTime));
+    var pauseTimeStart = subtractTime(pauseTimeEnd, pauseTime);
+    imgInfoPeriod.setAttribute("data-pause-time-start-" + i, pauseTimeStart);
+    imgInfoPeriod.setAttribute("data-pause-time-end-" + i, pauseTimeEnd);
 }
-for (var i = 0; i < periodCount; i++) {
-    imgInfo.setAttribute('data-pause-time-start-' + (i + 1), pauseStartTime[i]);
-    imgInfo.setAttribute('data-pause-time-end-' + (i + 1), pauseEndTime[i]);
+// Функция для вычитания времени
+function subtractTime(startTime, minutesToSubtract) {
+    var time = new Date("1970-01-01T" + startTime + "Z");
+    time.setMinutes(time.getMinutes() - minutesToSubtract);
+    return time.toISOString().substr(11, 8);
 }
-//
-// Получить элемент div
-// Получить элемент div
-var element = document.getElementById("life-time");
-
-// Извлечь значения атрибутов
-var startTime = element.getAttribute("data-start-time");
-var periodCount = element.getAttribute("data-periode-count");
-
-// Функция для расчета разницы во времени в формате "мм:сс"
-function calculateTimeDifference(start, end) {
-    var startTime = new Date("1970-01-01 " + start);
-    var endTime = new Date("1970-01-01 " + end);
-    var difference = new Date(endTime - startTime);
-    return (difference.toISOString().substr(14, 5));
+// Функция для сложения временных значений
+function addTimes(startTime, minutesToAdd) {
+    var time = new Date("1970-01-01T" + startTime + "Z");
+    time.setMinutes(time.getMinutes() + minutesToAdd);
+    return time.toISOString().substr(11, 8);
 }
-
-// Обработка каждого data-pause-time-start
-for (var i = 1; i <= periodCount; i++) {
-    var pauseTimeStart = element.getAttribute("data-pause-time-start-" + i);
-    var pauseTimeEnd = element.getAttribute("data-pause-time-end-" + i);
-
-    var pauseTimeTimer = calculateTimeDifference(pauseTimeEnd, pauseTimeStart);
-    element.setAttribute("data-pause-time-timer-" + i, pauseTimeTimer);
-
-    // Обновить startTime для следующего шага
-    startTime = pauseTimeEnd;
-}
-
-
-// Получаем элемент с id="life-time"
-var lifeTimeElement = document.getElementById("life-time");
-
-// Инициализируем переменную для суммы
-var totalPauseTime = 0;
-
-// Перебираем все атрибуты элемента, начинающиеся с "data-pause-time-timer-"
-for (var i = 1; ; i++) {
-    var attributeName = "data-pause-time-timer-" + i;
-    var pauseTimerValue = lifeTimeElement.getAttribute(attributeName);
-
-    // Если атрибут существует, прибавляем его значение к сумме
-    if (pauseTimerValue !== null) {
-        totalPauseTime += parseInt(pauseTimerValue);
-
-        // Прибавляем значение к следующему атрибуту, если он существует
-        var nextAttributeName = "data-pause-time-timer-" + (i + 1);
-        var nextPauseTimerValue = lifeTimeElement.getAttribute(nextAttributeName);
-
-        if (nextPauseTimerValue !== null) {
-            lifeTimeElement.setAttribute(nextAttributeName, (parseInt(nextPauseTimerValue) + parseInt(pauseTimerValue)).toString());
-        } else {
-            // Если следующий атрибут не существует, выходим из цикла
-            break;
+//Новый таймер
+function updateTimer() {
+    var currentTime = document.getElementById("life-time").getAttribute("current-time");
+    var startTime = document.getElementById("life-time").getAttribute("data-start-time");
+    var pauseStartTimes = [];
+    var pauseEndTimes = [];
+    var pauseDurations = [];
+    // Получите время начала, окончания и продолжительность паузы
+    for (var i = 1; i <= 3; i++) {
+        var pauseStartTimeAttr = document.getElementById("life-time").getAttribute("data-pause-time-start-" + i);
+        var pauseEndTimeAttr = document.getElementById("life-time").getAttribute("data-pause-time-end-" + i);
+        if (pauseStartTimeAttr && pauseEndTimeAttr) {
+            pauseStartTimes.push(pauseStartTimeAttr);
+            pauseEndTimes.push(pauseEndTimeAttr);
+            // Рассчитайте продолжительность для каждого периода паузы
+            var pauseStart = new Date("2000-01-01 " + pauseStartTimeAttr);
+            var pauseEnd = new Date("2000-01-01 " + pauseEndTimeAttr);
+            var pauseDuration = (pauseEnd - pauseStart) / 1000; // в секундах
+            pauseDurations.push(pauseDuration);
         }
-    } else {
-        // Если атрибут не существует, выходим из цикла
-        break;
     }
-}
-
-// Получаем элемент с id="life-time"
-var lifeTimeElement = document.getElementById("life-time");
-
-// Инициализируем переменную для суммы
-var totalPauseTime = 0;
-
-// Перебираем все атрибуты, начинающиеся с "data-pause-time-timer-"
-for (var i = 1; ; i++) {
-    var attributeName = "data-pause-time-timer-" + i;
-    var pauseTimerValue = lifeTimeElement.getAttribute(attributeName);
-
-    // Если атрибут существует, добавляем его значение к сумме
-    if (pauseTimerValue !== null) {
-        totalPauseTime += parseInt(pauseTimerValue);
-    } else {
-        // Если атрибут не существует, выходим из цикла
-        break;
+    // Проверьте, находится ли текущее время в пределах диапазона паузы
+    for (var i = 0; i < pauseStartTimes.length; i++) {
+        if (currentTime >= pauseStartTimes[i] && currentTime <= pauseEndTimes[i]) {
+            document.getElementById("life-time").innerText = "перерыв";
+            return;
+        }
     }
+    // Вычислять и отображать затраченное время
+    var startDateTime = new Date("2000-01-01 " + startTime);
+    var currentDateTime = new Date("2000-01-01 " + currentTime);
+    var elapsedMilliseconds = currentDateTime - startDateTime;
+    // Вычитайте время, затраченное на паузы
+    for (var i = 0; i < pauseStartTimes.length; i++) {
+        if (currentTime > pauseEndTimes[i]) {
+            elapsedMilliseconds -= pauseDurations[i] * 1000;
+        }
+    }
+    var elapsedSeconds = Math.floor(elapsedMilliseconds / 1000) % 60;
+    var elapsedMinutes = Math.floor(elapsedMilliseconds / 60000);
+    document.getElementById("life-time").innerText = "" + elapsedMinutes + " : " + elapsedSeconds + "";
 }
-
-//Сумирует общее количество времени матча data-periode-end
-var periodElement = document.getElementById('life-time');
-var periodeTimes = [];
-var i = 1;
-while (periodElement.hasAttribute('data-periode-time-' + i)) {
-    var periodeTime = parseInt(periodElement.getAttribute('data-periode-time-' + i));
-    periodeTimes.push(periodeTime);
-    i++;
-}
-var totalPirodeTime = periodeTimes.reduce((acc, time) => acc + time, 0);
-var hours = Math.floor(totalPirodeTime / 3600);
-var minutes = Math.floor((totalPirodeTime % 3600) / 60);
-var seconds = totalPirodeTime % 60;
-var formattedResult = hours.toString().padStart(2, '0') + ':' +
-    minutes.toString().padStart(2, '0') + ':' +
-    seconds.toString().padStart(2, '0');
-periodElement.setAttribute('data-periode-end', formattedResult);
+// Таймер обновления каждую секунду
+setInterval(updateTimer, 1000);
+// Первоначальное обновление
+updateTimer();
