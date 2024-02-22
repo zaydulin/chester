@@ -150,7 +150,7 @@ class Events(models.Model):
 
             return f"{formatted_time}"
         elif self.start_at:
-            date, time = self.start_at_for_timer.split(' ')
+            date, time = self.start_at.split(' ')
             hour, minute, second = time.split(':')
             formatted_hour = str(int(hour) - 1).zfill(2)
 
