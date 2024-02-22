@@ -492,6 +492,7 @@ def update_event_data(sport_id):
         while retries < MAX_RETRIES:
             response = requests.get(url, headers=HEADER_FOR_SECOND_API, params=querystring)
             if response.status_code == 200:
+                event_ids = []
                 response_data = response.json().get("DATA")
                 for league in response_data:
                     league_name = league.get("NAME","")
@@ -514,73 +515,78 @@ def update_event_data(sport_id):
                     events_list = []
                     events_list_update = []
                     for event in events:
+                        event_id = event.get('EVENT_ID')
+                        if event_id:
+                            event_ids.append(event_id)
                         homeimg_base = event.get("HOME_IMAGES")
                         awayimg_base = event.get("AWAY_IMAGES")
                         status_id = EVENT_STATUSES[event.get("STAGE_TYPE")]
+                        correct_home_logo = ''
+                        correct_away_logo = ''
                         if homeimg_base is not None and awayimg_base is not None:
                             logo_home = event.get("HOME_IMAGES")[-1]
                             if logo_home:
                                 correct_home_logo = logo_home.replace('www.', 'static.')
-                            else:
-                                correct_home_logo = ''
                             logo_away = event.get("AWAY_IMAGES")[-1]
                             if logo_away:
                                 correct_away_logo = logo_away.replace('www.', 'static.')
-                            else:
-                                correct_away_logo = ''
 
-                            if Team.objects.filter(second_api_team_id=event.get("HOME_PARTICIPANT_IDS")[-1]).exists():
-                                home_team = Team.objects.filter(
-                                    second_api_team_id=event.get("HOME_PARTICIPANT_IDS")[-1]).first()
-                            else:
-                                home_team = Team.objects.create(
-                                    second_api_team_id=event.get("HOME_PARTICIPANT_IDS")[-1],
-                                    name=event.get("HOME_NAME"),
-                                    logo=correct_home_logo,
-                                    rubrics=rubrics,
-                                )
+                        if Team.objects.filter(second_api_team_id=event.get("HOME_PARTICIPANT_IDS")[-1]).exists():
+                            home_team = Team.objects.filter(
+                                second_api_team_id=event.get("HOME_PARTICIPANT_IDS")[-1]).first()
+                        else:
+                            home_team = Team.objects.create(
+                                second_api_team_id=event.get("HOME_PARTICIPANT_IDS")[-1],
+                                name=event.get("HOME_NAME"),
+                                logo=correct_home_logo,
+                                rubrics=rubrics,
+                            )
 
-                            if Team.objects.filter(second_api_team_id=event.get("AWAY_PARTICIPANT_IDS")[-1]).exists():
-                                away_team = Team.objects.filter(
-                                    second_api_team_id=event.get("AWAY_PARTICIPANT_IDS")[-1]).first()
-                            else:
-                                away_team = Team.objects.create(
-                                    second_api_team_id=event.get("AWAY_PARTICIPANT_IDS")[-1],
-                                    name=event.get("AWAY_NAME"),
-                                    logo=correct_away_logo,
-                                    rubrics=rubrics,
-                                )
-                            existing_event = Events.objects.filter(rubrics=rubrics,second_event_api_id=event.get("EVENT_ID")).first()
+                        if Team.objects.filter(second_api_team_id=event.get("AWAY_PARTICIPANT_IDS")[-1]).exists():
+                            away_team = Team.objects.filter(
+                                second_api_team_id=event.get("AWAY_PARTICIPANT_IDS")[-1]).first()
+                        else:
+                            away_team = Team.objects.create(
+                                second_api_team_id=event.get("AWAY_PARTICIPANT_IDS")[-1],
+                                name=event.get("AWAY_NAME"),
+                                logo=correct_away_logo,
+                                rubrics=rubrics,
+                            )
+                        existing_event = Events.objects.filter(rubrics=rubrics,second_event_api_id=event.get("EVENT_ID")).first()
 
-                            if existing_event is None:
-                                events_list.append(Events(
-                                    rubrics=rubrics,
-                                    second_event_api_id=event.get("EVENT_ID"),
-                                    start_at=datetime.utcfromtimestamp(event.get("START_TIME")),
-                                    name=league_name,
-                                    title=league_name,
-                                    status=status_id,
-                                    home_team=home_team,
-                                    away_team=away_team,
-                                    home_score=event.get("HOME_SCORE_CURRENT"),
-                                    away_score=event.get("AWAY_SCORE_CURRENT"),
-                                    half=event.get("ROUND"),
-                                    section=season,
-                                    slug=generate_event_slug(event.get("HOME_NAME"), event.get("AWAY_NAME"),
-                                                             datetime.utcfromtimestamp(event.get("START_TIME"))),
-                                ))
-                            else:
-                                existing_event.home_score = event.get("HOME_SCORE_CURRENT")
-                                existing_event.away_score = event.get("AWAY_SCORE_CURRENT")
-                                existing_event.status = status_id
-                                existing_event.start_at = datetime.utcfromtimestamp(event.get("START_TIME"))
-                                existing_event.half = event.get("ROUND")
-                                events_list_update.append(existing_event)
+                        if existing_event is None:
+                            events_list.append(Events(
+                                rubrics=rubrics,
+                                second_event_api_id=event.get("EVENT_ID"),
+                                start_at=datetime.utcfromtimestamp(event.get("START_TIME")),
+                                name=league_name,
+                                title=league_name,
+                                status=status_id,
+                                home_team=home_team,
+                                away_team=away_team,
+                                home_score=event.get("HOME_SCORE_CURRENT"),
+                                away_score=event.get("AWAY_SCORE_CURRENT"),
+                                half=event.get("ROUND"),
+                                section=season,
+                                slug=generate_event_slug(event.get("HOME_NAME"), event.get("AWAY_NAME"),
+                                                         datetime.utcfromtimestamp(event.get("START_TIME"))),
+                            ))
+                        else:
+                            existing_event.home_score = event.get("HOME_SCORE_CURRENT")
+                            existing_event.away_score = event.get("AWAY_SCORE_CURRENT")
+                            existing_event.status = status_id
+                            existing_event.start_at = datetime.utcfromtimestamp(event.get("START_TIME"))
+                            existing_event.half = event.get("ROUND")
+                            events_list_update.append(existing_event)
 
                     Events.objects.bulk_create(events_list)
                     Events.objects.bulk_update(events_list_update, fields=[
                         'home_score', 'away_score', 'status','start_at','half'
                     ])
+                events_to_update = Events.objects.exclude(second_event_api_id__in=event_ids).filter(rubrics=rubrics,status=1)
+                for event in events_to_update:
+                    event.status = 2
+                    event.save()
                 break
             elif response.status_code == 429:
                 retries += 1

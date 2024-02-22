@@ -463,6 +463,7 @@ class EventsView(CustomHtmxMixin,TemplateView):
         context["unique_users_count"] = unique_users_count
         context["home_team"] = home_team
         context["away_team"] = away_team
+        context["eventslug"] = event.slug
         context["home_team_players_main"] = home_team_players_main
         context["home_team_players_not_main"] = home_team_players_not_main
         context["away_team_players_main"] = away_team_players_main
