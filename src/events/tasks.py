@@ -575,6 +575,7 @@ def update_event_data(sport_id):
                             existing_event.home_score = event.get("HOME_SCORE_CURRENT")
                             existing_event.away_score = event.get("AWAY_SCORE_CURRENT")
                             existing_event.status = status_id
+                            existing_event.start_at = datetime.utcfromtimestamp(event.get("START_TIME"))
                             start_time_fact = event.get("STAGE_START_TIME")
                             if start_time_fact:
                                 existing_event.start_at_for_timer = datetime.utcfromtimestamp(start_time_fact)

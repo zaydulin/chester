@@ -1652,7 +1652,7 @@
     function updateCurrentTimeAttribute() {
         var serverTime = new Date();
         var gmtTime = new Date(serverTime.valueOf() + serverTime.getTimezoneOffset() * 60000 + 4 * 60 * 60 * 1000); // Коррекция на часовой пояс
-
+        gmtTime.setHours(gmtTime.getHours() - 1);
         var hours = ('0' + gmtTime.getUTCHours()).slice(-2);
         var minutes = ('0' + gmtTime.getUTCMinutes()).slice(-2);
         var seconds = ('0' + gmtTime.getUTCSeconds()).slice(-2);
