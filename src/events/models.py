@@ -208,6 +208,11 @@ class Periods(models.Model):
     def __str__(self):
         return f'{self.event_api_id} - Dom - {self.home_score} - Guests - {self.away_score} - Period - {self.period_number}'
 
+    def save(self, *args, **kwargs):
+        if self.period_number == '0':
+            self.delete()
+        super(Periods, self).save(*args, **kwargs)
+
     class Meta:
         verbose_name = 'Период'
         verbose_name_plural = 'Периоды'
