@@ -909,7 +909,7 @@
                     <!---Футбол--->
                 </div>
                 {% if football %}
-                <div class="event-info__football-rev football-rev" hx-target=".event-info__football-rev" hx-get="{% url 'events_detail' slug=event.slug %}">
+                <div class="event-info__football-rev football-rev">
                     <div class="football-rev__header" >Обзор</div>
                     <div class="football-rev__teams">
                 <span>
@@ -922,7 +922,7 @@
                 </span>
                     </div>
                     <div class="football-rev__main" >
-                        <div id="incidents-footbal">
+
                             {% for incident in event.incidents.all %}
                             {% if incident.incident_participants.exists or incident.time|length > 4 %}
                             <div class="football-rev__event {% if incident.incident_team == 2 %} away{% else %} {% endif %}" id="incident_num_{{forloop.counter}}">
@@ -985,7 +985,7 @@
                             </div>
                             {% endif %}
                             {% endfor %}
-                        </div>
+
                         <div class="football-rev__score" >
                             <span>{{event.home_score}} - {{event.away_score}}</span>
 
@@ -1046,7 +1046,7 @@
                 {% endif %}
                 <!---Хокей--->
                 {% if hockey %}
-                <div class="event-info__football-rev football-rev" hx-target=".event-info__football-rev" hx-get="{% url 'events_detail' slug=event.slug %}">
+                <div class="event-info__football-rev football-rev">
                     <div class="football-rev__header">Обзор</div>
                     <div class="football-rev__teams">
                 <span>
@@ -1059,7 +1059,7 @@
                 </span>
                     </div>
                     <div class="football-rev__main" >
-                        <div id="incidents-footbal">
+
                             {% for incident in event.incidents.all %}
                             {% if incident.incident_participants.exists or incident.time|length > 4 %}
                             <div class="football-rev__event {% if incident.incident_team == 2 %} away{% else %} {% endif %}" id="incident_num_{{forloop.counter}}">
@@ -1121,7 +1121,7 @@
 
 
                             </div>
-                        </div>
+
                     </div>
                 </div>
                 {% endif %}
