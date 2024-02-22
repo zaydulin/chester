@@ -45,6 +45,7 @@ class Events(models.Model):
     second_event_api_id = models.CharField("ID API 2 ",max_length=150,blank=True,null=True)
     data = models.DateTimeField(auto_now=True)
     start_at = models.CharField('Начало', max_length=500, null=True)
+    start_at_for_timer = models.CharField('Начало для таймера', max_length=500,blank=True, null=True)
     name = models.CharField("Название", max_length=500, null=True)
     title = models.CharField("Заголовок", max_length=500, null=True)
     content = models.TextField("Мета-описание", max_length=500, null=True)
