@@ -794,7 +794,7 @@
                 </div>
                 {% endif %}
                 <div>
-                    <div class="event-info__video-toggler">
+                    <div class="event-info__video-toggler" {% if not event.match_stream_link  %}style="display:block!important"{% endif %}>
                         <label>
                             <input type="radio" name="video-img-toggle" value="img" id="img" checked />
                             <span>Матчи Live</span>
