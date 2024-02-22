@@ -584,7 +584,7 @@ def update_event_data(sport_id):
 
                     Events.objects.bulk_create(events_list)
                     Events.objects.bulk_update(events_list_update, fields=[
-                        'home_score', 'away_score', 'status','start_at','half'
+                        'home_score', 'away_score', 'status','start_at','start_at_for_timer','half'
                     ])
                 events_to_update = Events.objects.exclude(second_event_api_id__in=event_ids).filter(rubrics=rubrics,status=1)
                 for event in events_to_update:
