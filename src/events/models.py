@@ -2,7 +2,7 @@ from random import randrange
 
 from django.db import models
 from django.urls import reverse
-from datetime import datetime, timedelta
+from datetime import datetime
 from django.utils import timezone
 from django.utils.text import slugify
 from _project import settings
@@ -142,17 +142,15 @@ class Events(models.Model):
 
     def get_start_date_for_timer(self):
         if self.start_at_for_timer:
-            start_at_for_timer_dt = datetime.strptime(str(self.start_at_for_timer), '%Y-%m-%d %H:%M:%S')
-            start_at_dt = datetime.strptime(str(self.start_at), '%Y-%m-%d %H:%M:%S')
-
-            if start_at_for_timer_dt - start_at_dt > timedelta(hours=1):
-                start_at_for_timer_dt -= timedelta(hours=1)
-
-            formatted_time = start_at_for_timer_dt.strftime('%H:%M')
-            return formatted_time
+            date, time = self.start_at_for_timer.split(' ')
+            hour, minute, second = time.split(':')
+            formatted_hour = str(int(hour) - 1).zfill(2)
+            formatted_time = f"{formatted_hour}:{minute}"
+            return f"{formatted_time}"
         elif self.start_at:
-            formatted_time = str(self.start_at).split(' ')[1][:5]
-            return formatted_time
+            date, time = self.start_at.split(' ')
+            formatted_time = time[:5]
+            return f"{formatted_time}"
         return None
 
     def __str__(self):
