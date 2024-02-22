@@ -799,10 +799,12 @@
                             <input type="radio" name="video-img-toggle" value="img" id="img" checked />
                             <span>Матчи Live</span>
                         </label>
+                        {% if event.match_stream_link  %}
                         <label>
                             <input type="radio" name="video-img-toggle" value="video" id="video" />
                             <span>Прямая трансляция</span>
                         </label>
+                        {% endif %}
                     </div>
                     <div class="event-info__img-info img-info">
                         <img src="{{ event.rubrics.cover.url }}" alt="bg" class="img-info__background" />
