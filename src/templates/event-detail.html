@@ -6,7 +6,12 @@
 {% block content %}
 <script defer src="{% static 'docs/js/index.bundle.js' %}"></script>
 <script defer src="{% static 'docs/js/timer.js' %}"></script>
-
+<style>
+    .img-info__video-bg{
+      height: 500px;
+      margin: -31.25% 0;
+    }
+</style>
 <main  class="event-info sp-container" data-title = "{{title}}"  data-description="{{meta_content}}">
     <div class="side-banners left">
         {% for baner in sidebar_baners_left %}
