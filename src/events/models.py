@@ -142,30 +142,17 @@ class Events(models.Model):
 
     def get_start_date_for_timer(self):
         if self.start_at_for_timer:
-            date_timer, time_timer = self.start_at_for_timer.split(' ')
-            hour_timer, minute_timer, second_timer = time_timer.split(':')
-            formatted_hour_timer = str(int(hour_timer)).zfill(2)
-            formatted_time_timer = f"{formatted_hour_timer}:{minute_timer}"
+            start_at_for_timer_dt = datetime.strptime(self.start_at_for_timer, '%Y-%m-%d %H:%M:%S')
+            start_at_dt = datetime.strptime(self.start_at, '%Y-%m-%d %H:%M:%S')
 
-            if self.start_at:
-                date, time = self.start_at.split(' ')
-                hour, minute, second = time.split(':')
-                formatted_hour = str(int(hour)).zfill(2)
-                formatted_time = f"{formatted_hour}:{minute}"
+            if start_at_for_timer_dt - start_at_dt > timedelta(hours=1):
+                start_at_for_timer_dt -= timedelta(hours=1)
 
-                timer_datetime = datetime.strptime(f"{date_timer} {formatted_time_timer}", "%Y-%m-%d %H:%M")
-                event_datetime = datetime.strptime(f"{date} {formatted_time}", "%Y-%m-%d %H:%M")
-                diff = timer_datetime - event_datetime
-
-                if diff > timedelta(hours=1):
-                    timer_datetime -= timedelta(hours=1)
-                    formatted_time_timer = timer_datetime.strftime("%H:%M")
-
-            return f"{formatted_time_timer}"
+            formatted_time = start_at_for_timer_dt.strftime('%H:%M')
+            return formatted_time
         elif self.start_at:
-            date, time = self.start_at.split(' ')
-            formatted_time = time[:5]
-            return f"{formatted_time}"
+            formatted_time = self.start_at.split(' ')[1][:5]
+            return formatted_time
         return None
 
     def __str__(self):
