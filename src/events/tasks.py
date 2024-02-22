@@ -741,6 +741,55 @@ def get_match_stream_link(rubric_id):
                 pass
     return {"response": "get_match_stream_link successfully"}
 
+@shared_task
+def get_match_stream_links_id1():
+    return get_match_stream_link(1)
+
+@shared_task
+def get_match_stream_links_id2():
+    return get_match_stream_link(2)
+
+@shared_task
+def get_match_stream_links_id3():
+    return get_match_stream_link(3)
+
+@shared_task
+def get_match_stream_links_id4():
+    return get_match_stream_link(4)
+
+@shared_task
+def get_match_stream_links_id6():
+    return get_match_stream_link(6)
+
+@shared_task
+def get_match_stream_links_id7():
+    return get_match_stream_link(7)
+
+@shared_task
+def get_match_stream_links_id12():
+    return get_match_stream_link(12)
+
+@shared_task
+def get_match_stream_links_id13():
+    return get_match_stream_link(13)
+
+@shared_task
+def get_match_stream_links_id15():
+    return get_match_stream_link(15)
+
+@shared_task
+def get_match_stream_links_id21():
+    return get_match_stream_link(21)
+
+@shared_task
+def get_match_stream_links_id25():
+    return get_match_stream_link(25)
+
+@shared_task
+def get_match_stream_links_id36():
+    return get_match_stream_link(36)
+
+
 
 def create_additional_info_for_events(rubric_id):
     today = datetime.now().date()
