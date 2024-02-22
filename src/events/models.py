@@ -135,7 +135,7 @@ class Events(models.Model):
             formatted_date = f"{month}-{day}"
 
             # Получение времени
-            formatted_time = time[:5] - 1  # Берем только часы и минуты
+            formatted_time = time[:5]   # Берем только часы и минуты
 
             return f"{formatted_time}"
         return None
