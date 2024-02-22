@@ -142,8 +142,8 @@ class Events(models.Model):
 
     def get_start_date_for_timer(self):
         if self.start_at_for_timer:
-            start_at_for_timer_dt = datetime.strptime(self.start_at_for_timer, '%Y-%m-%d %H:%M:%S')
-            start_at_dt = datetime.strptime(self.start_at, '%Y-%m-%d %H:%M:%S')
+            start_at_for_timer_dt = datetime.strptime(str(self.start_at_for_timer), '%Y-%m-%d %H:%M:%S')
+            start_at_dt = datetime.strptime(str(self.start_at), '%Y-%m-%d %H:%M:%S')
 
             if start_at_for_timer_dt - start_at_dt > timedelta(hours=1):
                 start_at_for_timer_dt -= timedelta(hours=1)
@@ -151,7 +151,7 @@ class Events(models.Model):
             formatted_time = start_at_for_timer_dt.strftime('%H:%M')
             return formatted_time
         elif self.start_at:
-            formatted_time = self.start_at.split(' ')[1][:5]
+            formatted_time = str(self.start_at).split(' ')[1][:5]
             return formatted_time
         return None
 
