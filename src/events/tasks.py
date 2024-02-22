@@ -488,7 +488,7 @@ def update_event_data(sport_id):
     )
     for locale in ["en_INT", "ru_RU"]:
         retries = 0
-        querystring = {"indent_days": "0", "timezone": "-4", "locale": locale, "sport_id": str(sport_id)}
+        querystring = {"indent_days": "0", "timezone": "4", "locale": locale, "sport_id": str(sport_id)}
         while retries < MAX_RETRIES:
             response = requests.get(url, headers=HEADER_FOR_SECOND_API, params=querystring)
             if response.status_code == 200:
