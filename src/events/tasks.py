@@ -480,6 +480,7 @@ def get_statistic_event_id25():
 def get_statistic_event_id36():
     return get_statistic_event(36)
 
+
 #события на затрва (нужны тк таска отправляет запрос но не получает некоторые матчи ,проблема апи)
 def update_event_data(sport_id):
     url = "https://flashlive-sports.p.rapidapi.com/v1/events/list"
@@ -602,9 +603,16 @@ def update_event_data(sport_id):
                     pass
             else:
                 pass
-    #h2h в первый раз грузит если новый
-    events_to_additional_info_h2h = Events.objects.filter(second_event_api_id__in=event_ids ,rubrics=rubrics,h2h_status=False)
-    for event in  events_to_additional_info_h2h:
+
+    return {"response": f"update_event_data ok"}
+
+def create_h2h_and_players_for_new(sport_id):
+    rubrics = Rubrics.objects.get(
+        api_id=sport_id
+    )
+    # h2h в первый раз грузит если новый
+    events_to_additional_info_h2h = Events.objects.filter(status=1,rubrics=rubrics,h2h_status=False)
+    for event in events_to_additional_info_h2h:
         retries = 0
         while retries < MAX_RETRIES:
             response = requests.get(
@@ -666,7 +674,7 @@ def update_event_data(sport_id):
             else:
                 pass
     # players в первый раз грузит если новый
-    events_to_additional_info_players = Events.objects.filter(second_event_api_id__in=event_ids, rubrics=rubrics,player_status = False)
+    events_to_additional_info_players = Events.objects.filter(status=1, rubrics=rubrics,player_status=False)
     for event in events_to_additional_info_players:
         for locale in ["en_INT", "ru_RU"]:
             retries = 0
@@ -731,8 +739,55 @@ def update_event_data(sport_id):
                         pass
                 else:
                     pass
-    return {"response": f"update_event_data ok"}
 
+    return {"response": f"create_h2h_and_players_for_new ok"}
+@shared_task
+def create_h2h_and_players_for_new_id1():
+    return create_h2h_and_players_for_new(1)
+
+@shared_task
+def create_h2h_and_players_for_new_id2():
+    return create_h2h_and_players_for_new(2)
+
+@shared_task
+def create_h2h_and_players_for_new_id3():
+    return create_h2h_and_players_for_new(3)
+
+@shared_task
+def create_h2h_and_players_for_new_id4():
+    return create_h2h_and_players_for_new(4)
+
+@shared_task
+def create_h2h_and_players_for_new_id6():
+    return create_h2h_and_players_for_new(6)
+
+@shared_task
+def create_h2h_and_players_for_newa_id7():
+    return create_h2h_and_players_for_new(7)
+
+@shared_task
+def create_h2h_and_players_for_new_id12():
+    return create_h2h_and_players_for_new(12)
+
+@shared_task
+def create_h2h_and_players_for_new_id13():
+    return create_h2h_and_players_for_new(13)
+
+@shared_task
+def create_h2h_and_players_for_new_id15():
+    return create_h2h_and_players_for_new(15)
+
+@shared_task
+def create_h2h_and_players_for_new_id21():
+    return create_h2h_and_players_for_new(21)
+
+@shared_task
+def create_h2h_and_players_for_new_id25():
+    return create_h2h_and_players_for_new(25)
+
+@shared_task
+def create_h2h_and_players_for_new_id36():
+    return create_h2h_and_players_for_new(36)
 
 @shared_task
 def update_event_data_id1():
