@@ -1088,7 +1088,6 @@
                         </li>
                     </a>
                     {% endfor %}
-                    <li class="football-squads__sub-div">Замена</li>
                     {% for player in away_team_players_not_main %}
                     <a href="{% url 'player_detail' player.slug %}" hx-get="{% url 'player_detail' player.slug %}" hx-target="#main-content" hx-history-elt="#main-content" hx-push-url="true" hx-indicator="#content-loader" hx-on="htmx:beforeRequest: event.detail.target.innerHTML = ''" style="color:black">
                         <li class="football-squads__body-item">
