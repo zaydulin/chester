@@ -145,7 +145,7 @@ class Events(models.Model):
         if self.start_at_for_timer:
             date, time = self.start_at_for_timer.split(' ')
             hour, minute, second = time.split(':')
-            formatted_hour = str(int(hour) - 1).zfill(2)
+            formatted_hour = str(int(hour)).zfill(2)
             formatted_time = f"{formatted_hour}:{minute}"
             return f"{formatted_time}"
         elif self.start_at:
