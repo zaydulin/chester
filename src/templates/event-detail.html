@@ -116,7 +116,7 @@
                         <img src="{{home_team.logo}}" width="20" height="20" />
                         {{home_team.name}}
                     </h3>
-                    <select value="6">
+                    <select value="6" id="select_home">
                         <option>6</option>
                         <option>12</option>
                         <option>18</option>
@@ -311,7 +311,7 @@
                         <img src="{{away_team.logo}}" width="20" height="20" />
                         {{away_team.name}}
                     </h3>
-                    <select value="6">
+                    <select value="6" id="select_away">
                         <option>6</option>
                         <option>12</option>
                         <option>18</option>
@@ -1487,6 +1487,36 @@
         updateMatchesVisibility(); // Initial state
     });
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const selectHome = document.getElementById('select_home');
+        const allHomeTeam = document.getElementById('all-home-team');
+        const homeHomeTeam = document.getElementById('home-home-team');
+        const thistourHomeTeam = document.getElementById('thistour-home-team');
+        const thistourHomeHomeTeam = document.getElementById('thistour-home-home-team');
+
+        selectHome.addEventListener('change', function() {
+            const selectedValue = parseInt(selectHome.value);
+            updateMatchesCount(selectedValue);
+        });
+
+        function updateMatchesCount(count) {
+            const allMatches = [allHomeTeam, homeHomeTeam, thistourHomeTeam, thistourHomeHomeTeam];
+            allMatches.forEach(function(match) {
+                const matches = match.getElementsByClassName('h2h__last-matches');
+                for (let i = 0; i < matches.length; i++) {
+                    if (i < count) {
+                        matches[i].style.display = 'block';
+                    } else {
+                        matches[i].style.display = 'none';
+                    }
+                }
+            });
+        }
+
+        updateMatchesCount(parseInt(selectHome.value)); // Initial state
+    });
+</script>
 <!--away-->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -1530,6 +1560,36 @@
         }
 
         updateMatchesVisibility(); // Initial state
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const selectHome = document.getElementById('select_away');
+        const allAwayTeam = document.getElementById('all-away-team');
+        const homeAwayTeam = document.getElementById('home-away-team');
+        const thistourAwayTeam = document.getElementById('thistour-away-team');
+        const thistourHomeAwayTeam = document.getElementById('thistour-home-away-team');
+
+        selectHome.addEventListener('change', function() {
+            const selectedValue = parseInt(selectHome.value);
+            updateMatchesCount(selectedValue);
+        });
+
+        function updateMatchesCount(count) {
+            const allMatches = [allAwayTeam, homeAwayTeam, thistourAwayTeam, thistourHomeAwayTeam];
+            allMatches.forEach(function(match) {
+                const matches = match.getElementsByClassName('h2h__last-matches');
+                for (let i = 0; i < matches.length; i++) {
+                    if (i < count) {
+                        matches[i].style.display = 'block';
+                    } else {
+                        matches[i].style.display = 'none';
+                    }
+                }
+            });
+        }
+
+        updateMatchesCount(parseInt(selectHome.value)); // Initial state
     });
 </script>
 <!--Скрипт для переключалок h2h/end-->
