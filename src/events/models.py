@@ -64,6 +64,7 @@ class Events(models.Model):
     tennis_points = models.ManyToManyField("TennisPoints",verbose_name='Теннисные очки',blank=True)
     h2h = models.ManyToManyField("H2H", verbose_name='H2H', blank=True)
     h2h_status = models.BooleanField('H2H созданы',default=False)
+    player_status = models.BooleanField('Игроки созданы',default=False)
     match_stream_link = models.TextField("Ссылка на онлайн трансляцию")
 
     def get_absolute_url(self):

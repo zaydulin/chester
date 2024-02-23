@@ -486,13 +486,13 @@ def update_event_data(sport_id):
     rubrics = Rubrics.objects.get(
         api_id=sport_id
     )
+    event_ids = []
     for locale in ["en_INT", "ru_RU"]:
         retries = 0
         querystring = {"indent_days": "0", "timezone": "-4", "locale": locale, "sport_id": str(sport_id)}
         while retries < MAX_RETRIES:
             response = requests.get(url, headers=HEADER_FOR_SECOND_API, params=querystring)
             if response.status_code == 200:
-                event_ids = []
                 response_data = response.json().get("DATA")
                 for league in response_data:
                     league_name = league.get("NAME","")
@@ -602,7 +602,135 @@ def update_event_data(sport_id):
                     pass
             else:
                 pass
-
+    #h2h в первый раз грузит если новый
+    events_to_additional_info_h2h = Events.objects.filter(second_event_api_id__in=event_ids ,rubrics=rubrics,h2h_status=False)
+    for event in  events_to_additional_info_h2h:
+        retries = 0
+        while retries < MAX_RETRIES:
+            response = requests.get(
+                url="https://flashlive-sports.p.rapidapi.com/v1/events/h2h",
+                headers=HEADER_FOR_SECOND_API,
+                params={
+                    "locale": "en_INT",
+                    "event_id": event.second_event_api_id
+                }
+            )
+            if response.status_code == 200:
+                second_response_data = response.json().get("DATA", [])
+                for el in second_response_data:
+                    groups = el.get("GROUPS")
+                    for group in groups:
+                        items = group.get("ITEMS", [])
+                        for item in items:
+                            hi = item.get("HOME_IMAGES")
+                            ai = item.get("AWAY_IMAGES")
+                            logo_away, logo_home = item.get("AWAY_IMAGES"), item.get("HOME_IMAGES")
+                            if logo_away:
+                                logo_away = logo_away[-1]
+                                logo_away = logo_away.replace('www.', 'static.')
+                            else:
+                                logo_away = ''
+                            if logo_home:
+                                logo_home = logo_home[-1]
+                                logo_home = logo_home.replace('www.', 'static.')
+                            else:
+                                logo_home = ''
+                            if hi is not None and ai is not None:
+                                h2h, created = H2H.objects.get_or_create(
+                                    home_score=item.get("HOME_SCORE_FULL"),
+                                    away_score=item.get("AWAY_SCORE_FULL"),
+                                    name=item.get("EVENT_NAME"),
+                                    home_team_NAME=item.get("HOME_PARTICIPANT"),
+                                    home_team_LOGO=logo_home,
+                                    away_team_NAME=item.get("AWAY_PARTICIPANT"),
+                                    away_team_LOGO=logo_away,
+                                    league=item.get("EVENT_NAME"),
+                                    start_at=datetime.utcfromtimestamp(item.get("START_TIME")),
+                                    h_result=item.get("H_RESULT"),
+                                    team_mark=item.get("TEAM_MARK"),
+                                )
+                                event.h2h.add(h2h)
+                                event.save()
+                    event.h2h_status = True
+                    event.save()
+                break
+            elif response.status_code == 429:
+                retries += 1
+                if retries < MAX_RETRIES:
+                    if retries == MAX_RETRIES:
+                        pass
+                    time.sleep(1)
+                    continue
+                else:
+                    pass
+            else:
+                pass
+    # players в первый раз грузит если новый
+    events_to_additional_info_players = Events.objects.filter(second_event_api_id__in=event_ids, rubrics=rubrics,player_status = False)
+    for event in events_to_additional_info_players:
+        for locale in ["en_INT", "ru_RU"]:
+            retries = 0
+            while retries < MAX_RETRIES:
+                response = requests.get(
+                    url="https://flashlive-sports.p.rapidapi.com/v1/events/lineups",
+                    headers=HEADER_FOR_SECOND_API,
+                    params={
+                        "locale": locale,
+                        "event_id": event.second_event_api_id
+                    }
+                )
+                if response.status_code == 200:
+                    response_data = response.json().get("DATA")
+                    for data in response_data:
+                        formation_name = data.get("FORMATION_NAME")
+                        formations = data.get("FORMATIONS", [])
+                        for formation in formations:
+                            team_line = formation.get("FORMATION_LINE")
+                            if formation_name == 'Starting Lineups':
+                                status_team_line = False
+                            elif formation_name == 'Substitutes':
+                                status_team_line = True
+                            else:
+                                status_team_line = False
+                            members = formation.get("MEMBERS", [])
+                            for player in members:
+                                player_id = player.get("PLAYER_ID")
+                                if player_id:
+                                    fields = {
+                                        "slug": f'{player_id}',
+                                        "name": player["PLAYER_FULL_NAME"],
+                                        "position_name": player.get("PLAYER_POSITION"),
+                                        "main_player": status_team_line,
+                                        "number": player.get("PLAYER_NUMBER"),
+                                        "photo": f'https://static.flashscore.com/res/image/data/{player.get("LPI")})'
+                                    }
+                                    player, created = Player.objects.get_or_create(
+                                        player_id=player_id,
+                                    )
+                                    for field, value in fields.items():
+                                        if value:
+                                            setattr(player, field, value)
+                                    if not formation_name == 'Starting Lineups':
+                                        setattr(player, "main_player", False)
+                                    player.save()
+                                    if team_line == 1:
+                                        event.home_team.players.add(player)
+                                    elif team_line == 2:
+                                        event.away_team.players.add(player)
+                                    event.player_status = True
+                                    event.save()
+                    break
+                elif response.status_code == 429:
+                    retries += 1
+                    if retries < MAX_RETRIES:
+                        if retries == MAX_RETRIES:
+                            pass
+                        time.sleep(1)
+                        continue
+                    else:
+                        pass
+                else:
+                    pass
     return {"response": f"update_event_data ok"}
 
 
@@ -821,7 +949,7 @@ def create_additional_info_for_events(rubric_id):
             }
         )
         if response.status_code != 200:
-            return {"response": f"Error create_additional_info_for_events - {response.status_code} - {response.json()}"}
+            pass
 
         second_response_data = response.json().get("DATA", [])
         for el in second_response_data:
@@ -860,7 +988,7 @@ def create_additional_info_for_events(rubric_id):
                         event.save()
             event.h2h_status = True
             event.save()
-    events = Events.objects.filter(rubrics=rubric)
+    events = Events.objects.filter(~Q(status=2),rubrics=rubric,player_status = False,start_at__startswith=today_str)
     for event in events:
         response = requests.get(
             url="https://flashlive-sports.p.rapidapi.com/v1/events/lineups",
