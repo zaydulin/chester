@@ -1480,35 +1480,38 @@
         const thistourHomeMatches = document.getElementById('thistour-home-home-team');
 
         homeCheckbox.addEventListener('change', function() {
-            if (homeCheckbox.checked) {
+            updateMatchesVisibility();
+        });
+
+        thistourCheckbox.addEventListener('change', function() {
+            updateMatchesVisibility();
+        });
+
+        function updateMatchesVisibility() {
+            if (homeCheckbox.checked && thistourCheckbox.checked) {
+                allMatches.style.display = 'none';
+                homeMatches.style.display = 'none';
+                thistourMatches.style.display = 'none';
+                thistourHomeMatches.style.display = 'block';
+            } else if (homeCheckbox.checked) {
                 allMatches.style.display = 'none';
                 thistourMatches.style.display = 'none';
                 thistourHomeMatches.style.display = 'none';
                 homeMatches.style.display = 'block';
-            } else {
-                homeMatches.style.display = 'none';
-                if (!thistourCheckbox.checked) {
-                    allMatches.style.display = 'block';
-                }
-            }
-        });
-
-        thistourCheckbox.addEventListener('change', function() {
-            if (thistourCheckbox.checked) {
+            } else if (thistourCheckbox.checked) {
                 allMatches.style.display = 'none';
                 homeMatches.style.display = 'none';
                 thistourHomeMatches.style.display = 'none';
                 thistourMatches.style.display = 'block';
             } else {
+                homeMatches.style.display = 'none';
                 thistourMatches.style.display = 'none';
-                if (!homeCheckbox.checked) {
-                    allMatches.style.display = 'block';
-                }
+                thistourHomeMatches.style.display = 'none';
+                allMatches.style.display = 'block';
             }
-        });
+        }
 
-        homeCheckbox.dispatchEvent(new Event('change')); // Trigger initial state
-        thistourCheckbox.dispatchEvent(new Event('change')); // Trigger initial state
+        updateMatchesVisibility(); // Initial state
     });
 </script>
 <!--Скрипт для переключалок h2h/end-->
