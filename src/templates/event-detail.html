@@ -136,7 +136,7 @@
                     </label>
                 </div>
                 <div id="all-home-team" >
-                    Все - {{home_team.name}}<br>
+
                     {% for h2h in event.h2h.all %}
                     <div class="h2h__last-matches" >
                         <div class="h2h__last-matches-tour">
@@ -177,7 +177,7 @@
                     {% endfor%}
                 </div>
                 <div id="home-home-team">
-                    Дома - {{home_team.name}}<br>
+
                     {% for h2h in event.h2h.all %}
                     {% if h2h.home_team_ID == home_team.api_team_id %}
                     <div class="h2h__last-matches" >
@@ -219,7 +219,7 @@
                     {% endfor%}
                 </div>
                 <div id="thistour-home-team">
-                    Текущий турнир - {{home_team.name}}<br>
+
                     {% for h2h in event.h2h.all %}
                     {% if h2h.league == event.section.league_name %}
                     <div class="h2h__last-matches" >
@@ -261,7 +261,6 @@
                     {% endfor%}
                 </div>
                 <div  id="thistour-home-home-team">
-                    Текущий турнир - Дома - {{home_team.name}}<br>
                     {% for h2h in event.h2h.all %}
                     {% if h2h.home_team_ID == home_team.api_team_id %}
                     {% if h2h.league == event.section.league_name %}
@@ -331,7 +330,7 @@
                     </label>
                 </div>
                 <div id="all-away-team" >
-                    Все - {{away_team.name}}<br>
+
                     {% for h2h in event.h2h.all %}
                     <div class="h2h__last-matches">
                         <div class="h2h__last-matches-tour">
@@ -371,7 +370,7 @@
                     {% endfor%}
                 </div>
                 <div id="home-away-team">
-                    Дома - {{away_team.name}}<br>
+
                     {% for h2h in event.h2h.all %}
                     {% if h2h.away_team_ID == away_team.api_team_id %}
                     <div class="h2h__last-matches">
@@ -413,7 +412,7 @@
                     {% endfor%}
                 </div>
                  <div id="thistour-away-team">
-                    Текущий турнир - {{away_team.name}}<br>
+
                     {% for h2h in event.h2h.all %}
                     {% if h2h.league == event.section.league_name %}
                     <div class="h2h__last-matches">
@@ -455,7 +454,6 @@
                     {% endfor%}
                  </div>
                 <div  id="thistour-home-away-team">
-                    Текущий турнир - Дома - {{away_team.name}}<br>
                     {% for h2h in event.h2h.all %}
                     {% if h2h.away_team_ID == away_team.api_team_id %}
                     {% if h2h.league == event.section.league_name %}
