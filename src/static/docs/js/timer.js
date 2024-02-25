@@ -37,8 +37,6 @@ for (var i = 2; i <= periodeCount; i++) {
         // Создаем новый атрибут и добавляем его к элементу
         lifeTimeDiv.setAttribute('data-periode-time-' + i, formattedTime);
     }
-    // Выводим обновленный HTML
-    console.log(lifeTimeDiv.outerHTML);
 // Получаем элемент с id "life-time"
 var imgInfoPeriod = document.getElementById("life-time");
 // Получаем значения атрибутов
