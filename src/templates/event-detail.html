@@ -613,9 +613,10 @@
                             <span>Матчи Live</span>
                         </label>
                         {% if event.match_stream_link  %}
+
                         <label>
                             <input type="radio" name="video-img-toggle" value="video" id="video" />
-                            <span>Прямая трансляция</span>
+                            <span>{% if event.status == 1 %}Прямая трансляция{% else %}Смотреть запись{% endif %}</span>
                         </label>
                         {% endif %}
                     </div>
