@@ -229,7 +229,7 @@
                 <div id="thistour-home-team">
 
                     {% for h2h in event.h2h.all %}
-                    {% if h2h.league_starts_with(event.section.league_name) %}
+                     {% if h2h.league == event.section.league_name %}
                     <div class="h2h__last-matches" >
                         <div class="h2h__last-matches-tour">
                             <span class="h2h__last-matches-name-tour">{{h2h.league}}</span>
@@ -276,7 +276,7 @@
                 <div id="thistour-home-home-team">
                     {% for h2h in event.h2h.all %}
                     {% if h2h.home_team_NAME == home_team.name %}
-                    {% if h2h.league_starts_with(event.section.league_name) %}
+                     {% if h2h.league == event.section.league_name %}
                     <div class="h2h__last-matches">
                         <div class="h2h__last-matches-tour">
                             <span class="h2h__last-matches-name-tour">{{h2h.league}}</span>
@@ -442,7 +442,7 @@
                 <div id="thistour-away-team">
 
                     {% for h2h in event.h2h.all %}
-                    {% if h2h.league_starts_with(event.section.league_name) %}
+                     {% if h2h.league == event.section.league_name %}
                     <div class="h2h__last-matches">
                         <div class="h2h__last-matches-tour">
                             <span class="h2h__last-matches-name-tour">{{h2h.league}}</span>
@@ -489,7 +489,7 @@
                 <div  id="thistour-home-away-team">
                     {% for h2h in event.h2h.all %}
                     {% if h2h.away_team_NAME == away_team.name %}
-                    {% if h2h.league_starts_with(event.section.league_name) %}
+                    {% if h2h.league == event.section.league_name %}
                     <div class="h2h__last-matches">
                         <div class="h2h__last-matches-tour">
                             <span class="h2h__last-matches-name-tour">{{h2h.league}}</span>
