@@ -705,12 +705,13 @@ def create_h2h_and_players_for_new(sport_id):
                                 player_id = player.get("PLAYER_ID")
                                 if player_id:
                                     fields = {
+                                        "player_id": player_id,
                                         "slug": f'{player_id}',
                                         "name": player["PLAYER_FULL_NAME"],
                                         "position_name": player.get("PLAYER_POSITION"),
                                         "main_player": status_team_line,
                                         "number": player.get("PLAYER_NUMBER"),
-                                        "photo": f'https://static.flashscore.com/res/image/data/{player.get("LPI")})'
+                                        "photo": f'https://static.flashscore.com/res/image/data/{player.get("LPI")}'
                                     }
                                     player, created = Player.objects.get_or_create(
                                         slug=f'{player_id}'
