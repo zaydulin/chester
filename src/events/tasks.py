@@ -619,7 +619,7 @@ def create_h2h_and_players_for_new(sport_id):
                 url="https://flashlive-sports.p.rapidapi.com/v1/events/h2h",
                 headers=HEADER_FOR_SECOND_API,
                 params={
-                    "locale": "en_INT",
+                    "locale": "ru_RU",
                     "event_id": event.second_event_api_id
                 }
             )
