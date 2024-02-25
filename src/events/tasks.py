@@ -713,7 +713,7 @@ def create_h2h_and_players_for_new(sport_id):
                                         "photo": f'https://static.flashscore.com/res/image/data/{player.get("LPI")})'
                                     }
                                     player, created = Player.objects.get_or_create(
-                                        player_id=player_id,
+                                        slug=f'{player_id}'
                                     )
                                     for field, value in fields.items():
                                         if value:
