@@ -578,14 +578,8 @@ def update_event_data(sport_id):
                             existing_event.status = status_id
                             existing_event.start_at = datetime.utcfromtimestamp(event.get("START_TIME"))
                             start_time_fact = event.get("STAGE_START_TIME")
-                            if start_time_fact:
-                                start_time = datetime.utcfromtimestamp(start_time_fact)
-                                if existing_event.start_at_for_timer:
-                                    existing_start_times = existing_event.start_at_for_timer.split(',')
-                                    if str(start_time) not in existing_start_times:
-                                        existing_event.start_at_for_timer += f",{start_time}"
-                                else:
-                                    existing_event.start_at_for_timer = str(start_time)
+                            if start_time_fact :
+                                existing_event.start_at_for_timer = datetime.utcfromtimestamp(start_time_fact)
                             existing_event.half = event.get("ROUND")
                             events_list_update.append(existing_event)
 
