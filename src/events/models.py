@@ -210,6 +210,8 @@ class H2H(models.Model):
     def __str__(self):
         return f'{self.home_team_NAME}-{self.away_team_NAME}'
 
+    def league_starts_with(self, prefix):
+        return str(self.league).startswith(str(prefix))
     class Meta:
         verbose_name = 'H2H'
         verbose_name_plural = 'H2H'
