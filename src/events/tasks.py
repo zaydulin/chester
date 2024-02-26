@@ -763,7 +763,7 @@ def create_h2h_and_players_for_new_id6():
     return create_h2h_and_players_for_new(6)
 
 @shared_task
-def create_h2h_and_players_for_newa_id7():
+def create_h2h_and_players_for_new_id7():
     return create_h2h_and_players_for_new(7)
 
 @shared_task
