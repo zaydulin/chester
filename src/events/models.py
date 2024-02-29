@@ -65,7 +65,9 @@ class Events(models.Model):
     h2h = models.ManyToManyField("H2H", verbose_name='H2H', blank=True)
     h2h_status = models.BooleanField('H2H созданы',default=False)
     player_status = models.BooleanField('Игроки созданы',default=False)
-    match_stream_link = models.TextField("Ссылка на онлайн трансляцию")
+    match_stream_link = models.TextField("Ссылка на онлайн трансляцию",blank=True, null=True)
+    timer_div = models.TextField("Див Таймера",blank=True, null=True)
+    time_half_time = models.TextField("Время перерыва",blank=True, null=True)
 
     def get_absolute_url(self):
         return reverse('events', kwargs={"slug": self.slug})

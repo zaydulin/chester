@@ -567,7 +567,7 @@ def update_event_data(sport_id):
                                 away_team=away_team,
                                 home_score=event.get("HOME_SCORE_CURRENT"),
                                 away_score=event.get("AWAY_SCORE_CURRENT"),
-                                half=event.get("ROUND"),
+                                half=event.get("STAGE"),
                                 section=season,
                                 slug=generate_event_slug(event.get("HOME_NAME"), event.get("AWAY_NAME"),
                                                          datetime.utcfromtimestamp(event.get("START_TIME"))),
@@ -575,11 +575,15 @@ def update_event_data(sport_id):
                         else:
                             existing_event.home_score = event.get("HOME_SCORE_CURRENT")
                             existing_event.away_score = event.get("AWAY_SCORE_CURRENT")
+                            existing_event.half = event.get("STAGE")
                             existing_event.status = status_id
                             existing_event.start_at = datetime.utcfromtimestamp(event.get("START_TIME"))
                             start_time_fact = event.get("STAGE_START_TIME")
+                            stage = event.get("STAGE")
                             if start_time_fact and not existing_event.start_at_for_timer:
                                 existing_event.start_at_for_timer = datetime.utcfromtimestamp(start_time_fact)
+                            if stage == 'HALF_TIME':
+                                existing_event.time_half_time = datetime.utcfromtimestamp(start_time_fact)
                             existing_event.half = event.get("ROUND")
                             events_list_update.append(existing_event)
 
