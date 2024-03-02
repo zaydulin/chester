@@ -648,9 +648,7 @@
                                 {% if event.status == 3  %}  Матч начнется {{ event.start_at }}
                                 {% elif event.status == 2 %} Матч уже прошел {{ event.start_at }}
                                 {% elif event.status == 1 %}{% if event.status == 1 %}
-                                {% if event.timer_div %}
-                                    {{event.timer_div|safe}}
-                                {% else %}
+                                {% if not  event.timer_div or event.timer_div == '1' %}
                                     {% if eventslug == 'football'%}
                                     <div class="img-info__period"
                                          style="color:red"
@@ -717,8 +715,9 @@
                                          data-periode-time-1="30:00"
                                          data-pause-time-1="15:00">
                                      </div>
-
                                     {% endif %}
+                                {% else %}
+                                    {{event.timer_div|safe}}
                                 {% endif %}
                                 {% endif %}
                                 {% endif %}
