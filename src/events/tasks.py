@@ -518,7 +518,8 @@ def update_timer():
         periode_time_end = []
         pause_time_start = []
         periode_time = []
-        start_time=timeperiod.start.first()
+        tpfirst=timeperiod.first()
+        start_time = tpfirst.start
         current_pause_time = 0
         current_period_time = 0
         #data-pause-time
