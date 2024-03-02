@@ -480,102 +480,35 @@ def get_statistic_event_id25():
 def get_statistic_event_id36():
     return get_statistic_event(36)
 
-@shared_task
-def update_timer():
-    events = Events.objects.filter(status=1)
-    for event in events:
-        timeperiod = TimePeriod.objects.filter(event=event)
-        eventslug = event.rubrics.slug
-        if eventslug == 'football':
-            periode_count = 2
-            periode_time_1 = "55:00"
-            pause_time_1 = "25:00"
-        elif eventslug == 'tennis':
-            periode_count = 5
-            periode_time_1 = "55:00"
-            pause_time_1 = "25:00"
-        elif eventslug == 'basketball':
-            periode_count = 4
-            periode_time_1 = "22:00"
-            pause_time_1 = "12:00"
-        elif eventslug == 'hockey':
-            periode_count = 3
-            periode_time_1 = "30:00"
-            pause_time_1 = "25:00"
-        elif eventslug == 'volleyball':
-            periode_count = 5
-            periode_time_1 = "35:00"
-            pause_time_1 = "25:00"
-        elif eventslug == 'handball':
-            periode_count = 2
-            periode_time_1 = "40:00"
-            pause_time_1 = "25:00"
-        else:
-            periode_count = 0
-            periode_time_1 = ""
-            pause_time_1 = ""
-        pause_time = []
-        periode_time_end = []
-        pause_time_start = []
-        periode_time = []
-        start_time = datetime.strptime(event.get_start_date_for_timer()[-5:], '%H:%M')
-        current_pause_time = 0
-        current_period_time = 0
-        #data-pause-time
-        for _ in range(periode_count):
-            current_pause_time += int(pause_time_1.split(":")[0]) * 60 + int(pause_time_1.split(":")[1])
-            pause_time.append(f"{current_pause_time // 60:02d}:{current_pause_time % 60:02d}")
-        for i, period in enumerate(timeperiod):
-            if period.pause:
-                current_pause_time += int(period.pause.split(":")[0]) * 60 + int(period.pause.split(":")[1])
-                pause_time[i] = f"{current_pause_time // 60:02d}:{current_pause_time % 60:02d}"
-        #data-periode-time-end
-        for i in range(periode_count):
-            periode_minutes, periode_seconds = map(int, periode_time_1.split(':'))
-            pause_minutes, pause_seconds = map(int, pause_time_1.split(':'))
-            periode_end_time = start_time + timedelta(
-                minutes=periode_minutes + periode_seconds + pause_minutes + pause_seconds)
-            periode_time_end.append(periode_end_time.strftime('%H:%M:%S'))
-        for i, period in enumerate(timeperiod):
-            if period.end:
-                periode_time_end[i] = period.end
-        # data-periode-time-start
-        for i in range(periode_count):
-            periode_minutes, periode_seconds = map(int, periode_time_1.split(':'))
-            pause_time_start_time = start_time + timedelta(minutes=periode_minutes + periode_seconds)
-            pause_time_start.append(pause_time_start_time.strftime('%H:%M:%S'))
-        for i, period in enumerate(timeperiod):
-            if period.end_pause:
-                pause_time_start[i] = period.end_pause
-        #data-periode-time
-        for _ in range(periode_count):
-            current_period_time += int(periode_time_1.split(":")[0]) * 60 + int(periode_time_1.split(":")[1])
-            periode_time.append(f"{current_period_time // 60:02d}:{current_period_time % 60:02d}")
-        # for i, item in enumerate(timeperiod):
-        #     if item.period:
-        #         current_period_time += int(item.period.split(":")[0]) * 60 + int(item.period.split(":")[1])
-        #         periode_time[i] = f"{current_period_time // 60:02d}:{current_period_time % 60:02d}"
 
-        timer_div_html = f'''
-                        <div class="img-info__period" style="color:red" id="life-time" current-time="{datetime.now().strftime('%H:%M:%S')}" data-start-time="{start_time.strftime('%H:%M:%S')}" data-periode-count="{periode_count}" data-periode-add="0"
-                        '''
+def startend(event):
+    timeperiod = TimePeriod.objects.filter(event=event)
+    for period in timeperiod:
+        if period.start and period.end:
+            start_time = datetime.strptime(str(period.start), '%H:%M:%S').time()
+            end_time = datetime.strptime(str(period.end), '%H:%M:%S').time()
+            duration = datetime.combine(datetime.min, end_time) - datetime.combine(datetime.min, start_time)
+            duration_seconds = duration.total_seconds()
+            hours, remainder = divmod(duration_seconds, 3600)
+            minutes, seconds = divmod(remainder, 60)
+            period.period = f"{int(minutes):02}:{int(seconds):02}"
+            period.save()
+    return
 
-        for index, pause_time in enumerate(pause_time, start=1):
-            timer_div_html += f'\n data-pause-time-{index}="{pause_time}"'
 
-        for index, periode_time in enumerate(periode_time_end, start=1):
-            timer_div_html += f'\n data-periode-time-end-{index}="{periode_time}"'
-
-        for index, periode_time in enumerate(pause_time_start, start=1):
-            timer_div_html += f'\n data-pause-time-start-{index}="{periode_time}"'
-
-        for index, periode_time in enumerate(periode_time, start=1):
-            timer_div_html += f'\n data-periode-time-{index}="{periode_time}"'
-
-        timer_div_html += '>\n</div>'
-        event.timer_div = timer_div_html
-        event.save()
-    return {"response": f"update all timers"}
+def endpause(event):
+    timeperiod = TimePeriod.objects.filter(event=event)
+    for period in timeperiod:
+        if period.end and period.end_pause:
+            end_pause_time = datetime.strptime(str(period.end_pause), '%H:%M:%S').time()
+            end_time = datetime.strptime(str(period.end), '%H:%M:%S').time()
+            duration = datetime.combine(datetime.min, end_pause_time) - datetime.combine(datetime.min, end_time)
+            duration_seconds = duration.total_seconds()
+            hours, remainder = divmod(duration_seconds, 3600)
+            minutes, seconds = divmod(remainder, 60)
+            period.pause = f"{int(minutes):02}:{int(seconds):02}"
+            period.save()
+    return
 
 #события на затрва (нужны тк таска отправляет запрос но не получает некоторые матчи ,проблема апи)
 def update_event_data(sport_id):
@@ -698,6 +631,7 @@ def update_event_data(sport_id):
                                     for periodtime in timeperiods:
                                         if not periodtime.end:
                                             periodtime.end = period_end_time
+                                            startend(existing_event)
                                             time_periods_to_update.append(periodtime)
                                 if stage !='HALF_TIME' and existing_event.half == 'HALF_TIME' and stage != 'FINISHED':
                                     stage_time = datetime.utcfromtimestamp(event.get("STAGE_START_TIME"))
@@ -705,10 +639,18 @@ def update_event_data(sport_id):
                                     for periodtime in timeperiods:
                                         if not periodtime.end_pause:
                                             periodtime.end_pause = period_end_pause_time
+                                            endpause(existing_event)
                                             time_periods_to_update.append(periodtime)
                                         else:
                                             if not TimePeriod.objects.filter(event=existing_event,start= period_end_pause_time).exists():
-                                                time_periods_to_create.append(TimePeriod(event=existing_event,start= period_end_pause_time))
+
+                                                #тут для новго тайма
+                                                time_periods_to_create.append(TimePeriod(
+                                                    event=existing_event,
+                                                    start= period_end_pause_time,
+                                                    last_period = periodtime.period  ,
+                                                    pause_last =periodtime.pause_last,
+                                                ))
                                 if stage != 'HALF_TIME' and stage != 'FINISHED' and stage != 'SCHEDULED':
                                     stage_time = datetime.utcfromtimestamp(event.get("STAGE_START_TIME"))
                                     period_start_time = stage_time.strftime('%H:%M:%S')
@@ -718,8 +660,6 @@ def update_event_data(sport_id):
                             elif status_id == 2:
                                 for tp in timeperiods:
                                     tp.delete()
-
-
                             existing_event.half = stage
                             events_list_update.append(existing_event)
 
@@ -733,9 +673,7 @@ def update_event_data(sport_id):
                 for event in events_to_update:
                     event.status = 2
                     event.save()
-                timeperiods = TimePeriod.objects.filter(event__second_event_api_id__in=event_ids)
-                for item in  timeperiods:
-                    item.save()
+
 
                 break
             elif response.status_code == 429:
