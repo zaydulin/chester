@@ -174,6 +174,7 @@ class TimePeriod(models.Model):
     pause = models.CharField("Длительность перерыва", max_length=500, null=True)
     last_period = models.CharField("Длительность прошлого периода", max_length=500, null=True)
     pause_last= models.CharField("Длительность прошлого перерыва", max_length=500, null=True)
+    fake_end_pause_time= models.CharField("Фэк", max_length=500, null=True)
 
 
     class Meta:

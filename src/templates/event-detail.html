@@ -719,6 +719,7 @@
                                         {% endif %}
 
                                         {% for period in timeperiod %}
+                                        <span>------------------------</span>
                                         <span>Start - {{period.start}}</span>
                                         <span>End - {{period.end}}</span>
                                         <span>End_Pause - {{period.end_pause}}</span>
@@ -726,6 +727,12 @@
                                         <span>Pause - {{period.pause}}</span>
                                         <span>last_period - {{period.last_period}}</span>
                                         <span>pause_last - {{period.pause_last}}</span>
+                                        <span>fake_end_pause_time - {{period.fake_end_pause_time}}</span>
+                                        {% if period.end_pause %}
+                                            <span>End_Pause - {{period.end_pause}}</span>
+                                        {% else %}
+                                            <span>fake_end_pause_time - {{period.fake_end_pause_time}}</span>
+                                        {% endif %}
                                         {% endfor %}
 
 

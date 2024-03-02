@@ -492,6 +492,7 @@ def startend(event):
             hours, remainder = divmod(duration_seconds, 3600)
             minutes, seconds = divmod(remainder, 60)
             period.period = f"{int(minutes):02}:{int(seconds):02}"
+            period.fake_end_pause_time = f"{(int(minutes)+20):02}:{int(seconds):02}"
             period.save()
     return
 
