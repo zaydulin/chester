@@ -185,8 +185,6 @@ class TimePeriod(models.Model):
             hours, remainder = divmod(duration_seconds, 3600)
             minutes, seconds = divmod(remainder, 60)
             self.period = f"{int(minutes):02}:{int(seconds):02}"
-
-            self.save()
         if self.end and self.end_pause:
             end_pause_time = datetime.strptime(str(self.end_pause), '%H:%M:%S').time()
             end_time = datetime.strptime(str(self.end), '%H:%M:%S').time()
@@ -195,7 +193,6 @@ class TimePeriod(models.Model):
             hours, remainder = divmod(duration_seconds, 3600)
             minutes, seconds = divmod(remainder, 60)
             self.pause = f"{int(minutes):02}:{int(seconds):02}"
-            self.save()
         super(TimePeriod, self).save(*args, **kwargs)
 
 
