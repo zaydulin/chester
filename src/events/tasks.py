@@ -548,7 +548,7 @@ def update_timer():
             if period.end_pause:
                 pause_time_start[i] = period.end_pause
         #data-periode-time
-        for i in range(periode_count):
+        for _ in range(periode_count):
             current_period_time += int(periode_time_1.split(":")[0]) * 60 + int(periode_time_1.split(":")[1])
             periode_time.append(f"{current_period_time // 60:02d}:{current_period_time % 60:02d}")
         for i, item in enumerate(timeperiod):
