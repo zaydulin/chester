@@ -481,36 +481,6 @@ def get_statistic_event_id36():
     return get_statistic_event(36)
 
 
-def startend(event):
-    timeperiod = TimePeriod.objects.filter(event=event)
-    for period in timeperiod:
-        if period.start and period.end:
-            start_time = datetime.strptime(str(period.start), '%H:%M:%S').time()
-            end_time = datetime.strptime(str(period.end), '%H:%M:%S').time()
-            duration = datetime.combine(datetime.min, end_time) - datetime.combine(datetime.min, start_time)
-            duration_seconds = duration.total_seconds()
-            hours, remainder = divmod(duration_seconds, 3600)
-            minutes, seconds = divmod(remainder, 60)
-            period.period = f"{int(minutes):02}:{int(seconds):02}"
-
-            period.save()
-    return
-
-
-def endpause(event):
-    timeperiod = TimePeriod.objects.filter(event=event)
-    for period in timeperiod:
-        if period.end and period.end_pause:
-            end_pause_time = datetime.strptime(str(period.end_pause), '%H:%M:%S').time()
-            end_time = datetime.strptime(str(period.end), '%H:%M:%S').time()
-            duration = datetime.combine(datetime.min, end_pause_time) - datetime.combine(datetime.min, end_time)
-            duration_seconds = duration.total_seconds()
-            hours, remainder = divmod(duration_seconds, 3600)
-            minutes, seconds = divmod(remainder, 60)
-            period.pause = f"{int(minutes):02}:{int(seconds):02}"
-            period.save()
-    return
-
 #события на затрва (нужны тк таска отправляет запрос но не получает некоторые матчи ,проблема апи)
 def update_event_data(sport_id):
     url = "https://flashlive-sports.p.rapidapi.com/v1/events/list"
@@ -632,7 +602,7 @@ def update_event_data(sport_id):
                                     for periodtime in timeperiods:
                                         if not periodtime.end:
                                             periodtime.end = period_end_time
-                                            startend(existing_event)
+
                                             time_periods_to_update.append(periodtime)
                                 if stage !='HALF_TIME' and existing_event.half == 'HALF_TIME' and stage != 'FINISHED':
                                     stage_time = datetime.utcfromtimestamp(event.get("STAGE_START_TIME"))
@@ -640,7 +610,7 @@ def update_event_data(sport_id):
                                     for periodtime in timeperiods:
                                         if not periodtime.end_pause:
                                             periodtime.end_pause = period_end_pause_time
-                                            endpause(existing_event)
+
                                             time_periods_to_update.append(periodtime)
                                         else:
                                             if not TimePeriod.objects.filter(event=existing_event,start= period_end_pause_time).exists():
@@ -674,8 +644,9 @@ def update_event_data(sport_id):
                 for event in events_to_update:
                     event.status = 2
                     event.save()
-
-
+                timperiods = TimePeriod.objects.filter(event__second_event_api_id__in=event_ids)
+                for tp in timperiods:
+                    tp.save()
                 break
             elif response.status_code == 429:
                 retries += 1

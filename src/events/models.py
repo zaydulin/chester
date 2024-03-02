@@ -176,6 +176,28 @@ class TimePeriod(models.Model):
     pause_last= models.CharField("Длительность прошлого перерыва", max_length=500, null=True)
     fake_end_pause_time= models.CharField("Фэк", max_length=500, null=True)
 
+    def save(self, *args, **kwargs):
+        if self.start and self.end:
+            start_time = datetime.strptime(str(self.start), '%H:%M:%S').time()
+            end_time = datetime.strptime(str(self.end), '%H:%M:%S').time()
+            duration = datetime.combine(datetime.min, end_time) - datetime.combine(datetime.min, start_time)
+            duration_seconds = duration.total_seconds()
+            hours, remainder = divmod(duration_seconds, 3600)
+            minutes, seconds = divmod(remainder, 60)
+            self.period = f"{int(minutes):02}:{int(seconds):02}"
+
+            self.save()
+        if self.end and self.end_pause:
+            end_pause_time = datetime.strptime(str(self.end_pause), '%H:%M:%S').time()
+            end_time = datetime.strptime(str(self.end), '%H:%M:%S').time()
+            duration = datetime.combine(datetime.min, end_pause_time) - datetime.combine(datetime.min, end_time)
+            duration_seconds = duration.total_seconds()
+            hours, remainder = divmod(duration_seconds, 3600)
+            minutes, seconds = divmod(remainder, 60)
+            self.pause = f"{int(minutes):02}:{int(seconds):02}"
+            self.save()
+        super(TimePeriod, self).save(*args, **kwargs)
+
 
     class Meta:
         verbose_name = 'Таймер'
