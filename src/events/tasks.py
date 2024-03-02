@@ -567,7 +567,7 @@ def update_timer():
             timer_div_html += f'\n data-periode-time-end-{index}="{periode_time}"'
 
         for index, periode_time in enumerate(pause_time_start, start=1):
-            timer_div_html += f'\n data-pause-time-start-{index}="{periode_time}:00"'
+            timer_div_html += f'\n data-pause-time-start-{index}="{periode_time}"'
 
         for index, periode_time in enumerate(periode_time, start=1):
             timer_div_html += f'\n data-periode-time-{index}="{periode_time}"'
