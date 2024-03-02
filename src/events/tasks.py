@@ -1,7 +1,7 @@
 from celery import shared_task
 import requests
 from datetime import datetime, timedelta
-from .models import Rubrics, Season, Team, Events, H2H, Country
+from .models import Rubrics, Season, Team, Events, H2H, Country, TimePeriod
 from django.db.models import Q, Count
 from events.models import Rubrics, Events, Team, Season, Player, Incidents, Periods, GameStatistic, H2H, TennisPoints, \
     TennisGames, Points, Country, Stages, IncidentParticipants
@@ -515,6 +515,8 @@ def update_event_data(sport_id):
 
                     events_list = []
                     events_list_update = []
+                    time_periods_to_create = []
+                    time_periods_to_update = []
                     for event in events:
                         event_id = event.get('EVENT_ID')
                         if event_id:
@@ -556,7 +558,8 @@ def update_event_data(sport_id):
                         existing_event = Events.objects.filter(rubrics=rubrics,second_event_api_id=event.get("EVENT_ID")).first()
 
                         if existing_event is None:
-                            events_list.append(Events(
+                            stage = event.get("STAGE"),
+                            new_event = Events(
                                 rubrics=rubrics,
                                 second_event_api_id=event.get("EVENT_ID"),
                                 start_at=datetime.utcfromtimestamp(event.get("START_TIME")),
@@ -567,34 +570,62 @@ def update_event_data(sport_id):
                                 away_team=away_team,
                                 home_score=event.get("HOME_SCORE_CURRENT"),
                                 away_score=event.get("AWAY_SCORE_CURRENT"),
-                                half=event.get("STAGE"),
+                                half=stage,
                                 section=season,
                                 slug=generate_event_slug(event.get("HOME_NAME"), event.get("AWAY_NAME"),
                                                          datetime.utcfromtimestamp(event.get("START_TIME"))),
+                            )
+                            start = datetime.utcfromtimestamp(event.get("STAGE_START_TIME"))
+                            start_time = datetime.strptime(start[-5:], '%H:%M')
+                            formatted_start_time = start_time.strftime('%H:%M:%S')
+                            time_periods_to_create.append(TimePeriod(
+                                event=new_event,
+                                start= formatted_start_time
                             ))
+                            events_list.append(new_event)
                         else:
+                            stage =event.get("STAGE")
                             existing_event.home_score = event.get("HOME_SCORE_CURRENT")
                             existing_event.away_score = event.get("AWAY_SCORE_CURRENT")
-                            existing_event.half = event.get("STAGE")
                             existing_event.status = status_id
                             existing_event.start_at = datetime.utcfromtimestamp(event.get("START_TIME"))
                             start_time_fact = event.get("STAGE_START_TIME")
-                            stage = event.get("STAGE")
+                            timeperiods = TimePeriod.objects.filter(event=existing_event)
                             if start_time_fact and not existing_event.start_at_for_timer:
                                 existing_event.start_at_for_timer = datetime.utcfromtimestamp(start_time_fact)
                             if stage == 'HALF_TIME':
-                                existing_event.time_half_time = datetime.utcfromtimestamp(start_time_fact)
-                            existing_event.half = event.get("ROUND")
-                            events_list_update.append(existing_event)
+                                stage_time = datetime.utcfromtimestamp(event.get("STAGE_START_TIME"))
+                                period_end_time = datetime.strptime(stage_time[-5:], '%H:%M')
+                                formated_period_end_time = period_end_time.strftime('%H:%M:%S')
+                                for periodtime in timeperiods:
+                                    if not periodtime.end:
+                                        periodtime.end = formated_period_end_time
+                                        time_periods_to_update.append(periodtime)
+                            if stage !='HALF_TIME' and existing_event.half == 'HALF_TIME' and stage != 'FINISHED':
+                                stage_time = datetime.utcfromtimestamp(event.get("STAGE_START_TIME"))
+                                period_end_pause_time = datetime.strptime(stage_time[-5:], '%H:%M')
+                                formated_period_end_pause_time = period_end_pause_time.strftime('%H:%M:%S')
+                                for periodtime in timeperiods:
+                                    if not periodtime.end_pause:
+                                        periodtime.end_pause = formated_period_end_pause_time
+                                        time_periods_to_update.append(periodtime)
+                                    else:
+                                        time_periods_to_create.append(TimePeriod(event=existing_event,start= formated_period_end_pause_time))
 
+
+                            existing_event.half = stage
+                            events_list_update.append(existing_event)
+                    TimePeriod.objects.bulk_create(time_periods_to_create)
+                    TimePeriod.objects.bulk_update(time_periods_to_update,fields=['end', 'end_pause'])
                     Events.objects.bulk_create(events_list)
                     Events.objects.bulk_update(events_list_update, fields=[
-                        'home_score', 'away_score', 'status','start_at','start_at_for_timer','half'
+                        'home_score', 'away_score', 'status','start_at','start_at_for_timer','time_half_time','half'
                     ])
                 events_to_update = Events.objects.exclude(second_event_api_id__in=event_ids).filter(rubrics=rubrics,status=1)
                 for event in events_to_update:
                     event.status = 2
                     event.save()
+
                 break
             elif response.status_code == 429:
                 retries += 1

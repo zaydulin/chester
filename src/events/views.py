@@ -6,7 +6,7 @@ from django.db.models import Q, Count
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.generic import ListView, DetailView, TemplateView
-from .models import Events, Rubrics, Season, Team, Player , Country
+from .models import Events, Rubrics, Season, Team, Player, Country, TimePeriod
 from mainapp.models import Baners, Messages, Bookmarks
 from mainapp.views import CustomHtmxMixin
 from .forms import MessageForm, EventSearchForm
@@ -454,96 +454,18 @@ class EventsView(CustomHtmxMixin,TemplateView):
             ).first()
             context["is_home_team_bookmarked"] = home_team_bookmark is not None
             context["is_away_team_bookmarked"] = away_team_bookmark is not None
-
-        periode_times = []
-        periode_times_without_pause = []
-        start_time = datetime.strptime(event.get_start_date_for_timer()[-5:], '%H:%M')
-        pause_times = []
-        eventslug = event.rubrics.slug
-        if eventslug == 'football':
-            periode_count = 2
-            periode_time_1 = "45:00"
-            pause_time_1 = "15:00"
-        elif eventslug == 'tennis':
-            periode_count = 5
-            periode_time_1 = "45:00"
-            pause_time_1 = "15:00"
-        elif eventslug == 'basketball':
-            periode_count = 4
-            periode_time_1 = "12:00"
-            pause_time_1 = "2:00"
-        elif eventslug == 'hockey':
-            periode_count = 3
-            periode_time_1 = "20:00"
-            pause_time_1 = "15:00"
-        elif eventslug == 'volleyball':
-            periode_count = 5
-            periode_time_1 = "25:00"
-            pause_time_1 = "15:00"
-        elif eventslug == 'handball':
-            periode_count = 2
-            periode_time_1 = "30:00"
-            pause_time_1 = "15:00"
-        else:
-            periode_count = 0
-            periode_time_1 = ""
-            pause_time_1 = ""
-
-        for i in range(periode_count):
-            periode_minutes, periode_seconds = map(int, periode_time_1.split(':'))
-            pause_minutes, pause_seconds = map(int, pause_time_1.split(':'))
-
-            periode_end_time = start_time + timedelta(
-                minutes=periode_minutes + periode_seconds + pause_minutes + pause_seconds)
-            periode_end_time_without_pause = start_time + timedelta(minutes=periode_minutes + periode_seconds)
-
-            periode_times.append(periode_end_time.strftime('%H:%M'))
-            periode_times_without_pause.append(periode_end_time_without_pause.strftime('%H:%M'))
-
-            if i < periode_count - 1:
-                start_time = periode_end_time + timedelta(minutes=pause_minutes + pause_seconds)
-
-        pause_times = []
-        periode_times_data = []
-        current_pause_time = 0
-        current_periode_time = 0
-
-        for _ in range(periode_count):
-            current_pause_time += int(pause_time_1.split(":")[0]) * 60 + int(pause_time_1.split(":")[1])
-            current_periode_time += int(periode_time_1.split(":")[0]) * 60 + int(periode_time_1.split(":")[1])
-            pause_times.append(f"{current_pause_time // 60:02d}:{current_pause_time % 60:02d}")
-            periode_times_data.append(f"{current_periode_time // 60:02d}:{current_periode_time % 60:02d}")
-
-        timer_div_html = f'''
-        <div class="img-info__period" style="color:red" id="life-time" current-time="{datetime.now().strftime('%H:%M:%S')}" data-start-time="{start_time.strftime('%H:%M')}:00" data-periode-count="{periode_count}" data-periode-add="0"
-        '''
-
-        for index, pause_time in enumerate(pause_times, start=1):
-            timer_div_html += f'\n data-pause-time-{index}="{pause_time}"'
-
-        for index, periode_time in enumerate(periode_times, start=1):
-            timer_div_html += f'\n data-periode-time-end-{index}="{periode_time}:00"'
-
-        for index, periode_time in enumerate(periode_times_without_pause, start=1):
-            timer_div_html += f'\n data-pause-time-start-{index}="{periode_time}:00"'
-
-        for index, periode_time in enumerate(periode_times_data, start=1):
-            timer_div_html += f'\n data-periode-time-{index}="{periode_time}"'
-
-        timer_div_html += '>\n</div>'
-        print('timer_div_html--------------',timer_div_html)
-        event.timer_div = timer_div_html
-        event.save()
-
+        timeperiod = TimePeriod.objects.filter(event=event)
         context["title"] = f' {home_team.name} - {away_team.name}: смотреть онлайн {event.start_at} , прямая трансляция  бесплатно | Chesterbets'
         context["meta_content"] = f'{home_team.name} - {away_team.name} , ({event.rubrics.name}) , {event.start_at}. Онлайн видео трансляция, новости, статистика, ставки, прямой эфир.'
         context["event"] = event
+        context["timeperiod"] = timeperiod
         context["messages_page"] = messages_page
         context["messages"] = messages
         context["message_form"] = message_form
         context["unique_users_count"] = unique_users_count
         context["home_team"] = home_team
         context["away_team"] = away_team
+        context["eventslug"] = event.rubrics.slug
         context["home_team_players_main"] = home_team_players_main
         context["home_team_players_not_main"] = home_team_players_not_main
         context["away_team_players_main"] = away_team_players_main
@@ -578,6 +500,18 @@ class EventsView(CustomHtmxMixin,TemplateView):
 
 
 
+
+class GetCurrentTimerView(View):
+    def get(self, request, event_id):
+        event = Events.objects.filter(id=event_id).first()
+        data = {}
+        template_name = 'partials/timer_div.html'
+        if event:
+            if event.half == 'HALF_TIME':
+                data['timer_div'] = 'Перерыв'
+                return render(request, template_name, data)
+        else:
+            return JsonResponse({'error': 'Event not found'}, status=404)
 
 class GetElementDataView(View):
     def get(self, request, event_id, element):

@@ -631,15 +631,15 @@
                             <div class="img-info__score" style="display: flex ;justify-content: center;
                                     align-items: center;color: white;text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">
                                 <div hx-get="{% url 'get_element_data' event_id=event.id element='home_score_mid' %}" hx-trigger="every 5s" hx-swap="score-home-mid">
-                                <span class="event-team__point" id="score-home-mid" style="font-size: 60px;">
-                                    {% if not event.home_score %} 0 {% else %}{{ event.home_score }}{% endif %}
-                                </span>
+                                    <span class="event-team__point" id="score-home-mid" style="font-size: 60px;">
+                                        {% if not event.home_score %} 0 {% else %}{{ event.home_score }}{% endif %}
+                                    </span>
                                 </div>
                                 :
                                 <div hx-get="{% url 'get_element_data' event_id=event.id element='away_score_mid' %}" hx-trigger="every 5s" hx-swap="score-away-mid">
-                                <span class="event-team__point" id="score-away-mid"  style="font-size: 60px;">
-                                    {% if not event.away_score %} 0 {% else %}{{ event.away_score }}{% endif %}
-                                </span>
+                                    <span class="event-team__point" id="score-away-mid"  style="font-size: 60px;">
+                                        {% if not event.away_score %} 0 {% else %}{{ event.away_score }}{% endif %}
+                                    </span>
                                 </div>
 
                             </div>
@@ -648,13 +648,85 @@
                                 {% if event.status == 3  %}  Матч начнется {{ event.start_at }}
                                 {% elif event.status == 2 %} Матч уже прошел {{ event.start_at }}
                                 {% elif event.status == 1 %}{% if event.status == 1 %}
-
-                                <div id="timer-div">
-                                    {{ event.timer_div|safe }}
+                                {% if eventslug == 'football'%}
+                                <div class="img-info__period"
+                                     style="color:red"
+                                     id="life-time"
+                                     current-time="{% now 'H:i:s' %}"
+                                     data-start-time="{{event.get_start_date_for_timer|safe}}:00"
+                                     data-periode-count="2"
+                                     data-periode-add="0"
+                                     data-periode-time-1="45:00"
+                                     data-pause-time-1="15:00">
                                 </div>
+                                {% elif eventslug == 'tennis' %}
+                                <div class="img-info__period"
+                                     id="life-time"
+                                     style="color:red"
+                                     current-time="{% now 'H:i:s' %}"
+                                     data-start-time="{{event.get_start_date|safe}}:00"
+                                     data-periode-count="5"
+                                     data-periode-add="0"
+                                     data-periode-time-1="45:00"
+                                     data-pause-time-1="15:00">
+                                </div>
+                                {% elif eventslug == 'basketball' %}
+                                <div class="img-info__period"
+                                     id="life-time"
+                                     style="color:red"
+                                     current-time="{% now 'H:i:s' %}"
+                                     data-start-time="{{event.get_start_date|safe}}:00"
+                                     data-periode-count="4"
+                                     data-periode-add="0"
+                                     data-periode-time-1="12:00"
+                                     data-pause-time-1="2:00">
+                                </div>
+                                {% elif eventslug == 'hockey' %}
+                                <div class="img-info__period"
+                                     id="life-time"
+                                     style="color:red"
+                                     current-time="{% now 'H:i:s' %}"
+                                     data-start-time="{{event.get_start_date|safe}}:00"
+                                     data-periode-count="3"
+                                     data-periode-add="0"
+                                     data-periode-time-1="20:00"
+                                     data-pause-time-1="15:00">
+                                </div>
+                                {% elif eventslug == 'volleyball' %}
+                                <div class="img-info__period"
+                                     id="life-time"
+                                     style="color:red"
+                                     current-time="{% now 'H:i:s' %}"
+                                     data-start-time="{{event.get_start_date|safe}}:00"
+                                     data-periode-count="5"
+                                     data-periode-add="0"
+                                     data-periode-time-1="25:00"
+                                     data-pause-time-1="15:00">
+                                </div>
+                                {% elif eventslug == 'handball' %}
+                                <div class="img-info__period"
+                                     id="life-time"
+                                     style="color:red"
+                                     current-time="{% now 'H:i:s' %}"
+                                     data-start-time="{{event.get_start_date|safe}}:00"
+                                     data-periode-count="2"
+                                     data-periode-add="0"
+                                     data-periode-time-1="30:00"
+                                     data-pause-time-1="15:00">
+
 
                                 {% endif %}
                                 {% endif %}
+                                {% endif %}
+                                {% for period in timeperiod%}
+                                    <span>Start - {{period.start}}</span>
+                                    <span>End - {{period.end}}</span>
+                                    <span>End_Pause - {{period.end_pause}}</span>
+                                    <span>Period - {{period.period}}</span>
+                                    <span>Pause - {{period.pause}}</span>
+
+                                {% endfor%}
+
                             </div>
                         </div>
                     </div>

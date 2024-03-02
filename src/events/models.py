@@ -165,6 +165,36 @@ class Events(models.Model):
         verbose_name = 'Событие'
         verbose_name_plural = 'События'
 
+class TimePeriod(models.Model):
+    event = models.ForeignKey(Events, verbose_name="Матч",on_delete=models.CASCADE)
+    start = models.CharField("Начало периода", max_length=500, null=True)
+    end = models.CharField("Конец периода", max_length=500, null=True)
+    end_pause = models.CharField("Конец перерыва периода", max_length=500, null=True)
+    period = models.CharField("Длительность матча", max_length=500, null=True)
+    pause = models.CharField("Длительность перерыва", max_length=500, null=True)
+
+    def save(self, *args, **kwargs):
+        if self.start and self.end:
+            start_time = datetime.strptime(str(self.start), '%H:%M:%S').time()
+            end_time = datetime.strptime(str(self.end), '%H:%M:%S').time()
+            duration = datetime.combine(datetime.min, end_time) - datetime.combine(datetime.min, start_time)
+            duration_seconds = duration.total_seconds()
+            hours, remainder = divmod(duration_seconds, 3600)
+            minutes, seconds = divmod(remainder, 60)
+            self.period = f"{int(hours):02}:{int(minutes):02}:{int(seconds):02}"
+        if self.end and self.end_pause:
+            end_pause_time = datetime.strptime(str(self.end_pause), '%H:%M:%S').time()
+            end_time = datetime.strptime(str(self.end), '%H:%M:%S').time()
+            duration = datetime.combine(datetime.min, end_pause_time) - datetime.combine(datetime.min, end_time)
+            duration_seconds = duration.total_seconds()
+            hours, remainder = divmod(duration_seconds, 3600)
+            minutes, seconds = divmod(remainder, 60)
+            self.pause = f"{int(hours):02}:{int(minutes):02}:{int(seconds):02}"
+        super(TimePeriod, self).save(*args, **kwargs)
+
+    class Meta:
+        verbose_name = 'Таймер'
+        verbose_name_plural = 'Таймер'
 
 class TennisPoints(models.Model):
     api_id_tp =  models.CharField('ID API ',max_length=150)

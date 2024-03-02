@@ -18,6 +18,7 @@ urlpatterns = [
     path('get_chat_data/<slug:event_slug>/', get_chat_data, name='get_chat_data'),
     path('post_message/<slug:event_slug>/', views.PostMessageView.as_view(), name='post_message'),
     path('get_element_data/<int:event_id>/<str:element>/', views.GetElementDataView.as_view(), name='get_element_data'),
+    path('get_current_timer/<int:event_id>/', views.GetCurrentTimerView.as_view(), name='get_current_timer'),
 ]
 
 
