@@ -23,10 +23,12 @@ class SeasonAdmin(admin.ModelAdmin):
 
 class CountryAdmin(admin.ModelAdmin):
     list_display = ['name','name_en','image']
+class TimePeriodAdmin(admin.ModelAdmin):
+    list_display = ['event','start','end','end_pause','period','pause']
 
 
 admin.site.register(Events, EventsAdmin)
-admin.site.register(TimePeriod)
+admin.site.register(TimePeriod,TimePeriodAdmin)
 admin.site.register(Rubrics)
 admin.site.register(Stages)
 admin.site.register(Team)
