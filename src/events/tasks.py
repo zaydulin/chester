@@ -575,14 +575,14 @@ def update_event_data(sport_id):
                                 slug=generate_event_slug(event.get("HOME_NAME"), event.get("AWAY_NAME"),
                                                          datetime.utcfromtimestamp(event.get("START_TIME"))),
                             )
+                            if event.get("STAGE_START_TIME"):
+                                start = datetime.utcfromtimestamp(event.get("STAGE_START_TIME"))
+                                start_time = start.strftime('%H:%M:%S')
+                                time_periods_to_create.append(TimePeriod(
+                                    event=new_event,
+                                    start=start_time
+                                ))
 
-                            start = datetime.utcfromtimestamp(event.get("STAGE_START_TIME"))
-                            start_time = datetime.strptime(start[-5:], '%H:%M')
-                            formatted_start_time = start_time.strftime('%H:%M:%S')
-                            time_periods_to_create.append(TimePeriod(
-                                event=new_event,
-                                start= formatted_start_time
-                            ))
                             events_list.append(new_event)
                         else:
                             stage =event.get("STAGE")
