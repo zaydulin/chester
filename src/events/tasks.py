@@ -596,22 +596,20 @@ def update_event_data(sport_id):
                                 existing_event.start_at_for_timer = datetime.utcfromtimestamp(start_time_fact)
                             if stage == 'HALF_TIME':
                                 stage_time = datetime.utcfromtimestamp(event.get("STAGE_START_TIME"))
-                                period_end_time = datetime.strptime(stage_time[-5:], '%H:%M')
-                                formated_period_end_time = period_end_time.strftime('%H:%M:%S')
+                                period_end_time = stage_time.strftime('%H:%M:%S')
                                 for periodtime in timeperiods:
                                     if not periodtime.end:
-                                        periodtime.end = formated_period_end_time
+                                        periodtime.end = period_end_time
                                         time_periods_to_update.append(periodtime)
                             if stage !='HALF_TIME' and existing_event.half == 'HALF_TIME' and stage != 'FINISHED':
                                 stage_time = datetime.utcfromtimestamp(event.get("STAGE_START_TIME"))
-                                period_end_pause_time = datetime.strptime(stage_time[-5:], '%H:%M')
-                                formated_period_end_pause_time = period_end_pause_time.strftime('%H:%M:%S')
+                                period_end_pause_time = stage_time.strptime('%H:%M:%S')
                                 for periodtime in timeperiods:
                                     if not periodtime.end_pause:
-                                        periodtime.end_pause = formated_period_end_pause_time
+                                        periodtime.end_pause = period_end_pause_time
                                         time_periods_to_update.append(periodtime)
                                     else:
-                                        time_periods_to_create.append(TimePeriod(event=existing_event,start= formated_period_end_pause_time))
+                                        time_periods_to_create.append(TimePeriod(event=existing_event,start= period_end_pause_time))
 
 
                             existing_event.half = stage
