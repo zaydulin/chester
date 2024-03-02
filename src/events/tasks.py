@@ -603,7 +603,7 @@ def update_event_data(sport_id):
                                         time_periods_to_update.append(periodtime)
                             if stage !='HALF_TIME' and existing_event.half == 'HALF_TIME' and stage != 'FINISHED':
                                 stage_time = datetime.utcfromtimestamp(event.get("STAGE_START_TIME"))
-                                period_end_pause_time = stage_time.strptime('%H:%M:%S')
+                                period_end_pause_time = stage_time.strftime('%H:%M:%S')
                                 for periodtime in timeperiods:
                                     if not periodtime.end_pause:
                                         periodtime.end_pause = period_end_pause_time
