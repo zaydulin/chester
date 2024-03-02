@@ -158,7 +158,7 @@ class Events(models.Model):
 
     def __str__(self):
         status_str = next((status[1] for status in self.STATUS if status[0] == self.status), "Unknown")
-        return f'{self.section} - {self.name} - {status_str} - {self.start_at} - {self.rubrics.name}'
+        return f'{self.section} - {self.name} - {status_str} - {self.start_at} - {self.rubrics.name} - {self.second_event_api_id}'
 
     class Meta:
         indexes = [models.Index(fields=['rubrics'])]
