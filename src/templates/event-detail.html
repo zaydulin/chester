@@ -648,10 +648,81 @@
                                 {% if event.status == 3  %}  Матч начнется {{ event.start_at }}
                                 {% elif event.status == 2 %} Матч уже прошел {{ event.start_at }}
                                 {% elif event.status == 1 %}{% if event.status == 1 %}
-                                {{event.timer_div|safe}}
+                                {% if event.timer_div %}
+                                    {{event.timer_div|safe}}
+                                {% else %}
+                                    {% if eventslug == 'football'%}
+                                    <div class="img-info__period"
+                                         style="color:red"
+                                         id="life-time"
+                                         current-time="{% now 'H:i:s' %}"
+                                         data-start-time="{{event.get_start_date_for_timer|safe}}:00"
+                                         data-periode-count="2"
+                                         data-periode-add="0"
+                                         data-periode-time-1="45:00"
+                                         data-pause-time-1="15:00">
+                                    </div>
+                                    {% elif eventslug == 'tennis' %}
+                                    <div class="img-info__period"
+                                         id="life-time"
+                                         style="color:red"
+                                         current-time="{% now 'H:i:s' %}"
+                                         data-start-time="{{event.get_start_date|safe}}:00"
+                                         data-periode-count="5"
+                                         data-periode-add="0"
+                                         data-periode-time-1="45:00"
+                                         data-pause-time-1="15:00">
+                                    </div>
+                                    {% elif eventslug == 'basketball' %}
+                                    <div class="img-info__period"
+                                         id="life-time"
+                                         style="color:red"
+                                         current-time="{% now 'H:i:s' %}"
+                                         data-start-time="{{event.get_start_date|safe}}:00"
+                                         data-periode-count="4"
+                                         data-periode-add="0"
+                                         data-periode-time-1="12:00"
+                                         data-pause-time-1="2:00">
+                                    </div>
+                                    {% elif eventslug == 'hockey' %}
+                                    <div class="img-info__period"
+                                         id="life-time"
+                                         style="color:red"
+                                         current-time="{% now 'H:i:s' %}"
+                                         data-start-time="{{event.get_start_date|safe}}:00"
+                                         data-periode-count="3"
+                                         data-periode-add="0"
+                                         data-periode-time-1="20:00"
+                                         data-pause-time-1="15:00">
+                                    </div>
+                                    {% elif eventslug == 'volleyball' %}
+                                    <div class="img-info__period"
+                                         id="life-time"
+                                         style="color:red"
+                                         current-time="{% now 'H:i:s' %}"
+                                         data-start-time="{{event.get_start_date|safe}}:00"
+                                         data-periode-count="5"
+                                         data-periode-add="0"
+                                         data-periode-time-1="25:00"
+                                         data-pause-time-1="15:00">
+                                    </div>
+                                    {% elif eventslug == 'handball' %}
+                                    <div class="img-info__period"
+                                         id="life-time"
+                                         style="color:red"
+                                         current-time="{% now 'H:i:s' %}"
+                                         data-start-time="{{event.get_start_date|safe}}:00"
+                                         data-periode-count="2"
+                                         data-periode-add="0"
+                                         data-periode-time-1="30:00"
+                                         data-pause-time-1="15:00">
+                                     </div>
+
+                                    {% endif %}
                                 {% endif %}
                                 {% endif %}
-                                {% for period in timeperiod %}
+                                {% endif %}
+                                {% for period in timeperiod%}
                                     <span>Start - {{period.start}}</span>
                                     <span>End - {{period.end}}</span>
                                     <span>End_Pause - {{period.end_pause}}</span>
