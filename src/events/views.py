@@ -509,106 +509,11 @@ class GetCurrentTimerView(View):
         if event:
             if event.half == 'HALF_TIME':
                 data['timer_div'] = event.timer_div
-                update_timer(event_id)
                 return render(request, template_name, data)
             else:
                 pass
         else:
             return JsonResponse({'error': 'Event not found'}, status=404)
-def update_timer(event_id):
-    event = Events.objects.filter(id=event_id).first()
-    timeperiod = TimePeriod.objects.filter(event=event)
-    eventslug = event.rubrics.slug
-    if eventslug == 'football':
-        periode_count = 2
-        periode_time_1 = "55:00"
-        pause_time_1 = "25:00"
-    elif eventslug == 'tennis':
-        periode_count = 5
-        periode_time_1 = "55:00"
-        pause_time_1 = "25:00"
-    elif eventslug == 'basketball':
-        periode_count = 4
-        periode_time_1 = "22:00"
-        pause_time_1 = "12:00"
-    elif eventslug == 'hockey':
-        periode_count = 3
-        periode_time_1 = "30:00"
-        pause_time_1 = "25:00"
-    elif eventslug == 'volleyball':
-        periode_count = 5
-        periode_time_1 = "35:00"
-        pause_time_1 = "25:00"
-    elif eventslug == 'handball':
-        periode_count = 2
-        periode_time_1 = "40:00"
-        pause_time_1 = "25:00"
-    else:
-        periode_count = 0
-        periode_time_1 = ""
-        pause_time_1 = ""
-    pause_time = []
-    periode_time_end = []
-    pause_time_start = []
-    periode_time = []
-    start_time = datetime.strptime(event.get_start_date_for_timer()[-5:], '%H:%M')
-    current_pause_time = 0
-    current_period_time = 0
-    #data-pause-time
-    for _ in range(periode_count):
-        current_pause_time += int(pause_time_1.split(":")[0]) * 60 + int(pause_time_1.split(":")[1])
-        pause_time.append(f"{current_pause_time // 60:02d}:{current_pause_time % 60:02d}")
-    for i, period in enumerate(timeperiod):
-        if period.pause:
-            current_pause_time += int(period.pause.split(":")[0]) * 60 + int(period.pause.split(":")[1])
-            pause_time[i] = f"{current_pause_time // 60:02d}:{current_pause_time % 60:02d}"
-    #data-periode-time-end
-    for i in range(periode_count):
-        periode_minutes, periode_seconds = map(int, periode_time_1.split(':'))
-        pause_minutes, pause_seconds = map(int, pause_time_1.split(':'))
-        periode_end_time = start_time + timedelta(
-            minutes=periode_minutes + periode_seconds + pause_minutes + pause_seconds)
-        periode_time_end.append(periode_end_time.strftime('%H:%M:%S'))
-    for i, period in enumerate(timeperiod):
-        if period.end:
-            periode_time_end[i] = period.end
-    # data-periode-time-start
-    for i in range(periode_count):
-        periode_minutes, periode_seconds = map(int, periode_time_1.split(':'))
-        pause_time_start_time = start_time + timedelta(minutes=periode_minutes + periode_seconds)
-        pause_time_start.append(pause_time_start_time.strftime('%H:%M:%S'))
-    for i, period in enumerate(timeperiod):
-        if period.end_pause:
-            pause_time_start[i] = period.end_pause
-    #data-periode-time
-    for _ in range(periode_count):
-        current_period_time += int(periode_time_1.split(":")[0]) * 60 + int(periode_time_1.split(":")[1])
-        periode_time.append(f"{current_period_time // 60:02d}:{current_period_time % 60:02d}")
-    for i, item in enumerate(timeperiod):
-        if item.period:
-            current_period_time += int(item.period.split(":")[0]) * 60 + int(item.period.split(":")[1])
-            periode_time[i] = f"{current_period_time // 60:02d}:{current_period_time % 60:02d}"
-
-    timer_div_html = f'''
-                    <div class="img-info__period" style="color:red" id="life-time" current-time="{datetime.now().strftime('%H:%M:%S')}" data-start-time="{start_time.strftime('%H:%M:%S')}" data-periode-count="{periode_count}" data-periode-add="0"
-                    '''
-
-    for index, pause_time in enumerate(pause_time, start=1):
-        timer_div_html += f'\n data-pause-time-{index}="{pause_time}"'
-
-    for index, periode_time in enumerate(periode_time_end, start=1):
-        timer_div_html += f'\n data-periode-time-end-{index}="{periode_time}"'
-
-    for index, periode_time in enumerate(pause_time_start, start=1):
-        timer_div_html += f'\n data-pause-time-start-{index}="{periode_time}"'
-
-    for index, periode_time in enumerate(periode_time, start=1):
-        timer_div_html += f'\n data-periode-time-{index}="{periode_time}"'
-
-    timer_div_html += '>\n</div>'
-    event.timer_div = timer_div_html
-    event.save()
-    return {"response": f"update all timers"}
 
 class GetElementDataView(View):
     def get(self, request, event_id, element):
