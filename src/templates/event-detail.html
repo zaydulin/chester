@@ -644,7 +644,7 @@
 
                             </div>
 
-                            <div class="img-info__period"  hx-get="{% url 'get_current_timer' event_id=event.id  %}" hx-trigger="every 1m" hx-swap="timer-div">
+                            <div class="img-info__period"  hx-get="{% url 'get_current_timer' event_id=event.id  %}" hx-trigger="every 5s" hx-swap="timer-div">
                                 {% if event.status == 3  %}  Матч начнется {{ event.start_at }}
                                 {% elif event.status == 2 %} Матч уже прошел {{ event.start_at }}
                                 {% elif event.status == 1 %}{% if event.status == 1 %}
