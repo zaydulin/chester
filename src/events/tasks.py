@@ -616,12 +616,13 @@ def update_event_data(sport_id):
 
                             existing_event.half = stage
                             events_list_update.append(existing_event)
-                    TimePeriod.objects.bulk_create(time_periods_to_create)
-                    TimePeriod.objects.bulk_update(time_periods_to_update,fields=['end', 'end_pause'])
+
                     Events.objects.bulk_create(events_list)
                     Events.objects.bulk_update(events_list_update, fields=[
                         'home_score', 'away_score', 'status','start_at','start_at_for_timer','time_half_time','half'
                     ])
+                    TimePeriod.objects.bulk_create(time_periods_to_create)
+                    TimePeriod.objects.bulk_update(time_periods_to_update, fields=['end', 'end_pause'])
                 events_to_update = Events.objects.exclude(second_event_api_id__in=event_ids).filter(rubrics=rubrics,status=1)
                 for event in events_to_update:
                     event.status = 2
