@@ -111,7 +111,6 @@ class Events(models.Model):
         if self.home_score == '' or self.away_score == '':
             self.home_score = 0
             self.away_score = 0
-
         super(Events, self).save(*args, **kwargs)
 
     def get_start_time(self):

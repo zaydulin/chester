@@ -731,6 +731,11 @@ CELERY_BEAT_SCHEDULE = {
         "task": "events.tasks.get_statistic_event_id36",
         "schedule": crontab(minute="*/30"),
     },
+    #timer
+    "update_timer": {
+        "task": "events.tasks.update_timer",
+        "schedule": crontab(minute="*/1"),
+    }
 }
 CELERY_RESULT_BACKEND = "django-db"
 
