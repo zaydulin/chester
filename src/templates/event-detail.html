@@ -644,7 +644,7 @@
 
                             </div>
 
-                            <div class="img-info__period" >
+                            <div class="img-info__period"  hx-get="{% url 'get_current_timer' event_id=event.id  %}" hx-trigger="every 1m" hx-swap="timer-div">
                                 {% if event.status == 3  %}  Матч начнется {{ event.start_at }}
                                 {% elif event.status == 2 %} Матч уже прошел {{ event.start_at }}
                                 {% elif event.status == 1 %}{% if event.status == 1 %}
@@ -717,11 +717,10 @@
                                      </div>
                                     {% endif %}
                                 {% else %}
-                                    {{event.timer_div|safe}}
-                                {% endif %}
-                                {% endif %}
-                                {% endif %}
-                                {% for period in timeperiod%}
+                                    <div id="timer-div">
+                                        {{event.timer_div|safe}}
+                                    </div>
+                                    {% for period in timeperiod%}
                                     <span>Start - {{period.start}}</span>
                                     <span>End - {{period.end}}</span>
                                     <span>End_Pause - {{period.end_pause}}</span>
@@ -729,6 +728,10 @@
                                     <span>Pause - {{period.pause}}</span>
 
                                 {% endfor %}
+                                {% endif %}
+                                {% endif %}
+                                {% endif %}
+
 
 
 

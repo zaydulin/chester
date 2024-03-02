@@ -488,28 +488,28 @@ def update_timer():
         eventslug = event.rubrics.slug
         if eventslug == 'football':
             periode_count = 2
-            periode_time_1 = "45:00"
-            pause_time_1 = "15:00"
+            periode_time_1 = "55:00"
+            pause_time_1 = "25:00"
         elif eventslug == 'tennis':
             periode_count = 5
-            periode_time_1 = "45:00"
-            pause_time_1 = "15:00"
+            periode_time_1 = "55:00"
+            pause_time_1 = "25:00"
         elif eventslug == 'basketball':
             periode_count = 4
-            periode_time_1 = "12:00"
-            pause_time_1 = "2:00"
+            periode_time_1 = "22:00"
+            pause_time_1 = "12:00"
         elif eventslug == 'hockey':
             periode_count = 3
-            periode_time_1 = "20:00"
-            pause_time_1 = "15:00"
+            periode_time_1 = "30:00"
+            pause_time_1 = "25:00"
         elif eventslug == 'volleyball':
             periode_count = 5
-            periode_time_1 = "25:00"
-            pause_time_1 = "15:00"
+            periode_time_1 = "35:00"
+            pause_time_1 = "25:00"
         elif eventslug == 'handball':
             periode_count = 2
-            periode_time_1 = "30:00"
-            pause_time_1 = "15:00"
+            periode_time_1 = "40:00"
+            pause_time_1 = "25:00"
         else:
             periode_count = 0
             periode_time_1 = ""

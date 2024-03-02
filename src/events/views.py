@@ -508,7 +508,7 @@ class GetCurrentTimerView(View):
         template_name = 'partials/timer_div.html'
         if event:
             if event.half == 'HALF_TIME':
-                data['timer_div'] = 'Перерыв'
+                data['timer_div'] = event.timer_div
                 return render(request, template_name, data)
         else:
             return JsonResponse({'error': 'Event not found'}, status=404)
