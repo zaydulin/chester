@@ -551,13 +551,13 @@ def update_timer():
         for i in range(periode_count):
             current_period_time += int(periode_time_1.split(":")[0]) * 60 + int(periode_time_1.split(":")[1])
             periode_time.append(f"{current_period_time // 60:02d}:{current_period_time % 60:02d}")
-        for i, period in enumerate(timeperiod):
-            if period.period:
-                current_period_time += int(period.period.split(":")[0]) * 60 + int(period.period.split(":")[1])
-                pause_time[i] = f"{current_pause_time // 60:02d}:{current_pause_time % 60:02d}"
+        for i, item in enumerate(timeperiod):
+            if item.period:
+                current_period_time += int(item.period.split(":")[0]) * 60 + int(item.period.split(":")[1])
+                periode_time[i] = f"{current_period_time // 60:02d}:{current_period_time % 60:02d}"
 
         timer_div_html = f'''
-                        <div class="img-info__period" style="color:red" id="life-time" current-time="{datetime.now().strftime('%H:%M:%S')}" data-start-time="{start_time}" data-periode-count="{periode_count}" data-periode-add="0"
+                        <div class="img-info__period" style="color:red" id="life-time" current-time="{datetime.now().strftime('%H:%M:%S')}" data-start-time="{start_time.strftime('%H:%M:%S')}" data-periode-count="{periode_count}" data-periode-add="0"
                         '''
 
         for index, pause_time in enumerate(pause_time, start=1):
